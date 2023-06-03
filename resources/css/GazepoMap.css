@@ -1,0 +1,49 @@
+.map-container {
+    position: relative;
+    /*overflow-y: scroll;*/
+    /*height: 100vh;*/
+    padding-bottom: 1.5em;
+}
+.GazepoContainer {
+    overflow-y: auto;
+    height: 100vh;
+    width: fit-content;
+}
+.image-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none; /* Initially hidden */
+}
+
+.Image:hover + .image-map {
+    display: block; /* Show map on image hover */
+}
+
+.tablearea {
+    cursor: pointer;
+}
+.availabilityarea {
+    pointer-events: none;
+}
+.tablearea {
+    background-color: transparent; /* Set the background color to transparent */
+    transition: opacity 0.3s ease;
+}
+.tablearea:hover {
+    opacity: 0.7; /* Change the opacity on hover */
+}
+
+area {
+    display: block;
+    position: relative;
+}
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: block;
+    background: transparent;
+}
+/*padding: 0px; margin: 0px; border: 0px; background: transparent; position: absolute; top: 0px; left: 0px; width: 412px; height: 915px; display: block;*/
