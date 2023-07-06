@@ -3,15 +3,15 @@ import {getAvailabilityByDate, getGazepoAvailabilityColor} from "../../ExternalJ
 import {TableArea} from "./TableArea";
 import {useContext} from "react";
 import {BookingDetailsContext} from "../../Contexts/BookingDetailsContext";
-import {GazepoAvailabilityContext} from "../../Contexts/GazepoAvailabilityContext";
+import {GazeboAvailabilityContext} from "../../Contexts/GazeboAvailabilityContext";
 import {ContainerRefContext} from "../../Contexts/ContainerRefContext";
-import {GazeposContext} from "../../Contexts/GazeposContext";
+import {GazebosContext} from "../../Contexts/GazebosContext";
 
 export function GazepoArea({AvailabilityCoords,TableCoords, AA}) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
-    Availability = useContext(GazepoAvailabilityContext),
+    Availability = useContext(GazeboAvailabilityContext),
     ContainerRef = useContext(ContainerRefContext),
-    Gazepos = useContext(GazeposContext),
+    Gazepos = useContext(GazebosContext),
     getID = (number)=> {
         for(let gazepo of Gazepos){
             if(parseInt(gazepo.ascending_number) === parseInt(number))

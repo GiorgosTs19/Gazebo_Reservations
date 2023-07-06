@@ -10,7 +10,9 @@ class Reservation extends Model {
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'gazepo_id',
+        'gazebo_id',
+        'First_Name',
+        'Last_Name',
         'Date',
         'Email',
         'Phone_Number',
@@ -34,7 +36,7 @@ class Reservation extends Model {
         return $this->hasMany(MenuSelection::class);
     }
 
-    public function Gazepo(): \Illuminate\Database\Eloquent\Relations\HasOne {
-        return $this->hasOne(Gazepo::class);
-    }
+//    public function Gazebo(): \Illuminate\Database\Eloquent\Relations\HasOne {
+//        return Ga;
+//    }
 }

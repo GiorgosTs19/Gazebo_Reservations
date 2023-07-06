@@ -3,17 +3,17 @@ import {Button} from "react-bootstrap";
 export default function Overlay({setVisibility}) {
 
     return (
-        <div className="overlay-container">
+        <div className="overlay-container p-0">
             <div className="overlay">
                 <div className="overlay-panel overlay-left">
-                    <Button variant={'outline-light'} id="signIn"
-                        onClick={()=>{setVisibility('Login');document.title = 'Gazepos';}} size={'lg'}>
-                        Book a Gazepo
+                    <Button variant={'outline-light'} id="signIn" className={'mx-auto'}
+                        onClick={()=>{setVisibility('Login');document.title = 'Seaside Dinner';}} size={'sm'}>
+                        Book Seaside Dinner
                     </Button>
                 </div>
                 <div className="overlay-panel overlay-right">
                     <Button variant={'outline-light'} id="signUp"
-                        onClick={()=>{setVisibility('Register');document.title = 'Beach Beds';}} size={'lg'}>
+                        onClick={()=>{setVisibility('Register');document.title = 'Beach Beds';}} size={'sm'}>
                         Book a Beach Bed
                     </Button>
                 </div>

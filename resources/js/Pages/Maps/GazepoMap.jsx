@@ -27,15 +27,15 @@ export function GazepoMap({Gazepos}) {
     return (
         <CanvasRefContext.Provider value={canvasRef.current}>
                 <div className={'map-container'}>
-                    <img src={'Images/Gazepo.jpg'} alt="Clickable Image" useMap="#map" className={'Image img-fluid'}
+                    <img src={'Images/Gazepo.jpg'} alt="Clickable Image" useMap="#map" className={'Image img-fluid rounded-2 shadow-lg img-thumbnail'}
                          ref={imageRef}/>
                     <map name="map" id={'map'} className={'image-map'} style={{ display:'block'}} ref={mapRef}>
-                        <GazepoArea AA={1} AvailabilityCoords={"151,158,15"} TableCoords={"117,180,185,260"}></GazepoArea>
-                        <GazepoArea AA={2} AvailabilityCoords={"258,158,15"} TableCoords={'225,180,293,260'}></GazepoArea>
-                        <GazepoArea AA={3} AvailabilityCoords={"366,158,15"} TableCoords={"331,180,400,260"}></GazepoArea>
-                        <GazepoArea AA={4} AvailabilityCoords={"473,158,15"} TableCoords={'439,180,507,260'}></GazepoArea>
-                        <GazepoArea AA={5} AvailabilityCoords={"576,158,15"} TableCoords={'545,180,614,260'}></GazepoArea>
-                        <GazepoArea AA={6} AvailabilityCoords={"684,158,15"} TableCoords={'652,180,720,260'}></GazepoArea>
+                        <GazepoArea AA={1} AvailabilityCoords={"151,158,15"} TableCoords={"114,175,191,263"}></GazepoArea>
+                        <GazepoArea AA={2} AvailabilityCoords={"258,158,15"} TableCoords={'220,175,298,263'}></GazepoArea>
+                        <GazepoArea AA={3} AvailabilityCoords={"366,158,15"} TableCoords={"328,175,405,263"}></GazepoArea>
+                        <GazepoArea AA={4} AvailabilityCoords={"473,158,15"} TableCoords={'436,175,511,263'}></GazepoArea>
+                        <GazepoArea AA={5} AvailabilityCoords={"576,158,15"} TableCoords={'542,175,618,263'}></GazepoArea>
+                        <GazepoArea AA={6} AvailabilityCoords={"684,158,15"} TableCoords={'649,175,725,263'}></GazepoArea>
                     </map>
                     <Stage width={window.innerWidth} height={window.innerHeight}>
                         <Layer ref={canvasRef}>

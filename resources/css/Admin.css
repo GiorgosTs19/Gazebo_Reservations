@@ -1,0 +1,89 @@
+.reservation-view {
+    opacity: 1;
+    transition: opacity 0.3s ease; /* Add a smooth transition effect */
+}
+.reservation-view:hover {
+    opacity: 0.40;
+}
+
+/* Input container */
+.input-container {
+    position: relative;
+    margin: 20px;
+    width: 85%;
+}
+
+/* Input field */
+.input-field {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    background-color: transparent;
+}
+
+/* Input label */
+.input-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 16px;
+    color: rgba(204, 204, 204, 0);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Input highlight */
+.input-highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background-color: #007bff;
+    transition: all 0.3s ease;
+}
+
+/* Input field:focus styles */
+.input-field:focus + .input-label {
+    top: -20px;
+    font-size: 18px;
+    color: #007bff;
+}
+
+.input-field:focus + .input-label + .input-highlight {
+    width: 100%;
+}
+
+.settings-header-border {
+    width: 100%;
+    margin-bottom: 10px;
+    border: black solid 1px;
+}
+.settings-header-border, .settings-header-border .settings-heading-subtitle {
+    text-align: left;
+    padding: 0 20px;
+    margin-top: -20px;
+}
+.settings-heading-subtitle{
+    cursor: pointer;
+}
+
+.settings-header-border > span, .settings-header-border .settings-heading-subtitle > span {
+    background-color: white;
+    box-shadow: white 11px 0 0, white -13px 0 0;
+}
+.settings-header-border .settings-heading-subtitle > span:after {
+    top: -13px;
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: black !important;
+}
+
+.disabled-day {
+    color: #ea1414 !important;
+}

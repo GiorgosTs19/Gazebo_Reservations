@@ -8,22 +8,27 @@
     "use strict";
 
     function r() {
-        // Function to resize the image map coordinates
+        let o;
+        let i;
+        let u;
+        let d;
+
+// Function to resize the image map coordinates
         function e() {
-            var r = {
+            const r = {
                 width: u.width / u.naturalWidth,
                 height: u.height / u.naturalHeight
             };
 
-            var a = {
+            const a = {
                 width: parseInt(window.getComputedStyle(u, null).getPropertyValue("padding-left"), 10),
                 height: parseInt(window.getComputedStyle(u, null).getPropertyValue("padding-top"), 10)
             };
 
             i.forEach(function(e, t) {
-                var n = 0;
+                let n = 0;
                 o[t].coords = e.split(",").map(function(e) {
-                    var t = 1 === (n = 1 - n) ? "width" : "height";
+                    let t = 1 === (n = 1 - n) ? "width" : "height";
                     return a[t] + Math.floor(Number(e) * r[t]);
                 }).join(",");
             });
@@ -45,11 +50,11 @@
             return document.querySelector('img[usemap="' + e + '"]');
         }
 
-        var a = this,
-            o = null,
-            i = null,
-            u = null,
-            d = null;
+        let a = this;
+        o = null;
+        i = null;
+        u = null;
+        d = null;
 
         if (typeof a._resize !== "function") {
             o = a.getElementsByTagName("area");
@@ -75,6 +80,8 @@
 
     // Function to handle the image maps
     function e() {
+        let n;
+
         function t(e) {
             e && (function(e) {
                 if (!e.tagName) throw new TypeError("Object is not a valid DOM element");
@@ -82,7 +89,6 @@
             }(e), r.call(e), n.push(e));
         }
 
-        var n;
 
         return function(e) {
             switch (n = [], typeof e) {

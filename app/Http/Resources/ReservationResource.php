@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Gazebo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,16 +13,21 @@ class ReservationResource extends JsonResource {
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array {
-        $Attendees = $this->Attendees();
-        $Rooms = $this->Rooms();
-        $Menus = $this->Menus();
-        $Gazepo = $this->Gazepo();
+        $this->load('Attendees', 'Rooms', 'Menus');
+
         return [
-            'Reservation'=>$this,
-            'Rooms' => $Rooms,
-            'Attendees' => $Attendees,
-            'Menus' => $Menus,
-            'Gazepo' => $Gazepo
+            'id'=>$this->id,
+            'Gazebo'=>new GazeboResource(Gazebo::find($this->gazebo_id)),
+            'Name'=>['First'=>$this->First_Name,'Last'=>$this->Last_Name],
+            'Date'=>$this->Date,
+            'Contact'=>['Email'=>$this->Email,'Phone'=>$this->Phone_Number],
+            'Notes'=>$this->Notes,
+            'Confirmation_Number'=>$this->Confirmation_Number,
+            'Rooms' => $this->Rooms,
+            'Attendees' => $this->Attendees,
+            'Menus' => MenuSelectionResource::collection($this->Menus),
+            'Type' => $this->Type,
+            'Confirmed_At' => $this->created_at
         ];
     }
 }

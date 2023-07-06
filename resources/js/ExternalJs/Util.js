@@ -4,7 +4,7 @@
  * @param selection Selection 1: Year (prefix) Month (prefix) Day, Selection 2: Day (prefix) Month (prefix) Year
  * @returns a string based on the selection ( date format ) and the prefix given.
  */
-export function getFormatedDate(date, prefix, selection) {
+export function getFormattedDate(date, prefix, selection) {
     switch (selection) {
         case 1:{
             const year = date.getFullYear();
@@ -14,6 +14,8 @@ export function getFormatedDate(date, prefix, selection) {
         }
         case 2:
             return date?.getDate() + prefix + (date?.getMonth()+1) + prefix +  date?.getFullYear();
+        case 3:
+            return date?.getDate() + prefix + (date?.getMonth()+1);
     }
 
 }
@@ -22,10 +24,11 @@ export function getFormatedDate(date, prefix, selection) {
  * @param date A date object
  * @param oldPrefix The prefix used on the old date string.
  * @param newPrefix The prefix that will be used on the new date string. ( Default : oldPrefix )
+ * @param withTime
  * @returns the new date string using the new prefix (for example : Y-m-d -> d-m-Y, d-m-Y -> Y-m-d).
  */
-export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix) {
-    const date_parts = date?.split(oldPrefix);
+export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix,withTime=false) {
+    const date_parts = withTime ? date?.split(' ')[0].split(oldPrefix) : date?.split(oldPrefix);
     if(date_parts)
         return date_parts[2] + newPrefix + date_parts[1] + newPrefix + date_parts[0];
 }
@@ -34,10 +37,27 @@ export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix) {
  *
  * @param menu_id Requested ID
  * @param Menus_Array Array of all Menus and their items
+ * @param onlyOne
  * @returns {string} the name of the Menu whose ID matches the ID passed into the function.
  */
 export function getMenuName(menu_id,Menus_Array) {
-    return (Menus_Array.find(menu=>menu.id===menu_id).Name);
+    const Mains = Menus_Array.Mains,
+    Desserts = Menus_Array.Desserts;
+    console.log(Mains)
+    console.log(Desserts)
+    const MainFound = Mains.find(menu=>menu.id===menu_id),
+        DessertFound = Desserts.find(menu=>menu.id===menu_id);
+    if(MainFound !== undefined) {
+        if(MainFound.Items.length === 1)
+            return MainFound.Items[0].Name;
+        return MainFound.Name;
+    }
+    else if(DessertFound !== undefined) {
+        if(DessertFound.Items.length === 1)
+            return DessertFound.Items[0].Name;
+        return DessertFound.Name;
+    }
+    return 'Menu';
 }
 
 /**
@@ -55,17 +75,41 @@ export function getTableAA (id,Gazepos_Array) {
  *
  * @param date
  * @param AvailabilityArray
+ * @param fromReservations
  */
-export function getAvailabilityByDate(date,AvailabilityArray) {
+export function getAvailabilityByDate(date,AvailabilityArray, fromReservations = false) {
+    if(fromReservations) {
+        return AvailabilityArray.find(
+            item=>item.Date === getFormattedDate(date,'-',1))?.Disabled;
+    }
     if (typeof date === 'string') {
         return AvailabilityArray.find(
             item=>item.Date === date)?.Available;
     }
     else if (typeof date === 'object') {
         return AvailabilityArray.find(
-            item=>item.Date === getFormatedDate(date,'-',1))?.Available;
+            item=>item.Date === getFormattedDate(date,'-',1))?.Available;
     }
 }
+
+
+export function getReservationsByDate(date,ReservationsArray) {
+    if (typeof date === 'string') {
+        const reservations =  ReservationsArray.find(
+            item=>item.Date === date)?.Reservations;
+        if (Array.isArray(reservations))
+            return reservations;
+        return 'None';
+    }
+    else if (typeof date === 'object') {
+        const reservations = ReservationsArray.find(
+            item=>item.Date === getFormattedDate(date,'-',1))?.Reservations;
+        if (Array.isArray(reservations))
+            return reservations;
+        return 'None';
+    }
+}
+
 
 
 export function getGazepoAvailabilityColor(gazepo_id,current_date_availability) {
@@ -78,6 +122,17 @@ export function getGazepoAvailabilityColor(gazepo_id,current_date_availability) 
     }
 }
 
+export function getTableAvailabilityBoolean(gazepo_id, current_date_availability, fromReservations = false) {
+    if(current_date_availability === 'All')
+        return true;
+    else if(Array.isArray(current_date_availability)) {
+        if (fromReservations)
+            return !!current_date_availability.some(obj => obj.Gazebo.id === gazepo_id);
+        return !!current_date_availability.some(obj => obj.hasOwnProperty(gazepo_id));
+
+    }
+}
+
 export function getGazepoShapesByTitle(title,shapes) {
     const availability =  shapes.find(shape=> shape.className === 'Text' &&
         shape.getAttrs().name === (title + ' Availability')
@@ -87,4 +142,99 @@ export function getGazepoShapesByTitle(title,shapes) {
     );
 
     return [availability,table];
+}
+
+
+export function formatDateInGreek(dateString) {
+    const daysOfWeek = [
+        'Κυριακή',
+        'Δευτέρα',
+        'Τρίτη',
+        'Τετάρτη',
+        'Πέμπτη',
+        'Παρασκευή',
+        'Σάββατο'
+    ];
+
+    const months = [
+        'Ιανουαρίου',
+        'Φεβρουαρίου',
+        'Μαρτίου',
+        'Απριλίου',
+        'Μαΐου',
+        'Ιουνίου',
+        'Ιουλίου',
+        'Αυγούστου',
+        'Σεπτεμβρίου',
+        'Οκτωβρίου',
+        'Νοεμβρίου',
+        'Δεκεμβρίου'
+    ];
+
+    const date = new Date(dateString);
+
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const dayOfMonth = date.getDate().toString().padStart(2, '0');
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
+}
+
+export function created_at(given_date) {
+    const date = new Date(given_date);
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const year = date.getFullYear().toString();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+
+    return `${day}-${month}-${year}, ${hours}:${minutes}:${seconds}`;
+}
+
+/**
+ *
+ * @param time1
+ * @param time2
+ * @param isNextDay
+ * @returns {number}
+ * -1 if time1 is earlier than time2,
+ * 1 if time1 is later than time2,
+ * 0 if time1 is equal to time2,
+ */
+export function compareTimes(time1, time2, isNextDay = false) {
+    const [hours1, minutes1] = time1.split(':');
+    const [hours2, minutes2] = time2.split(':');
+
+    const date1 = new Date();
+    date1.setHours(hours1, minutes1, 0);
+
+    const date2 = new Date();
+    date2.setHours(hours2, minutes2, 0);
+
+    if (isNextDay) {
+        date2.setDate(date2.getDate() + 1); // Add 1 day to time2
+    }
+
+    if (date1 < date2) {
+        return -1; // time1 is earlier than time2
+    } else if (date1 > date2) {
+        return 1; // time1 is later than time2
+    } else {
+        return 0; // time1 and time2 are the same
+    }
+}
+
+export function getTimeDifferenceInMinutes(time1, time2) {
+    // Create Date objects from the time strings
+    const startTime = new Date(`1970-01-01T${time1}`);
+    const endTime = new Date(`1970-01-01T${time2}`);
+
+    // Calculate the difference in milliseconds
+    const timeDiff = endTime.getTime() - startTime.getTime();
+
+    // Convert milliseconds to minutes
+    return Math.floor(timeDiff / (1000 * 60));
 }

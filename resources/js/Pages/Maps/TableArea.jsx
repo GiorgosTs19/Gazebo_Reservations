@@ -1,8 +1,9 @@
-import React, {useEffect, useRef} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 
 export function TableArea({title,coords,onClick,ID,isAvailable}) {
     const TableAreaRef = useRef();
     const id = title.split(' ')[1];
+    // areas = useContext(AreasContext);
     useEffect(()=>{
         if(!isAvailable)
             TableAreaRef.current.style.cursor = 'default';

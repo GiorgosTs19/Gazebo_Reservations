@@ -13,7 +13,7 @@ class MenuSelection extends Model   {
         'reservation_room_id',
         'reservation_id',
         'Main_Dish',
-        'Desert'
+        'Dessert'
     ];
 
     public function Reservation(): \Illuminate\Database\Eloquent\Relations\BelongsTo {

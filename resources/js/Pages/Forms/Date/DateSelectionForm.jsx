@@ -4,7 +4,6 @@ import {DateNotes} from "../../../Notes/DateNotes";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {changeDateFormat} from "../../../ExternalJs/Util";
-import {AvailabilityNotes} from "../../../Notes/AvailabilityNotes";
 import {ReservationCalendar} from "./ReservationCalendar";
 
 export function DateSelectionForm() {
@@ -13,16 +12,17 @@ export function DateSelectionForm() {
     handleNextClick = ()=>{
         setProgress('Table');
     };
+
     return (
-        <div className={'my-2'}>
-            <div className={'border border-gray-200 rounded p-3 m-3'} style={{backgroundColor:'white'}}>
+        <div className={'my-1 p-1'}>
+            <div className={'border-bottom border-gray-200 rounded mx-lg-auto mx-3 my-1'} style={{backgroundColor:'white',width:'fit-content'}}>
                 <DateNotes></DateNotes>
-                <AvailabilityNotes></AvailabilityNotes>
+                {/*<AvailabilityNotes></AvailabilityNotes>*/}
             </div>
-            <div>
-                <h5>Select a date for your Reservation</h5>
+            <div className={'mt-4'}>
+                <h5>Select a date for your {bookingDetails.type === 'Bed' ? 'Sea Bed' : bookingDetails.type} Reservation</h5>
                 <h6 className="mb-3 text-muted">Availability displayed underneath each day.</h6>
-                <Button variant={'outline-dark'} hidden={!bookingDetails?.date} className={'mb-3'}
+                <Button variant={'outline-dark rounded-5 shadow-sm'} hidden={!bookingDetails?.date} className={'mb-3'}
                         onClick={handleNextClick}>
                     Book on {changeDateFormat(bookingDetails?.date,'-','/')}
                 </Button>

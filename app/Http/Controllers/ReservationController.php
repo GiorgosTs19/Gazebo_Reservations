@@ -8,6 +8,7 @@ use App\Models\Reservation;
 use App\Models\ReservationAttendee;
 use App\Models\ReservationRoom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -50,15 +51,19 @@ class ReservationController extends Controller
             'primary_menu',
             'secondary_menu',
             'notes',
+            'type',
         ]);
 
         $Reservation = new Reservation;
-        $Reservation->gazepo_id = $input['table'];
+        $Reservation->gazebo_id = $input['table'];
         $Reservation->Date = $input['date'];
         $Reservation->Email = $input['email'];
         $Reservation->Phone_Number = $input['phone_number'];
+        $Reservation->First_Name = $input['first_name'];
+        $Reservation->Last_Name = $input['last_name'];
         $Reservation->Notes = $input['notes'];
         $Reservation->Confirmation_Number = $this->generateConfirmationNumber();
+        $Reservation->Type = $input['type'];
         $Reservation->save();
 
         if(is_array($input['attendees']))
@@ -77,8 +82,8 @@ class ReservationController extends Controller
         $Primary_Menu = new MenuSelection;
         $Primary_Menu->reservation_id = $Reservation->id;
         $Primary_Menu->reservation_room_id = $Primary_Room->id;
-        $Primary_Menu->Main_Dish = $input['primary_menu'];
-        $Primary_Menu->Desert = $input['primary_menu'];
+        $Primary_Menu->Main_Dish = $input['primary_menu']['Main'];
+        $Primary_Menu->Dessert = $input['primary_menu']['Dessert'];
         $Primary_Menu->save();
 
         if($input['more_rooms'] === true && $input['secondary_room'] !== '') {
@@ -90,12 +95,11 @@ class ReservationController extends Controller
             $Secondary_Menu = new MenuSelection;
             $Secondary_Menu->reservation_id = $Reservation->id;
             $Secondary_Menu->reservation_room_id = $Secondary_Room->id;
-            $Secondary_Menu->Main_Dish = $input['secondary_menu'];
-            $Secondary_Menu->Desert = $input['secondary_menu'];
+            $Secondary_Menu->Main_Dish = $input['secondary_menu']['Main'];
+            $Secondary_Menu->Dessert = $input['secondary_menu']['Dessert'];
             $Secondary_Menu->save();
         }
-//        return Inertia::render('Reservations/Gazepo',['Reservation'=>new ReservationResource($Reservation)]);
-//        'Gazepos'=>$Gazepos,'Menu'=>$Menus,
+        return Redirect::route('ShowAdminPanel');
     }
 
     /**

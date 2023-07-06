@@ -11,13 +11,18 @@ class MenuItem extends Model {
 
     protected $fillable = [
         'Name',
-        'Menu_ID',
+        'menu_id',
+        'is_lactose_free',
+        'is_gluten_free',
+        'is_wheat_free',
+        'is_vegetarian',
+        'is_vegan'
     ];
 
     protected $hidden = [
         'created_at',
         'updated_at',
-        'Menu_ID'
+        'menu_id'
     ];
 
     public function Menu() {

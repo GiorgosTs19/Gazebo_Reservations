@@ -11,10 +11,10 @@ return new class extends Migration {
     public function up(): void  {
         Schema::create('menu_selections', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('reservation_id');
-            $table->foreignUuid('reservation_room_id');
+            $table->foreignUuid('reservation_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('reservation_room_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('Main_Dish');
-            $table->foreignUuid('Desert');
+            $table->foreignUuid('Dessert');
             $table->timestamps();
         });
     }

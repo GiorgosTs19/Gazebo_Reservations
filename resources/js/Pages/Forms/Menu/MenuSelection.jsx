@@ -1,50 +1,82 @@
-import {Accordion, Button, ListGroup} from "react-bootstrap";
-import {MenuItem} from "../../Admin/Menu/MenuItem";
-import {useContext} from "react";
-import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {Badge,ListGroup} from "react-bootstrap";
 
-export function MenuSelection({menu,index,primary=false}) {
+import {useContext, useEffect} from "react";
+import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {MenuInfoModal} from "./MenuInfoModal";
+
+export function MenuSelection({menu, index, primary=false, dessert=false, onlyOne=false}) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
-    handleSelectMenu = (Menu) => {
+    handleSelectMenu = () => {
         switch (primary) {
             case true : {
-                setBookingDetails({...bookingDetails,primary_menu:Menu})
+                if(dessert)
+                    setBookingDetails((prevDetails) => ({
+                        ...prevDetails,
+                        primary_menu: {
+                            ...prevDetails.primary_menu,
+                            Dessert: menu.id,
+                        },
+                    }));
+                else
+                    setBookingDetails((prevDetails) => ({
+                        ...prevDetails,
+                        primary_menu: {
+                            ...prevDetails.primary_menu,
+                            Main: menu.id,
+                        },
+                    }));
                 break;
             }
             case false : {
-                setBookingDetails({...bookingDetails,secondary_menu:Menu})
+                if(dessert)
+                    setBookingDetails((prevDetails) => ({
+                        ...prevDetails,
+                        secondary_menu: {
+                            ...prevDetails.secondary_menu,
+                            Dessert: menu.id,
+                        },
+                    }));
+                else
+                    setBookingDetails((prevDetails) => ({
+                        ...prevDetails,
+                        secondary_menu: {
+                            ...prevDetails.secondary_menu,
+                            Main: menu.id,
+                        },
+                    }));
                 break;
             }
         }
     },
-    isSelected =  (Menu) => {
+    isSelected =  () => {
         switch (primary) {
             case true : {
-                if(Menu === bookingDetails.primary_menu)
-                    return 'Selected';
-                return 'Select'
+                if(menu.id === bookingDetails.primary_menu.Main || menu.id === bookingDetails.primary_menu.Dessert)
+                    return '(Selected)';
+                return '';
             }
             case false : {
-                if(Menu === bookingDetails.secondary_menu)
-                    return 'Selected';
-                return 'Select'
+                if(menu.id === bookingDetails.secondary_menu.Main || menu.id === bookingDetails.secondary_menu.Dessert)
+                    return '(Selected)';
+                return '';
             }
         }
     }
+
+    useEffect(()=>{
+        if(onlyOne)
+            handleSelectMenu();
+    },[]);
+
     return (
-        <Accordion.Item eventKey={index} key={menu.id}>
-            <Accordion.Header>{menu.Name}</Accordion.Header>
-            <Accordion.Body>
-                <Button variant={'outline-dark'} className={'mt-2 mb-3'}
-                        onClick={()=>handleSelectMenu(menu.id)} disabled={isSelected(menu.id) === 'Selected'}>
-                    {isSelected(menu.id)}
-                </Button>
-                <ListGroup as="ol" numbered>
-                    {menu.Items.map((item)=>{
-                        return <MenuItem item={item} key={item.id}></MenuItem>
-                    })}
-                </ListGroup>
-            </Accordion.Body>
-        </Accordion.Item>
+        <ListGroup.Item eventKey={index} key={menu.id} as={'li'}
+        className={"d-flex justify-content-between align-items-start border-top-0 border-end-0 border-start-0 " +
+        (isSelected() && !dessert ? 'active' : '')}
+        onClick={handleSelectMenu} disabled={onlyOne}>
+            <div className="ms-2 me-auto">
+                <div className="fw-bold">{menu.Items.length === 1 ? menu.Items[0].Name : menu.Name} {isSelected()}</div>
+            </div>
+            {menu.Items.length > 1 && <MenuInfoModal menu={menu}></MenuInfoModal>}
+        </ListGroup.Item>
     )
 }

@@ -39,14 +39,14 @@ export function resizeCanvas(canvas, image, areas, layer,Gazepos) {
                 const TableArea = areas[index+1];
                 const TableCoords = TableArea.getAttribute('coords').split(',').map(parseFloat);
                 const TableX = TableCoords[0] * (canvas.width / image.offsetWidth);
-                const x = area.getAttribute('color')==='#FF5733' ? TableX : TableX-1+radius/2;
+                const x = area.getAttribute('color')==='#FF5733' ? TableX+radius/6 : TableX-1.5+radius/2;
                 if(!isNaN(x) || !isNaN(centerY) || !(isNaN(radius))){
                     const availabilityText = new Konva.Text({
                         name:area.id,
                         x: x,
                         y: centerY,
                         text: area.getAttribute('color')==='#FF5733' ? 'Unavailable':'Available',
-                        fontSize: radius,
+                        fontSize: radius-radius/3,
                         fontFamily: 'Calibri',
                         fill: area.getAttribute('color'),
                     });
@@ -78,7 +78,6 @@ export function resizeCanvas(canvas, image, areas, layer,Gazepos) {
                 }
             }
             layer.batchDraw();
-            console.log(shapes)
         });
     }
 
