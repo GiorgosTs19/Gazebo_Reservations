@@ -27,7 +27,6 @@ export function EditingMenuForm({menu}) {
         const formHasChanges =
             menuName !== originalMenu?.Name || !isEqual(menuItems, originalMenu?.Items) ||
             menuType !== originalMenu.Type || menuCategory !== originalMenu.Category;
-        console.log(isEqual(menuItems, originalMenu?.Items));
         setHasChanges(formHasChanges);
     };
 

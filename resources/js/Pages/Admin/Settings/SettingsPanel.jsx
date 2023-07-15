@@ -3,26 +3,15 @@ import {useContext, useState} from "react";
 import {DinnerSettings} from "./DinnersSettings/DinnerSettings";
 import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
+import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
-export function SettingsPanel({Bed_Reservations,Dinner_Reservations}) {
-    const [activeTabKey, setActiveTabKey] = useState('SeaSide'),
+export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettings,BedSettings}) {
+    const [activeTabKey, setActiveTabKey] = useState('Dinner'),
     innerWidth = useContext(InnerWidthContext);
     const handleTabSelect = (k) => {
-        // if(activeTabKey === 'Edit')
         setActiveTabKey(k)
     }
-    const Today = new Date();
-    console.log(Today)
-    const [errors,setErrors] = useState({
-        Seaside_Arrival : '',
-        SeaSide_Departure : '',
-        SeaSide_First_Day : '',
-        SeaSide_Last_Day : '',
-        SeaBed_Arrival : '',
-        SeaBed_Departure : '',
-        SeaBed_First_Day : '',
-        SeaBed_Last_Day : '',
-    });
+
 
     // const local_settings_reducer = (state,action) => {
     //     switch (action.type) {
@@ -54,20 +43,22 @@ export function SettingsPanel({Bed_Reservations,Dinner_Reservations}) {
 
 
     return (
-        <Row>
-            <Tabs defaultActiveKey="SeaSide" className="mb-3" activeKey={activeTabKey}
-                  onSelect={(k) => handleTabSelect(k)}>
-                <Tab eventKey="SeaSide" title="Βραδινά">
-                    <Col style={{height:innerWidth > 1200 ? '85vh' : '75vh',overflowY:'auto'}}>
-                        <ReservationsContext.Provider value={Dinner_Reservations}>
-                            <DinnerSettings></DinnerSettings>
-                        </ReservationsContext.Provider>
-                    </Col>
-                </Tab>
-                <Tab eventKey="SeaBeds" title="Πρωινά">
+        <ActiveReservationTypeContext.Provider value={activeTabKey}>
+            <Row>
+                <Tabs defaultActiveKey="Dinner" className="mb-3" activeKey={activeTabKey}
+                      onSelect={(k) => handleTabSelect(k)}>
+                    <Tab eventKey="Dinner" title="Βραδινά">
+                        <Col style={{height:innerWidth > 1200 ? '85vh' : '75vh',overflowY:'auto'}}>
+                            <ReservationsContext.Provider value={Dinner_Reservations}>
+                                <DinnerSettings Settings={dinnerSettings}></DinnerSettings>
+                            </ReservationsContext.Provider>
+                        </Col>
+                    </Tab>
+                    <Tab eventKey="Bed" title="Πρωινά">
 
-                </Tab>
-            </Tabs>
-        </Row>
+                    </Tab>
+                </Tabs>
+            </Row>
+        </ActiveReservationTypeContext.Provider>
     )
 }

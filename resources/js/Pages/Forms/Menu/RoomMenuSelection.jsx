@@ -1,10 +1,8 @@
-import {Accordion, Card, ListGroup} from "react-bootstrap";
-import {MenuSelection} from "./MenuSelection";
+import {Card} from "react-bootstrap";
 import {useContext} from "react";
 import {MenuContext} from "../../../Contexts/MenuContext";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {getMenuName} from "../../../ExternalJs/Util";
-import {DinnerMenus} from "../../Admin/Menu/DinnerMenus";
 import {DinnerMenu} from "./DinnerMenus/DinnerMenu";
 
 export function RoomMenuSelection({Room,primary= false}) {
@@ -14,13 +12,13 @@ export function RoomMenuSelection({Room,primary= false}) {
         switch (primary) {
             case true : {
                 if(bookingDetails.primary_menu.Main !== '') {
-                    return getMenuName(bookingDetails.primary_menu.Main,Menus);
+                    return getMenuName(bookingDetails.primary_menu.Main,Menus,true);
                 }
                 return 'Menu'
             }
             case false : {
                 if(bookingDetails.secondary_menu.Main !== '') {
-                    return getMenuName(bookingDetails.secondary_menu.Main,Menus);
+                    return getMenuName(bookingDetails.secondary_menu.Main,Menus,true);
                 }
                 return 'Menu'
             }

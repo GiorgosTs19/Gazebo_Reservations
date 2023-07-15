@@ -47,67 +47,91 @@ class GazeboController extends Controller {
     /**
      * Store a newly created resource in storage.
      */
-    public static function checkAvailability($type='Dinner',$getReservations = false,$getReservationsOnly=false) {
-        $Gazebos = Gazebo::all();
+    public static function checkAvailability($Gazebos,$type,$Disabled_Days): array {
         date_default_timezone_set("Europe/Athens");
         $startDate = date("Y-m-d"); // Get today's date
         $currentDate = $startDate;
         $Last_Day = '2023-11-10';
         $Availability = [];
-        if($getReservationsOnly)
-            $getReservations = true;
-
-        if($getReservations)
-            $Reservations = [];
+        $Reservations_of_Type = Reservation::where('Type',$type)->where('Date', '>=', $startDate)->get();
         while ($currentDate <= $Last_Day) {
             $Available_Tables = [];
-            $current_reservations_count = Reservation::where('Date',$currentDate)->where('Type',$type)->count();
-            $is_current_date_disabled = DisabledDay::where('Date',$currentDate)->exists();
+            $current_date_reservations = $Reservations_of_Type->filter(function ($item) use ($currentDate) {
+                return  date("Y-m-d", strtotime($item->Date)) === $currentDate;
+            });
+            $current_reservations_count = $current_date_reservations->count();
+            $is_current_date_disabled = $Disabled_Days->first(function ($item) use ($currentDate, $type) {
+                return $item->Date == $currentDate && $item->Type == $type;
+            });
 
             if($current_reservations_count === 0 ) {
-                if(!$getReservationsOnly){
-                    $current_date_availibility = ['Date'=>$currentDate,'Available'=>'All','Disabled'=>$is_current_date_disabled];
-                    $Availability[] = $current_date_availibility;
-                }
-                if($getReservations) {
-                    $current_date_reservations = ['Date'=>$currentDate,'Reservations'=>'None','Disabled'=>$is_current_date_disabled];
-                    $Reservations[] = $current_date_reservations;
-                }
+                    $current_date_availability = ['Date'=>$currentDate,'Available'=>'All','Disabled'=>$is_current_date_disabled];
+                    $Availability[] = $current_date_availability;
             }
             else {
-                foreach ($Gazebos as $Gazepo) {
-                    if(!$getReservationsOnly){
-                        $gazebo_is_available = !Reservation::where('Date',$currentDate)
-                            ->where('gazebo_id',$Gazepo->id)->where('Type',$type)->exists();
-                        if($gazebo_is_available === true)
-                            $Available_Tables[] = [(''.$Gazepo->id)=>$gazebo_is_available];
-                    }
+                foreach ($Gazebos as $Gazebo) {
+                    $gazebo_is_available = !$current_date_reservations->contains('gazebo_id',$Gazebo->id);
+                    if($gazebo_is_available === true)
+                        $Available_Tables[] = [(''.$Gazebo->id)=>$gazebo_is_available];
                 }
                 $Availability[] = ['Date'=>$currentDate,'Available'=>$Available_Tables,'Disabled'=>$is_current_date_disabled];
-                if($getReservations)
-                    $Reservations[] = ['Date'=>$currentDate,'Reservations'=>ReservationResource::collection(
-                        Reservation::where('Date',$currentDate)->where('Type',$type)->get()),'Disabled'=>$is_current_date_disabled];
             }
             $currentDate = date("Y-m-d", strtotime($currentDate . " +1 day"));
         }
-        if($getReservationsOnly)
-            return $Reservations;
-
-        if($getReservations)
-            return [$Availability,$Reservations];
-
         return $Availability;
+    }
+
+    public static function getAdminReservations($Gazebos,$type,$Disabled_Days): array {
+        date_default_timezone_set("Europe/Athens");
+        $startDate = date("Y-m-d"); // Get today's date
+        $currentDate = $startDate;
+        $Last_Day = '2023-11-10';
+        $Reservations = [];
+        $Reservations_of_Type = Reservation::where('Type',$type)->where('Date', '>=', $startDate)->get();
+        while ($currentDate <= $Last_Day) {
+            $Available_Tables = [];
+            $Disabled_Day = $Disabled_Days->first(function ($item) use ($currentDate, $type) {
+                return $item->Date == $currentDate && $item->Type == $type;
+            });
+            $is_current_date_disabled = $Disabled_Day !== null;
+            if($is_current_date_disabled)
+                $allows_existing_reservations = $Disabled_Day->Allow_Existing_Reservations;
+            else
+                $allows_existing_reservations = 0;
+            $currentDate_Reservations = $Reservations_of_Type->filter(function ($item) use ($currentDate) {
+                return  date("Y-m-d", strtotime($item->Date)) === $currentDate;
+            });
+                foreach ($Gazebos as $Gazebo) {
+                // Check if there is a reservation for every table in the current date.
+                    $gazebo_is_available = !$currentDate_Reservations->contains('gazebo_id',$Gazebo->id);
+                    // Check if there is a reservation for every table in the current date.
+                    // Add the table id to the tables array, and a boolean to indicate if it is available or not.
+                    $Available_Tables[] = ['id'=>$Gazebo->id,'isAvailable'=>$gazebo_is_available];
+                }
+                // Add a new row to the reservations table, include the current date, the Reservations taking place at the current date,
+                // the available tables on that date, a boolean to indicate if the current date is disabled by an admin, and a boolean to
+                // indicate ( if the date is disabled by an admin ) whether any existing reservation on that date are allowed.
+                $Reservations[] = ['Date'=>$currentDate,'Reservations'=>ReservationResource::collection($currentDate_Reservations),'Disabled'=>$is_current_date_disabled,
+                    'Available'=>$Available_Tables,'Existing_Reservations_Allowed'=>$allows_existing_reservations];
+
+            $currentDate = date("Y-m-d", strtotime($currentDate . " +1 day"));
+        }
+
+        return $Reservations;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Gazebo $gazebo) {
+    public function show() {
+        date_default_timezone_set("Europe/Athens");
+        $Disabled_Days = DisabledDay::where('Date', '>=', date("Y-m-d"))->get();
         $Gazebos = GazeboResource::collection(Gazebo::all());
         $Bed_Menus = MenuResource::collection(Menu::where('Type','Bed')->get());
         $Dinner_Menus = ['Mains'=>MenuResource::collection(Menu::where('Type','Dinner')->where('Category','Main')->get()),
             'Desserts'=>MenuResource::collection(Menu::where('Type','Dinner')->where('Category','Dessert')->get())];
-        $Availability = ['Dinner' => self::checkAvailability(), 'Morning' => self::checkAvailability('Bed')];
+        $Availability = ['Dinner' => self::checkAvailability($Gazebos,'Dinner',$Disabled_Days),
+            'Morning' => self::checkAvailability($Gazebos,'Bed',$Disabled_Days)];
         return Inertia::render('Reservations/Gazebo',
             ['Gazebos'=>$Gazebos,'Menu'=>['Morning'=>$Bed_Menus,'Dinner'=>$Dinner_Menus],'Availability'=>$Availability]);
     }

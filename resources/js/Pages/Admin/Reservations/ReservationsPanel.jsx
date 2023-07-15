@@ -29,9 +29,6 @@ export function ReservationsPanel({Dinner_Reservations,Bed_Reservations}) {
             }
         },
     showReservationLong = () => {
-        if(isMobile)
-            if(activeReservation !== null)
-                return <DinnerReservationLong></DinnerReservationLong>
         if(activeReservation !== null)
             return <DinnerReservationLong></DinnerReservationLong>
         return  <h4 className={'text-muted m-auto'}>Επιλέξτε μία κράτηση για να δείτε λεπτομέρειες.</h4>
@@ -48,11 +45,9 @@ export function ReservationsPanel({Dinner_Reservations,Bed_Reservations}) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
     useEffect(()=>{
         setActiveReservation(null);
     },[reservationType]);
-
     return (
         <ReservationsContext.Provider value={getReservationsByActiveType()}>
             <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>

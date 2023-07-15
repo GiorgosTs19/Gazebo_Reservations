@@ -11,16 +11,16 @@ direction,goToPreviousWeek,goToNextWeek}) {
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     reservationsToShow = (day)=>{
         const reservations_of_current_date = getReservationsByDate(day,Reservations);
-        if(reservations_of_current_date === 'None')
+        if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>;
-        return reservations_of_current_date.map((reservation,index)=>{
-            return <ListGroup.Item key={index+1} className={'py-0 d-flex  ' + (activeReservation?.id === reservation.id ? 'bg-info' : '')}>
-                <ReservationShortest Reservation={reservation} key={reservation.id}></ReservationShortest>
-            </ListGroup.Item>;
+        // if(Array.isArray(reservations_of_current_date))
+            return reservations_of_current_date.map((reservation,index)=>{
+                return <ListGroup.Item key={index+1} className={'py-0 d-flex  ' + (activeReservation?.id === reservation.id ? 'bg-info' : '')}>
+                    <ReservationShortest Reservation={reservation} key={reservation.id}></ReservationShortest>
+                </ListGroup.Item>;
         })
     };
     const renderWeekDays = () => {
-        const weekDays = [];
         return Array(7).fill(null).map((_,index)=>{
             const day = new Date(currentDate.getTime());
             const today = new Date();

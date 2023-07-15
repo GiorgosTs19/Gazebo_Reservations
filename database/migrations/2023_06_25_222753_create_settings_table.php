@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('dinner_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('Starting_Date');
-            $table->string('Ending_Date');
+            $table->date('Starting_Date');
+            $table->date('Ending_Date');
             $table->string('Arrival_Time_Start');
             $table->string('Arrival_Time_End')->nullable();
             $table->string('Departure_Time');
@@ -22,10 +22,10 @@ return new class extends Migration {
         });
         Schema::create('bed_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('Starting_Date');
-            $table->string('Ending_Date');
-            $table->string('Arrival_Time');
-            $table->string('Departure_Time');
+            $table->date('Starting_Date');
+            $table->date('Ending_Date');
+            $table->string('Arrival_Time')->nullable();
+            $table->string('Departure_Time')->nullable();
             $table->tinyText('Date_Notes')->nullable();
             $table->tinyText('Finalization_Notes')->nullable();
             $table->timestamps();

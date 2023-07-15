@@ -10,7 +10,7 @@ import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
 export function MonthlyView() {
-    const [selectedDate,setSelectedDate] = useState(null),
+    const [selectedDate,setSelectedDate] = useState(''),
         CalendarRef = useRef(null),
         today = new Date(),
         yesterday = new Date(today),
@@ -29,8 +29,8 @@ export function MonthlyView() {
         getTileContent = (date) => {
             if(!isDateDisabled(date)){
                 const current_date_reservations = getReservationsByDate(date,Reservations);
-                switch (current_date_reservations) {
-                    case 'None': {
+                switch (current_date_reservations.length) {
+                    case 0: {
                         return <h6 className={'m-0'} style={{color: '#42C618'}}>0</h6>;
                     }
                     default : {
@@ -54,10 +54,10 @@ export function MonthlyView() {
             }
         };
     const reservationsToShow = ()=>{
-        if(!selectedDate)
+        if(selectedDate === '')
             return <h4 className={'text-muted my-auto'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
-        if(reservations_of_current_date === 'None')
+        if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>;
         return reservations_of_current_date.map((reservation)=>{
             return <ReservationShort Reservation={reservation} key={reservation.id}></ReservationShort>;

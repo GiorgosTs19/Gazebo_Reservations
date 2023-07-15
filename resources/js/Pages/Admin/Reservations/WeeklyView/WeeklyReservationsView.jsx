@@ -20,12 +20,12 @@ export function WeeklyReservationsView() {
         nextWeek.setDate(currentDate.getDate() + 7);
         setCurrentDate(nextWeek);
     };
+
     const getBorder = (index) => {
         switch (index) {
             case 0 : {
                 if(direction === 'horizontal')
                     return ' border-end-0';
-
                 return 'border-bottom';
             }
             case 6 : {

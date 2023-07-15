@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('Type');
             $table->string('First_Name');
             $table->string('Last_Name');
-            $table->dateTime('Date');
+            $table->date('Date');
             $table->string('Email');
             $table->string('Phone_Number');
             $table->tinyText('Notes')->nullable()->default(null);

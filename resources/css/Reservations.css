@@ -145,3 +145,24 @@ input[type=number] {
 .react-calendar__month-view__days__day--weekend {
     color: black !important;
 }
+
+.react-calendar__tile {
+    padding: 6px 6px !important;
+}
+
+.react-calendar__navigation button:disabled {
+    background-color: transparent !important;
+    color: black !important;
+}
+
+/*.react-calendar__tile--now {*/
+/*    background-color: #c9d8f6 !important;*/
+/*}*/
+
+.react-calendar__tile--active {
+    background-color: #c9d8f6 !important;
+}
+
+abbr[title] {
+    text-decoration: none !important;
+}

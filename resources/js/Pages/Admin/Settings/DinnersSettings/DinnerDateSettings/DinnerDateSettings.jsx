@@ -29,6 +29,7 @@ export function DinnerDateSettings({DinnerReservations}) {
     const handleShowChange = () => {
         setShow(!show);
     }
+
     return (
         <div className={"settings-header-border mt-5 " + (!show ? 'text-center' : '')}>
             <h4 className="settings-heading-subtitle"
@@ -48,7 +49,7 @@ export function DinnerDateSettings({DinnerReservations}) {
                                 <span className={'text-muted fst-italic ms-2'}>{settings.First_Day ? changeDateFormat(settings.First_Day,'-','-'):''}</span>
                                 <Stack direction={'horizontal'}>
                                     <p>Πρώτη Μέρα Κρατήσεων : </p>
-                                    <input type={'date'} className={'ms-2 mb-3 p-1'} onChange={handleFirstDateChange} value={settings.First_Day}/>
+                                    <input type={'date'} className={'ms-2 mb-3 p-1 rounded'} onChange={handleFirstDateChange} value={settings.First_Day}/>
                                 </Stack>
                             </Stack>
                             {errors.First_Day !== '' && <p className={'text-danger fst-italic'}>{errors.First_Day}</p>}
@@ -58,7 +59,7 @@ export function DinnerDateSettings({DinnerReservations}) {
                                 <span className={'text-muted fst-italic ms-2'}>{settings.Last_Day ? changeDateFormat(settings.Last_Day,'-','-'):''}</span>
                                 <Stack direction={'horizontal'}>
                                     <p>Τελευταία Μέρα Κρατήσεων : </p>
-                                    <input type={'date'} className={'ms-2 mb-3 p-1'} onChange={handleLastDateChange} min={settings.First_Day}
+                                    <input type={'date'} className={'ms-2 mb-3 p-1 rounded'} onChange={handleLastDateChange} min={settings.First_Day}
                                            value={settings.Last_Day}/>
                                 </Stack>
                             </Stack>
@@ -69,7 +70,7 @@ export function DinnerDateSettings({DinnerReservations}) {
                 <Row className={'border-top mt-2 py-3 mx-auto'}>
                     <h5 className={'text-center'}>Διαθεσιμότητα Ημερών</h5>
                     <SelectedDateContext.Provider value={{selectedDate,setSelectedDate}}>
-                        <Col xs={12} lg={3} xl={3} className={'text-center d-flex'}>
+                        <Col xs={12} lg={3} xl={2} className={'text-center d-flex'}>
                             <div className={'m-auto'}>
                                 <p className={'text-muted fst-italic'}>Μπορείτε ανα πάσα στιγμή να αλλάξετε την διαθεσιμότητα τραπεζιών και ημερών.</p>
                                 <p className={'text-danger fst-italic'}>Οι μέρες που έχετε ορίσει ως μη διαθέσιμες, θα εμφανίζονται "απενεργοποιημένες"
@@ -81,7 +82,7 @@ export function DinnerDateSettings({DinnerReservations}) {
                         <Col xs={12} lg={4} xl={3}>
                             <CalendarSettings DinnerReservations={DinnerReservations}></CalendarSettings>
                         </Col>
-                        <Col xs={12} lg={5} xl={6} className={'d-flex flex-column mt-3 mt-lg-0 text-center'}>
+                        <Col xs={12} lg={5} xl={7} className={'d-flex flex-column mt-3 mt-lg-0 text-center'}>
                             {selectedDate !== '' ? <SelectedDateSettings></SelectedDateSettings> :
                             <h5 className={'m-auto'}>Επιλέξτε μία ημέρα για να δείτε τις επιλογές σας.</h5>}
                         </Col>

@@ -13,6 +13,8 @@ return new class extends Migration
         Schema::create('disabled_days', function (Blueprint $table) {
             $table->id();
             $table->string('Date');
+            $table->string('Type')->default('Dinner');
+            $table->boolean('Allow_Existing_Reservations')->default(false);
             $table->timestamps();
         });
     }

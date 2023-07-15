@@ -44,7 +44,6 @@ export function ProceedButton() {
                 }
         }
     };
-    console.log(checkProceedRequirements())
     return (
         <>
             {

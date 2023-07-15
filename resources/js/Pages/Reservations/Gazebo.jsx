@@ -83,12 +83,13 @@ export default function Gazebo(props) {
     useEffect(()=>{
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
     },[bookingDetails.number_of_people]);
-    console.log(bookingDetails)
+
+    console.log(props)
     return (
         <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
             <FormProgressContext.Provider value={{progress,setProgress}}>
                 <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
-                    <GazeboAvailabilityContext.Provider value={bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning}>
+                    <GazeboAvailabilityContext.Provider value={(bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning)}>
                         <GazebosContext.Provider value={Gazebos}>
                             <IsTouchableContext.Provider value={isTouchDevice()}>
                                 <InnerWidthContext.Provider value={innerWidth}>

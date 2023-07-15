@@ -62,13 +62,13 @@ export function FinalizeReservation({Gazepos}) {
                     <div className={'border-bottom  mb-1 mx-auto'} style={{width:'fit-content'}}>
                         <i><Card.Subtitle className={'mb-2'}>Selected {bookingDetails.more_rooms ? 'Menus / Room' : 'Menu'}</Card.Subtitle></i>
                         <Card.Text className={'mb-2'}>
-                            <i>{bookingDetails.primary_room + ' : ' + getMenuName(bookingDetails.primary_menu.Main,Menus) + ' Menu'
-                                + ', ' + getMenuName(bookingDetails.primary_menu.Dessert,Menus)}</i>
+                            <i>{bookingDetails.primary_room + ' : ' + getMenuName(bookingDetails.primary_menu.Main,Menus,true) + ' Menu'
+                                + ', ' + getMenuName(bookingDetails.primary_menu.Dessert,Menus,true)}</i>
                         </Card.Text>
                         <Card.Text className={'mb-2'}>
                             <i>{bookingDetails.secondary_room !== '' &&
-                                bookingDetails.secondary_room + ' : ' + getMenuName(bookingDetails.secondary_menu.Main,Menus) + ' Menu'
-                                + ', ' + getMenuName(bookingDetails.secondary_menu.Dessert,Menus)}</i>
+                                bookingDetails.secondary_room + ' : ' + getMenuName(bookingDetails.secondary_menu.Main,Menus,true) + ' Menu'
+                                + ', ' + getMenuName(bookingDetails.secondary_menu.Dessert,Menus,true)}</i>
                         </Card.Text>
                     </div>
                     {bookingDetails.attendees.length > 1 && <div className={'border-bottom pt-1 pt-md-2 mx-auto'} style={{width: 'fit-content'}}>

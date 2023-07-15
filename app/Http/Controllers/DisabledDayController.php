@@ -8,10 +8,16 @@ use Illuminate\Support\Facades\Redirect;
 
 class DisabledDayController extends Controller {
     public function Disable_Day(Request $request): \Illuminate\Http\RedirectResponse {
-        $input = $request->only(['Date']);
+        $input = $request->only(['Date','Allow_Existing_Reservations','Type']);
         $date_to_disable = $input['Date'];
+        $should_allow_existing_reservations = $input['Allow_Existing_Reservations'];
+        $already_exists = DisabledDay::where('Date',$date_to_disable)->exists();
+        if ($already_exists)
+            return Redirect::back();
         $Disabled_Day = new DisabledDay;
         $Disabled_Day->Date = $date_to_disable;
+        $Disabled_Day->Type = $input['Type'];
+        $Disabled_Day->Allow_Existing_Reservations = $should_allow_existing_reservations;
         $Disabled_Day->save();
 
         return Redirect::back();

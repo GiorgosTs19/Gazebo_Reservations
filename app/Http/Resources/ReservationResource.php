@@ -17,7 +17,7 @@ class ReservationResource extends JsonResource {
 
         return [
             'id'=>$this->id,
-            'Gazebo'=>new GazeboResource(Gazebo::find($this->gazebo_id)),
+            'Gazebo'=>$this->gazebo_id,
             'Name'=>['First'=>$this->First_Name,'Last'=>$this->Last_Name],
             'Date'=>$this->Date,
             'Contact'=>['Email'=>$this->Email,'Phone'=>$this->Phone_Number],
@@ -27,7 +27,8 @@ class ReservationResource extends JsonResource {
             'Attendees' => $this->Attendees,
             'Menus' => MenuSelectionResource::collection($this->Menus),
             'Type' => $this->Type,
-            'Confirmed_At' => $this->created_at
+            'Placed_At' => $this->created_at,
+            'Updated_At' => $this->updated_at
         ];
     }
 }

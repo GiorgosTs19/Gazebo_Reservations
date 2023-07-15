@@ -62,6 +62,7 @@
     width: 100%;
     margin-bottom: 10px;
     border: black solid 1px;
+    border-radius: 1em;
 }
 .settings-header-border, .settings-header-border .settings-heading-subtitle {
     text-align: left;
@@ -86,4 +87,8 @@
 
 .disabled-day {
     color: #ea1414 !important;
+}
+.react-calendar__navigation button:disabled {
+    background-color: transparent !important;
+    color: black !important;
 }

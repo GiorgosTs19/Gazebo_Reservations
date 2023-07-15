@@ -17,11 +17,11 @@ class Reservation extends Model {
         'Email',
         'Phone_Number',
         'Notes',
-        'Confirmation_Number'
+        'Confirmation_Number',
+        'updated_at'
     ];
 
     protected $hidden = [
-        'updated_at',
     ];
 
     public function Attendees(): \Illuminate\Database\Eloquent\Relations\HasMany {

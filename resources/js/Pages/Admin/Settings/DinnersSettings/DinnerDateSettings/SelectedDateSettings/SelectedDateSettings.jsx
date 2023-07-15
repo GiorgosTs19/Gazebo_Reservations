@@ -4,21 +4,17 @@ import {
     getAvailabilityByDate,
     getFormattedDate,
     getTableAvailabilityBoolean,
-    getTableAA, getReservationsByDate
+    getTableAA, getReservationsByDate, isDateDisabledByAdmin
 } from "../../../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../../../Contexts/ReservationsContext";
 import {Button, Col, FormSelect, Row} from "react-bootstrap";
-import {GazebosContext} from "../../../../../../Contexts/GazebosContext";
-import Form from 'react-bootstrap/Form';
-import {Inertia} from "@inertiajs/inertia";
-import {SetDayUnavailableModal} from "../../../../Modals/SetDayUnavailableModal";
 import {SelectedDateTableSettings} from "./SelectedDateTableSettings";
 import {SelectedDateAvailabilitySettings} from "./SelectedDateAvailabilitySettings";
 
 export function SelectedDateSettings() {
     const {selectedDate, setSelectedDate}= useContext(SelectedDateContext),
         SelectedReservations = useContext(ReservationsContext);
-    const isDateDisabled = getAvailabilityByDate(selectedDate,SelectedReservations,true),
+    const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(selectedDate,SelectedReservations),
     [selectedTable,setSelectedTable] = useState(0);
 
     const handleSelectTable = (e) => {
@@ -33,6 +29,7 @@ export function SelectedDateSettings() {
     AvailabilityText = 'Η επιλεγμένη ημέρα ' +  ((Reservations.length === 0 || Reservations === 'None' ) ? 'δεν έχει κάποια κράτηση.' :
         ('έχει ' + (Array.isArray(Reservations) ?
             Reservations.length : '') + (Reservations.length === 1 ? ' κράτηση' : ' κρατήσεις')));
+
 
     return (
         <div className={'text-center my-auto'}>

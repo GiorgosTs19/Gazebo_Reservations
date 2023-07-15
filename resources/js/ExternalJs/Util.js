@@ -37,25 +37,41 @@ export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix,withTime=fal
  *
  * @param menu_id Requested ID
  * @param Menus_Array Array of all Menus and their items
- * @param onlyOne
+ * @param isMenuDestructured
  * @returns {string} the name of the Menu whose ID matches the ID passed into the function.
  */
-export function getMenuName(menu_id,Menus_Array) {
-    const Mains = Menus_Array.Mains,
-    Desserts = Menus_Array.Desserts;
-    console.log(Mains)
-    console.log(Desserts)
-    const MainFound = Mains.find(menu=>menu.id===menu_id),
-        DessertFound = Desserts.find(menu=>menu.id===menu_id);
-    if(MainFound !== undefined) {
-        if(MainFound.Items.length === 1)
-            return MainFound.Items[0].Name;
-        return MainFound.Name;
+export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false) {
+    if(!isMenuDestructured){
+        const Mains = Menus_Array.Dinner.Mains,
+            Desserts = Menus_Array.Dinner.Desserts;
+        const MainFound = Mains.find(menu=>menu.id===menu_id),
+            DessertFound = Desserts.find(menu=>menu.id===menu_id);
+        if(MainFound !== undefined) {
+            if(MainFound.Items.length === 1)
+                return MainFound.Items[0].Name;
+            return MainFound.Name;
+        }
+        else if(DessertFound !== undefined) {
+            if(DessertFound.Items.length === 1)
+                return DessertFound.Items[0].Name;
+            return DessertFound.Name;
+        }
     }
-    else if(DessertFound !== undefined) {
-        if(DessertFound.Items.length === 1)
-            return DessertFound.Items[0].Name;
-        return DessertFound.Name;
+    else {
+        const Mains = Menus_Array.Mains,
+            Desserts = Menus_Array.Desserts;
+        const MainFound = Mains.find(menu=>menu.id===menu_id),
+            DessertFound = Desserts.find(menu=>menu.id===menu_id);
+        if(MainFound !== undefined) {
+            if(MainFound.Items.length === 1)
+                return MainFound.Items[0].Name;
+            return MainFound.Name;
+        }
+        else if(DessertFound !== undefined) {
+            if(DessertFound.Items.length === 1)
+                return DessertFound.Items[0].Name;
+            return DessertFound.Name;
+        }
     }
     return 'Menu';
 }
@@ -75,13 +91,8 @@ export function getTableAA (id,Gazepos_Array) {
  *
  * @param date
  * @param AvailabilityArray
- * @param fromReservations
  */
-export function getAvailabilityByDate(date,AvailabilityArray, fromReservations = false) {
-    if(fromReservations) {
-        return AvailabilityArray.find(
-            item=>item.Date === getFormattedDate(date,'-',1))?.Disabled;
-    }
+export function getAvailabilityByDate(date,AvailabilityArray) {
     if (typeof date === 'string') {
         return AvailabilityArray.find(
             item=>item.Date === date)?.Available;
@@ -127,7 +138,7 @@ export function getTableAvailabilityBoolean(gazepo_id, current_date_availability
         return true;
     else if(Array.isArray(current_date_availability)) {
         if (fromReservations)
-            return !!current_date_availability.some(obj => obj.Gazebo.id === gazepo_id);
+            return current_date_availability.some(obj => obj.Gazebo === gazepo_id);
         return !!current_date_availability.some(obj => obj.hasOwnProperty(gazepo_id));
 
     }
@@ -237,4 +248,39 @@ export function getTimeDifferenceInMinutes(time1, time2) {
 
     // Convert milliseconds to minutes
     return Math.floor(timeDiff / (1000 * 60));
+}
+
+export function isDateDisabledByAdmin (date,Reservations) {
+    if(typeof date === 'string'){
+        const selectedDate = Reservations.find(date => date.Date === date);
+        return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+    }
+    if(typeof date === 'object') {
+        const newDate = getFormattedDate(date,'-',1);
+        const selectedDate = Reservations.find(date => date.Date === newDate);
+        return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+    }
+}
+
+export function isDateDisabledByAdminForReservations (date,Reservations) {
+    if(typeof date === 'string'){
+        const selectedDate = Reservations.find(date => date.Date === date);
+        return selectedDate.Disabled;
+    }
+    if(typeof date === 'object') {
+        const newDate = getFormattedDate(date,'-',1);
+        const selectedDate = Reservations.find(date => date.Date === newDate);
+        return selectedDate.Disabled;
+    }
+}
+
+export function getAvailabilityPercentage (Availability_Array) {
+    const totalTables = Availability_Array.length;
+    let availableTables = 0;
+    for (let index in Availability_Array) {
+
+        if(Availability_Array[index].isAvailable === true)
+            availableTables++;
+    }
+    return [availableTables,totalTables,availableTables/totalTables]
 }

@@ -11,7 +11,7 @@ direction,goToPreviousWeek,goToNextWeek}) {
     const Reservations = useContext(ReservationsContext),
         reservationsToShow = (day)=>{
             const reservations_of_current_date = getReservationsByDate(day,Reservations);
-            if(reservations_of_current_date === 'None')
+            if(reservations_of_current_date.length === 0)
                 return <h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>;
             return reservations_of_current_date.map((reservation,index)=>{
                 return <ListGroup.Item key={index+1} className={'p-1 d-flex ' + (activeReservation?.id === reservation.id ? 'bg-info' : '')}>
