@@ -34,7 +34,7 @@ export default function AdminPanel(props) {
         }
         setActiveTabKey(k);
     };
-
+    console.log(props)
     useEffect(() => {
         const handleResize = () => {
             setInnerWidth(window.innerWidth);

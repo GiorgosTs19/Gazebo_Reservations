@@ -14,18 +14,12 @@ export function MenuSelectionForm() {
                     bookingDetails.primary_menu.Dessert !== '' && bookingDetails.secondary_menu.Dessert !== '';
             }
             case false : {
-                return bookingDetails.primary_menu !== '' && bookingDetails.primary_menu.Dessert !== '';
-            }
-            case null : {
-                return bookingDetails.primary_menu !== '' && bookingDetails.primary_menu.Dessert !== '';
+                return bookingDetails.primary_menu.Main !== '' && bookingDetails.primary_menu.Dessert !== '';
             }
         }
     },
     handleFinalize = () => {
         setProgress('Finalize');
-    },
-    handleBackToDetails = () => {
-        setProgress('Details');
     };
     console.log(bookingDetails)
     return (

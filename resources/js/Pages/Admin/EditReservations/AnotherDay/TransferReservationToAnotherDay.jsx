@@ -1,39 +1,57 @@
 import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {ChangeReservationDateCalendar} from "./ChangeReservationDateCalendar";
 import {useEffect, useRef, useState} from "react";
-import {changeDateFormat, getTableAA} from "../../../ExternalJs/Util";
+import {changeDateFormat, getTableAA} from "../../../../ExternalJs/Util";
 import {useContext} from "react";
-import {GazebosContext} from "../../../Contexts/GazebosContext";
-import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
-import {EditReservationModalTitleContext} from "../Contexts/EditReservationModalTitleContext";
+import {GazebosContext} from "../../../../Contexts/GazebosContext";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {EditReservationModalTitleContext} from "../../Contexts/EditReservationModalTitleContext";
+import {Inertia} from "@inertiajs/inertia";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {ShowEditReservationModalContext} from "../../Contexts/ShowEditReservationModalContext";
 
 export function TransferReservationToAnotherDay() {
     const [selectedDateAvailability,setSelectedDateAvailability] = useState(null),
     Gazebos = useContext(GazebosContext);
     const date = selectedDateAvailability ? selectedDateAvailability[0] : null,
-        availableTables = selectedDateAvailability ? selectedDateAvailability[1] : [];
+        tables = selectedDateAvailability ? selectedDateAvailability[1] : [];
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
+    {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext);
     const handleSelectTable = (table,index) => {
         if(table.isAvailable)
             setSelectedTable(table.id);
-        if(index === Gazebos.length-1)
-            if(TablesListRef.current)
-                TablesListRef.current.scrollTo({top:TablesListRef.current.scrollHeight})
+        if (TablesListRef.current) {
+            if(index === 0)
+                TablesListRef.current.scrollTop = 0;
+            else {
+                const listItem = TablesListRef.current.childNodes[index];
+                const listItemHeight = listItem.offsetHeight;
+                const scrollTop = listItem.offsetTop - listItemHeight;
+                TablesListRef.current.scrollTo({ top: scrollTop, behavior: 'smooth' });
+            }
+        }
     };
     const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
     const handleShowOnlyAvailableTablesChange = (e) => {
         setShowOnlyAvailableTables(!showOnlyAvailableTables);
     };
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
-    const sameTable = selectedDateAvailability ? availableTables.find(table =>{
+    const sameTable = selectedDateAvailability ? tables.find(table =>{
         return table.id === activeReservation.Gazebo;
     }) : null;
+    const AvailableTables = selectedDateAvailability[1].filter((table)=>{
+        return table.isAvailable === true;
+    });
     const sameTableIsAvailable = sameTable ? sameTable.isAvailable : ''
     useEffect(()=> {
+        if(AvailableTables.length === 1){
+            return handleSelectTable(AvailableTables[0],tables.indexOf(AvailableTables[0]));
+        }
         if(selectedDateAvailability) {
             if(sameTableIsAvailable)
-                return setSelectedTable(sameTable.id);
+                return handleSelectTable(sameTable.id,tables.indexOf(tables.find((table)=>{return table.id === sameTable.id})))
             return setSelectedTable('');
         }
     },[selectedDateAvailability]);
@@ -58,10 +76,12 @@ export function TransferReservationToAnotherDay() {
             return 'opacity-25';
     };
     const getAvailableTablesTextWarning = () => {
+        if(AvailableTables.length === 1)
+            return <p className={'text-info sticky-top bg-white'}>Το μοναδικό διαθέσιμο τραπέζι επιλέχθηκε αυτόματα.</p>;
         if(sameTableIsAvailable !== '') {
             if(sameTableIsAvailable)
                 return <p className={'text-info sticky-top bg-white'}>Το ίδιο τραπέζι είναι διαθέσιμο και επιλέχθηκε αυτόματα.</p>;
-            return <p className={'text-danger'}>Το ίδιο τραπέζι δεν είναι διαθέσιμο, παρακαλούμε επιλέξτε κάποιο άλλο.</p>;
+            return <p className={'text-danger'}>Το ίδιο τραπέζι δεν είναι διαθέσιμο, επιλέξτε κάποιο άλλο.</p>;
         }
     }
     const getTablesList = () =>{
@@ -70,7 +90,7 @@ export function TransferReservationToAnotherDay() {
                 Επιλέξτε μία ημέρα για να δείτε διαθεσιμότητα.
             </ListGroup.Item>
             if(showOnlyAvailableTables)
-                return availableTables.filter(table=>{
+                return tables.filter(table=>{
                     return table.isAvailable === true;
                 }).map((table,index)=>{
                     return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
@@ -86,22 +106,28 @@ export function TransferReservationToAnotherDay() {
                         </Row>
                     </ListGroup.Item>;
                 })
-            return availableTables.map((table,index)=>{
+            return tables.map((table,index)=>{
                 return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
-                       style={{cursor:table.isAvailable ? 'pointer' : ''}}
-                       className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
-                            <Row>
-                                <Col>
-                                    Τραπέζι {getTableAA(table.id,Gazebos)}
-                                </Col>
-                                <Col>
-                                    {getTableAvailabilityText(table)}
-                                </Col>
-                            </Row>
-                        </ListGroup.Item>;
+                   style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed') }}
+                   className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
+                        <Row>
+                            <Col>
+                                Τραπέζι {getTableAA(table.id,Gazebos)}
+                            </Col>
+                            <Col>
+                                {getTableAvailabilityText(table)}
+                            </Col>
+                        </Row>
+                    </ListGroup.Item>;
             })
     }
-    const unavailableTablesExist = availableTables.some(table=>{return table.isAvailable === false});
+    const unavailableTablesExist = tables.some(table=>{return table.isAvailable === false});
+
+    const handleSaveChanges = () => {
+        Inertia.patch(route('Change_Reservation_Date'),{Reservation_id:activeReservation.id,Date:selectedDateAvailability[0],
+        Table_id:selectedTable},{preserveScroll:true,only:reservationType === 'Dinner' ?
+                ['Dinner_Reservations'] : ['Bed_Reservations'],onSuccess:()=>setShowEditModal(false)});
+    };
     return (
         <>
             <Row className={'my-2'}>
@@ -139,7 +165,8 @@ export function TransferReservationToAnotherDay() {
                     </Card>
                 </Col>}
             </Row>
-            {selectedTable !== '' && <Button variant={'outline-success'} className={'my-2'} style={{width: 'fit-content'}}>Επιβεβαίωση
+            {selectedTable !== '' && <Button variant={'outline-success'} className={'my-2'} style={{width: 'fit-content'}}
+            onClick={handleSaveChanges}>Επιβεβαίωση
                 Αλλαγής</Button>}
         </>
     )

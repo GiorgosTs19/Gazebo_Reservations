@@ -1,13 +1,14 @@
 import {useContext, useRef} from "react";
 import {useEffect} from "react";
 import {useState} from "react";
-import {getReservationsByDate} from "../../../../ExternalJs/Util";
+import {getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {MobileMonthlyView} from "./MobileMonthlyView";
 import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import Calendar from "react-calendar";
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
@@ -20,7 +21,16 @@ export function MonthlyView() {
         innerWidth = useContext(InnerWidthContext);
         yesterday.setDate(tomorrow.getDate() - 1)
         tomorrow.setDate(tomorrow.getDate() + 1)
-        const isDateDisabled = (date) => (date < yesterday) || (date >= Last_Day),
+        const isDateDisabled = (date,view,activeStartDate) => {
+            if(view === 'month')
+                return (date < yesterday) || (date >= Last_Day)
+            if(view === 'year'){
+                const currentMonth = new Date().getMonth();
+                const selectedMonth = date.getMonth();
+
+                return selectedMonth < currentMonth;
+            }
+            },
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         handleDateChange = (date)=> {
             setSelectedDate(date);
@@ -53,7 +63,7 @@ export function MonthlyView() {
                 return null;
             }
         };
-    const reservationsToShow = ()=>{
+    const reservationsToShow = ()=> {
         if(selectedDate === '')
             return <h4 className={'text-muted my-auto'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
@@ -64,22 +74,60 @@ export function MonthlyView() {
         })
     };
 
-    useEffect(()=>{
-        CalendarRef.current?.classList.add('rounded');
-        CalendarRef.current?.classList.add('shadow');
-    },[CalendarRef.current]);
+    const reservations_of_current_date = selectedDate ?  getReservationsByDate(selectedDate,Reservations) : [];
+    const [isDateDisabledByA,existingReservationsAllowed] = selectedDate ? isDateDisabledByAdmin(selectedDate,Reservations) : [false,true],
+        hasReservations = Array.isArray(reservations_of_current_date) && reservations_of_current_date.length > 0;
 
+    const getTileClassName = ({ activeStartDate, date, view }) => {
+        if(date>today && date<Last_Day)
+            return (view === 'month' && isDateDisabledByAdmin(date,Reservations)[0])
+                ? 'disabled-day' : '';
+    }
 
+    const CalendarToShow = <Calendar onChange={handleDateChange} value={selectedDate || today}
+        className={'mx-auto rounded shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
+        tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
+        tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
+        prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'year'}/>
+
+    const getWarningMessage = () => {
+        if (isDateDisabledByA) {
+            if(hasReservations) {
+                switch (existingReservationsAllowed) {
+                    case 1 : {
+                        return <div>
+                                    <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>
+                                    <h6  className={'text-warning'}>
+                                        Οι παρακάτω κρατήσεις μπορούν να πραγματοποιηθούν.
+                                    </h6>
+                                </div>
+
+                    }
+
+                    case 0 : {
+                        return <div>
+                                    <h6  className={'text-warning'}>
+                                        Οι παρακάτω κρατήσεις δεν μπορούν να πραγματοποιηθούν.
+                                        ΠΡΕΠΕΙ να γίνει μεταφορά τους σε άλλη μέρα.
+                                    </h6>
+                                </div>
+
+                    }
+                }
+            }
+            return <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>;
+        }
+    };
 
     return (
         innerWidth > 992
             ?
-            <LargeDevicesMonthlyView handleDateChange={handleDateChange} selectedDate={selectedDate} today={today}
-                                     CalendarRef={CalendarRef} getTileContent={getTileContent} isDateDisabled={isDateDisabled} reservationsToShow={reservationsToShow}>
+            <LargeDevicesMonthlyView Calendar={CalendarToShow}
+                reservationsToShow={reservationsToShow} WarningMessage={getWarningMessage}>
             </LargeDevicesMonthlyView>
             :
-            <MobileMonthlyView handleDateChange={handleDateChange} selectedDate={selectedDate} today={today}
-                               CalendarRef={CalendarRef} getTileContent={getTileContent} isDateDisabled={isDateDisabled} reservationsToShow={reservationsToShow}>
+            <MobileMonthlyView Calendar={CalendarToShow}
+                reservationsToShow={reservationsToShow} WarningMessage={getWarningMessage}>
             </MobileMonthlyView>
     )
 }

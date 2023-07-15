@@ -2,17 +2,19 @@ import {Button, Modal} from "react-bootstrap";
 import {useState} from "react";
 import {ReservationEditingOptions} from "../Reservations/ReservationEditing/ReservationEditingOptions";
 import {EditReservationModalTitleContext} from "../Contexts/EditReservationModalTitleContext";
+import {ShowEditReservationModalContext} from "../Contexts/ShowEditReservationModalContext";
+import {EditModalContentContext} from "../Contexts/EditModalContentContext";
 export function ReservationEditModal({Reservation}) {
-    const [show, setShow] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const handleShow = () => {
         // Inertia.get(route('ShowAdminPanel'),{},{preserveScroll:true,preserveState:true,only:['Dinner_Reservations'],onSuccess:()=>{
         //     }});
-        setShow(true);
+        setShowEditModal(true);
     };
     const [content,setContent] = useState('Options');
     const [modalTitle,setModalTitle] = useState('Επεξεργασία Κράτησης');
     const handleBackToOptions = () => {setContent('Options');setModalTitle('Επεξεργασία Κράτησης')};
-    const handleHide = () => {setContent('Options');setShow(false);}
+    const handleHide = () => {setContent('Options');setShowEditModal(false);}
     return (
         <>
             <Button variant={'outline-warning'} size={'lg'}
@@ -20,24 +22,29 @@ export function ReservationEditModal({Reservation}) {
                 Επεξεργασία
             </Button>
 
-            <Modal size="lg" show={show} onHide={handleHide} className={'text-center'}>
+            <Modal size="lg" show={showEditModal} onHide={handleHide} className={'text-center'}>
                 <EditReservationModalTitleContext.Provider value={{modalTitle,setModalTitle}}>
-                    <Modal.Header closeButton>
-                        <Modal.Title id="example-modal-sizes-title-lg">
-                            {modalTitle}
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {content !== 'Options' && <h2 onClick={handleBackToOptions} style={{cursor:'pointer'}}>&larr;</h2>}
-                        {content === 'Options' &&
-                            <ReservationEditingOptions Content={{content,setContent}} Reservation={Reservation}
-                                                       ModalTitle={{modalTitle,setModalTitle}}>
-                            </ReservationEditingOptions>
-                        }
-                        {content !== 'Options' &&
-                            content
-                        }
-                    </Modal.Body>
+                    <ShowEditReservationModalContext.Provider value={{showEditModal,setShowEditModal}}>
+                        <EditModalContentContext.Provider value={{content,setContent}}>
+                            <Modal.Header closeButton>
+                                <Modal.Title id="example-modal-sizes-title-lg">
+                                    {modalTitle}
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {content !== 'Options' && <h2 onClick={handleBackToOptions} style={{cursor:'pointer',width:'fit-content'}} className={'mx-auto mb-3 border-bottom'}
+                                >&larr;</h2>}
+                                {content === 'Options' &&
+                                    <ReservationEditingOptions Content={{content,setContent}} Reservation={Reservation}
+                                                               ModalTitle={{modalTitle,setModalTitle}}>
+                                    </ReservationEditingOptions>
+                                }
+                                {content !== 'Options' &&
+                                    content
+                                }
+                            </Modal.Body>
+                        </EditModalContentContext.Provider>
+                    </ShowEditReservationModalContext.Provider>
                 </EditReservationModalTitleContext.Provider>
             </Modal>
         </>

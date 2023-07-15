@@ -121,9 +121,25 @@ class ReservationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reservation $reservation)
-    {
-        //
+    public function changeReservationDate(Request $request): \Illuminate\Http\RedirectResponse {
+        $input = $request->only(['Reservation_id','Date','Table_id']);
+        $Reservation = Reservation::find($input['Reservation_id']);
+        if($Reservation->Date !== $input['Date'])
+            $Reservation->Date =$input['Date'];
+        if($Reservation->gazebo_id !== $input['Table_id'])
+            $Reservation->gazebo_id = $input['Table_id'];
+        $Reservation->save();
+        return Redirect::back();
+    }
+
+
+    public function changeReservationTable(Request $request): \Illuminate\Http\RedirectResponse {
+        $input = $request->only(['Reservation_id','Table_id']);
+        $Reservation = Reservation::find($input['Reservation_id']);
+        if($Reservation->gazebo_id !== $input['Table_id'])
+            $Reservation->gazebo_id = $input['Table_id'];
+        $Reservation->save();
+        return Redirect::back();
     }
 
     /**

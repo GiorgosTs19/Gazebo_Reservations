@@ -4,10 +4,10 @@ import {
     getAvailabilityPercentage,
     getFormattedDate,
     isDateDisabledByAdmin
-} from "../../../ExternalJs/Util";
+} from "../../../../ExternalJs/Util";
 import Calendar from "react-calendar";
-import {ReservationsContext} from "../../../Contexts/ReservationsContext";
-import {GazebosContext} from "../../../Contexts/GazebosContext";
+import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
+import {GazebosContext} from "../../../../Contexts/GazebosContext";
 
 export function ChangeReservationDateCalendar({SelectedDateAvailability,className}) {
     const {selectedDateAvailability,setSelectedDateAvailability} = SelectedDateAvailability;
@@ -62,10 +62,30 @@ export function ChangeReservationDateCalendar({SelectedDateAvailability,classNam
             return null;
         }
 
+    const [activeMonth,setActiveMonth] = useState(today.getMonth());
+    const isPrevLabelDisabled = () =>{
+        if(activeMonth === today.getMonth())
+            return null;
+        return "‹";
+    };
+
+    const getTileClassName = (date) => {
+        const dateAvailability = getAvailabilityByDate(date,Reservations);
+        if(dateAvailability) {
+            const dateIsNotAvailable = dateAvailability.every((table)=>{
+                return table.isAvailable === false;
+            });
+            if(dateIsNotAvailable)
+                return 'disabled-day_transfer'
+        }
+        return '';
+    }
     return (
         <Calendar onChange={handleDateChange} value={selectedDate} tileDisabled={({ date }) => isDateDisabled(date)}
             prev2Label={null} next2Label={null} className={'mx-auto rounded shadow ' + className} minDetail={'month'}
             tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
-            inputRef={CalendarRef} showNeighboringMonth={false}/>
+            onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
+            inputRef={CalendarRef} showNeighboringMonth={false} prevLabel={isPrevLabelDisabled()}
+            tileClassName={({date})=>getTileClassName(date)}/>
     )
 }

@@ -108,16 +108,13 @@ export function getReservationsByDate(date,ReservationsArray) {
     if (typeof date === 'string') {
         const reservations =  ReservationsArray.find(
             item=>item.Date === date)?.Reservations;
-        if (Array.isArray(reservations))
-            return reservations;
-        return 'None';
+            return reservations ?? [];
     }
     else if (typeof date === 'object') {
         const reservations = ReservationsArray.find(
             item=>item.Date === getFormattedDate(date,'-',1))?.Reservations;
-        if (Array.isArray(reservations))
-            return reservations;
-        return 'None';
+            return reservations ?? [];
+
     }
 }
 

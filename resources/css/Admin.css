@@ -88,6 +88,18 @@
 .disabled-day {
     color: #ea1414 !important;
 }
+
+.disabled-day_transfer {
+    color: #ea1414 !important;
+    opacity: 25% !important;
+    pointer-events: none;
+}
+
+.react-calendar__tile:disabled {
+    background-color: white !important;
+    opacity: 50% !important;
+    cursor: not-allowed;
+}
 .react-calendar__navigation button:disabled {
     background-color: transparent !important;
     color: black !important;

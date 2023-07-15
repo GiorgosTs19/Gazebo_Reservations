@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
-export function MobileMonthlyView({handleDateChange,selectedDate,today,CalendarRef,getTileContent,isDateDisabled,reservationsToShow}) {
+export function MobileMonthlyView({Calendar,reservationsToShow,WarningMessage}) {
     const [shouldShowCalendar,setShouldShowCalendar] = useState(true),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
 
@@ -24,17 +24,16 @@ export function MobileMonthlyView({handleDateChange,selectedDate,today,CalendarR
             <Col className={'p-4'}>
                 {shouldShowCalendar && <>
                     <ReservationCountNotes></ReservationCountNotes>
-                    <Calendar onChange={handleDateChange} value={selectedDate || today} className={'mx-auto'}
-                              inputRef={CalendarRef}
-                              tileContent={({activeStartDate, date, view}) => view === 'month' && getTileContent(date)}
-                              tileDisabled={({date}) => isDateDisabled(date)}/>
-                </>}
+                    {Calendar}
+                </>
+                }
                 {!shouldShowCalendar && activeReservation == null &&
                     <>
                         <Button size={'lg'} variant={'info'} onClick={handleBackToCalendar} className={'my-4'}>
                             &#x2190;
                         </Button>
                         <Stack className={'p-3'} style={{overflowY: 'auto', maxHeight : '350px'}}>
+                            {WarningMessage()}
                             {reservationsToShow()}
                         </Stack>
                     </>

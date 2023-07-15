@@ -11,7 +11,6 @@ export function TodaysView() {
     Reservations = useContext(ReservationsContext),
     innerWidth = useContext(InnerWidthContext);
     const reservations_of_current_date = getReservationsByDate(today,Reservations);
-    console.log(reservations_of_current_date)
     const reservationsToShow = ()=>{
         if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;

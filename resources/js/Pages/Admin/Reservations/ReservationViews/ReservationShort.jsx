@@ -9,9 +9,9 @@ export function ReservationShort({Reservation}) {
         Rooms = Reservation.Rooms,
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
     return (
-        <div className={'text-muted my-auto p-1 border rounded-2 reservation-view ' + (activeReservation?.id === Reservation.id && 'bg-info')}
+        <div className={'text-muted my-2 p-1 border rounded-2 reservation-view ' + (activeReservation?.id === Reservation.id && 'bg-info')}
          style={{cursor:'pointer',pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''}}>
-            <Row className={'p-2 '} onClick={()=>setActiveReservation(Reservation)}>
+            <Row className={'p-2'} onClick={()=>setActiveReservation(Reservation)}>
                 <p>Αρ. Κράτησης : {Confirmation_Number}</p>
                 <Col >
                     <p><img src={'/Images/Icons/profile_icon.png'} alt={''}/> {Name}</p>

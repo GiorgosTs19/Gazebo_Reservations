@@ -19,7 +19,7 @@ export function ReservationCalendar() {
     Last_Day = new Date('2023-11-10'),
     Availability = useContext(GazeboAvailabilityContext),
     CalendarRef = useRef(null),
-    [activeMonth,setActiveMonth] = useState(null),
+    [activeMonth,setActiveMonth] = useState(today.getMonth()),
     disabledDueToAvailability = (date) =>{
         const current_date_availability = getAvailabilityByDate(date,Availability);
         return Array.isArray(current_date_availability) && current_date_availability.length === 0;
@@ -28,11 +28,8 @@ export function ReservationCalendar() {
     yesterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
     twoDaysBefore.setDate(today.getDate()-2);
-    useEffect(()=>{
-        const activeMonth = today.getMonth();
-        setActiveMonth(activeMonth);
-    },[]);
-    const isPrev2LabelDisabled = () =>{
+
+    const isPrevLabelDisabled = () =>{
        if(activeMonth === today.getMonth())
            return null;
        return "‹";
@@ -87,7 +84,7 @@ export function ReservationCalendar() {
         <Calendar onChange={handleDateChange} value={selectedDate} tileDisabled={({ date }) => isDateDisabled(date)}
                   className={'mx-auto rounded shadow'} tileContent={({ activeStartDate , date, view }) =>
             view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
-        prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrev2LabelDisabled()}
+        prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()}
         onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
         tileClassName={''}/>
     )
