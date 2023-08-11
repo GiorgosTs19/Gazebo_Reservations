@@ -25,7 +25,7 @@ export function RoomMenuSelection({Room,primary= false}) {
         }
     };
     return (
-        <Card className={'my-3 border-0'}>
+        <Card className={'my-3 border-0 bg-transparent'}>
             <Card.Header className={'bg-transparent'}><b><i>{getContent()}</i></b> for Room {Room}</Card.Header>
             <Card.Body>
                 {bookingDetails.type === 'Bed' ? '' : <DinnerMenu primary={primary}></DinnerMenu>}

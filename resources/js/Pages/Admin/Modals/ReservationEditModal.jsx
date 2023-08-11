@@ -17,8 +17,8 @@ export function ReservationEditModal({Reservation}) {
     const handleHide = () => {setContent('Options');setShowEditModal(false);}
     return (
         <>
-            <Button variant={'outline-warning'} size={'lg'}
-                    className={'mx-auto'} onClick={handleShow}>
+            <Button variant={'outline-dark'}
+                    className={'mx-auto px-2 py-2 rounded-3'} onClick={handleShow}>
                 Επεξεργασία
             </Button>
 
@@ -32,8 +32,8 @@ export function ReservationEditModal({Reservation}) {
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                {content !== 'Options' && <h2 onClick={handleBackToOptions} style={{cursor:'pointer',width:'fit-content'}} className={'mx-auto mb-3 border-bottom'}
-                                >&larr;</h2>}
+                                {content !== 'Options' && <h5 onClick={handleBackToOptions} style={{cursor:'pointer',width:'fit-content'}} className={'mx-auto mb-3 border-bottom'}
+                                >&larr; Πίσω</h5>}
                                 {content === 'Options' &&
                                     <ReservationEditingOptions Content={{content,setContent}} Reservation={Reservation}
                                                                ModalTitle={{modalTitle,setModalTitle}}>

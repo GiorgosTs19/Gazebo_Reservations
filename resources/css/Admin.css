@@ -1,19 +1,49 @@
+* {
+    box-sizing: border-box;
+}
 .reservation-view {
     opacity: 1;
     transition: opacity 0.3s ease; /* Add a smooth transition effect */
 }
 .reservation-view:hover {
-    opacity: 0.40;
+    background-color: #fcf9f9;
 }
 
+.scrollable-y {
+    height: calc(100vh - 150px);
+    overflow-x: hidden;
+}
+.scrollable-y-not-vh {
+    height: calc(100% - 130px);
+    overflow-x: hidden;
+}
+.scrollable-y-50vh {
+    height: calc(70vh);
+    overflow-x: hidden;
+}
+.scrollable-x-not-vw {
+    width: calc(100% - 20px);
+    overflow-y: hidden;
+}
 /* Input container */
 .input-container {
     position: relative;
     margin: 20px;
     width: 85%;
 }
-
-/* Input field */
+.active-reservation {
+    background-color: #f5fafa;
+    /*border: 3px black !important;*/
+}
+.info-text, .info-text-lg {
+    opacity: 70%;
+}
+.info-text {
+    font-size : 14px;
+}
+.info-text-lg {
+    font-size : 15px;
+}
 .input-field {
     display: block;
     width: 100%;
@@ -103,4 +133,8 @@
 .react-calendar__navigation button:disabled {
     background-color: transparent !important;
     color: black !important;
+}
+
+.box_shadow {
+    box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, 0.3) 0 3px 7px -3px;
 }

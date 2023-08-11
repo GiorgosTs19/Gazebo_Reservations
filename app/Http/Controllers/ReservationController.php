@@ -103,11 +103,17 @@ class ReservationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Changes the status of the Reservation from Pending to either Confirmed or Cancelled.
      */
-    public function store(Request $request)
+    public function changeReservationStatus(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $input = $request->only(['reservation_id','status']);
+        $Reservation = Reservation::find($input['reservation_id']);
+        if($Reservation) {
+            $Reservation->Status = $input['status'];
+            $Reservation->save();
+        }
+        return Redirect::back();
     }
 
     /**

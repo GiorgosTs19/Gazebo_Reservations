@@ -8,15 +8,17 @@ import {
 import {useContext, useEffect, useRef, useState} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {GazeboAvailabilityContext} from "../../../Contexts/GazeboAvailabilityContext";
+import {SettingsContext} from "../../Admin/Contexts/SettingsContext";
 
 export function ReservationCalendar() {
     const  {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     [selectedDate,setSelectedDate] = useState(bookingDetails.date ?? null),
+    Settings = useContext(SettingsContext),
     today = new Date(),
     yesterday = new Date(),
     twoDaysBefore = new Date(),
     tomorrow = new Date(),
-    Last_Day = new Date('2023-11-10'),
+    Last_Day = Settings ? new Date(Settings?.Ending_Date) : new Date((new Date).getFullYear(),11,31),
     Availability = useContext(GazeboAvailabilityContext),
     CalendarRef = useRef(null),
     [activeMonth,setActiveMonth] = useState(today.getMonth()),
@@ -34,9 +36,14 @@ export function ReservationCalendar() {
            return null;
        return "‹";
     };
+    const isNextLabelDisabled = () =>{
+       if(activeMonth === Last_Day.getMonth())
+           return null;
+       return "›";
+    };
     const isDateDisabled = (date) => {
         if(bookingDetails.type === 'Dinner')
-            return (today.getHours()<23 ? date < today : date<tomorrow) || date >= Last_Day
+            return (today.getHours()<23 ? date < today : date<tomorrow) || date > Last_Day
             || disabledDueToAvailability(date) || isDateDisabledByAdminForReservations(date,Availability);
         return date < yesterday || date >= Last_Day || disabledDueToAvailability(date) || isDateDisabledByAdminForReservations(date,Availability);
         },
@@ -71,21 +78,20 @@ export function ReservationCalendar() {
                     }
                 }
         }
-        return null;
+        return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#555557',width:'76%', height:'4px'}}></div>;
     };
 
-    // const isTileHidden = ({ date, view }) => {
-    //     if(bookingDetails.type === 'Dinner')
-    //         return view === 'month' && date < today ? 'd-none' : null;
-    //     return view === 'month' && date < yesterday ? 'd-none' : null
-    // };
-
+    const getTileClassName = (date) => {
+        if(isDateDisabled(date))
+            return 'disabled';
+        return '';
+    }
     return (
         <Calendar onChange={handleDateChange} value={selectedDate} tileDisabled={({ date }) => isDateDisabled(date)}
-                  className={'mx-auto rounded shadow'} tileContent={({ activeStartDate , date, view }) =>
+                  className={'mx-auto my-4 rounded-5 '} tileContent={({ activeStartDate , date, view }) =>
             view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
-        prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()}
-        onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
-        tileClassName={''}/>
+                  prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}
+                  onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
+                  tileClassName={({ activeStartDate , date, view }) => getTileClassName(date)}/>
     )
 }

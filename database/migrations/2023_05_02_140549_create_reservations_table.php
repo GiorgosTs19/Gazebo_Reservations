@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('Phone_Number');
             $table->tinyText('Notes')->nullable()->default(null);
             $table->string('Confirmation_Number')->unique();
+            $table->string('Status')->default('Pending');
             $table->timestamps();
         });
     }

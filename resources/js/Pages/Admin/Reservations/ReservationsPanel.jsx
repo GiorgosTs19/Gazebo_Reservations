@@ -68,13 +68,13 @@ export function ReservationsPanel({Dinner_Reservations,Bed_Reservations}) {
                         </Card.Header>
                         <Card.Body>
                             <Row className={'h-100'}>
-                                <Col sm={12} lg={(activeReservation !== null || activeView === 'Weekly') ? 7 : 12}  className={!isMobile && 'border-end'}>
+                                <Col sm={12} lg={(activeReservation !== null || activeView === 'Weekly' || activeView === 'Today') ? 7 : 12}  className={!isMobile && 'border-end'}>
                                     {activeView === 'Today' && <TodaysView></TodaysView>}
                                     {activeView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
                                     {activeView === 'Monthly' && <MonthlyView></MonthlyView>}
                                 </Col>
-                                {(activeReservation !== null || (activeView === 'Weekly' && innerWidth > 1200)) && <Col sm={12} lg={5}
-                                    className={'d-flex text-center'} as={'div'} style={{overflowY: 'auto', maxHeight: '70vh'}}>
+                                {(activeReservation !== null || ((activeView === 'Weekly'  || activeView === 'Today') && innerWidth > 1200)) && <Col sm={12} lg={5}
+                                    className={'d-flex text-center '} as={'div'} style={{overflowY: 'auto', maxHeight: '75vh'}}>
                                     {showReservationLong()}
                                 </Col>}
                             </Row>

@@ -2,15 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BedSetting;
 use App\Models\DinnerSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 
 class SettingsController extends Controller {
 
-    public function index()
-    {
-        //
+    public function initializeSettings() {
+        $DinnerSettings = DinnerSetting::first();
+        if(!$DinnerSettings) {
+            $NewDinnerSettings = new DinnerSetting;
+            $NewDinnerSettings->Starting_Date = date('Y-m-d');
+            $NewDinnerSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));;
+            $NewDinnerSettings->Arrival_Time_Start = '21:00';
+            $NewDinnerSettings->save();
+        }
+        $BedSettings = BedSetting::first();
+        if(!$BedSettings) {
+            $NewBedSettings = new BedSetting;
+            $NewBedSettings->Starting_Date = date('Y-m-d');
+            $NewBedSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));;
+            $NewBedSettings->Arrival_Time = '08:00';
+            $NewBedSettings->save();
+        }
     }
 
     /**

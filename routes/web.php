@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -9,10 +11,29 @@ use Inertia\Inertia;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 Route::get('/', [\App\Http\Controllers\GazeboController::class,
     'show']);
@@ -20,6 +41,9 @@ Route::get('/', [\App\Http\Controllers\GazeboController::class,
 Route::get('/Reserve', [\App\Http\Controllers\GazeboController::class,
     'show'])->name('Show.Gazebo.Reservation.Form');
 
+Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::class,'create'])->name('Create_Reservation');
+//Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
+Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
 
 Route::prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
@@ -27,23 +51,29 @@ Route::prefix('/Admin')->group(function () {
 
     Route::prefix('/Settings')->group(function () {
         Route::prefix('/Dinner')->group(function () {
-            Route::post('/Save',[\App\Http\Controllers\SettingsController::class,'saveDinnerSettings'])->name('Save_Dinner_Settings');
+            Route::post('/Save', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
         });
     });
 
     Route::prefix('/Reservations')->group(function () {
         Route::prefix('/Edit')->group(function () {
-            Route::patch('/Date',[\App\Http\Controllers\ReservationController::class,'changeReservationDate'])->
+            Route::patch('/Date', [\App\Http\Controllers\ReservationController::class, 'changeReservationDate'])->
             name('Change_Reservation_Date');
-            Route::patch('/Table',[\App\Http\Controllers\ReservationController::class,'changeReservationTable'])->
+            Route::patch('/Table', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
             name('Change_Reservation_Table');
+        });
+        Route::prefix('/Status')->group(function () {
+            Route::patch('/Confirm', [\App\Http\Controllers\ReservationController::class, 'changeReservationStatus'])->
+            name('Change_Reservation_Status');
+//            Route::patch('/Cancel', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
+//            name('Cancel_Reservation');
         });
     });
 
     Route::prefix('/Menu')->group(function () {
-        Route::post('/Create', [\App\Http\Controllers\MenuController::class,'create'])->name('Create_Menu');
-        Route::delete('/Delete', [\App\Http\Controllers\MenuController::class,'destroy'])->name('Delete_Menu');
-        Route::patch('/Edit', [\App\Http\Controllers\MenuController::class,'edit'])->name('Edit_Menu');
+        Route::post('/Create', [\App\Http\Controllers\MenuController::class, 'create'])->name('Create_Menu');
+        Route::delete('/Delete', [\App\Http\Controllers\MenuController::class, 'destroy'])->name('Delete_Menu');
+        Route::patch('/Edit', [\App\Http\Controllers\MenuController::class, 'edit'])->name('Edit_Menu');
     });
 
     Route::prefix('/Disable')->group(function () {
@@ -55,11 +85,4 @@ Route::prefix('/Admin')->group(function () {
         Route::delete('/Table', [\App\Http\Controllers\DisabledTableController::class, 'Enable_Table'])->name('Enable_Table');
     });
 });
-
-
-
-Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::class,'create'])->name('Create_Reservation');
-Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
-Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
-
-
+require __DIR__.'/auth.php';

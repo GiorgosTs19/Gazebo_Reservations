@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GazeboResource;
 use App\Http\Resources\MenuResource;
 use App\Http\Resources\ReservationResource;
+use App\Models\BedSetting;
+use App\Models\DinnerSetting;
 use App\Models\DisabledDay;
 use App\Models\Gazebo;
 use App\Models\Menu;
@@ -51,7 +53,7 @@ class GazeboController extends Controller {
         date_default_timezone_set("Europe/Athens");
         $startDate = date("Y-m-d"); // Get today's date
         $currentDate = $startDate;
-        $Last_Day = '2023-11-10';
+        $Last_Day = $type === 'Dinner' ? DinnerSetting::first()->Ending_Date : BedSetting::first()->Ending_Date ;
         $Availability = [];
         $Reservations_of_Type = Reservation::where('Type',$type)->where('Date', '>=', $startDate)->get();
         while ($currentDate <= $Last_Day) {
@@ -132,8 +134,11 @@ class GazeboController extends Controller {
             'Desserts'=>MenuResource::collection(Menu::where('Type','Dinner')->where('Category','Dessert')->get())];
         $Availability = ['Dinner' => self::checkAvailability($Gazebos,'Dinner',$Disabled_Days),
             'Morning' => self::checkAvailability($Gazebos,'Bed',$Disabled_Days)];
+        $Dinner_Settings = DinnerSetting::first();
+        $Bed_Settings = BedSetting::first();
         return Inertia::render('Reservations/Gazebo',
-            ['Gazebos'=>$Gazebos,'Menu'=>['Morning'=>$Bed_Menus,'Dinner'=>$Dinner_Menus],'Availability'=>$Availability]);
+            ['Gazebos'=>$Gazebos,'Menu'=>['Morning'=>$Bed_Menus,'Dinner'=>$Dinner_Menus],'Availability'=>$Availability,'Settings'=>['Dinner'=>$Dinner_Settings,
+                'Bed'=>$Bed_Settings]]);
     }
 
     /**

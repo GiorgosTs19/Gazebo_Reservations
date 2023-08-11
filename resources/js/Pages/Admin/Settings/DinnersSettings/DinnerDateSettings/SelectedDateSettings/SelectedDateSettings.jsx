@@ -1,13 +1,9 @@
 import {useContext, useEffect, useState} from "react";
 import {SelectedDateContext} from "../../../../Contexts/SelectedDateContext";
-import {
-    getAvailabilityByDate,
-    getFormattedDate,
-    getTableAvailabilityBoolean,
-    getTableAA, getReservationsByDate, isDateDisabledByAdmin
+import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin
 } from "../../../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../../../Contexts/ReservationsContext";
-import {Button, Col, FormSelect, Row} from "react-bootstrap";
+import {Card, Col, Row} from "react-bootstrap";
 import {SelectedDateTableSettings} from "./SelectedDateTableSettings";
 import {SelectedDateAvailabilitySettings} from "./SelectedDateAvailabilitySettings";
 
@@ -32,26 +28,23 @@ export function SelectedDateSettings() {
 
 
     return (
-        <div className={'text-center my-auto'}>
+        <div className={'text-center mx-auto mt-4'}>
             <h5>{getFormattedDate(selectedDate,'-',2)}</h5>
-            {<b className={(Reservations.length === 0 || Reservations === 'None' ) ? 'text-success' : 'text-warning'}>
+            {<b className={'' + (Reservations.length === 0 || Reservations === 'None' ) ? 'text-success' : 'text-warning'}>
                 {AvailabilityText}
             </b>}
-            <div className="settings-header-border mt-5 mt-xl-2">
-                <h4 className="settings-heading-subtitle"><span>Επιλογές</span></h4>
-                <Row>
-                    <Col xs={12} lg={5} className={'text-center my-4 my-lg-0 d-flex flex-column p3'}>
+                <Row className={'mt-4'}>
+                    <Col xs={12} lg={6} className={'text-center my-4 my-lg-0 d-flex flex-column p3 border-end'}>
                         {/*Handles the selected day's availability settings. ( Setting unavailable or available )*/}
                         <SelectedDateAvailabilitySettings Reservations={Reservations} AvailabilityText={AvailabilityText}
                         isDateDisabled={isDateDisabled} selectedDate={selectedDate}></SelectedDateAvailabilitySettings>
                     </Col>
-                    <Col xs={12} lg={7} className={'text-center my-4 my-xl-0 p-2'}>
+                    <Col xs={12} lg={6} className={'text-center my-4 my-xl-0 p-2'}>
                         {/*Handles the selected day's tables availability settings. ( Setting unavailable or available )*/}
                         <SelectedDateTableSettings selectedTable={selectedTable} handleSelectTable={handleSelectTable}
                            isDateDisabled={isDateDisabled} Reservations={Reservations}></SelectedDateTableSettings>
                     </Col>
                 </Row>
-            </div>
         </div>
     )
 }

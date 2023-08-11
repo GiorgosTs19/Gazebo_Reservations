@@ -7,7 +7,8 @@ import {MobileWeeklyView} from "./MobileWeeklyView";
 export function WeeklyReservationsView() {
     const [currentDate, setCurrentDate] = useState(new Date()),
     [direction,setDirection] = useState('vertical'),
-    innerWidth = useContext(InnerWidthContext);
+    innerWidth = useContext(InnerWidthContext),
+    [reservationsFilter,setReservationsFilter] = useState('All');
 
     const goToPreviousWeek = () => {
         const previousWeek = new Date(currentDate.getTime());
@@ -42,19 +43,18 @@ export function WeeklyReservationsView() {
     }
 
 
-
     return (
         <>
             {innerWidth > 1200
                 ?
                 <LargeDevicesWeeklyView getBorder={getBorder} currentDate={currentDate}
                     direction={direction} goToNextWeek={goToNextWeek}
-                    goToPreviousWeek={goToPreviousWeek}>
+                    goToPreviousWeek={goToPreviousWeek} filter={{reservationsFilter,setReservationsFilter}}>
                 </LargeDevicesWeeklyView>
                 :
                 <MobileWeeklyView getBorder={getBorder} currentDate={currentDate}
                     direction={direction} goToNextWeek={goToNextWeek}
-                    goToPreviousWeek={goToPreviousWeek}>
+                    goToPreviousWeek={goToPreviousWeek} filter={{reservationsFilter,setReservationsFilter}}>
                 </MobileWeeklyView>
             }
         </>

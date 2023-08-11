@@ -5,7 +5,6 @@ import {useRef} from "react";
 import {SelectedDateContext} from "../../../Contexts/SelectedDateContext";
 import {ReservationsContext} from "../../../../../Contexts/ReservationsContext";
 import {getAvailabilityByDate, isDateDisabledByAdmin} from "../../../../../ExternalJs/Util";
-import {useEffect} from "react";
 
 export function CalendarSettings() {
     const {settings,dispatchSetting} = useContext(SettingsContext),
@@ -37,14 +36,12 @@ export function CalendarSettings() {
                 ? 'disabled-day' : '';
     }
 
-
-
     return (
-        <div className={'d-flex my-auto h-100'}>
+        // <div className={'d-flex mx-auto h-100'}>
             <Calendar className={'rounded shadow-sm m-auto'} tileDisabled={({ date }) => isDateDisabled(date)}
               inputRef={CalendarRef} showNeighboringMonth={false} value={selectedDate} onChange={handleDateChange}
               tileClassName={getTileClassName} prev2Label={null}>
             </Calendar>
-        </div>
+        // </div>
     )
 }

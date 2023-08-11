@@ -41,12 +41,12 @@ export function TransferReservationToAnotherDay() {
     const sameTable = selectedDateAvailability ? tables.find(table =>{
         return table.id === activeReservation.Gazebo;
     }) : null;
-    const AvailableTables = selectedDateAvailability[1].filter((table)=>{
+    const AvailableTables = selectedDateAvailability ? selectedDateAvailability[1].filter((table)=>{
         return table.isAvailable === true;
-    });
+    }) : [];
     const sameTableIsAvailable = sameTable ? sameTable.isAvailable : ''
     useEffect(()=> {
-        if(AvailableTables.length === 1){
+        if(AvailableTables.length === 1) {
             return handleSelectTable(AvailableTables[0],tables.indexOf(AvailableTables[0]));
         }
         if(selectedDateAvailability) {

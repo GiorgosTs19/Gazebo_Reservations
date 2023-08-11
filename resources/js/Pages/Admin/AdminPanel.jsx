@@ -10,6 +10,7 @@ import 'react-calendar/dist/Calendar.css';
 import {MenuContext} from "../../Contexts/MenuContext";
 import {PendingUnsavedChangesContext} from "./Contexts/PendingUnsavedChangesContext";
 import {ShouldShowUnsavedChangesModalContext} from "./Contexts/ShouldShowUnsavedChangesModalContext";
+import {AuthenticatedUserContext} from "./Contexts/AuthenticatedUserContext";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -20,6 +21,7 @@ export default function AdminPanel(props) {
     Dinner_Settings = props.Dinner_Settings,
     Bed_Settings = props.Bed_Settings,
     ActiveTab = props.ActiveTab,
+    User = props.auth.user,
     [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false});
     const [activeTabKey, setActiveTabKey] = useState(ActiveTab),
     [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Dinner:false,Bed:false,Key:''});
@@ -34,7 +36,6 @@ export default function AdminPanel(props) {
         }
         setActiveTabKey(k);
     };
-    console.log(props)
     useEffect(() => {
         const handleResize = () => {
             setInnerWidth(window.innerWidth);
@@ -46,42 +47,46 @@ export default function AdminPanel(props) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    // console.log(props)
+    console.log(props)
     return (
-        <InnerWidthContext.Provider value={innerWidth}>
-            <GazebosContext.Provider value={Gazebos}>
-                <MenuContext.Provider value={Menus}>
-                    <Container fluid className={'px-3 py-3 '  + (innerWidth<992 ? 'overflow-auto' : '')}>
-                        <Tabs defaultActiveKey="Reservations" className="mb-3" activeKey={activeTabKey}
-                              onSelect={(k) => handleTabSelect(k)}>
-                            <Tab eventKey="Reservations" title="Κρατήσεις">
-                                <Col>
-                                    <ReservationsPanel Bed_Reservations={Bed_Reservations}
-                                                       Dinner_Reservations={Dinner_Reservations}>
-                                    </ReservationsPanel>
-                                </Col>
-                            </Tab>
-                            <Tab eventKey="Menus" title="Μενού">
-                                <Col>
-                                    <MenuAdminPanel Menus={Menus}></MenuAdminPanel>
-                                </Col>
-                            </Tab>
-                            <Tab eventKey="Settings" title="Ρυθμίσεις">
-                                <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey}}>
-                                        <Col>
-                                            <SettingsPanel Bed_Reservations={Bed_Reservations}
-                                                           Dinner_Reservations={Dinner_Reservations}
-                                                           bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
-                                            </SettingsPanel>
-                                        </Col>
-                                    </ShouldShowUnsavedChangesModalContext.Provider>
-                                </PendingUnsavedChangesContext.Provider>
-                            </Tab>
-                        </Tabs>
-                    </Container>
-                </MenuContext.Provider>
-            </GazebosContext.Provider>
-        </InnerWidthContext.Provider>
+        <AuthenticatedUserContext.Provider value={User}>
+            <InnerWidthContext.Provider value={innerWidth}>
+                <GazebosContext.Provider value={Gazebos}>
+                    <MenuContext.Provider value={Menus}>
+                        <Container fluid className={'px-3 py-3 '  + (innerWidth<992 ? 'overflow-auto' : '')}>
+                            <Tabs defaultActiveKey="Reservations" className="mb-3 d-flex" activeKey={activeTabKey}
+                                  onSelect={(k) => handleTabSelect(k)}>
+                                <Tab eventKey="Reservations" title="Κρατήσεις">
+                                    <Col>
+                                        <ReservationsPanel Bed_Reservations={Bed_Reservations}
+                                                           Dinner_Reservations={Dinner_Reservations}>
+                                        </ReservationsPanel>
+                                    </Col>
+                                </Tab>
+                                <Tab eventKey="Menus" title="Μενού">
+                                    <Col>
+                                        <MenuAdminPanel Menus={Menus}></MenuAdminPanel>
+                                    </Col>
+                                </Tab>
+                                <Tab eventKey="Settings" title="Ρυθμίσεις">
+                                    <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
+                                        <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey}}>
+                                            <Col>
+                                                <SettingsPanel Bed_Reservations={Bed_Reservations}
+                                                               Dinner_Reservations={Dinner_Reservations}
+                                                               bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
+                                                </SettingsPanel>
+                                            </Col>
+                                        </ShouldShowUnsavedChangesModalContext.Provider>
+                                    </PendingUnsavedChangesContext.Provider>
+                                </Tab>
+                                <Tab disabled title={'Συνδεδεμένος/η ώς ' + User.first_name + ' '+ User.last_name}></Tab>
+                            </Tabs>
+
+                        </Container>
+                    </MenuContext.Provider>
+                </GazebosContext.Provider>
+            </InnerWidthContext.Provider>
+        </AuthenticatedUserContext.Provider>
     )
 }

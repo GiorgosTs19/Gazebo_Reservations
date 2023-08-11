@@ -29,16 +29,16 @@ export function ReservationEditingOptions({Content,ModalTitle}) {
         <>
             <h5 className={'text-danger'}>Οποιαδήποτε αλλαγή πρέπει πάντα να γίνεται έπειτα απο συνεννόηση με τον πελάτη.</h5>
             <Row className={'my-4'}>
-                <Col className={'d-flex flex-column'}>
-                    <p className={'text-info my-auto'}>
+                <Col className={'d-flex flex-column my-3 my-lg-0'} lg={4}>
+                    <p className={'info-text-lg my-auto'}>
                         Θα γίνει προσπάθεια ανάθεσης του ίδιου τραπεζιού αυτόματα από το σύστημα.
                         Στην περίπτωση που το τραπέζι δεν είναι διαθέσιμο θα πρέπει να γίνει εκ νέου επιλογή τραπεζιού,
                         βάσει της διαθεσιμότητας της ημέρας.
                     </p>
                     <Button variant={'outline-dark'} className={'mt-3'} onClick={handleClickTransfer}>Μεταφορά σε άλλη μέρα</Button>
                 </Col>
-                <Col className={'d-flex flex-column'}>
-                    <p className={'text-info my-auto'}>Εκ νέου επιλογή τραπεζιού,
+                <Col className={'d-flex flex-column my-3 my-lg-0'} lg={4}>
+                    <p className={'info-text-lg my-auto'}>Εκ νέου επιλογή τραπεζιού,
                         με βάση την διαθεσιμότητα της ημέρας για την οποία έγινε η κράτηση.</p>
                     {noAvailableTablesExist && <p className={'text-danger fw-bold'}>Δεν υπάρχουν διαθέσιμα τραπέζια την ίδια μέρα.</p>}
                     <Button variant={'outline-dark'} className={'mt-3 ' + (noAvailableTablesExist ? 'opacity-25':'')}
@@ -46,8 +46,8 @@ export function ReservationEditingOptions({Content,ModalTitle}) {
                         Αλλαγή τραπεζιού
                     </Button>
                 </Col>
-                <Col className={'d-flex flex-column'}>
-                    <p className={'text-info my-auto'}>Αλλαγή των επιλεγμένων Μενού της κράτησης.</p>
+                <Col className={'d-flex flex-column my-3 my-lg-0'} lg={4}>
+                    <p className={'info-text-lg my-auto'}>Αλλαγή των επιλεγμένων Μενού της κράτησης.</p>
                     <Button variant={'outline-dark'} className={'mt-3'}>Αλλαγή Μενού</Button>
                 </Col>
             </Row>

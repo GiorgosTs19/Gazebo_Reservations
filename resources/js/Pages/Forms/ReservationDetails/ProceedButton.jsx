@@ -2,6 +2,7 @@ import {Button} from "react-bootstrap";
 import {useContext} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
+import {useEffect} from "react";
 
 export function ProceedButton() {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
@@ -44,11 +45,20 @@ export function ProceedButton() {
                 }
         }
     };
+    useEffect(()=>{
+        window.addEventListener('keypress',ev => {
+            if(ev.key === 'Enter') {
+                if(checkProceedRequirements()){
+                    handleNextClick();
+                }
+            }
+        });
+    },[]);
     return (
         <>
             {
-                checkProceedRequirements() && <Button variant={'outline-success'} onClick={handleNextClick}
-                  className={'rounded-5 shadow-sm mx-auto px-2 py-1'} style={{width:'fit-content'}}>
+                checkProceedRequirements() && <Button variant={'outline-dark'} onClick={handleNextClick}
+                  className={'rounded-5 shadow-sm mx-auto px-2 py-1 reservation-button '} style={{width:'fit-content'}}>
                     To Menu Selection
                 </Button>
             }

@@ -1,11 +1,10 @@
-import {Button} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import {SettingsContext} from "../../Contexts/SettingsContext";
 import {LocalSettingsContext} from "../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../Contexts/ErrorsContext";
 import {DinnerTimeSettings} from "./DinnerTimeSettings/DinnerTimeSettings";
 import {useReducer,useState,useContext, useEffect} from "react";
 import {DinnerDateSettings} from "./DinnerDateSettings/DinnerDateSettings";
-import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {Inertia} from "@inertiajs/inertia";
 import {isEqual} from "lodash";
 import {PendingUnsavedChangesContext} from "../../Contexts/PendingUnsavedChangesContext";
@@ -14,7 +13,6 @@ import {ShouldShowUnsavedChangesModalContext} from "../../Contexts/ShouldShowUns
 import {Arrival_Start_Error_Check} from "../Utility/Util";
 
 export function DinnerSettings({Settings}) {
-    const innerWidth = useContext(InnerWidthContext);
     const [errors,setErrors] = useState({
         Arrival : '',
         First_Day : '',
@@ -127,13 +125,17 @@ export function DinnerSettings({Settings}) {
                         shouldShowModal={showUnsavedChangesWarningModal.Dinner} SaveChanges={handleSaveChanges} >
                     </PendingUnsavedChangesWarningModal>
                     <div className={'text-center'}>
-                        {settingsHaveChanged && <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
-                                 className={'rounded-5 shadow-sm'}
-                                 onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>}
-                        <div  className={'pt-5'}>
-                            <DinnerTimeSettings></DinnerTimeSettings>
-                            <DinnerDateSettings></DinnerDateSettings>
-                        </div>
+                        <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                         className={'rounded-5 shadow-sm'}
+                         onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
+                        <Row className={'px-3 py-2 mt-4'}>
+                            <Col xxl={4} className={'d-flex'}>
+                                <DinnerDateSettings></DinnerDateSettings>
+                            </Col>
+                            <Col className={'my-auto'}>
+                                <DinnerTimeSettings></DinnerTimeSettings>
+                            </Col>
+                        </Row>
                     </div>
                 </SettingsContext.Provider>
             </LocalSettingsContext.Provider>

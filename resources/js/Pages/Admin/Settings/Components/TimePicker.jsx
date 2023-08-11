@@ -33,21 +33,23 @@ export function TimePicker({onChange, inputValue,className,textPrefix}) {
             <Stack className={'' + className}>
                 {<span
                     className={'text-muted fst-italic mb-2 p-0'}>{(textPrefix ?? '') + ' ' + ((hours?.value ?? '') + ':' + (minutes?.value ?? ''))}</span>}
-                <Stack direction={'horizontal'} className={'mx-auto'}>
+                <Stack  className={'mx-auto'} direction={'horizontal'}>
                     <Select
                         id="hours"
                         value={hourOptions.find(obj => obj.value === inputValue.split(':')[0])}
                         options={hourOptions}
                         onChange={handleHoursChange}
-                        className={'mx-1'}
+                        className={'m-2'}
+                        placeholder={'Ώρα'}
                     />
-                    <Select
-                        id="minutes"
-                        value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
-                        options={minuteOptions}
-                        onChange={handleMinutesChange}
-                        className={'mx-1'}
-                    />
+                        <Select
+                            id="minutes"
+                            value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
+                            options={minuteOptions}
+                            onChange={handleMinutesChange}
+                            className={'m-2'}
+                            placeholder={'Λεπτά'}
+                        />
                 </Stack>
             </Stack>
         </div>

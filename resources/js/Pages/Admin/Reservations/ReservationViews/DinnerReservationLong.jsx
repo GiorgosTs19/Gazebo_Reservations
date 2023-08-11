@@ -1,11 +1,13 @@
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {GazeboLocation} from "../../../Forms/Gazebo/GazeboCarousel/GazeboLocation";
-import {Col, Row, Stack} from "react-bootstrap";
+import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
 import {changeDateFormat, created_at, getMenuName, getTableAA} from "../../../../ExternalJs/Util";
 import {ReservationEditModal} from "../../Modals/ReservationEditModal";
 import {MenuContext} from "../../../../Contexts/MenuContext";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
+import {Inertia} from "@inertiajs/inertia";
+import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 
 export function DinnerReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
@@ -22,21 +24,86 @@ export function DinnerReservationLong() {
     Placed_At = activeReservation.Placed_At,
     Updated_At = activeReservation.Updated_At,
     hasChanges = Placed_At !== Updated_At,
-    MenuCatalog = useContext(MenuContext);
+    MenuCatalog = useContext(MenuContext),
+    Reservations = useContext(ReservationsContext);
+    const getStatusColor = () =>{
+        switch (activeReservation.Status) {
+            case 'Cancelled' : {
+                return 'text-danger';
+            }
+            case 'Confirmed' : {
+                return 'text-success';
+            }
+            default : {
+                return 'text-warning'
+            }
+        }
+    };
+    const getStatusText = () =>{
+        switch (activeReservation.Status) {
+            case 'Cancelled' : {
+                return 'Ακυρώθηκε';
+            }
+            case 'Confirmed' : {
+                return 'Επιβεβαιώθηκε';
+            }
+            default : {
+                return 'Εκκρεμεί Επιβεβαίωση';
+            }
+        }
+    };
+    const handleChangeReservationStatus = (status) => {
+        Inertia.patch(route('Change_Reservation_Status'),{reservation_id:activeReservation.id,status:status},{
+           onSuccess:()=>{
+               setActiveReservation(null);
+           },
+            only:activeReservation.Type === 'Dinner' ? ['Dinner_Reservations'] : ['Bed_Reservations']
+        });
+    }
 
     return (
         <div className={'text-center p-3 m-auto'}>
-            <Row className={'mb-2 my-lg-0'}>
-                <Col className={'border border-gray-400 mb-2 my-lg-0'}>
+            <Row>
+                <Col className={'text-center ' + ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '')} xxl={7}>
+                    <h6>Ενέργειες</h6>
+                        <Row className={'my-3'}>
+                            <Col xxl={activeReservation.Status === 'Pending' ? 4 : 12}
+                                 className={activeReservation.Status === 'Pending' ? ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '') : ''}>
+                                <ReservationEditModal Reservation={activeReservation}></ReservationEditModal>
+                            </Col>
+                            {
+                                activeReservation.Status === 'Pending' &&
+                                <Col className={'d-flex flex-row my-3 my-xxl-0 '} xxl={8}>
+                                    <Button className={'m-auto m-xxl-1'} variant={'outline-success'}
+                                            onClick={()=>handleChangeReservationStatus('Confirmed')}>
+                                        Επιβεβαίωση
+                                    </Button>
+                                    <Button className={'m-auto m-xxl-1'} variant={'outline-danger'}
+                                            onClick={()=>handleChangeReservationStatus('Cancelled')}>
+                                        Ακύρωση
+                                    </Button>
+                                </Col>
+                            }
+                        </Row>
+                </Col>
+                <Col className={'d-flex flex-column my-3 my-xxl-0'} xxl={5}>
+                    <h6 className={'mx-auto'}>Κατάσταση</h6>
+                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2'}>
+                        {getStatusText()}
+                    </Badge>
+                </Col>
+            </Row>
+            <Row className={'mb-2 my-xxl-0'}>
+                <Col className={'border border-gray-400 mb-2 my-xxl-0'} xs={12} xxl={6}>
                     <p className={'p-1 my-1'}><i>Κράτηση για : {Date}</i></p>
                     <p className={'p-1 my-1'}><i>Καταχωρήθηκε στις : {created_at(Placed_At)}</i></p>
                     <p className={'p-1 my-1'}><i>Τελευταία αλλαγή : {hasChanges ? created_at(Updated_At) : '-'}</i></p>
                     <p className={'p-1 my-1'}>Κράτηση για <b>{Attendees.length + 1}</b> {Attendees.length === 0 ? 'άτομο' : 'άτομα'}.</p>
                 </Col>
-                <Col className={'d-flex'}>
+                <Col className={'d-flex'} xs={12} xxl={6}>
                     <Stack>
                         <h4 className={'border-bottom p-2 m-auto'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
-                        <ReservationEditModal Reservation={activeReservation}></ReservationEditModal>
+
                     </Stack>
                 </Col>
             </Row>
@@ -46,11 +113,16 @@ export function DinnerReservationLong() {
                         <h5>Όνομα Κράτησης</h5>
                         <p>{Name === ' ' ? <b className={'h5 p-0 m-0'}>-</b> : Name}</p>
                     </div>
-                    <div className={'border-bottom p-2 my-2'}>
+                    <Row className={'border-bottom p-2 my-2'}>
                         <h5>Στοιχεία Επικοινωνίας</h5>
-                        <p><b>Email</b> : {ContactDetails?.Email}</p>
-                        <p><b>Κινητό</b> : {ContactDetails?.Phone}</p>
-                    </div>
+                        <Col lg={8} className={'d-flex flex-column'}>
+                            <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Email}</p>
+                            <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Phone}</p>
+                        </Col>
+                        <Col lg={4} className={'d-flex'}>
+                            <a className={'btn btn-outline-dark m-auto'} href={'mailto:' + ContactDetails.Email}>Email</a>
+                        </Col>
+                    </Row>
                     <div className={'border-bottom p-2'}>
                         <h5>Παρευρισκόμενοι</h5>
                         <p>
