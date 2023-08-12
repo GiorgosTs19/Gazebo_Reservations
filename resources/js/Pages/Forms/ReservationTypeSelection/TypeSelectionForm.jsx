@@ -67,12 +67,19 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
         setShowCalendar(false);
         setProgress('Type');
     },[bookingDetails.type]);
+
+    useEffect(()=>{
+        if(bookingDetails.table !== '')
+            setBookingDetails({...bookingDetails,table:''});
+    },[bookingDetails.date]);
+
     useEffect(()=>{
         if(progress !== 'Type' && progress !=='Table'){
             setProgress('Details');
             setBookingDetails({...bookingDetails,more_rooms:false,primary_room:'',secondary_room:''});
         }
     },[bookingDetails.number_of_people]);
+
     useEffect(()=>{
         const tl = gsap.timeline();
         if(bookingDetails.type === 'Dinner') {

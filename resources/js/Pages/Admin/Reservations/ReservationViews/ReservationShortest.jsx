@@ -3,6 +3,7 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
 import {created_at, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
+import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 
 export function ReservationShortest({Reservation,className=''}) {
     const Confirmation_Number = Reservation.Confirmation_Number,
@@ -23,27 +24,15 @@ export function ReservationShortest({Reservation,className=''}) {
             }
         }
     };
-    const getStatusText = () =>{
-        switch (Reservation.Status) {
-            case 'Cancelled' : {
-                return 'Ακυρώθηκε';
-            }
-            case 'Confirmed' : {
-                return 'Επιβεβαιώθηκε';
-            }
-            default : {
-                return 'Εκκρεμεί Επιβεβαίωση';
-            }
-        }
-    };
+    const statusText = useGetReservationStatusText(Reservation.Status);
     return (
         <div className={'text-muted my-2 p-1 rounded-2 ' + (activeReservation?.id !== Reservation.id ? 'reservation-view ' : 'active-reservation ') + className}
              style={{cursor:'pointer',width:'250px',height:'240px'}} onClick={()=>setActiveReservation(Reservation)}>
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
             <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
             {/*<p className={'my-1'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>*/}
-            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2'}>
-                {getStatusText()}
+            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow'}>
+                {statusText}
             </Badge>
             <Row className={'p-2'} >
                 <Col className={'d-flex flex-column'}>

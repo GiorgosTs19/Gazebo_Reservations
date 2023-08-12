@@ -108,7 +108,6 @@ export default function Gazebo(props) {
             }
         }
     },[progress]);
-    console.log(props)
     return (
         <SettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
             <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>

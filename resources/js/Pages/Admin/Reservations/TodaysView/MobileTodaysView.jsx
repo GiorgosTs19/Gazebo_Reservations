@@ -4,7 +4,7 @@ import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 
-export function MobileTodaysView({reservationsToShow,filter}) {
+export function MobileTodaysView({reservationsToShow,filter,children}) {
     const [shouldShowStack, setShouldShowStack] = useState(true),
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         {reservationsFilter,setReservationsFilter} = filter,
@@ -19,6 +19,7 @@ export function MobileTodaysView({reservationsToShow,filter}) {
 
     return (
         <>
+            {children}
             {shouldShowStack ?
                 <div className={'d-flex flex-column'}>
                     <FiltersBar setReservationsFilter={setReservationsFilter}

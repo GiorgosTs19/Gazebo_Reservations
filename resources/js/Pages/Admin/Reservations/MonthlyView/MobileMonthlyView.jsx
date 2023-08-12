@@ -17,28 +17,27 @@ export function MobileMonthlyView({Calendar,reservationsToShow,WarningMessage,se
         setShouldShowCalendar(true);
         setActiveReservation(null);
     };
-    console.log(shouldShowCalendar)
     return (
         <Row className={'text-center h-100'}>
-            <Col className={'p-4'}>
+             <Col className={'p-4'}>
                 {shouldShowCalendar && <>
                     <ReservationCountNotes></ReservationCountNotes>
                     {Calendar}
                 </>
                 }
-                {!shouldShowCalendar && activeReservation == null &&
+                {!shouldShowCalendar &&
                     <>
                         <Button size={'lg'} variant={'info'} onClick={handleBackToCalendar} className={'my-4'}>
                             &#x2190;
                         </Button>
-                        <Stack className={'p-3'} style={{overflowY: 'auto', maxHeight : '350px'}}>
+                        <Stack className={'p-3'} style={{overflowY: 'auto', maxHeight: '350px'}}>
                             {WarningMessage()}
                             {reservationsToShow()}
                         </Stack>
                     </>
                 }
                 {activeReservation !== null &&
-                    <Button size={'lg'} variant={'info'} onClick={()=>setActiveReservation(null)} className={'my-1'}>
+                    <Button size={'lg'} variant={'info'} onClick={() => setActiveReservation(null)} className={'my-1'}>
                         &#x2190;
                     </Button>
                 }

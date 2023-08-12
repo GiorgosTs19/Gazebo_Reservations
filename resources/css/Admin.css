@@ -1,6 +1,8 @@
 * {
     box-sizing: border-box;
 }
+/* Reservations */
+
 .reservation-view {
     opacity: 1;
     transition: opacity 0.3s ease; /* Add a smooth transition effect */
@@ -8,7 +10,34 @@
 .reservation-view:hover {
     background-color: #fcf9f9;
 }
+.active-reservation {
+    background-color: #f5fafa;
+    /*border: 3px black !important;*/
+}
+.reservation-long-view {
+    height: 100%;
+}
 
+.monthly-reservation-stack {
+    /*height: 250px;*/
+}
+/* Reservations */
+
+
+ .tab-pane {
+    height: 90vh;
+    position: relative;
+}
+/* Shadow utility classes */
+
+.box_shadow {
+    box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, 0.3) 0 3px 7px -3px;
+}
+
+
+/* Shadow utility classes */
+
+/* Scrollables utility classes*/
 .scrollable-y {
     height: calc(100vh - 150px);
     overflow-x: hidden;
@@ -18,31 +47,20 @@
     overflow-x: hidden;
 }
 .scrollable-y-50vh {
-    height: calc(70vh);
+    height: calc(65vh);
     overflow-x: hidden;
 }
 .scrollable-x-not-vw {
     width: calc(100% - 20px);
     overflow-y: hidden;
 }
-/* Input container */
+/* Scrollables utility Classes*/
+
+/* Input fields */
 .input-container {
     position: relative;
     margin: 20px;
     width: 85%;
-}
-.active-reservation {
-    background-color: #f5fafa;
-    /*border: 3px black !important;*/
-}
-.info-text, .info-text-lg {
-    opacity: 70%;
-}
-.info-text {
-    font-size : 14px;
-}
-.info-text-lg {
-    font-size : 15px;
 }
 .input-field {
     display: block;
@@ -87,7 +105,22 @@
 .input-field:focus + .input-label + .input-highlight {
     width: 100%;
 }
+/* Input fields */
 
+/* Text */
+.info-text, .info-text-lg {
+    opacity: 70%;
+}
+.info-text {
+    font-size : 14px;
+}
+.info-text-lg {
+    font-size : 15px;
+}
+
+/* Text */
+
+/* Settings */
 .settings-header-border {
     width: 100%;
     margin-bottom: 10px;
@@ -110,31 +143,56 @@
 .settings-header-border .settings-heading-subtitle > span:after {
     top: -13px;
 }
-
-.react-calendar__month-view__days__day--weekend {
-    color: black !important;
-}
+/* Settings */
 
 .disabled-day {
     color: #ea1414 !important;
 }
-
+abbr[title] {
+    text-decoration: none !important;
+}
 .disabled-day_transfer {
     color: #ea1414 !important;
     opacity: 25% !important;
     pointer-events: none;
 }
+/*Calendar*/
 
 .react-calendar__tile:disabled {
     background-color: white !important;
     opacity: 50% !important;
     cursor: not-allowed;
 }
+.react-calendar__month-view__days__day--weekend {
+    color: black !important;
+}
+
 .react-calendar__navigation button:disabled {
     background-color: transparent !important;
     color: black !important;
 }
 
-.box_shadow {
-    box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, 0.3) 0 3px 7px -3px;
+/*Calendar*/
+
+
+/* More utility classes*/
+
+/* Height */
+.mh-100 {
+    max-height: 100%;
 }
+.mh-75 {
+    max-height: 75%;
+}
+.h-85 {
+    height: 85%;
+}
+.h-90 {
+    height: 90%;
+}
+/* Height */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+/* Cursor */

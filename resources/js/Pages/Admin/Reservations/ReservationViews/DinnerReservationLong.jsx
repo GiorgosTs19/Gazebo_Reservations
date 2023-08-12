@@ -8,6 +8,7 @@ import {MenuContext} from "../../../../Contexts/MenuContext";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
+import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 
 export function DinnerReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
@@ -39,19 +40,7 @@ export function DinnerReservationLong() {
             }
         }
     };
-    const getStatusText = () =>{
-        switch (activeReservation.Status) {
-            case 'Cancelled' : {
-                return 'Ακυρώθηκε';
-            }
-            case 'Confirmed' : {
-                return 'Επιβεβαιώθηκε';
-            }
-            default : {
-                return 'Εκκρεμεί Επιβεβαίωση';
-            }
-        }
-    };
+    const status = useGetReservationStatusText(activeReservation.Status);
     const handleChangeReservationStatus = (status) => {
         Inertia.patch(route('Change_Reservation_Status'),{reservation_id:activeReservation.id,status:status},{
            onSuccess:()=>{
@@ -62,8 +51,8 @@ export function DinnerReservationLong() {
     }
 
     return (
-        <div className={'text-center p-3 m-auto'}>
-            <Row>
+        <div className={'text-center p-3 mx-auto '}>
+            <Row className={''}>
                 <Col className={'text-center ' + ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '')} xxl={7}>
                     <h6>Ενέργειες</h6>
                         <Row className={'my-3'}>
@@ -88,26 +77,23 @@ export function DinnerReservationLong() {
                 </Col>
                 <Col className={'d-flex flex-column my-3 my-xxl-0'} xxl={5}>
                     <h6 className={'mx-auto'}>Κατάσταση</h6>
-                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2'}>
-                        {getStatusText()}
+                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2 box_shadow'}>
+                        {status}
                     </Badge>
                 </Col>
             </Row>
-            <Row className={'mb-2 my-xxl-0'}>
-                <Col className={'border border-gray-400 mb-2 my-xxl-0'} xs={12} xxl={6}>
+            <Row className={'my-4'}>
+                <Col className={'border border-gray-400 mb-2 my-xxl-0 box_shadow rounded-4'} xs={12} xxl={7}>
                     <p className={'p-1 my-1'}><i>Κράτηση για : {Date}</i></p>
                     <p className={'p-1 my-1'}><i>Καταχωρήθηκε στις : {created_at(Placed_At)}</i></p>
                     <p className={'p-1 my-1'}><i>Τελευταία αλλαγή : {hasChanges ? created_at(Updated_At) : '-'}</i></p>
                     <p className={'p-1 my-1'}>Κράτηση για <b>{Attendees.length + 1}</b> {Attendees.length === 0 ? 'άτομο' : 'άτομα'}.</p>
                 </Col>
-                <Col className={'d-flex'} xs={12} xxl={6}>
-                    <Stack>
-                        <h4 className={'border-bottom p-2 m-auto'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
-
-                    </Stack>
+                <Col className={'d-flex'} xs={12} xxl={5}>
+                        <h4 className={'border-bottom p-4 m-auto box_shadow rounded-4'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
                 </Col>
             </Row>
-            <Row>
+            <Row className={'box_shadow my-3 border rounded-3'}>
                 <Col sm={12} lg={6}>
                     <div className={'border-bottom p-2 my-2'}>
                         <h5>Όνομα Κράτησης</h5>
@@ -115,11 +101,11 @@ export function DinnerReservationLong() {
                     </div>
                     <Row className={'border-bottom p-2 my-2'}>
                         <h5>Στοιχεία Επικοινωνίας</h5>
-                        <Col lg={8} className={'d-flex flex-column'}>
+                        <Col xxl={8} className={'d-flex flex-column'}>
                             <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Email}</p>
                             <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Phone}</p>
                         </Col>
-                        <Col lg={4} className={'d-flex'}>
+                        <Col xxl={4} className={'d-flex'}>
                             <a className={'btn btn-outline-dark m-auto'} href={'mailto:' + ContactDetails.Email}>Email</a>
                         </Col>
                     </Row>
@@ -157,7 +143,7 @@ export function DinnerReservationLong() {
                 </div>
                     <p className={'text-muted'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p>
                 </div>
-                <div className={'border-bottom p-2 my-2'}>
+                <div className={'p-2 my-2'}>
                     <h5>Σημειώσεις Κράτησης</h5>
                     <p>{Notes === null ? 'Καμία σημείωση' : Notes}</p>
                 </div>

@@ -11,6 +11,8 @@ import {MenuContext} from "../../Contexts/MenuContext";
 import {PendingUnsavedChangesContext} from "./Contexts/PendingUnsavedChangesContext";
 import {ShouldShowUnsavedChangesModalContext} from "./Contexts/ShouldShowUnsavedChangesModalContext";
 import {AuthenticatedUserContext} from "./Contexts/AuthenticatedUserContext";
+import {Inertia} from "@inertiajs/inertia";
+import {SettingsContext} from "./Contexts/SettingsContext";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -26,6 +28,10 @@ export default function AdminPanel(props) {
     const [activeTabKey, setActiveTabKey] = useState(ActiveTab),
     [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Dinner:false,Bed:false,Key:''});
     const handleTabSelect = (k) => {
+        if(k === 'Logout') {
+            Inertia.post(route('logout'));
+            return;
+        }
         if(activeTabKey === 'Settings' && pendingUnsavedChanges.Dinner) {
             setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:true,Key:k});
             return;
@@ -53,13 +59,14 @@ export default function AdminPanel(props) {
             <InnerWidthContext.Provider value={innerWidth}>
                 <GazebosContext.Provider value={Gazebos}>
                     <MenuContext.Provider value={Menus}>
-                        <Container fluid className={'px-3 py-3 '  + (innerWidth<992 ? 'overflow-auto' : '')}>
-                            <Tabs defaultActiveKey="Reservations" className="mb-3 d-flex" activeKey={activeTabKey}
+                        <Container fluid className={'px-3 pt-3 pb-0 vh-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
+                            <Tabs defaultActiveKey="Reservations" className="mb-2 d-flex" activeKey={activeTabKey}
                                   onSelect={(k) => handleTabSelect(k)}>
                                 <Tab eventKey="Reservations" title="Κρατήσεις">
-                                    <Col>
+                                    <Col className={'h-100'}>
                                         <ReservationsPanel Bed_Reservations={Bed_Reservations}
-                                                           Dinner_Reservations={Dinner_Reservations}>
+                                                           Dinner_Reservations={Dinner_Reservations}
+                                        Dinner_Settings={Dinner_Settings} Bed_Settings={Bed_Settings}>
                                         </ReservationsPanel>
                                     </Col>
                                 </Tab>
@@ -71,7 +78,7 @@ export default function AdminPanel(props) {
                                 <Tab eventKey="Settings" title="Ρυθμίσεις">
                                     <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                         <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey}}>
-                                            <Col>
+                                            <Col className={'h-100'}>
                                                 <SettingsPanel Bed_Reservations={Bed_Reservations}
                                                                Dinner_Reservations={Dinner_Reservations}
                                                                bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
@@ -80,9 +87,9 @@ export default function AdminPanel(props) {
                                         </ShouldShowUnsavedChangesModalContext.Provider>
                                     </PendingUnsavedChangesContext.Provider>
                                 </Tab>
-                                <Tab disabled title={'Συνδεδεμένος/η ώς ' + User.first_name + ' '+ User.last_name}></Tab>
+                                <Tab disabled title={'Συνδεδεμένος / η ώς ' + User.first_name + ' '+ User.last_name}></Tab>
+                                <Tab title={'Αποσύνδεση'} eventKey={'Logout'}></Tab>
                             </Tabs>
-
                         </Container>
                     </MenuContext.Provider>
                 </GazebosContext.Provider>

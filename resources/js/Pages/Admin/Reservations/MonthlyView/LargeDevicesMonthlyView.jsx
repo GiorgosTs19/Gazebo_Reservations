@@ -6,16 +6,15 @@ import {FiltersBar} from "../FiltersBar/FiltersBar";
 export function LargeDevicesMonthlyView({Calendar,reservationsToShow,WarningMessage,reservationsFilter,setReservationsFilter}) {
     const reservations = reservationsToShow();
     return (
-        <Row className={'text-center'}>
-            <Col lg={7} xl={5} className={'p-4 border-end d-flex flex-column'}>
+        <Row className={'text-center h-100'}>
+            <Col lg={7} xl={5} className={'p-4 border-end d-flex flex-column h-100 overflow-y-auto'}>
                 {Calendar}
             </Col>
-            <Col lg={5} xl={7} className={'my-3 d-flex flex-column'}>
+            <Col lg={5} xl={7} className={'my-3 d-flex flex-column h-100'}>
                 <FiltersBar direction={'horizontal'} reservationsFilter={reservationsFilter}
                              setReservationsFilter={setReservationsFilter} className={'mx-auto mb-3'}></FiltersBar>
                 {WarningMessage()}
-                <Stack className={'h-100 p-3'} style={{overflowY:'auto',
-                    maxHeight:'70vh'}}>
+                <Stack className={'p-3 overflow-y-auto monthly-reservation-stack'} >
                     {reservations}
                 </Stack>
             </Col>

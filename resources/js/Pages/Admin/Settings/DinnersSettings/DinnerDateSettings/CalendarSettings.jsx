@@ -38,7 +38,7 @@ export function CalendarSettings() {
 
     return (
         // <div className={'d-flex mx-auto h-100'}>
-            <Calendar className={'rounded shadow-sm m-auto'} tileDisabled={({ date }) => isDateDisabled(date)}
+            <Calendar className={'rounded box_shadow m-auto'} tileDisabled={({ date }) => isDateDisabled(date)}
               inputRef={CalendarRef} showNeighboringMonth={false} value={selectedDate} onChange={handleDateChange}
               tileClassName={getTileClassName} prev2Label={null}>
             </Calendar>

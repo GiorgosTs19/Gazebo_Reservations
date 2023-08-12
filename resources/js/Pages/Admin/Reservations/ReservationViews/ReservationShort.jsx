@@ -4,8 +4,9 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {created_at, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
+import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 
-export function ReservationShort({Reservation}) {
+export function ReservationShort({Reservation,className}) {
     const Name = Reservation.Name.First + ' ' + Reservation.Name.Last,
         ContactDetails = Reservation.Contact,
         Confirmation_Number = Reservation.Confirmation_Number,
@@ -25,32 +26,21 @@ export function ReservationShort({Reservation}) {
           }
       }
     };
-    const getStatusText = () =>{
-      switch (Reservation.Status) {
-          case 'Cancelled' : {
-              return 'Ακυρώθηκε';
-          }
-          case 'Confirmed' : {
-              return 'Επιβεβαιώθηκε';
-          }
-          default : {
-              return 'Εκκρεμεί Επιβεβαίωση';
-          }
-      }
-    };
+    const status = useGetReservationStatusText(Reservation.Status);
     const handleChangeReservationStatus = (status) => {
         Inertia.patch(route('Change_Reservation_Status'),{reservation_id:Reservation.id,status:status},{
             only:[Reservation.Type === 'Dinner' ? 'Dinner_Reservations' : 'Bed_Reservations']
         });
     }
     return (
-        <div className={'text-muted my-2 p-1 border rounded-2  ' + (activeReservation?.id !== Reservation.id ? 'reservation-view' : 'active-reservation')}
-         style={{cursor:'pointer'}} onClick={()=>setActiveReservation(Reservation)}>
+        <div className={'text-muted p-1 border rounded-2 box_shadow cursor-pointer ' + className +
+            (activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}
+         onClick={()=>setActiveReservation(Reservation)}>
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
             <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
             <p className={'my-1'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>
-            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2'}>
-                {getStatusText()}
+            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow'}>
+                {status}
             </Badge>
             <Row className={'p-2'} >
                 <Col className={'border border-start-0 border-top-0 border-bottom-0'}>

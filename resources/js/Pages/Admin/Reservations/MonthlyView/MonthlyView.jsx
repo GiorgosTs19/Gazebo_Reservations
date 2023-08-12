@@ -8,31 +8,32 @@ import {MobileMonthlyView} from "./MobileMonthlyView";
 import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import Calendar from "react-calendar";
-import {ListGroup} from "react-bootstrap";
-import {ReservationShortest} from "../ReservationViews/ReservationShortest";
+import {SettingsContext} from "../../Contexts/SettingsContext";
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
+        Settings = useContext(SettingsContext),
         CalendarRef = useRef(null),
         today = new Date(),
         yesterday = new Date(today),
         tomorrow = new Date(today),
-        Last_Day = new Date('2023-11-10'),
+        Last_Day = new Date(Settings.Last_Day),
         Reservations = useContext(ReservationsContext),
         innerWidth = useContext(InnerWidthContext),
-        [reservationsFilter,setReservationsFilter] = useState('All');
+        [reservationsFilter,setReservationsFilter] = useState('All'),
+        [activeMonth,setActiveMonth] = useState(today.getMonth());
         yesterday.setDate(today.getDate() - 1)
         tomorrow.setDate(tomorrow.getDate() + 1)
         const isDateDisabled = (date,view,activeStartDate) => {
             if(view === 'month')
-                return (date < yesterday) || (date >= Last_Day)
-            if(view === 'year'){
+                return (date < yesterday) || (date > Last_Day)
+            if(view === 'year') {
                 const currentMonth = new Date().getMonth();
                 const selectedMonth = date.getMonth();
 
                 return selectedMonth < currentMonth;
             }
-            },
+        },
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         handleDateChange = (date)=> {
                 setSelectedDate(date);
@@ -65,7 +66,17 @@ export function MonthlyView() {
                 return null;
             }
         };
-
+    const isPrevLabelDisabled = () =>{
+        if(activeMonth === today.getMonth())
+            return null;
+        return "‹";
+    };
+    const isNextLabelDisabled = () => {
+        console.log(activeMonth,Last_Day)
+        if(activeMonth === Last_Day.getMonth())
+            return null;
+        return "›";
+    };
     const reservationsToShow = ()=> {
         if(selectedDate === '')
             return <h4 className={'text-muted my-auto'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
@@ -74,7 +85,7 @@ export function MonthlyView() {
             return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>;
         if(reservationsFilter === 'All')
             return reservations_of_current_date.map((reservation)=>{
-                return <ReservationShort Reservation={reservation} key={reservation.id}></ReservationShort>;
+                return <ReservationShort Reservation={reservation} key={reservation.id} className={reservations_of_current_date.length > 1 ? 'my-2' : 'my-auto'}></ReservationShort>;
             });
         const reservations = reservations_of_current_date.filter((reservation)=>{
             return reservation.Status === reservationsFilter;
@@ -97,10 +108,12 @@ export function MonthlyView() {
                 ? 'disabled-day' : '';
     }
     const CalendarToShow = <Calendar onChange={handleDateChange} value={selectedDate || today}
-        className={'m-auto rounded shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
+        className={'m-auto rounded box_shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
         tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
         tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
-        prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}/>
+        prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
+        onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
+        prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}/>
 
     const getWarningMessage = () => {
         if (isDateDisabledByA) {

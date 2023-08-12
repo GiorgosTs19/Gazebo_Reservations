@@ -147,28 +147,12 @@ input[type=number] {
     clip-path: inset(0px);
 }
 
-
-
-
-/*.react-calendar.night,.react-calendar.night .react-calendar__tile,.react-calendar.night .react-calendar__navigation__arrow {*/
-/*    background-color: transparent !important;*/
-/*    color: white !important;*/
-/*}*/
-
-
-
 abbr[title] {
     text-decoration: none !important;
 }
-
-/*.bg-night {*/
-/*    background-image: linear-gradient(to bottom, #0D1836, #2A2D4E, #3E3F63, #3E3F63, #34364F, #34364F, #2A2D4E, #0D1836),*/
-/*    radial-gradient(circle, #FFFFE0 1px, transparent 1px),*/
-/*    radial-gradient(circle, white 1px, transparent 1.2px),*/
-/*    radial-gradient(circle, white 1.5px, transparent 1.8px),*/
-/*    radial-gradient(circle, white 2px, transparent 2.5px);*/
-
-/*}*/
+ul .nav-tabs:last-child .nav-link{
+   color: black;
+}
 .bg {
     background-image: linear-gradient(to bottom, #87CEFA, #00FFFF, #87CEFA);
 }
@@ -210,18 +194,14 @@ ul .list-group-item.active {
     color: black !important;
 }
 
-/*.react-calendar__tile:active {*/
-/*    background-color: #ce2c2c;*/
+/*.react-calendar.night .react-calendar__tile--active {*/
+/*    background-color: #1c5b72 !important;*/
+/*    border-radius: 12px;*/
 /*}*/
-
-.react-calendar.night .react-calendar__tile--active {
-    background-color: #1c5b72 !important;
-    border-radius: 12px;
-}
-.react-calendar.day .react-calendar__tile--active {
-    background-color: #17a19d !important;
-    border-radius: 12px;
-}
+/*.react-calendar.day .react-calendar__tile--active {*/
+/*    background-color: #17a19d !important;*/
+/*    border-radius: 12px;*/
+/*}*/
 .react-calendar {
     background-color: white !important;
     box-shadow: 0 1px 5px 5px rgba(163, 169, 169, 0.6);

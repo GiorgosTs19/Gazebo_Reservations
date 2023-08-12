@@ -45,7 +45,7 @@ Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::cla
 //Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
 Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
 
-Route::prefix('/Admin')->group(function () {
+Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
 

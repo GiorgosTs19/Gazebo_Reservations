@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BedSettingsResource;
 use App\Http\Resources\DinnerSettingsResource;
 use App\Http\Resources\GazeboResource;
 use App\Http\Resources\MenuResource;
@@ -35,7 +36,7 @@ class AdminController extends Controller {
             return  $item->Type == 'Bed';
         }));
         $Dinner_Settings = new DinnerSettingsResource(DinnerSetting::first());
-        $Bed_Settings = BedSetting::first();
+        $Bed_Settings = new BedSettingsResource(BedSetting::first());
         return Inertia::render('Admin/AdminPanel',['Menus'=>$Menus,'Dinner_Reservations'=> fn () =>$Dinner_Reservations,
             'Bed_Reservations'=> fn () => $Bed_Reservations,'Gazebos'=>GazeboResource::collection($Gazebos),
             'Dinner_Settings' => fn () => $Dinner_Settings,'Bed_Settings'=> fn () =>$Bed_Settings,'ActiveTab'=>$Active_Key ?: 'Reservations']);

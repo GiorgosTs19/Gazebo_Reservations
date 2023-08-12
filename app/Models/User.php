@@ -23,7 +23,7 @@ class User extends Authenticatable
         'last_name',
         'can_admin',
         'email',
-        'Reservation_ID'
+        'password'
     ];
 
     /**

@@ -250,12 +250,16 @@ export function getTimeDifferenceInMinutes(time1, time2) {
 export function isDateDisabledByAdmin (date,Reservations) {
     if(typeof date === 'string'){
         const selectedDate = Reservations.find(date => date.Date === date);
-        return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        if(selectedDate)
+            return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        return false;
     }
     if(typeof date === 'object') {
         const newDate = getFormattedDate(date,'-',1);
         const selectedDate = Reservations.find(date => date.Date === newDate);
-        return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        if(selectedDate)
+            return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        return false;
     }
 }
 
