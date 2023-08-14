@@ -13,29 +13,7 @@ export function TodaysView() {
     innerWidth = useContext(InnerWidthContext);
     const reservations_of_current_date = getReservationsByDate(today,Reservations),
         [reservationsFilter,setReservationsFilter] = useState('All');
-    const reservationsToShow = (isMobile)=> {
-        if(reservations_of_current_date.length === 0)
-            return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
-        if(reservationsFilter === 'All')
-            return reservations_of_current_date.map((reservation)=>{
-                if(isMobile) {
-                    return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border'}></ReservationShortest>;
-                }
-                return <ReservationShort Reservation={reservation} key={reservation.id} className={reservations_of_current_date.length > 1 ? ' my-2' : ' my-auto'}></ReservationShort>;
-            });
-        const reservations = reservations_of_current_date.filter((reservation)=>{
-            return reservation.Status === reservationsFilter;
-        }).map((reservation,index)=>{
-            if(isMobile) {
-                return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border'}></ReservationShortest>;
-            }
-            return <ReservationShort Reservation={reservation} key={reservation.id} className={reservations_of_current_date.length > 1 ? 'my-2' : 'my-auto'}></ReservationShort>;
-        });
 
-        if(reservations.length > 0)
-            return reservations;
-        return <h5 className={'my-auto text-wrap'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια.</h5>
-    };
 
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Reservations),
     hasReservations = Array.isArray(reservations_of_current_date) && reservations_of_current_date.length > 0;
@@ -61,12 +39,12 @@ export function TodaysView() {
        <>
            <div className={'text-center h-100'}>
                {innerWidth > 992 ?
-                   <LargeDevicesTodaysView reservationsToShow={reservationsToShow(false)} filter={{reservationsFilter,setReservationsFilter}}>
+                   <LargeDevicesTodaysView reservations_of_current_date={reservations_of_current_date} filter={{reservationsFilter,setReservationsFilter}}>
                        <h5>{formatDateInGreek(today)}</h5>
                        {isDateDisabled &&  <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>}
                        {isDateDisabled && hasReservations && getWarningMessage()}
                    </LargeDevicesTodaysView>
-                   : <MobileTodaysView reservationsToShow={reservationsToShow(true)} filter={{reservationsFilter,setReservationsFilter}}>
+                   : <MobileTodaysView reservations_of_current_date={reservations_of_current_date} filter={{reservationsFilter,setReservationsFilter}}>
                        <h5>{formatDateInGreek(today)}</h5>
                        {isDateDisabled &&  <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>}
                        {isDateDisabled && hasReservations && getWarningMessage()}

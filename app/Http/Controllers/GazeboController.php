@@ -12,6 +12,7 @@ use App\Models\Gazebo;
 use App\Models\Menu;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GazeboController extends Controller {
@@ -144,9 +145,24 @@ class GazeboController extends Controller {
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Gazebo $gazebo)
-    {
-        //
+    public function getAvailabilityForDate(Request $request) {
+        $input = $request->only(['date','get_reservations']);
+
+        $Availability = [];
+        $Gazebos = Gazebo::all();
+        $Reservations = Reservation::where('Date',$input['date'])->get();
+        if(!$input['get_reservations'])
+            $Reservations = $Reservations->pluck('gazebo_id');
+        foreach ($Gazebos as $gazebo) {
+            $Availability[] = ['id'=>$gazebo->id,'isAvailable'=>!$Reservations->contains($gazebo->id)];
+        }
+        return Redirect::back()->with(['availability_for_date'=>$input['get_reservations'] ? $Reservations : $Availability]);
+    }
+
+    public function getAvailabilityForDates(Request $request) {
+        $input = $request->only(['date_start','date_end']);
+        $Reservations = Reservation::date($input['date_start'],$input['date_end'])->orderBy('Date', 'asc')->get();
+        return Redirect::back()->with(['availability_for_date_range'=>$Reservations]);
     }
 
     /**

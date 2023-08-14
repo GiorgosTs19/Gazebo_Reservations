@@ -38,18 +38,18 @@ export function ReservationShort({Reservation,className}) {
          onClick={()=>setActiveReservation(Reservation)}>
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
             <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
-            <p className={'my-1'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>
-            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow'}>
+            <p className={'my-1 user-select-none'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>
+            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow user-select-none'}>
                 {status}
             </Badge>
             <Row className={'p-2'} >
                 <Col className={'border border-start-0 border-top-0 border-bottom-0'}>
-                    <h6 className={'mb-3'}>Στοιχεία Πελάτη</h6>
+                    <h6 className={'mb-3 user-select-none'}>Στοιχεία Πελάτη</h6>
                     <p className={'my-3'}>{Name}</p>
                     <p className={'my-3 info-text'}>{ContactDetails.Email}</p>
                     <p className={'my-3 info-text'}>{ContactDetails.Phone}</p>
                 </Col>
-                <Col className={'d-flex flex-column'}>
+                <Col className={'d-flex flex-column user-select-none'}>
                     <h6 className={'mb-2'}>Στοιχεία Κράτησης</h6>
                     <p className={'my-2'}>
                         <span> {Rooms.length > 1 ? 'Δωμάτια : ' : 'Δωμάτιο : '}</span>

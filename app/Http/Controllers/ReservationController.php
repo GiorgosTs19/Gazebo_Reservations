@@ -105,15 +105,14 @@ class ReservationController extends Controller
     /**
      * Changes the status of the Reservation from Pending to either Confirmed or Cancelled.
      */
-    public function changeReservationStatus(Request $request): \Illuminate\Http\RedirectResponse
-    {
+    public function changeReservationStatus(Request $request): \Illuminate\Http\RedirectResponse {
         $input = $request->only(['reservation_id','status']);
         $Reservation = Reservation::find($input['reservation_id']);
         if($Reservation) {
             $Reservation->Status = $input['status'];
             $Reservation->save();
         }
-        return Redirect::back();
+        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
     }
 
     /**
@@ -135,7 +134,7 @@ class ReservationController extends Controller
         if($Reservation->gazebo_id !== $input['Table_id'])
             $Reservation->gazebo_id = $input['Table_id'];
         $Reservation->save();
-        return Redirect::back();
+        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
     }
 
 
@@ -145,15 +144,17 @@ class ReservationController extends Controller
         if($Reservation->gazebo_id !== $input['Table_id'])
             $Reservation->gazebo_id = $input['Table_id'];
         $Reservation->save();
-        return Redirect::back();
+        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation)
-    {
-        //
+    public function Search(Request $request) {
+        $input = $request->only(['conf_number','email','phone_number','room_number']);
+        $result = ReservationResource::collection(Reservation::confirmationNumber($input['conf_number'])->
+        phone($input['phone_number'])->email($input['email'])->get());
+        return Redirect::back()->with(['search_result'=>$result]);
     }
 
     /**

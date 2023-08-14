@@ -48,7 +48,7 @@ export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettin
                 <Tabs defaultActiveKey="Dinner" className="mb-3" activeKey={activeTabKey}
                       onSelect={(k) => handleTabSelect(k)}>
                     <Tab eventKey="Dinner" title="Βραδινά">
-                        <Col className={'scrollable-y'} style={{overflowY:'auto'}}>
+                        <Col className={'scrollable-y overflow-y-auto'}>
                             <ReservationsContext.Provider value={Dinner_Reservations}>
                                 <DinnerSettings Settings={dinnerSettings}></DinnerSettings>
                             </ReservationsContext.Provider>

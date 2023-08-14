@@ -14,20 +14,20 @@ export function MenuAdminPanel({Menus}) {
         setActiveTabKey(k)
     }
     return (
-        <div className={'text-center'}>
+        <div className={'text-center h-100'}>
             <h4 className={''}>Διαχείριση Menu</h4>
-            <Row className={'p-2'}>
+            <Row className={'p-2 h-100'}>
                 <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
                     <ActiveTabKeyContext.Provider value={{activeTabKey, setActiveTabKey}}>
                         <Tabs defaultActiveKey="Existing" className="mb-3" activeKey={activeTabKey}
                               onSelect={(k) => handleTabSelect(k)}>
                             <Tab eventKey="Existing" title="Υπάρχοντα Menu">
-                                <Col>
+                                <Col className={'h-100'}>
                                     <ExistingMenus Menus={Menus}></ExistingMenus>
                                 </Col>
                             </Tab>
                             <Tab eventKey="New" title="Δημιουργία Menu">
-                                <Col>
+                                <Col className={'h-100'}>
                                     <NewMenuForm></NewMenuForm>
                                 </Col>
                             </Tab>

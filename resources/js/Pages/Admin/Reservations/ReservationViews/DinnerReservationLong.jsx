@@ -1,17 +1,18 @@
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {GazeboLocation} from "../../../Forms/Gazebo/GazeboCarousel/GazeboLocation";
-import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
+import {Badge, Button, Col, Row} from "react-bootstrap";
 import {changeDateFormat, created_at, getMenuName, getTableAA} from "../../../../ExternalJs/Util";
 import {ReservationEditModal} from "../../Modals/ReservationEditModal";
 import {MenuContext} from "../../../../Contexts/MenuContext";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
-import {Inertia} from "@inertiajs/inertia";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
+import {handleChangeReservationStatus} from "../../../../Inertia_Requests/Admin_Requests";
+import {ViewContext} from "../../../../Contexts/ViewContext";
+import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 
 export function DinnerReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    {activeView,setActiveView} = useContext(ViewContext),
     Tables = useContext(GazebosContext),
     Date = changeDateFormat(activeReservation.Date, '-', '-',true),
     Name = activeReservation?.Name.First + ' ' + activeReservation?.Name.Last,
@@ -25,8 +26,7 @@ export function DinnerReservationLong() {
     Placed_At = activeReservation.Placed_At,
     Updated_At = activeReservation.Updated_At,
     hasChanges = Placed_At !== Updated_At,
-    MenuCatalog = useContext(MenuContext),
-    Reservations = useContext(ReservationsContext);
+    MenuCatalog = useContext(MenuContext);
     const getStatusColor = () =>{
         switch (activeReservation.Status) {
             case 'Cancelled' : {
@@ -41,73 +41,67 @@ export function DinnerReservationLong() {
         }
     };
     const status = useGetReservationStatusText(activeReservation.Status);
-    const handleChangeReservationStatus = (status) => {
-        Inertia.patch(route('Change_Reservation_Status'),{reservation_id:activeReservation.id,status:status},{
-           onSuccess:()=>{
-               setActiveReservation(null);
-           },
-            only:activeReservation.Type === 'Dinner' ? ['Dinner_Reservations'] : ['Bed_Reservations']
-        });
-    }
 
     return (
         <div className={'text-center p-3 mx-auto '}>
             <Row className={''}>
-                <Col className={'text-center ' + ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '')} xxl={7}>
+                <Col className={'text-center d-flex flex-column ' + ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '')} xxl={7}>
                     <h6>Ενέργειες</h6>
-                        <Row className={'my-3'}>
-                            <Col xxl={activeReservation.Status === 'Pending' ? 4 : 12}
-                                 className={activeReservation.Status === 'Pending' ? ( innerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '') : ''}>
-                                <ReservationEditModal Reservation={activeReservation}></ReservationEditModal>
+                        <Row className={'my-3 mx-auto'}>
+                            {(activeView === 'Weekly' || activeView === 'Monthly' || activeView === 'Search') && innerWidth < 992 &&
+                                <LeftArrowSVG className={'mb-4'} onClick={() => setActiveReservation(null)}/>}
+                            <Col lg={12}>
+                                <ReservationEditModal Reservation={activeReservation} Status={activeReservation.Status}></ReservationEditModal>
                             </Col>
                             {
                                 activeReservation.Status === 'Pending' &&
-                                <Col className={'d-flex flex-row my-3 my-xxl-0 '} xxl={8}>
-                                    <Button className={'m-auto m-xxl-1'} variant={'outline-success'}
-                                            onClick={()=>handleChangeReservationStatus('Confirmed')}>
+                                <Col className={'d-flex flex-row my-3 mx-auto'}>
+                                    <Button className={'m-auto '} variant={'outline-success'}
+                                            onClick={()=>handleChangeReservationStatus('Confirmed',{activeReservation,setActiveReservation})}>
                                         Επιβεβαίωση
                                     </Button>
-                                    <Button className={'m-auto m-xxl-1'} variant={'outline-danger'}
-                                            onClick={()=>handleChangeReservationStatus('Cancelled')}>
+                                    <Button className={'m-auto '} variant={'outline-danger'}
+                                            onClick={()=>handleChangeReservationStatus('Cancelled',{activeReservation,setActiveReservation})}>
                                         Ακύρωση
                                     </Button>
                                 </Col>
                             }
+                            {activeReservation.Status === 'Cancelled' &&
+                                <h6 className={'text-danger my-3 user-select-none'}>Η κράτηση έχει ακυρωθεί, δεν επιτρέπονται
+                                    αλλαγές.</h6>}
                         </Row>
                 </Col>
                 <Col className={'d-flex flex-column my-3 my-xxl-0'} xxl={5}>
-                    <h6 className={'mx-auto'}>Κατάσταση</h6>
-                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2 box_shadow'}>
+                    <h6 className={'mx-auto user-select-none'}>Κατάσταση</h6>
+                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2 box_shadow user-select-none'}>
                         {status}
                     </Badge>
+                    {activeReservation.Status === 'Pending' && <h6 className={'text-warning my-3 my-xxl-0 user-select-none'}>Η κράτηση δεν έχει επιβεβαιωθεί ακόμη, δεν επιτρέπονται αλλαγές.</h6>}
                 </Col>
             </Row>
-            <Row className={'my-4'}>
+            <Row className={'my-4 mt-xxl-2'}>
                 <Col className={'border border-gray-400 mb-2 my-xxl-0 box_shadow rounded-4'} xs={12} xxl={7}>
-                    <p className={'p-1 my-1'}><i>Κράτηση για : {Date}</i></p>
-                    <p className={'p-1 my-1'}><i>Καταχωρήθηκε στις : {created_at(Placed_At)}</i></p>
-                    <p className={'p-1 my-1'}><i>Τελευταία αλλαγή : {hasChanges ? created_at(Updated_At) : '-'}</i></p>
-                    <p className={'p-1 my-1'}>Κράτηση για <b>{Attendees.length + 1}</b> {Attendees.length === 0 ? 'άτομο' : 'άτομα'}.</p>
+                    <p className={'p-1 my-1 user-select-none'}><i>Κράτηση για : {Date}</i></p>
+                    <p className={'p-1 my-1 user-select-none'}><i>Καταχωρήθηκε στις : {created_at(Placed_At)}</i></p>
+                    <p className={'p-1 my-1 user-select-none'}><i>Τελευταία αλλαγή : {hasChanges ? created_at(Updated_At) : '-'}</i></p>
+                    <p className={'p-1 my-1 user-select-none'}>Κράτηση για <b>{Attendees.length + 1}</b> {Attendees.length === 0 ? 'άτομο' : 'άτομα'}.</p>
                 </Col>
-                <Col className={'d-flex'} xs={12} xxl={5}>
+                <Col className={'d-flex mt-4 mt-xxl-2'} xs={12} xxl={5}>
                         <h4 className={'border-bottom p-4 m-auto box_shadow rounded-4'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
                 </Col>
             </Row>
-            <Row className={'box_shadow my-3 border rounded-3'}>
+            <Row className={'box_shadow mt-4 mt-xxl-2 border rounded-3'}>
                 <Col sm={12} lg={6}>
-                    <div className={'border-bottom p-2 my-2'}>
-                        <h5>Όνομα Κράτησης</h5>
-                        <p>{Name === ' ' ? <b className={'h5 p-0 m-0'}>-</b> : Name}</p>
-                    </div>
                     <Row className={'border-bottom p-2 my-2'}>
                         <h5>Στοιχεία Επικοινωνίας</h5>
-                        <Col xxl={8} className={'d-flex flex-column'}>
-                            <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Email}</p>
-                            <p className={'info-text-lg mx-auto my-1'}>{ContactDetails?.Phone}</p>
-                        </Col>
-                        <Col xxl={4} className={'d-flex'}>
-                            <a className={'btn btn-outline-dark m-auto'} href={'mailto:' + ContactDetails.Email}>Email</a>
-                        </Col>
+                        {/*<Col xxl={8} className={'d-flex flex-column'}>*/}
+                            <p>{Name === ' ' ? <b className={'h5 p-0 my-2'}>-</b> : Name}</p>
+                            <p className={'info-text-lg mx-auto my-2'}>{ContactDetails?.Email}</p>
+                            <p className={'info-text-lg mx-auto my-2'}>{ContactDetails?.Phone}</p>
+                        {/*</Col>*/}
+                        {/*<Col xxl={4} className={'d-flex'}>*/}
+                            <a className={'btn btn-outline-dark m-auto w-fit-content'} href={'mailto:' + ContactDetails.Email}>Email</a>
+                        {/*</Col>*/}
                     </Row>
                     <div className={'border-bottom p-2'}>
                         <h5>Παρευρισκόμενοι</h5>
@@ -119,31 +113,39 @@ export function DinnerReservationLong() {
                         </p>
                     </div>
                 </Col>
-                <Col sm={12} lg={6}>
-                    <div className={'border-bottom p-2 my-2'}>
-                        <h5>{Rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
-                        <p>
-                            {Rooms?.map((room,index)=>{
-                                return <span key={index}>{index>0 && ', '}{room.Room_Number}</span>
+                <Col sm={12} lg={6} className={'d-flex flex-column'}>
+                    <Row>
+                        <Col>
+                            <div className={'border-bottom p-2 my-auto user-select-none'}>
+                                <h5>{Rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
+                                <p>
+                                    {Rooms?.map((room,index)=>{
+                                        return <span key={index} className={'user-select-none'}>{index>0 && ', '}{room.Room_Number}</span>
+                                    })}
+                                </p>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className={'border-bottom p-2 user-select-none'}>
+                                <h5>Τραπέζι</h5>
+                                <p>{Gazebo}</p>
+                            </div>
+                        </Col>
+                    </Row>
+
+                    <div className={'border-bottom p-2 my-auto'}>
+                        <h5>Menu</h5>
+                        <div>
+                            {Menus?.map((menu,index)=>{
+                                return <p key={index} className={'user-select-none'}><i>{menu.Room}</i> {' { K: ' + getMenuName(menu.Main,MenuCatalog) + ', E: ' + getMenuName(menu.Dessert,MenuCatalog) + ' }'}</p>
                             })}
-                        </p>
+                        </div>
+                        <p className={'text-muted user-select-none'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p>
                     </div>
-                    <div className={'border-bottom p-2'}>
-                        <h5>A/A Κρατημένου Τραπεζιού</h5>
-                        <p>{Gazebo}</p>
-                        <GazeboLocation index={Gazebo} className={'p-1'} gap={2} width={'w-75'}></GazeboLocation>
-                    </div>
+
                 </Col>
-                <div className={'border-bottom p-2 my-2'}>
-                    <h5>Επιλεγμένο Menu / Δωμάτιο</h5>
-                    <div>
-                    {Menus?.map((menu,index)=>{
-                        return <p key={index}><i>{menu.Room}</i> {' { K: ' + getMenuName(menu.Main,MenuCatalog) + ', E: ' + getMenuName(menu.Dessert,MenuCatalog) + ' }'}</p>
-                    })}
-                </div>
-                    <p className={'text-muted'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p>
-                </div>
-                <div className={'p-2 my-2'}>
+
+                <div className={'p-2 my-2 user-select-none'}>
                     <h5>Σημειώσεις Κράτησης</h5>
                     <p>{Notes === null ? 'Καμία σημείωση' : Notes}</p>
                 </div>

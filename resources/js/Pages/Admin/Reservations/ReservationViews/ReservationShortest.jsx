@@ -31,21 +31,21 @@ export function ReservationShortest({Reservation,className=''}) {
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
             <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
             {/*<p className={'my-1'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>*/}
-            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow'}>
+            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow user-select-none'}>
                 {statusText}
             </Badge>
             <Row className={'p-2'} >
                 <Col className={'d-flex flex-column'}>
-                    <h6 className={'mb-2'}>Στοιχεία Κράτησης</h6>
-                    <p className={'my-2'}>
+                    <h6 className={'mb-2 user-select-none'}>Στοιχεία Κράτησης</h6>
+                    <p className={'my-2 user-select-none'}>
                         <span> {Rooms.length > 1 ? 'Δωμάτια : ' : 'Δωμάτιο : '}</span>
                         {/*<img src={'/Images/Icons/bed_icon.png'} alt={''}/>*/}
                         {Rooms.map((room,index)=>{
                             return <span key={index}>{index>0 && ', '} {room.Room_Number}</span>
                         })}
                     </p>
-                    <p className={'my-2'}><i>Άτομα : </i>{Reservation.Attendees.length + 1}</p>
-                    <p className={'my-2'}><i>Τραπέζι : </i>{getTableAA(Reservation?.Gazebo,Tables)}</p>
+                    <p className={'my-2 user-select-none'}><i>Άτομα : </i>{Reservation.Attendees.length + 1}</p>
+                    <p className={'my-2 user-select-none'}><i>Τραπέζι : </i>{getTableAA(Reservation?.Gazebo,Tables)}</p>
                 </Col>
             </Row>
         </div>

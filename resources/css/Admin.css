@@ -176,6 +176,14 @@ abbr[title] {
 
 
 /* More utility classes*/
+/* Width */
+.w-fit-content {
+    width: fit-content;
+}
+.w-90 {
+    width: 90%;
+}
+/* Width */
 
 /* Height */
 .mh-100 {
@@ -187,8 +195,14 @@ abbr[title] {
 .h-85 {
     height: 85%;
 }
+.h-85 {
+    height: 85%;
+}
 .h-90 {
     height: 90%;
+}
+.mh-400px {
+    max-height: 400px;
 }
 /* Height */
 
@@ -196,3 +210,25 @@ abbr[title] {
     cursor: pointer;
 }
 /* Cursor */
+
+@media (max-width: 500px) {
+    .search-view-reservations {
+        height: 65% !important;
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 768px) {
+    .search-view-reservations {
+        height: 55% !important;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+    .search-view-reservations {
+        height: 90% !important;
+    }
+}
+@media (min-width: 1200px) {
+    .search-view-reservations {
+        height: 100% !important;
+    }
+}

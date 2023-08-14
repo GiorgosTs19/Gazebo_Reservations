@@ -9,7 +9,6 @@ export function DinnerDateSettings({DinnerReservations}) {
     const [selectedDate,setSelectedDate] = useState(''),
         [show,setShow] = useState(false);
 
-
     const handleShowChange = () => {
         setShow(!show);
     }
@@ -21,31 +20,13 @@ export function DinnerDateSettings({DinnerReservations}) {
             </Card.Header>
             <SelectedDateContext.Provider value={{selectedDate,setSelectedDate}}>
             <Card.Body className={'d-flex flex-column'}>
-                {/*<Row>*/}
-                {/*    <Col lg={selectedDate !== '' ? 4 : 5}>*/}
-                            <CalendarSettings DinnerReservations={DinnerReservations}></CalendarSettings>
-                        {selectedDate !== '' ? <SelectedDateSettings></SelectedDateSettings> :
-                            <h5 className={'my-auto text-wrap'}>Επιλέξτε μία ημέρα για να δείτε τις επιλογές σας.</h5>}
-                    {/*</Col>*/}
-                    {/*<Col lg={selectedDate !== '' ? 8 : 7} className={'d-flex flex-row mt-3 mt-lg-0 text-center'}>*/}
-                    {/*   */}
-                    {/*</Col>*/}
-                {/*</Row>*/}
+                <CalendarSettings DinnerReservations={DinnerReservations}></CalendarSettings>
+            {selectedDate !== '' ? <SelectedDateSettings></SelectedDateSettings> :
+                <h5 className={'my-5 text-wrap'}>Επιλέξτε μία ημέρα για να δείτε τις επιλογές σας.</h5>}
             </Card.Body>
             </SelectedDateContext.Provider>
         </Card>
     )
 }
-
-
-// <div className={'m-auto'}>
-//     <p className={'text-danger fst-italic'}>Οι μη διαθέσιμες μέρες θα εμφανίζονται "απενεργοποιημένες"
-//         στην φόρμα κρατήσεων.</p>
-// </div>
-// <div className={'m-auto'}>
-//     <p className={'text-danger fst-italic'}>Τα μη διαθέσιμα τραπέζια, θα εμφανίζονται "απενεργοποιημένα"
-//         στην φόρμα κρατήσεων για την συγκεκριμένη ημέρα.</p>
-// </div>
-
 
 

@@ -6,11 +6,13 @@ use App\Http\Resources\BedSettingsResource;
 use App\Http\Resources\DinnerSettingsResource;
 use App\Http\Resources\GazeboResource;
 use App\Http\Resources\MenuResource;
+use App\Http\Resources\ReservationResource;
 use App\Models\BedSetting;
 use App\Models\DinnerSetting;
 use App\Models\DisabledDay;
 use App\Models\Gazebo;
 use App\Models\Menu;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -37,8 +39,23 @@ class AdminController extends Controller {
         }));
         $Dinner_Settings = new DinnerSettingsResource(DinnerSetting::first());
         $Bed_Settings = new BedSettingsResource(BedSetting::first());
+        $activeReservation = null;
+        $availability_for_date = [];
+        $availability_for_date_range = [];
+        $search_result = [];
+        if($request->session()->exists('activeReservation'))
+            $activeReservation = new ReservationResource(Reservation::find($request->session()->get('activeReservation')));
+        if($request->session()->exists('availability_for_date'))
+            $availability_for_date = $request->session()->get('availability_for_date');
+        if($request->session()->exists('search_result'))
+            $search_result = $request->session()->get('search_result');
+        if($request->session()->exists('availability_for_date_range'))
+            $availability_for_date_range = $request->session()->get('availability_for_date_range');
+
         return Inertia::render('Admin/AdminPanel',['Menus'=>$Menus,'Dinner_Reservations'=> fn () =>$Dinner_Reservations,
             'Bed_Reservations'=> fn () => $Bed_Reservations,'Gazebos'=>GazeboResource::collection($Gazebos),
-            'Dinner_Settings' => fn () => $Dinner_Settings,'Bed_Settings'=> fn () =>$Bed_Settings,'ActiveTab'=>$Active_Key ?: 'Reservations']);
+            'Dinner_Settings' => fn () => $Dinner_Settings,'Bed_Settings'=> fn () =>$Bed_Settings,'ActiveTab'=>$Active_Key ?: 'Reservations',
+            'activeReservation'=>Inertia::lazy(fn()=>$activeReservation),'availability_for_date'=>Inertia::lazy(fn()=>$availability_for_date),
+            'search_result'=>Inertia::lazy(fn()=>$search_result),'availability_for_date_range'=>Inertia::lazy(fn()=>$availability_for_date_range)]);
     }
 }

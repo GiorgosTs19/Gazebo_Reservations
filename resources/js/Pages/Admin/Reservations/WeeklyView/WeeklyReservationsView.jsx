@@ -3,10 +3,11 @@ import {useContext} from "react";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {LargeDevicesWeeklyView} from "./LargeDevicesWeeklyView";
 import {MobileWeeklyView} from "./MobileWeeklyView";
+import {Button} from "react-bootstrap";
+import {getFormattedDate} from "../../../../ExternalJs/Util";
 
 export function WeeklyReservationsView() {
     const [currentDate, setCurrentDate] = useState(new Date()),
-    [direction,setDirection] = useState('vertical'),
     innerWidth = useContext(InnerWidthContext),
     [reservationsFilter,setReservationsFilter] = useState('All');
 
@@ -22,42 +23,22 @@ export function WeeklyReservationsView() {
         setCurrentDate(nextWeek);
     };
 
-    const getBorder = (index) => {
-        switch (index) {
-            case 0 : {
-                if(direction === 'horizontal')
-                    return ' border-end-0';
-                return 'border-bottom';
-            }
-            case 6 : {
-                if(direction === 'horizontal')
-                    return ' border-end';
-                return 'border-top'
-            }
-            default : {
-                if(direction === 'horizontal')
-                    return ' border-end-0';
-                return 'border-bottom border-top';
-            }
-        }
-    }
-
-
+    const isToday = getFormattedDate(currentDate,'/',2) === getFormattedDate(new Date(),'/',2);
     return (
         <>
             {innerWidth > 1200
                 ?
-                <LargeDevicesWeeklyView getBorder={getBorder} currentDate={currentDate}
-                    direction={direction} goToNextWeek={goToNextWeek}
-                    goToPreviousWeek={goToPreviousWeek} filter={{reservationsFilter,setReservationsFilter}}>
+                <LargeDevicesWeeklyView currentDate={currentDate}
+                    filter={{reservationsFilter,setReservationsFilter}}>
+                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
+                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}>Επόμενη Εβδομάδα</Button>
                 </LargeDevicesWeeklyView>
                 :
-                <MobileWeeklyView getBorder={getBorder} currentDate={currentDate}
-                    direction={direction} goToNextWeek={goToNextWeek}
-                    goToPreviousWeek={goToPreviousWeek} filter={{reservationsFilter,setReservationsFilter}}>
+                <MobileWeeklyView currentDate={currentDate} filter={{reservationsFilter,setReservationsFilter}}>
+                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
+                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}>Επόμενη Εβδομάδα</Button>
                 </MobileWeeklyView>
             }
         </>
     );
 }
-// className={direction === 'vertical' ? 'pe-3 border-end' : ''}

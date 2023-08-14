@@ -43,7 +43,7 @@ export const  FinalizeReservation = forwardRef(function FinalizeReservation({...
                             {changeDateFormat(bookingDetails.date,'-','-')}</div>
                             <div className={'d-flex mx-auto my-1'}>
                                 <UserSVG/>
-                                {bookingDetails.number_of_people} people
+                                {bookingDetails.number_of_people}
                             </div>
                             <div className={'d-flex mx-auto my-1'}>
                                 Table {getTableAA(bookingDetails.table,Gazebos)}

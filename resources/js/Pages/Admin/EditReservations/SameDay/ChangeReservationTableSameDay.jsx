@@ -1,6 +1,6 @@
 import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
-import {changeDateFormat, getAvailabilityByDate, getTableAA} from "../../../../ExternalJs/Util";
-import {useContext,useState,useRef} from "react";
+import {changeDateFormat, getTableAA} from "../../../../ExternalJs/Util";
+import {useContext,useState,useRef,useEffect} from "react";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
@@ -19,7 +19,6 @@ export function ChangeReservationTableSameDay() {
         {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext),
         {content,setContent} = useContext(EditModalContentContext);
     const handleSelectTable = (table,index) => {
-        console.log(index);
         if(table.isAvailable && table.id !== activeReservation.Gazebo)
             setSelectedTable(table.id);
         if (TablesListRef.current) {
@@ -34,18 +33,30 @@ export function ChangeReservationTableSameDay() {
         }
     };
 
-    const date = activeReservation.Date,
-        availableTables = getAvailabilityByDate(activeReservation.Date, Reservations);
+    const date = activeReservation.Date;
+    const [tables,setTables] = useState([]);
+    useEffect(()=>{
+        if(date !== null) {
+            Inertia.get(route('Get_Availability_For_Date'), {date: date},{
+                only:['availability_for_date'],
+                preserveScroll:true,
+                preserveState:true,
+                onSuccess:(res)=>{
+                    setTables(res.props.availability_for_date);
+                }
+            });
+        }
+    },[]);
     const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
     const handleShowOnlyAvailableTablesChange = (e) => {
         setShowOnlyAvailableTables(!showOnlyAvailableTables);
     };
 
-    const unavailableTablesExist = availableTables.some(table=>{return table.isAvailable === false});
+    const unavailableTablesExist = tables.some(table=>{return table.isAvailable === false});
 
-    const sameTable = availableTables.find(table =>{
-        return table.id === activeReservation.Gazebo;
-    });
+    // const sameTable = tables.find(table =>{
+    //     return table.id === activeReservation.Gazebo;
+    // });
 
     const getTableAvailabilityText = (table) => {
         if(selectedTable === table.id)
@@ -65,7 +76,7 @@ export function ChangeReservationTableSameDay() {
     };
     const getTablesList = () => {
         if(showOnlyAvailableTables)
-            return availableTables.filter(table=>{
+            return tables.filter(table=>{
                 return table.isAvailable === true;
             }).map((table,index)=>{
                 return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
@@ -82,7 +93,7 @@ export function ChangeReservationTableSameDay() {
                 </ListGroup.Item>;
             });
 
-        return availableTables.map((table,index)=>{
+        return tables.map((table,index)=>{
             return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
                style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed') }}
                className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
@@ -100,9 +111,10 @@ export function ChangeReservationTableSameDay() {
     const handleSaveChanges = () => {
         Inertia.patch(route('Change_Reservation_Table'),{Reservation_id:activeReservation.id,
             Table_id:selectedTable},{preserveScroll:true,only:reservationType === 'Dinner' ?
-                ['Dinner_Reservations'] : ['Bed_Reservations'],onSuccess:()=> {
+                ['Dinner_Reservations','activeReservation'] : ['Bed_Reservations','activeReservation'],onSuccess:(res)=> {
                 setContent('Options');
                 setShowEditModal(false);
+                setActiveReservation(res.props.activeReservation);
             }});
     };
     return (

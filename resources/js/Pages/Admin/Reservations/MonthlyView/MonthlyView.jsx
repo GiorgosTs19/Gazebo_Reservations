@@ -24,6 +24,8 @@ export function MonthlyView() {
         [activeMonth,setActiveMonth] = useState(today.getMonth());
         yesterday.setDate(today.getDate() - 1)
         tomorrow.setDate(tomorrow.getDate() + 1)
+        // Checks if the date passed in the function has to be disabled on the calendar, either because this day has passed,
+        // or is out of the reservation date boundaries set by the administrators.
         const isDateDisabled = (date,view,activeStartDate) => {
             if(view === 'month')
                 return (date < yesterday) || (date > Last_Day)
@@ -35,30 +37,32 @@ export function MonthlyView() {
             }
         },
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+        // Handles the change of date on the calendar.
         handleDateChange = (date)=> {
                 setSelectedDate(date);
                 setActiveReservation(null);
         },
+        // Returns the content to be displayed in each of the calendar's tiles, based on the day's availability.
         getTileContent = (date) => {
             if(!isDateDisabled(date)){
                 const current_date_reservations = getReservationsByDate(date,Reservations);
                 switch (current_date_reservations.length) {
                     case 0: {
-                        return <h6 className={'m-0'} style={{color: '#42C618'}}>0</h6>;
+                        return <h6 className={'m-0 user-select-none'} style={{color: '#42C618'}}>0</h6>;
                     }
                     default : {
                         if (Array.isArray(current_date_reservations)) {
                             if(current_date_reservations.length < 2){
-                                return <h6 className={'m-0'} style={{color:'#42C618'}}>{current_date_reservations.length}</h6>;
+                                return <h6 className={'m-0 user-select-none'} style={{color:'#42C618'}}>{current_date_reservations.length}</h6>;
                             }
                             else if(current_date_reservations.length >= 2 && current_date_reservations.length < 4) {
-                                return <h6 className={'m-0'} style={{color: '#E7EA2B'}}>{current_date_reservations.length}</h6>;
+                                return <h6 className={'m-0 user-select-none'} style={{color: '#E7EA2B'}}>{current_date_reservations.length}</h6>;
                             }
                             else if(current_date_reservations.length >= 4 && current_date_reservations.length < 6) {
-                                return <h6 className={'m-0'} style={{color: '#F68908'}}>{current_date_reservations.length}</h6>;
+                                return <h6 className={'m-0 user-select-none'} style={{color: '#F68908'}}>{current_date_reservations.length}</h6>;
                             }
                             else if(current_date_reservations.length === 6) {
-                                return <h6 className={'m-0'} style={{color: '#D2042D'}}>{current_date_reservations.length}</h6>;
+                                return <h6 className={'m-0 user-select-none'} style={{color: '#D2042D'}}>{current_date_reservations.length}</h6>;
                             }
                         }
                     }
@@ -66,36 +70,41 @@ export function MonthlyView() {
                 return null;
             }
         };
+
+    // Returns whether the toPrevMonth button should be disabled ( True when viewing current month )
     const isPrevLabelDisabled = () =>{
         if(activeMonth === today.getMonth())
             return null;
         return "‹";
     };
+
+    // Returns whether the toNextMonth button should be disabled ( True when viewing the last month,
+    // based on the reservation date boundaries set by the administrators )
     const isNextLabelDisabled = () => {
-        console.log(activeMonth,Last_Day)
         if(activeMonth === Last_Day.getMonth())
             return null;
         return "›";
     };
+    // Renders the reservations to show for the selected date.
     const reservationsToShow = ()=> {
         if(selectedDate === '')
-            return <h4 className={'text-muted my-auto'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
+            return <h4 className={'text-muted my-auto user-select-none'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
-        if(reservations_of_current_date.length === 0)
-            return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>;
-        if(reservationsFilter === 'All')
-            return reservations_of_current_date.map((reservation)=>{
-                return <ReservationShort Reservation={reservation} key={reservation.id} className={reservations_of_current_date.length > 1 ? 'my-2' : 'my-auto'}></ReservationShort>;
-            });
-        const reservations = reservations_of_current_date.filter((reservation)=>{
-            return reservation.Status === reservationsFilter;
-        }).map((reservation,index)=>{
-            return <ReservationShort Reservation={reservation} key={reservation.id}></ReservationShort>;
-        });
 
-        if(reservations.length > 0)
-            return reservations;
-        return <h4 className={'my-auto'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
+        if(reservations_of_current_date.length === 0)
+            return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>;
+
+        const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
+            reservations_of_current_date.filter((reservation)=>{
+                return reservation.Status === reservationsFilter;
+            });
+
+        if(filteredReservations.length === 0)
+            return <h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
+
+        return filteredReservations.map((reservation)=>{
+            return <ReservationShort Reservation={reservation} key={reservation.id} className={'my-2'}></ReservationShort>;
+        });
     };
 
     const reservations_of_current_date = selectedDate ?  getReservationsByDate(selectedDate,Reservations) : [];
@@ -147,7 +156,7 @@ export function MonthlyView() {
     return (
         innerWidth > 992
             ?
-            <LargeDevicesMonthlyView Calendar={CalendarToShow}
+            <LargeDevicesMonthlyView Calendar={CalendarToShow} selectedDate = {selectedDate}
                 reservationsToShow={reservationsToShow} WarningMessage={getWarningMessage}
             reservationsFilter={reservationsFilter} setReservationsFilter={setReservationsFilter}>
             </LargeDevicesMonthlyView>

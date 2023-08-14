@@ -55,13 +55,19 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         });
     });
 
+    Route::prefix('/Date')->group(function () {
+        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
+    });
+
     Route::prefix('/Reservations')->group(function () {
         Route::prefix('/Edit')->group(function () {
             Route::patch('/Date', [\App\Http\Controllers\ReservationController::class, 'changeReservationDate'])->
             name('Change_Reservation_Date');
             Route::patch('/Table', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
             name('Change_Reservation_Table');
+            Route::get('/Search',[\App\Http\Controllers\ReservationController::class,'Search'])->name('Search_Reservations');
         });
+
         Route::prefix('/Status')->group(function () {
             Route::patch('/Confirm', [\App\Http\Controllers\ReservationController::class, 'changeReservationStatus'])->
             name('Change_Reservation_Status');
@@ -74,6 +80,11 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         Route::post('/Create', [\App\Http\Controllers\MenuController::class, 'create'])->name('Create_Menu');
         Route::delete('/Delete', [\App\Http\Controllers\MenuController::class, 'destroy'])->name('Delete_Menu');
         Route::patch('/Edit', [\App\Http\Controllers\MenuController::class, 'edit'])->name('Edit_Menu');
+    });
+
+    Route::prefix('/Date_Range')->group(function() {
+       Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDates'])
+           ->name('Get_Availability_For_Dates');
     });
 
     Route::prefix('/Disable')->group(function () {

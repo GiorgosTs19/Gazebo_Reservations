@@ -71,7 +71,7 @@ export default function AdminPanel(props) {
                                     </Col>
                                 </Tab>
                                 <Tab eventKey="Menus" title="Μενού">
-                                    <Col>
+                                    <Col className={'h-100'}>
                                         <MenuAdminPanel Menus={Menus}></MenuAdminPanel>
                                     </Col>
                                 </Tab>

@@ -10,7 +10,7 @@ export function ReservationTypeSelectionMenu() {
 
     return (
         <Form className="m-auto ">
-            <h5>
+            <h5 className={'user-select-none'}>
                 <Form.Check // prettier-ignore
                     type={'radio'}
                     label={`Kρατήσεις Seaside Dinner`}
@@ -20,7 +20,7 @@ export function ReservationTypeSelectionMenu() {
                     onChange={()=>handleOnChange('Dinner')}
                 />
             </h5>
-            <h5>
+            <h5 className={'user-select-none'}>
                 <Form.Check
                     type={'radio'}
                     label={'Kρατήσεις Sea Bed'}
