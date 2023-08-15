@@ -71,4 +71,13 @@ class Reservation extends Model {
 
         return $query->whereBetween('Date',[$date_start,$date_end]);
     }
+    public function scopeTable($query,$table_id) {
+        if(!$table_id)
+            return $query->where('gazebo_id',$table_id);
+
+        return $query;
+    }
+    public function scopeOrder($query,$direction = 'asc') {
+        return $query->orderBy('date',$direction);
+    }
 }

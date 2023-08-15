@@ -41,7 +41,7 @@ export function DinnerTimeSettings() {
     },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
     return (
         // settings-header-border
-        <div>
+        <div className={'user-select-none'}>
             <Row>
                 <Col xl={6}>
                     <ArrivalSettings></ArrivalSettings>

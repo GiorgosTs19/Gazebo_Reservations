@@ -55,6 +55,11 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         });
     });
 
+
+    Route::prefix('/Table')->group(function () {
+        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForTable'])->name('Get_Reservations_For_Table');
+    });
+
     Route::prefix('/Date')->group(function () {
         Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
     });
@@ -83,8 +88,14 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
     });
 
     Route::prefix('/Date_Range')->group(function() {
+
        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDates'])
            ->name('Get_Availability_For_Dates');
+
+        Route::prefix('/Disable')->group(function () {
+            Route::post('/Days', [\App\Http\Controllers\DisabledDayController::class, 'Disable_Days'])->name('Disable_Days');
+            Route::post('/Tables', [\App\Http\Controllers\DisabledTableController::class, 'Disable_Table'])->name('Disable_Tables');
+        });
     });
 
     Route::prefix('/Disable')->group(function () {

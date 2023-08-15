@@ -2,7 +2,6 @@ import Calendar from "react-calendar";
 import {
     getAvailabilityByDate, getAvailabilityPercentage,
     getFormattedDate,
-    isDateDisabledByAdmin,
     isDateDisabledByAdminForReservations
 } from "../../../ExternalJs/Util";
 import {useContext, useEffect, useRef, useState} from "react";

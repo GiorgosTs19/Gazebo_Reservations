@@ -32,17 +32,17 @@ export function ArrivalSettings() {
             <Card.Body className={'px-2 py-3 mx-auto w-100 d-flex flex-column text-center'}>
             <FormLabel is={'string'}  className={'mx-auto'}>{localSettings.Strict_Arrival_Time ? 'Ώρα' : 'Ωράριο'} άφιξης πελατών</FormLabel>
             <Row direction={'horizontal'} className={'my-3 my-lg-3 mx-auto w-100'}>
-                <Col md={localSettings.Strict_Arrival_Time ? 12 : 6} className={'' + (!localSettings.Strict_Arrival_Time ? 'border-end' : '')}>
+                <Col md={localSettings.Strict_Arrival_Time ? 12 : 6} className={'' + (!localSettings.Strict_Arrival_Time ? 'border-end px-0' : '')}>
                     <Stack>
                         <TimePicker onChange={handleArrivalTimeStartChange} inputValue={settings.Arrival_Start} Name={'Arrival_Start'}
-                                    textPrefix={!localSettings.Strict_Arrival_Time ? 'Aπο ' : ''}></TimePicker>
+                                    textPrefix={!localSettings.Strict_Arrival_Time ? 'Aπο ' : ''} direction={localSettings.Strict_Arrival_Time ? 'horizontal' : 'vertical'}></TimePicker>
                     </Stack>
                 </Col>
                 {!localSettings.Strict_Arrival_Time &&
-                    <Col md={6} >
+                    <Col md={6} className={'px-0'}>
                         <Stack>
                             <TimePicker onChange={handleArrivalTimeEndChange} inputValue={settings.Arrival_End} Name={'Arrival_End'}
-                                        textPrefix={'Έως '}></TimePicker>
+                                        textPrefix={'Έως '} direction={'vertical'}></TimePicker>
                         </Stack>
                     </Col>
                 }

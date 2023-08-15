@@ -39,7 +39,7 @@ export function ArrivalMessageSettings() {
             <Card.Body className={'p-3 m-auto w-100 d-flex flex-column text-center'}>
                 <Form.Control as="textarea" rows={3} value={settings.Arrival_Message} style={{resize:'none'}}
                               onChange={handleChangeArrivalMessage} className={'m-auto'}/>
-                <p className={'text-muted text-center mb-0'}>Το παραπάνω μήνυμα εμφανίζεται στην φόρμας κράτησης.</p>
+                <p className={'text-muted text-center mb-0 user-select-none'}>Το παραπάνω μήνυμα εμφανίζεται στην φόρμας κράτησης.</p>
             </Card.Body>
         </Card>
     )

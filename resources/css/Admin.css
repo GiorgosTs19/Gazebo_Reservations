@@ -146,8 +146,19 @@
 /* Settings */
 
 .disabled-day {
-    color: #ea1414 !important;
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
 }
+
+.disabled-day-no-click {
+    /*color: #ea1414 !important;*/
+    /*pointer-events: none;*/
+    /*cursor: not-allowed !important;*/
+    /*opacity: 65%;*/
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+}
+
 abbr[title] {
     text-decoration: none !important;
 }
@@ -163,9 +174,9 @@ abbr[title] {
     opacity: 50% !important;
     cursor: not-allowed;
 }
-.react-calendar__month-view__days__day--weekend {
-    color: black !important;
-}
+/*.react-calendar__month-view__days__day--weekend {*/
+/*    color: black !important;*/
+/*}*/
 
 .react-calendar__navigation button:disabled {
     background-color: transparent !important;
@@ -204,6 +215,12 @@ abbr[title] {
 .mh-400px {
     max-height: 400px;
 }
+.mh-600px {
+    max-height: 600px;
+}
+.mh-720px {
+    max-height: 720px;
+}
 /* Height */
 
 .cursor-pointer {
@@ -231,4 +248,31 @@ abbr[title] {
     .search-view-reservations {
         height: 100% !important;
     }
+}
+
+.overlay-number {
+    position: absolute;
+    top: 50%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    transform: translate(-50%, -35%);
+    font-size: 23px;
+    font-weight: bold;
+    color: black;
+    /*background-color: rgba(0, 0, 0, 0.5); !* Adjust opacity and color *!*/
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the image */
+.image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.day-unavailable-modal {
+    max-height: 900px;
 }

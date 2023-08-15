@@ -33,7 +33,7 @@ export default function Login({ status, canResetPassword }) {
                         <Form.Group className="my-3 mx-auto text-center" controlId="email">
                             <Form.Label className="my-1">Email</Form.Label>
                             <Form.Control type="email" placeholder="name@example.com" value={data.email}
-                      onChange={(e) => setData('email', e.target.value)}/>
+                      onChange={(e) => setData('email', e.target.value)} aria-autocomplete={"none"}/>
                         </Form.Group>
 
                         <Form.Group className="my-3 mx-auto text-center" controlId="password">

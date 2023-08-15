@@ -11,6 +11,7 @@ import {PendingUnsavedChangesContext} from "../../Contexts/PendingUnsavedChanges
 import {PendingUnsavedChangesWarningModal} from "../../Menu/EditMenu/PendingUnsavedChangesWarningModal";
 import {ShouldShowUnsavedChangesModalContext} from "../../Contexts/ShouldShowUnsavedChangesModalContext";
 import {Arrival_Start_Error_Check} from "../Utility/Util";
+import {DinnerTableSettings} from "./DinnerTableSettings/DinnerTableSettings";
 
 export function DinnerSettings({Settings}) {
     const [errors,setErrors] = useState({
@@ -129,11 +130,14 @@ export function DinnerSettings({Settings}) {
                          className={'rounded-5 shadow-sm'}
                          onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
                         <Row className={'px-3 py-2 mt-4'}>
-                            <Col xxl={4} className={'d-flex'}>
+                            <Col xxl={3} className={'d-flex'}>
                                 <DinnerDateSettings></DinnerDateSettings>
                             </Col>
                             <Col className={'my-auto'}>
                                 <DinnerTimeSettings></DinnerTimeSettings>
+                            </Col>
+                            <Col xxl={5} className={'d-flex'}>
+                                <DinnerTableSettings></DinnerTableSettings>
                             </Col>
                         </Row>
                     </div>

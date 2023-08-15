@@ -31,7 +31,7 @@ export function ReservationDateRangeSettings() {
                     <Col className={'d-flex'}>
                         <FormGroup className={'p-2 m-auto text-center'}>
                                 <span className={'text-muted fst-italic ms-2'}>{settings.First_Day ? changeDateFormat(settings.First_Day,'-','-'):''}</span>
-                                <Stack direction={'horizontal'}>
+                                <Stack direction={'vertical'}>
                                     <p>Πρώτη Μέρα Κρατήσεων : </p>
                                     <input type={'date'} className={'ms-2 mb-3 p-1 rounded'} onChange={handleFirstDateChange} value={settings.First_Day}/>
                                 </Stack>
@@ -41,7 +41,7 @@ export function ReservationDateRangeSettings() {
                     <Col className={'d-flex'}>
                         <FormGroup className={'p-2 text-center m-auto'}>
                                 <span className={'text-muted fst-italic ms-2'}>{settings.Last_Day ? changeDateFormat(settings.Last_Day,'-','-'):''}</span>
-                                <Stack direction={'horizontal'}>
+                                <Stack direction={'vertical'}>
                                     <p>Τελευταία Μέρα Κρατήσεων : </p>
                                     <input type={'date'} className={'ms-2 mb-3 p-1 rounded'} onChange={handleLastDateChange} min={settings.First_Day}
                                            value={settings.Last_Day}/>

@@ -147,16 +147,19 @@ class GazeboController extends Controller {
      */
     public function getAvailabilityForDate(Request $request) {
         $input = $request->only(['date','get_reservations']);
-
+        $getReservations = false;
+        if($request->has('get_reservations'))
+            $getReservations = $input['get_reservations'];
         $Availability = [];
         $Gazebos = Gazebo::all();
         $Reservations = Reservation::where('Date',$input['date'])->get();
-        if(!$input['get_reservations'])
+        if(!$getReservations)
             $Reservations = $Reservations->pluck('gazebo_id');
+
         foreach ($Gazebos as $gazebo) {
             $Availability[] = ['id'=>$gazebo->id,'isAvailable'=>!$Reservations->contains($gazebo->id)];
         }
-        return Redirect::back()->with(['availability_for_date'=>$input['get_reservations'] ? $Reservations : $Availability]);
+        return Redirect::back()->with(['availability_for_date'=> $getReservations ? $Reservations : $Availability]);
     }
 
     public function getAvailabilityForDates(Request $request) {
@@ -166,11 +169,14 @@ class GazeboController extends Controller {
     }
 
     /**
-     * Update the specified resource in storage.
+     * Returns all the reservations of the specified table, within the date range set in the settings starting from today.
      */
-    public function update(Request $request, Gazebo $gazebo)
-    {
-        //
+    public function getReservationsForTable(Request $request) {
+        $input = $request->only(['gazebo_id','reservation_type']);
+        $Settings = $input['reservation_type'] === 'Dinner' ? DinnerSetting::first() : BedSetting::first();
+        $reservations_to_return = Reservation::date(date("Y-m-d"),$Settings->Ending_Date)->table($input['gazebo_id'])->order()
+            ->distinct()->pluck('Date');
+        return Redirect::back()->with(['reservations_of_table'=>$reservations_to_return]);
     }
 
     /**

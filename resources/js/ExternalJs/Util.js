@@ -252,14 +252,14 @@ export function isDateDisabledByAdmin (date,Reservations) {
         const selectedDate = Reservations.find(date => date.Date === date);
         if(selectedDate)
             return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
-        return false;
+        return [false,true];
     }
     if(typeof date === 'object') {
         const newDate = getFormattedDate(date,'-',1);
         const selectedDate = Reservations.find(date => date.Date === newDate);
         if(selectedDate)
             return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
-        return false;
+        return [false,true];
     }
 }
 

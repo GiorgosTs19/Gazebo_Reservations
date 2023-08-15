@@ -1,16 +1,24 @@
 import {useContext, useEffect, useState} from "react";
 import {SelectedDateContext} from "../../../../Contexts/SelectedDateContext";
-import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin
+import {getFormattedDate, isDateDisabledByAdmin
 } from "../../../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../../../Contexts/ReservationsContext";
 import {Col, Row} from "react-bootstrap";
-import {SelectedDateAvailabilitySettings} from "./SelectedDateAvailabilitySettings";
+import {SelectedDateTableSettings} from "./SelectedDateTableSettings";
 
-export function SelectedDateSettings() {
+export function SelectedDateSettings({Reservations}) {
     const {selectedDate, setSelectedDate}= useContext(SelectedDateContext),
         SelectedReservations = useContext(ReservationsContext),
     dateIsRange = Array.isArray(selectedDate);
-    const [isDateDisabled,existingReservationsAllowed] = !dateIsRange ?  isDateDisabledByAdmin(selectedDate,SelectedReservations) : [false,true];
+    const [isDateDisabled,existingReservationsAllowed] = !dateIsRange ?  isDateDisabledByAdmin(selectedDate,SelectedReservations) : [false,true],
+    [selectedTable,setSelectedTable] = useState(0);
+
+    const handleSelectTable = (e) => {
+        setSelectedTable(e.target.value)
+    }
+    useEffect(()=>{
+        setSelectedTable(0) ;
+    },[selectedDate]);
 
     // Selected Dates Reservations
     // const Reservations = !dateIsRange && getReservationsByDate(selectedDate,SelectedReservations),
@@ -23,10 +31,10 @@ export function SelectedDateSettings() {
         <div className={'text-center mx-auto mt-4'}>
             <h5>{!dateIsRange && getFormattedDate(selectedDate,'-',2)}</h5>
                 <Row className={'mt-4'}>
-                    <Col xs={12} className={'text-center my-4 my-lg-0 d-flex flex-column p3'}>
-                        {/*Handles the selected day's availability settings. ( Setting unavailable or available )*/}
-                        <SelectedDateAvailabilitySettings
-                        isDateDisabled={isDateDisabled} selectedDate={selectedDate}></SelectedDateAvailabilitySettings>
+                    <Col xs={12} lg={6} className={'text-center my-4 my-xl-0 p-2'}>
+                        {/*Handles the selected day's tables availability settings. ( Setting unavailable or available )*/}
+                        {/*<SelectedDateTableSettings selectedTable={selectedTable} handleSelectTable={handleSelectTable}*/}
+                        {/*   isDateDisabled={isDateDisabled} Reservations={Reservations}></SelectedDateTableSettings>*/}
                     </Col>
                 </Row>
         </div>

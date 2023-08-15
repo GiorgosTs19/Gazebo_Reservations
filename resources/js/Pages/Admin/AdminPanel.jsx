@@ -6,13 +6,12 @@ import {ReservationsPanel} from "./Reservations/ReservationsPanel";
 import {GazebosContext} from "../../Contexts/GazebosContext";
 import '../../../css/Admin.css'
 import {SettingsPanel} from "./Settings/SettingsPanel";
-import 'react-calendar/dist/Calendar.css';
+import '../../../css/Calendar.css';
 import {MenuContext} from "../../Contexts/MenuContext";
 import {PendingUnsavedChangesContext} from "./Contexts/PendingUnsavedChangesContext";
 import {ShouldShowUnsavedChangesModalContext} from "./Contexts/ShouldShowUnsavedChangesModalContext";
 import {AuthenticatedUserContext} from "./Contexts/AuthenticatedUserContext";
 import {Inertia} from "@inertiajs/inertia";
-import {SettingsContext} from "./Contexts/SettingsContext";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
