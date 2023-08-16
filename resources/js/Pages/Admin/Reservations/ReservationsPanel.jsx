@@ -13,7 +13,7 @@ import {TodaysView} from "./TodaysView/TodaysView";
 import {ReservationTypeSelectionMenu} from "./Settings/ReservationTypeSelectionMenu";
 import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
-import {SettingsContext} from "../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../Contexts/DatabaseSettingsContext";
 import {SearchView} from "./SearchView/SearchView";
 import {getReservationsByDate} from "../../../ExternalJs/Util";
 

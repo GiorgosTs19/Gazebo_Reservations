@@ -1,13 +1,14 @@
 import {Card, Col, FormGroup, Row, Stack} from "react-bootstrap";
 import {changeDateFormat} from "../../../../../ExternalJs/Util";
 import {useContext} from "react";
-import {SettingsContext} from "../../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
 import {InnerWidthContext} from "../../../../../Contexts/InnerWidthContext";
+import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
 
 export function ReservationDateRangeSettings() {
-    const {settings,dispatchSetting} = useContext(SettingsContext),
+    const {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
         {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
         {errors,setErrors} = useContext(ErrorsContext),
         innerWidth = useContext(InnerWidthContext);

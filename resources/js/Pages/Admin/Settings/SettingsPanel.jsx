@@ -1,14 +1,11 @@
-import {Col, Row, Tab, Tabs} from "react-bootstrap";
-import {useContext, useState} from "react";
+import {Row} from "react-bootstrap";
+import {useContext} from "react";
 import {DinnerSettings} from "./DinnersSettings/DinnerSettings";
-import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
-export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettings,BedSettings}) {
+export function SettingsPanel({dinnerSettings}) {
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
-        [activeTabKey, setActiveTabKey] = useState('Dinner'),
-        Reservations = useContext(ReservationsContext),
     innerWidth = useContext(InnerWidthContext);
     const renderContent = () => {
         switch (reservationType) {

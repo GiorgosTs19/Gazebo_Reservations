@@ -9,7 +9,7 @@ class DisabledTable extends Model {
     use HasFactory;
 
     public function scopeTable($query,$table_id) {
-        if(!$table_id)
+        if($table_id)
             return $query->where('gazebo_id',$table_id);
 
         return $query;

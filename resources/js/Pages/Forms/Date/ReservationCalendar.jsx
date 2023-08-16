@@ -7,12 +7,12 @@ import {
 import {useContext, useEffect, useRef, useState} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {GazeboAvailabilityContext} from "../../../Contexts/GazeboAvailabilityContext";
-import {SettingsContext} from "../../Admin/Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../Admin/Contexts/DatabaseSettingsContext";
 
 export function ReservationCalendar() {
     const  {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     [selectedDate,setSelectedDate] = useState(bookingDetails.date ?? null),
-    Settings = useContext(SettingsContext),
+    Settings = useContext(DatabaseSettingsContext),
     today = new Date(),
     yesterday = new Date(),
     twoDaysBefore = new Date(),

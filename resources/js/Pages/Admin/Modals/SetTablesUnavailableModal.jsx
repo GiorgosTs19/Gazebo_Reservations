@@ -1,13 +1,13 @@
 import {useContext, useEffect, useState} from "react";
-import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {Inertia} from "@inertiajs/inertia";
 import {Button, Modal} from "react-bootstrap";
-import {SelectedDateContext} from "../../Contexts/SelectedDateContext";
-import {GazebosContext} from "../../../../Contexts/GazebosContext";
-import {CalendarSettings} from "../../Settings/DinnersSettings/CalendarSettings";
-import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
-import {getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
+import {SelectedDateContext} from "../Contexts/SelectedDateContext";
+import {GazebosContext} from "../../../Contexts/GazebosContext";
+import {CalendarSettings} from "../Settings/DinnersSettings/CalendarSettings";
+import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
+import {getFormattedDate, isDateDisabledByAdmin} from "../../../ExternalJs/Util";
+import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 
 export function SetTablesUnavailableModal({gazebo}) {
     const [show, setShow] = useState(false);

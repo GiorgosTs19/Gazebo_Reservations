@@ -1,12 +1,13 @@
 import {Card, Col, Form, FormLabel, Image, Row, Stack} from "react-bootstrap";
 import {TimePicker} from "../../Components/TimePicker";
 import {useContext} from "react";
-import {SettingsContext} from "../../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
+import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
 
 export function ArrivalSettings() {
-    const {settings,dispatchSetting} = useContext(SettingsContext),
+    const {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
     {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
     {errors,setErrors} = useContext(ErrorsContext);
 

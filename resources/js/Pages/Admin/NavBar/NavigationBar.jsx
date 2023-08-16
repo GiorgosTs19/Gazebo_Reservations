@@ -5,7 +5,7 @@ import {AuthenticatedUserContext} from "../Contexts/AuthenticatedUserContext";
 import {Inertia} from "@inertiajs/inertia";
 
 export function NavigationBar({activeTab,activeMenusTab}) {
-    const {activeTabKey,setActiveTabKey} = activeTab,
+    const {activeTabKey,handleSetActiveKey} = activeTab,
     {activeMenusTabKey,setActiveMenusTabKey} = activeMenusTab,
     User = useContext(AuthenticatedUserContext);
     return (
@@ -25,16 +25,16 @@ export function NavigationBar({activeTab,activeMenusTab}) {
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <Nav className="user-select-none w-100">
-                            <Nav.Link href="#Κρατήσεις" onClick={()=>setActiveTabKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
-                            <Nav.Link href="#Μενού" onClick={()=>setActiveTabKey("Menus")} disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
+                            <Nav.Link href="#Κρατήσεις" onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
+                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού#Υπάρχοντα"
-                                                                   className={'border-start px-2 ms-3 my-2 my-md-0'}
+                                                                   className={'border-start px-2 ms-1 my-2 my-md-0'}
                                                                    onClick={() => setActiveMenusTabKey("Existing")}>Υπάρχοντα</Nav.Link>}
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού#Δημιουργία"
-                                                                   className={'border-start px-2 ms-3 my-2 my-md-0'}
+                                                                   className={'border-end px-2 ms-1 my-2 my-md-0'}
                                                                    onClick={() => setActiveMenusTabKey("New")}>Δημιουργία</Nav.Link>}
 
-                            <Nav.Link href="#Ρυθμίσεις" onClick={()=>setActiveTabKey("Settings")}>Ρυθμίσεις</Nav.Link>
+                            <Nav.Link href="#Ρυθμίσεις" onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
                             <Navbar.Text className={'fw-bold ms-auto me-0 me-md-5'}>
                                 Συνδεδεμένος / η ώς : {User.first_name + ' '+ User.last_name}
                             </Navbar.Text>

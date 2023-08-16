@@ -1,5 +1,5 @@
 import {Button, Col, Row} from "react-bootstrap";
-import {SettingsContext} from "../../Contexts/SettingsContext";
+import {LocalisedSettingsContext} from "../../Contexts/LocalisedSettingsContext";
 import {LocalSettingsContext} from "../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../Contexts/ErrorsContext";
 import {DinnerTimeSettings} from "./DinnerTimeSettings/DinnerTimeSettings";
@@ -14,6 +14,7 @@ import {Arrival_Start_Error_Check} from "../Utility/Util";
 import {DinnerTableSettings} from "./DinnerTableSettings/DinnerTableSettings";
 
 export function DinnerSettings({Settings}) {
+
     const [errors,setErrors] = useState({
         Arrival : '',
         First_Day : '',
@@ -82,8 +83,6 @@ export function DinnerSettings({Settings}) {
         Arrival_Message : Settings.Arrival_Message ?? getPreviewText(),
     });
 
-
-
     useEffect(()=>{
         return Arrival_Start_Error_Check(localSettings,settings,{errors,setErrors});
     },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
@@ -95,35 +94,37 @@ export function DinnerSettings({Settings}) {
             Inertia.post(route('Save_Dinner_Settings'),settings,{preserveScroll:true,preserveState:true,
                 only:['Dinner_Settings']});
     };
+
     // Make a deep copy of the settings from the database, in case that the setting changes need to be reverted.
     const unModifiedSettings = structuredClone(Settings);
     const {pendingUnsavedChanges,setPendingUnsavedChanges} = useContext(PendingUnsavedChangesContext);
     const settingsHaveChanged = !isEqual(settings,Settings);
-    const {showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey} = useContext(ShouldShowUnsavedChangesModalContext);
+    const {showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey} = useContext(ShouldShowUnsavedChangesModalContext);
     // If Settings have changed, change the pendingUnsavedChanges, to alert for unsaved settings in case of Tab Switch
     useEffect(()=>{
-        // setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
+        setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
+        console.log('Settings', settingsHaveChanged)
     },[settingsHaveChanged]);
     // Handles the closing of the UnsavedChangesWarningModal, reverting the recent changes
     // made to the settings and switching to the wanted Tab.
     const handleCloseUnsavedChangesWarning = () => {
         dispatchLocalSetting({type:'Revert_Recent_Changes',value: unModifiedLocalSettings});
         dispatchSetting({type:'Revert_Recent_Changes',value: unModifiedSettings});
-        setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:false});
-        setActiveTabKey(showUnsavedChangesWarningModal.Key);
+        setShowUnsavedChangesWarningModal((prev)=> {return {...prev, Show: false}});
+        handleSetActiveKey(showUnsavedChangesWarningModal.Key,true);
     };
     const handleModalSaveChanges = () => {
         handleSaveChanges();
-        setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:false});
-        setActiveTabKey(showUnsavedChangesWarningModal.Key);
+        setShowUnsavedChangesWarningModal((prev)=> {return {...prev, Show: false}});
+        handleSetActiveKey(showUnsavedChangesWarningModal.Key,true);
     }
 
     return (
         <ErrorsContext.Provider value={{errors,setErrors}}>
             <LocalSettingsContext.Provider value={{localSettings, dispatchLocalSetting}}>
-                <SettingsContext.Provider value={{settings,dispatchSetting}}>
+                <LocalisedSettingsContext.Provider value={{settings,dispatchSetting}}>
                     <PendingUnsavedChangesWarningModal handleCloseModal={handleCloseUnsavedChangesWarning}
-                        shouldShowModal={showUnsavedChangesWarningModal.Dinner} SaveChanges={handleSaveChanges} >
+                        shouldShowModal={showUnsavedChangesWarningModal.Show} SaveChanges={handleModalSaveChanges} >
                     </PendingUnsavedChangesWarningModal>
                     <div className={'text-center'}>
                         <Row className={'px-3 py-2 mt-4'}>
@@ -142,7 +143,7 @@ export function DinnerSettings({Settings}) {
                             </Col>
                         </Row>
                     </div>
-                </SettingsContext.Provider>
+                </LocalisedSettingsContext.Provider>
             </LocalSettingsContext.Provider>
         </ErrorsContext.Provider>
     )

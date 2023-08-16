@@ -1,6 +1,6 @@
 import {useState,useContext} from "react";
 import {Card, Col, Image, Row} from "react-bootstrap";
-import {SetTablesUnavailableModal} from "../../../Modals/SetDayUnavailableModal/SetTablesUnavailableModal";
+import {SetTablesUnavailableModal} from "../../../Modals/SetTablesUnavailableModal";
 import {GazebosContext} from "../../../../../Contexts/GazebosContext";
 
 export function DinnerTableSettings() {

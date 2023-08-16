@@ -8,11 +8,11 @@ import {MobileMonthlyView} from "./MobileMonthlyView";
 import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import Calendar from "react-calendar";
-import {SettingsContext} from "../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
-        Settings = useContext(SettingsContext),
+        Settings = useContext(DatabaseSettingsContext),
         CalendarRef = useRef(null),
         today = new Date(),
         yesterday = new Date(today),

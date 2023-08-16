@@ -1,13 +1,13 @@
 import Calendar from "react-calendar";
 import {useContext, useEffect, useState,useRef} from "react";
-import {SettingsContext} from "../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 import {SelectedDateContext} from "../../Contexts/SelectedDateContext";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {getAvailabilityByDate, getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {Button, Form, Row, Stack} from "react-bootstrap";
 
 export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSettings = false,Reservations, Disabled_Days}) {
-    const {settings,dispatchSetting} = useContext(SettingsContext),
+    const {settings} = useContext(DatabaseSettingsContext),
         [canSelectRange,setCanSelectRange] = useState(false),
         today = new Date(),
         yesterday = new Date(today),

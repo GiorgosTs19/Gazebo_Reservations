@@ -1,6 +1,6 @@
 import {Col, Image, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
-import {SettingsContext} from "../../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
 import {InnerWidthContext} from "../../../../../Contexts/InnerWidthContext";
@@ -8,16 +8,17 @@ import {getTimeDifferenceInMinutes} from "../../../../../ExternalJs/Util";
 import {ArrivalSettings} from "./ArrivalSettings";
 import {ArrivalMessageSettings} from "./ArrivalMessageSettings";
 import {ReservationDateRangeSettings} from "../DinnerDateSettings/ReservationDateRangeSettings";
+import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
 
 export function DinnerTimeSettings({children}) {
     const [show,setShow] = useState(false),
-        {settings,dispatchSetting} = useContext(SettingsContext),
+        {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
         {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
         {errors,setErrors} = useContext(ErrorsContext),
         innerWidth = useContext(InnerWidthContext),
         [useCustomMessage,setUseCustomMessage] = useState(false);
 
-
+    console.log(settings)
     const handleShowChange = () => {
         setShow(!show);
     }

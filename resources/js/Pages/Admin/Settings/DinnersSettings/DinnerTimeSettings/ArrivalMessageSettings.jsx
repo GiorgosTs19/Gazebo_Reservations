@@ -1,11 +1,12 @@
 import {Card, Form} from "react-bootstrap";
 import {useEffect,useState,useContext} from "react";
-import {SettingsContext} from "../../../Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
+import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
 
 export function ArrivalMessageSettings() {
-    const {settings,dispatchSetting} = useContext(SettingsContext),
+    const {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
         {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
         {errors,setErrors} = useContext(ErrorsContext),
         [useCustomMessage,setUseCustomMessage] = useState(false);

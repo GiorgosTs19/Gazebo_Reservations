@@ -17,7 +17,7 @@ import {ViewContext} from "../../Contexts/ViewContext";
 import {ActiveReservationTypeContext} from "./Contexts/ActiveReservationTypeContext";
 import {NavigationBar} from "./NavBar/NavigationBar";
 import {ActiveReservationContext} from "./Contexts/ActiveReservationContext";
-import {SettingsContext} from "./Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "./Contexts/DatabaseSettingsContext";
 import {ReservationsContext} from "../../Contexts/ReservationsContext";
 import {MenuEditModeContext} from "./Contexts/MenuEditModeContext";
 
@@ -33,20 +33,12 @@ export default function AdminPanel(props) {
     [reservationType,setReservationType] = useState('Dinner'),
     [editingMenu,setEditingMenu] = useState(null),
     [activeReservation,setActiveReservation] = useState(null);
-    const User = props.auth.user,
-    [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false});
+    const User = props.auth.user;
     const [activeTabKey, setActiveTabKey] = useState(ActiveTab),
-    [activeMenusTabKey, setActiveMenusTabKey] = useState('Existing'),
-    [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Dinner:false,Bed:false,Key:''});
+    [activeMenusTabKey, setActiveMenusTabKey] = useState('Existing');
+    const [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false}),
+    [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Show:false,Key:''});
     const renderContent = () => {
-        if(activeTabKey === 'Settings' && pendingUnsavedChanges.Dinner) {
-            // setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:true,Key:'k'});
-            return;
-        }
-        if(activeTabKey === 'Settings' && pendingUnsavedChanges.Bed) {
-            // setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Bed:true,Key:'k'});
-            return;
-        }
         switch (activeTabKey) {
             case 'Settings' : {
                 return SettingsContent;
@@ -60,6 +52,15 @@ export default function AdminPanel(props) {
         }
     };
 
+    const handleSetActiveKey = (k,bypass=false) => {
+        if(!bypass)
+            if(activeTabKey === 'Settings' && (pendingUnsavedChanges.Dinner || pendingUnsavedChanges.Bed)) {
+                setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Show:true,Key:k});
+                return;
+            }
+        setActiveTabKey(k);
+    }
+
     const getReservationsByActiveType = () => {
         switch (reservationType) {
             case 'Dinner' :
@@ -71,9 +72,7 @@ export default function AdminPanel(props) {
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent =
-            <SettingsPanel Bed_Reservations={Bed_Reservations}
-                           Dinner_Reservations={Dinner_Reservations}
-                           bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
+            <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
             </SettingsPanel>;
     useEffect(() => {
         const handleResize = () => {
@@ -88,17 +87,13 @@ export default function AdminPanel(props) {
     }, []);
     return (
         <AuthenticatedUserContext.Provider value={User}>
-            <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-            </PendingUnsavedChangesContext.Provider>
-            <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey}}>
-            </ShouldShowUnsavedChangesModalContext.Provider>
-            <SettingsContext.Provider value={reservationType === 'Dinner' ? Dinner_Settings : Bed_Settings}>
+            <DatabaseSettingsContext.Provider value={{settings : reservationType === 'Dinner' ? Dinner_Settings : Bed_Settings}}>
                 <ReservationsContext.Provider value={getReservationsByActiveType()}>
                     <InnerWidthContext.Provider value={innerWidth}>
                         <GazebosContext.Provider value={Gazebos}>
                             <MenuContext.Provider value={Menus}>
                                 <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                    <NavigationBar activeTab={{activeTabKey,setActiveTabKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}></NavigationBar>
+                                    <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}></NavigationBar>
                                     <div className={'h-90 px-3 vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
                                         <Card className={"px-2 mx-sm-auto mx-lg-0 mx-3 border-0 pb-2 overflow-y-auto h-100 "} >
                                             <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
@@ -124,7 +119,7 @@ export default function AdminPanel(props) {
                                                             </Card.Header>
                                                             <Card.Body className={'box_shadow px-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-75' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
                                                                 <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-                                                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey}}>
+                                                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
                                                                         {renderContent()}
                                                                     </ShouldShowUnsavedChangesModalContext.Provider>
                                                                 </PendingUnsavedChangesContext.Provider>
@@ -140,7 +135,7 @@ export default function AdminPanel(props) {
                         </GazebosContext.Provider>
                     </InnerWidthContext.Provider>
                 </ReservationsContext.Provider>
-            </SettingsContext.Provider>
+            </DatabaseSettingsContext.Provider>
         </AuthenticatedUserContext.Provider>
     )
 }

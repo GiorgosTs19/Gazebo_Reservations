@@ -16,7 +16,7 @@ import '../../../css/Reservations.css'
 import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
 import {Container} from "react-bootstrap";
 import gsap from "gsap";
-import {SettingsContext} from "../Admin/Contexts/SettingsContext";
+import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext";
 
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
@@ -109,7 +109,7 @@ export default function Gazebo(props) {
         }
     },[progress]);
     return (
-        <SettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
+        <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
             <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
                 <FormProgressContext.Provider value={{progress,setProgress}}>
                     <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
@@ -145,6 +145,6 @@ export default function Gazebo(props) {
                     </MenuContext.Provider>
                 </FormProgressContext.Provider>
             </BookingDetailsContext.Provider>
-        </SettingsContext.Provider>
+        </DatabaseSettingsContext.Provider>
     )
 }
