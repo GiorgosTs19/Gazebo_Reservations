@@ -6,11 +6,13 @@ import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {ExpandSVG} from "../../../../SVGS/ExpandSVG";
+import {LargeWeekDayDisplay} from "./LargeWeekDayDisplay";
 
 export function LargeDevicesWeeklyView({currentDate, direction, filter, children}) {
     const Reservations = useContext(ReservationsContext),
     [showFilters,setShowFilters] = useState(false),
     {reservationsFilter, setReservationsFilter} = filter,
+    [largeWeekDay,setLargeWeekDay] = useState([null,[]]),
     // Generates the reservations for each day of the active week.
     reservationsToShow = (day)=>{
         const reservations_of_current_date = getReservationsByDate(day,Reservations);
@@ -32,7 +34,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, children
             </ListGroup.Item>;
         });
 
-        return [mappedReservations,filteredReservations.length,reservations_of_current_date.length];
+        return [mappedReservations,filteredReservations.length,reservations_of_current_date.length,filteredReservations];
     };
 
     // Generates the days of the active week and counts the total amount of reservations for that week.
@@ -42,15 +44,18 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, children
             const day = new Date(currentDate.getTime());
             const today = new Date();
             day.setDate(currentDate.getDate() + index);
-            const [reservations,reservationsCount,totalReservations] = reservationsToShow(day);
+            const [reservations,reservationsCount,totalReservations,unlistedReservations] = reservationsToShow(day);
             totalWeekReservations += totalReservations;
             return <ListGroup.Item className={'my-2 d-flex flex-column box_shadow '} key={index}>
-                {reservationsCount > 0 && <p className={'my-2 border-bottom py-2 px-4 box_shadow rounded-5 mx-auto user-select-none'} style={{width:'fit-content'}}>
-                    {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount)}</p>}
+                <div className={'d-flex flex-row'}>
+                    {reservationsCount >= 3 && <ExpandSVG rotate={'0deg'} className={'my-auto'} onClick={()=>setLargeWeekDay([day,unlistedReservations])}></ExpandSVG>}
+                    {reservationsCount > 0 && <p className={'my-2 border-bottom py-2 px-4 box_shadow rounded-5 mx-auto user-select-none'} style={{width:'fit-content'}}>
+                        {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount)}</p>}
+                </div>
                     <Stack direction={'horizontal'} key={'Stack'} className={''}>
-                            <h3 className={'me-1 border-end pe-3 user-select-none'}>
-                                {getFormattedDate(day,'/',3)}
-                            </h3>
+                        <h3 className={'me-1 border-end pe-3 user-select-none'}>
+                            {getFormattedDate(day,'/',3)}
+                        </h3>
                         <ListGroup horizontal={'xl'} gap={5} className={'p-1 scrollable-x-not-vw mt-2 '} style={{overflowX:'auto'}} key={'List'}>
                             {reservations}
                         </ListGroup>
@@ -93,7 +98,9 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, children
                     <Col lg={showFilters ? 10 : 11} className={'p-0 h-100'}>
                         <ListGroup horizontal={direction === 'horizontal'} gap={2}
                                    className="week-days px-3 mx-3 overflow-y-auto h-100">
-                            {weekDays}
+                            {!largeWeekDay[0] ? weekDays : <LargeWeekDayDisplay reservations={largeWeekDay[1]} dateToDisplay={largeWeekDay[0]}
+                            reservationsFilter={reservationsFilter} largeWeekDayHandling = {{largeWeekDay,setLargeWeekDay}}>
+                            </LargeWeekDayDisplay>}
                         </ListGroup>
                     </Col>
                 </Row>

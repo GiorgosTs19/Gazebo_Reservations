@@ -102,7 +102,7 @@ export function DinnerSettings({Settings}) {
     const {showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey} = useContext(ShouldShowUnsavedChangesModalContext);
     // If Settings have changed, change the pendingUnsavedChanges, to alert for unsaved settings in case of Tab Switch
     useEffect(()=>{
-        setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
+        // setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
     },[settingsHaveChanged]);
     // Handles the closing of the UnsavedChangesWarningModal, reverting the recent changes
     // made to the settings and switching to the wanted Tab.
@@ -126,15 +126,16 @@ export function DinnerSettings({Settings}) {
                         shouldShowModal={showUnsavedChangesWarningModal.Dinner} SaveChanges={handleSaveChanges} >
                     </PendingUnsavedChangesWarningModal>
                     <div className={'text-center'}>
-                        <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
-                         className={'rounded-5 shadow-sm'}
-                         onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
                         <Row className={'px-3 py-2 mt-4'}>
+                            <Col className={'my-auto'}>
+                                <DinnerTimeSettings>
+                                    <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                                            className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
+                                            onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
+                                </DinnerTimeSettings>
+                            </Col>
                             <Col xxl={3} className={'d-flex'}>
                                 <DinnerDateSettings></DinnerDateSettings>
-                            </Col>
-                            <Col className={'my-auto'}>
-                                <DinnerTimeSettings></DinnerTimeSettings>
                             </Col>
                             <Col xxl={5} className={'d-flex'}>
                                 <DinnerTableSettings></DinnerTableSettings>

@@ -27,14 +27,9 @@ export function MonthlyView() {
         // Checks if the date passed in the function has to be disabled on the calendar, either because this day has passed,
         // or is out of the reservation date boundaries set by the administrators.
         const isDateDisabled = (date,view,activeStartDate) => {
+            console.log()
             if(view === 'month')
                 return (date < yesterday) || (date > Last_Day)
-            if(view === 'year') {
-                const currentMonth = new Date().getMonth();
-                const selectedMonth = date.getMonth();
-
-                return selectedMonth < currentMonth;
-            }
         },
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         // Handles the change of date on the calendar.
@@ -44,7 +39,7 @@ export function MonthlyView() {
         },
         // Returns the content to be displayed in each of the calendar's tiles, based on the day's availability.
         getTileContent = (date) => {
-            if(!isDateDisabled(date)){
+            if(!isDateDisabled(date) && !isDateDisabledByAdmin(date,Reservations)[0]){
                 const current_date_reservations = getReservationsByDate(date,Reservations);
                 switch (current_date_reservations.length) {
                     case 0: {
@@ -102,9 +97,19 @@ export function MonthlyView() {
         if(filteredReservations.length === 0)
             return <h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
 
-        return filteredReservations.map((reservation)=>{
-            return <ReservationShort Reservation={reservation} key={reservation.id} className={'my-2'}></ReservationShort>;
-        });
+        // Will always try to show as many reservations per line, to save space.
+        const reservationsToRender = activeReservation !== null ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 1000 ? 2 : 1));
+        const reservationChunks = [];
+        for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
+            reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
+        }
+        return reservationChunks.map((chunk, index) => (
+            <div key={index} className="d-flex justify-content-center">
+                {chunk.map(reservation => (
+                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-3 my-5'} />
+                ))}
+            </div>
+        ))
     };
 
     const reservations_of_current_date = selectedDate ?  getReservationsByDate(selectedDate,Reservations) : [];
@@ -116,13 +121,17 @@ export function MonthlyView() {
             return (view === 'month' && isDateDisabledByAdmin(date,Reservations)[0])
                 ? 'disabled-day' : '';
     }
-    const CalendarToShow = <Calendar onChange={handleDateChange} value={selectedDate || today}
-        className={'m-auto rounded box_shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
-        tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
-        tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
-        prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
-        onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
-        prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}/>
+    const CalendarToShow = <>
+        <h6 className={'mb-4 mb-md-0 user-select-none'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
+        <Calendar onChange={handleDateChange} value={selectedDate || today}
+                  className={'m-auto rounded box_shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
+                  tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
+                  tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
+                  prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
+                  onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}
+                  prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}/>
+    </>
+
 
     const getWarningMessage = () => {
         if (isDateDisabledByA) {

@@ -150,3 +150,6 @@
 .react-calendar--selectRange .react-calendar__tile--hover {
     background-color: #e6e6e6;
 }
+.react-calendar__tile--active:disabled {
+    color: black!important;
+}

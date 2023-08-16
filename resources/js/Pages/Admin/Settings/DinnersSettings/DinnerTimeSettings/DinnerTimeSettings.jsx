@@ -9,7 +9,7 @@ import {ArrivalSettings} from "./ArrivalSettings";
 import {ArrivalMessageSettings} from "./ArrivalMessageSettings";
 import {ReservationDateRangeSettings} from "../DinnerDateSettings/ReservationDateRangeSettings";
 
-export function DinnerTimeSettings() {
+export function DinnerTimeSettings({children}) {
     const [show,setShow] = useState(false),
         {settings,dispatchSetting} = useContext(SettingsContext),
         {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
@@ -42,6 +42,7 @@ export function DinnerTimeSettings() {
     return (
         // settings-header-border
         <div className={'user-select-none'}>
+            {children}
             <Row>
                 <Col xl={6}>
                     <ArrivalSettings></ArrivalSettings>

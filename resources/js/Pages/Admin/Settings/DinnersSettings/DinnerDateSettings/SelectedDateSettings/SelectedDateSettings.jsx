@@ -21,7 +21,7 @@ export function SelectedDateSettings() {
 
     return (
         <div className={'text-center mx-auto mt-4'}>
-            <h5>{!dateIsRange && getFormattedDate(selectedDate,'-',2)}</h5>
+            {/*<h5>{!dateIsRange && getFormattedDate(selectedDate,'-',2)}</h5>*/}
                 <Row className={'mt-4'}>
                     <Col xs={12} className={'text-center my-4 my-lg-0 d-flex flex-column p3'}>
                         {/*Handles the selected day's availability settings. ( Setting unavailable or available )*/}

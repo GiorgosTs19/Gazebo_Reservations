@@ -8,6 +8,7 @@ use App\Http\Resources\ReservationResource;
 use App\Models\BedSetting;
 use App\Models\DinnerSetting;
 use App\Models\DisabledDay;
+use App\Models\DisabledTable;
 use App\Models\Gazebo;
 use App\Models\Menu;
 use App\Models\Reservation;
@@ -90,7 +91,7 @@ class GazeboController extends Controller {
         $currentDate = $startDate;
         $Last_Day = '2023-11-10';
         $Reservations = [];
-        $Reservations_of_Type = Reservation::where('Type',$type)->where('Date', '>=', $startDate)->get();
+        $Reservations_of_Type = Reservation::type($type)->where('Date', '>=', $startDate)->get();
         while ($currentDate <= $Last_Day) {
             $Available_Tables = [];
             $Disabled_Day = $Disabled_Days->first(function ($item) use ($currentDate, $type) {
@@ -152,7 +153,7 @@ class GazeboController extends Controller {
             $getReservations = $input['get_reservations'];
         $Availability = [];
         $Gazebos = Gazebo::all();
-        $Reservations = Reservation::where('Date',$input['date'])->get();
+        $Reservations = Reservation::date($input['date'])->get();
         if(!$getReservations)
             $Reservations = $Reservations->pluck('gazebo_id');
 
@@ -170,13 +171,18 @@ class GazeboController extends Controller {
 
     /**
      * Returns all the reservations of the specified table, within the date range set in the settings starting from today.
+     * Can also return the days when the table is disabled by the admins, by passing the get_disabled_days prop as true.
      */
     public function getReservationsForTable(Request $request) {
-        $input = $request->only(['gazebo_id','reservation_type']);
+        $input = $request->only(['gazebo_id','reservation_type','get_disabled_days']);
+        $get_disabled_days = false;
+        if($request->has('get_disabled_days'))
+            $get_disabled_days = $input['get_disabled_days'];
         $Settings = $input['reservation_type'] === 'Dinner' ? DinnerSetting::first() : BedSetting::first();
-        $reservations_to_return = Reservation::date(date("Y-m-d"),$Settings->Ending_Date)->table($input['gazebo_id'])->order()
+        $reservations_to_return = Reservation::type($input['reservation_type'])->date(date("Y-m-d"),$Settings->Ending_Date)->table($input['gazebo_id'])->order()
             ->distinct()->pluck('Date');
-        return Redirect::back()->with(['reservations_of_table'=>$reservations_to_return]);
+        $disabled_days = DisabledTable::table($input['gazebo_id'])->type($input['reservation_type'])->order()->distinct()->pluck('Date');
+        return Redirect::back()->with(['reservations_of_table'=>$get_disabled_days ?  [$reservations_to_return,$disabled_days] : $reservations_to_return]);
     }
 
     /**

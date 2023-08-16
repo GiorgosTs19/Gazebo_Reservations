@@ -78,6 +78,9 @@ class Reservation extends Model {
         return $query;
     }
     public function scopeOrder($query,$direction = 'asc') {
-        return $query->orderBy('date',$direction);
+        return $query->orderBy('Date',$direction);
+    }
+    public function scopeType($query,$type) {
+        return $query->where('Type',$type);
     }
 }

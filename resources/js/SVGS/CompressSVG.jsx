@@ -1,4 +1,4 @@
-export function ExpandSVG({className,width=24,height=24,onClick=()=>{},rotate='45def'}) {
+export function CompressSVG({className,width=24,height=24,onClick=()=>{},rotate='45def'}) {
     return (
         <svg
             width={width}
@@ -11,11 +11,11 @@ export function ExpandSVG({className,width=24,height=24,onClick=()=>{},rotate='4
             onClick={onClick}
         >
             <path
-                d="M13.8995 4.10052V2.10052H21.8995V10.1005H19.8995V5.51477L14.1213 11.293L12.7071 9.87878L18.4854 4.10052H13.8995Z"
+                d="M14.567 8.02947L20.9105 1.76929L22.3153 3.19282L15.9916 9.43352L19.5614 9.44772L19.5534 11.4477L12.5535 11.4199L12.5813 4.41992L14.5813 4.42788L14.567 8.02947Z"
                 fill="currentColor"
             />
             <path
-                d="M4.10046 13.8995H2.10046V21.8995H10.1005V19.8995H5.51468L11.2929 14.1212L9.87872 12.707L4.10046 18.4853V13.8995Z"
+                d="M7.97879 14.5429L4.40886 14.5457L4.40729 12.5457L11.4073 12.5402L11.4128 19.5402L9.41277 19.5417L9.40995 15.9402L3.09623 22.2306L1.68463 20.8138L7.97879 14.5429Z"
                 fill="currentColor"
             />
         </svg>

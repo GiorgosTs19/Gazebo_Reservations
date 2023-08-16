@@ -20,7 +20,7 @@ export function EditingMenuForm({menu}) {
         [menuType,setMenuType] = useState(menu?.Type),
         [menuCategory,setMenuCategory] = useState(menu?.Category),
         {editingMenu,setEditingMenu} = useContext(MenuEditModeContext),
-        {activeTabKey, setActiveTabKey} = useContext(ActiveTabKeyContext),
+        {activeMenusTabKey,setActiveMenusTabKey}  = useContext(ActiveTabKeyContext),
         [hasChanges, setHasChanges] = useState(false);
 
     const checkFormChanges = () => {
@@ -65,7 +65,7 @@ export function EditingMenuForm({menu}) {
                 Menu_Type:menuType,Menu_Category:menuCategory},
                 {preserveState:true,preserveScroll:true,onSuccess:
                     ()=>{
-                        setActiveTabKey('Existing');
+                        setActiveMenusTabKey('Existing');
                         setEditingMenu(null);
                     }
                 });

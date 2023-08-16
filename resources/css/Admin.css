@@ -221,6 +221,10 @@ abbr[title] {
 .mh-720px {
     max-height: 720px;
 }
+.vh-100-70px {
+    height: calc(100vh - 70px);
+}
+
 /* Height */
 
 .cursor-pointer {
@@ -229,8 +233,14 @@ abbr[title] {
 /* Cursor */
 
 @media (max-width: 500px) {
+    .vh-100-70px {
+        height: calc(100vh - 50px);
+    }
     .search-view-reservations {
         height: 65% !important;
+    }
+    .filters-bar-stack {
+        font-size: 13px;
     }
 }
 
@@ -243,10 +253,23 @@ abbr[title] {
     .search-view-reservations {
         height: 90% !important;
     }
+    .filters-bar-stack {
+        font-size: 13px;
+    }
+}
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
+    .filters-bar-stack {
+        font-size: 13px;
+    }
 }
 @media (min-width: 1200px) {
     .search-view-reservations {
         height: 100% !important;
+    }
+}
+@media (min-width: 1400px) {
+    .filters-bar-stack {
+        font-size: 16px;
     }
 }
 
@@ -276,3 +299,7 @@ abbr[title] {
 .day-unavailable-modal {
     max-height: 900px;
 }
+
+/* Font Size */
+
+/* Font Size */

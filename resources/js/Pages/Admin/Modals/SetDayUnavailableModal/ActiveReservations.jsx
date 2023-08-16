@@ -46,7 +46,7 @@ export function ActiveReservations({dateIsRange,reservations}) {
             return getDatesWithReservations().map((day,index)=>{
                 const [reservationsShow,reservationsCount] = reservationsToShow(day);
                 return <Accordion.Item className={'mx-2 my-4'} key={index} eventKey={index.toString()}>
-                    <Accordion.Header>{changeDateFormat(day,'-','-')} ( {reservationsCount} κρατήσεις )</Accordion.Header>
+                    <Accordion.Header>{changeDateFormat(day,'-','-')} ( {reservationsCount} {reservationsCount > 1 ? 'κρατήσεις' : 'κράτηση'} )</Accordion.Header>
                     <Accordion.Body>
                         <ListGroup horizontal={false} gap={5} className={'py-1'}>
                             {reservationsShow}

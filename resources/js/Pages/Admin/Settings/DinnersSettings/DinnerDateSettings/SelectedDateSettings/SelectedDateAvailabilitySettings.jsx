@@ -2,17 +2,19 @@ import {SetDayUnavailableModal} from "../../../../Modals/SetDayUnavailableModal/
 import {Button} from "react-bootstrap";
 import {getFormattedDate} from "../../../../../../ExternalJs/Util";
 import {Inertia} from "@inertiajs/inertia";
+import {useContext} from "react";
+import {ActiveReservationTypeContext} from "../../../../Contexts/ActiveReservationTypeContext";
 
 export function SelectedDateAvailabilitySettings({isDateDisabled,selectedDate}) {
     const dateIsRange = Array.isArray(selectedDate);
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const handleSetDayAvailable = () => {
         const date_to_enable = !dateIsRange && getFormattedDate(selectedDate,'-',1);
-        Inertia.delete(route('Enable_Day'),{headers: { 'X-Date': date_to_enable},preserveScroll:true,preserveState:true,
+        Inertia.delete(route('Enable_Day'),{headers: {'X-Date': date_to_enable,'X-Type':reservationType},preserveScroll:true,preserveState:true,
             only:['Dinner_Reservations']});
     };
     return (
         <div className={'my-auto'}>
-            <h5 className={'mb-2 mb-xl-3'}>Διαθεσιμότητα {!dateIsRange ? 'Ημέρας' : 'Ημερών'}</h5>
             {!isDateDisabled &&
                 <SetDayUnavailableModal current_date_availability={isDateDisabled} selectedDate={selectedDate}>
                 </SetDayUnavailableModal>}

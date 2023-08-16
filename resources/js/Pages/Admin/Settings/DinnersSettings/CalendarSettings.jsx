@@ -6,7 +6,7 @@ import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {getAvailabilityByDate, getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {Button, Form, Row, Stack} from "react-bootstrap";
 
-export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSettings = false,Reservations}) {
+export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSettings = false,Reservations, Disabled_Days}) {
     const {settings,dispatchSetting} = useContext(SettingsContext),
         [canSelectRange,setCanSelectRange] = useState(false),
         today = new Date(),
@@ -25,14 +25,15 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
         setSelectedDate('');
     },[canSelectRange]);
 
-    const disabledDueToAvailability = (date) =>{
-        const [current_date_availability,existingReservationsAllowed] = !Array.isArray(selectedDate) ? getAvailabilityByDate(date,contextReservations) : [[],true];
-
-        return Array.isArray(current_date_availability) && current_date_availability.length === 0;
-    };
+    // const disabledDueToAvailability = (date) =>{
+    //     const current_date_availability = getAvailabilityByDate(date,contextReservations);
+    //     console.log(current_date_availability)
+    //     return Array.isArray(current_date_availability) && current_date_availability.length === 0;
+    // };
 
     const isDateDisabled = (date) => (date <= yesterday) || (date >= Last_Day)
-        || (!Array.isArray(selectedDate) && disabledDueToAvailability(date));
+        || (canSelectRange && (isDateDisabledByAdmin(date,contextReservations)[0] ||
+            (isInTableSettings && Disabled_Days.includes(getFormattedDate(date,'-',1)) )));
 
     const handleDateChange = (date)=> {
         setSelectedDate(date);
@@ -55,11 +56,25 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
         return "›";
     };
 
+    const getBoolean = (day,checking = 'Reservation') => {
+        switch (isInTableSettings)  {
+            case true : {
+                return checking === 'Reservation' ? Reservations?.includes(getFormattedDate(day,'-',1)) :
+                    Disabled_Days?.includes(getFormattedDate(day,'-',1));
+            }
+            case false : {
+                return Reservations?.includes(getFormattedDate(day,'-',1));
+            }
+        }
+    }
+
     const getTileContent = (day) => {
         if(isDateDisabledByAdmin(day,contextReservations)[0])
+            return null;
+        if(getBoolean(day,'Disabled'))
             return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#000000',width:'76%', height:'4px'}}></div>;
-        if(day >= yesterday){
-            if(Reservations.includes(getFormattedDate(day,'-',1)))
+        if(day >= yesterday) {
+            if(getBoolean(day,'Reservation'))
                 return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#F68908',width:'76%', height:'4px'}}></div>;
             return <div className={'my-2 mx-auto'} style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>
         }

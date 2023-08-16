@@ -56,6 +56,7 @@ class AdminController extends Controller {
         $availability_for_date_range = [];
         $search_result = [];
         $reservations_of_table = [];
+        $disabled_days_for_table = [];
 
         // True when a request that requires the activeReservation of that time to be returned is fired.
         if($request->session()->exists('activeReservation'))
@@ -72,12 +73,14 @@ class AdminController extends Controller {
         // True when a request for a specific table's reservations is fired.
         if($request->session()->exists('reservations_of_table'))
             $reservations_of_table = $request->session()->get('reservations_of_table');
+        if($request->session()->exists('Disabled_Days_For_Table'))
+            $disabled_days_for_table = $request->session()->get('Disabled_Days_For_Table');
 
         return Inertia::render('Admin/AdminPanel',['Menus'=>$Menus,'Dinner_Reservations'=> fn () =>$Dinner_Reservations,
             'Bed_Reservations'=> fn () => $Bed_Reservations,'Gazebos'=>GazeboResource::collection($Gazebos),
             'Dinner_Settings' => fn () => $Dinner_Settings,'Bed_Settings'=> fn () =>$Bed_Settings,'ActiveTab'=>$Active_Key ?: 'Reservations',
             'activeReservation'=>Inertia::lazy(fn()=>$activeReservation),'availability_for_date'=>Inertia::lazy(fn()=>$availability_for_date),
             'search_result'=>Inertia::lazy(fn()=>$search_result),'availability_for_date_range'=>Inertia::lazy(fn()=>$availability_for_date_range),
-            'reservations_of_table'=>Inertia::lazy(fn()=>$reservations_of_table)]);
+            'reservations_of_table'=>Inertia::lazy(fn()=>$reservations_of_table),'disabled_days_for_table'=>Inertia::lazy(fn()=>$disabled_days_for_table)]);
     }
 }

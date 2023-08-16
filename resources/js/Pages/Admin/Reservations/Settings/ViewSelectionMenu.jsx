@@ -8,38 +8,47 @@ import {TodayViewSVG} from "../../../../SVGS/TodayViewSVG";
 import {WeeklyViewSVG} from "../../../../SVGS/WeeklyViewSVG";
 import {MonthlyViewSVG} from "../../../../SVGS/MonthlyViewSVG";
 import {SearchViewSVG} from "../../../../SVGS/SearchViewSVG";
+import {getFormattedDate} from "../../../../ExternalJs/Util";
 
 export function ViewSelectionMenu() {
-    const {activeView,setActiveView} = useContext(ViewContext),
+    const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     handleSetActiveView = (view) =>{
-        setActiveView(view);
+        setActiveReservationsView(view);
         setActiveReservation(null);
     }
+    const getReservationViewText = () => {
+        switch (activeReservationsView) {
+            case 'Today' : return `Σημερινές Κρατήσεις`;
+            case 'Weekly' : return `Κρατήσεις ανά εβδομάδα`;
+            case 'Monthly' : return 'Κρατήσεις ανά μήνα';
+            case 'Search' : return 'Αναζήτηση Κρατήσεων'
+        }
+    };
 
-    const TodayViewIcon = <TodayViewSVG className={'m-auto user-select-none ' + (activeView === 'Today' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Today')}
-        disabled={activeView === 'Today'}/>,
+    const TodayViewIcon = <TodayViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Today')}
+        disabled={activeReservationsView === 'Today'}/>,
 
-    WeeklyViewIcon = <WeeklyViewSVG className={'m-auto user-select-none ' + (activeView === 'Weekly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Weekly')}
-        disabled={activeView === 'Weekly'}/>,
+    WeeklyViewIcon = <WeeklyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Weekly')}
+        disabled={activeReservationsView === 'Weekly'}/>,
 
-    MonthlyViewIcon = <MonthlyViewSVG className={'m-auto user-select-none ' + (activeView === 'Monthly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Monthly')}
-        disabled={activeView === 'Monthly'}/>,
+    MonthlyViewIcon = <MonthlyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Monthly')}
+        disabled={activeReservationsView === 'Monthly'}/>,
 
-    SearchViewIcon =<SearchViewSVG className={'m-auto user-select-none ' + (activeView === 'Search' ? '' : 'cursor-pointer')} height={36} width={36} onClick={()=>handleSetActiveView('Search')}
-        disabled={activeView === 'Search'}/>;
+    SearchViewIcon =<SearchViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer')} height={36} width={36} onClick={()=>handleSetActiveView('Search')}
+        disabled={activeReservationsView === 'Search'}/>;
 
 
 
     return (
-        <div className={'box_shadow px-0 px-xl-4 rounded-4 py-2 border'}>
-            <h5 className={'user-select-none'}>Εμφάνιση Κρατήσεων</h5>
+        <>
+            <h5 className={'user-select-none mb-4 px-2 px-md-0'}>{getReservationViewText()}</h5>
             <ListGroup horizontal className={'p-0 my-auto'}>
                 {TodayViewIcon}
                 {WeeklyViewIcon}
                 {MonthlyViewIcon}
                 {SearchViewIcon}
             </ListGroup>
-        </div>
+        </>
     )
 }

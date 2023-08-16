@@ -59,7 +59,6 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             const yesterday = new Date(today).setDate(today.getDate()-1);
             day.setDate(currentDate.getDate() +index);
             const [reservations,reservationsCount] = reservationsToShow(day);
-            console.log(reservations,reservationsCount)
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
                 <Accordion.Header>{getFormattedDate(day,'/',3)} ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true)} )</Accordion.Header>

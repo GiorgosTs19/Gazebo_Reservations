@@ -12,12 +12,12 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,WarningMess
             <Col lg={7} xl={5} className={'p-4 border-end d-flex flex-column h-100 overflow-y-auto'}>
                 {Calendar}
             </Col>
-            <Col lg={5} xl={7} className={'my-3 d-flex flex-column h-100'}>
+            <Col lg={5} xl={7} className={'d-flex flex-column h-100 pb-0'}>
                 <FiltersBar direction={'horizontal'} reservationsFilter={reservationsFilter}
                     disabled={selectedDate === ''}
-                     setReservationsFilter={setReservationsFilter} className={'mx-auto mb-3'}></FiltersBar>
+                     setReservationsFilter={setReservationsFilter} className={'mx-auto mt-3'}></FiltersBar>
                 {WarningMessage()}
-                <Stack className={'p-3 overflow-y-auto monthly-reservation-stack'} >
+                <Stack className={'px-3 overflow-y-auto monthly-reservation-stack '} >
                     {reservations}
                 </Stack>
             </Col>

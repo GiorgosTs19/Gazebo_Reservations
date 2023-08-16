@@ -6,10 +6,19 @@ import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
 export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettings,BedSettings}) {
-    const [activeTabKey, setActiveTabKey] = useState('Dinner'),
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
+        [activeTabKey, setActiveTabKey] = useState('Dinner'),
+        Reservations = useContext(ReservationsContext),
     innerWidth = useContext(InnerWidthContext);
-    const handleTabSelect = (k) => {
-        setActiveTabKey(k)
+    const renderContent = () => {
+        switch (reservationType) {
+            case 'Dinner' : {
+                return <DinnerSettings Settings={dinnerSettings}></DinnerSettings>;
+            }
+            case 'Bed' : {
+                return null;
+            }
+        }
     }
 
 
@@ -43,22 +52,8 @@ export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettin
 
 
     return (
-        <ActiveReservationTypeContext.Provider value={activeTabKey}>
-            <Row>
-                <Tabs defaultActiveKey="Dinner" className="mb-3" activeKey={activeTabKey}
-                      onSelect={(k) => handleTabSelect(k)}>
-                    <Tab eventKey="Dinner" title="Βραδινά">
-                        <Col className={'scrollable-y overflow-y-auto'}>
-                            <ReservationsContext.Provider value={Dinner_Reservations}>
-                                <DinnerSettings Settings={dinnerSettings}></DinnerSettings>
-                            </ReservationsContext.Provider>
-                        </Col>
-                    </Tab>
-                    <Tab eventKey="Bed" title="Πρωινά">
-
-                    </Tab>
-                </Tabs>
-            </Row>
-        </ActiveReservationTypeContext.Provider>
+    <Row>
+        {renderContent()}
+    </Row>
     )
 }

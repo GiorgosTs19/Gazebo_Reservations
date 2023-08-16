@@ -94,7 +94,7 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
 
         Route::prefix('/Disable')->group(function () {
             Route::post('/Days', [\App\Http\Controllers\DisabledDayController::class, 'Disable_Days'])->name('Disable_Days');
-            Route::post('/Tables', [\App\Http\Controllers\DisabledTableController::class, 'Disable_Table'])->name('Disable_Tables');
+            Route::post('/Table', [\App\Http\Controllers\DisabledTableController::class, 'Disable_Tables'])->name('Disable_Table_In_Range');
         });
     });
 

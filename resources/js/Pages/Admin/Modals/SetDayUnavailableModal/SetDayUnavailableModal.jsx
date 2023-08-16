@@ -1,39 +1,28 @@
-import {
-    Accordion, Badge,
-    Button, Col,
-    Form,
-    Image,
-    ListGroup,
-    Modal,
-    OverlayTrigger, Row,
-    Stack,
-    Tooltip
-} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {changeDateFormat, getFormattedDate} from "../../../../ExternalJs/Util";
 import {Inertia} from "@inertiajs/inertia";
 import {useContext, useEffect, useState} from "react";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
-
-import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 import {ActiveReservations} from "./ActiveReservations";
 import {Warnings} from "./Warnings";
 
 export function SetDayUnavailableModal({selectedDate,current_date_availability}) {
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const [show, setShow] = useState(false),
     innerWidth = useContext(InnerWidthContext),
-    [allowExistingReservations,setAllowExistingReservations] = useState(false),
-    Type = useContext(ActiveReservationTypeContext);
+    [allowExistingReservations,setAllowExistingReservations] = useState(false);
     const [reservations,setReservations] = useState([]);
     const dateIsRange = Array.isArray(selectedDate);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
+    console.log(reservationType)
 
     useEffect(()=>{
         if(show) {
             if(!dateIsRange) {
-                Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(selectedDate,'-',1),get_reservations:true},{
+                Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(selectedDate,'-',1),
+                    get_reservations:true,Type:reservationType},{
                     only:['availability_for_date'],
                     preserveScroll:true,
                     preserveState:true,
@@ -43,7 +32,8 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
                 });
                 return;
             }
-            Inertia.get(route('Get_Availability_For_Dates'), {date_start: getFormattedDate(selectedDate[0],'-',1),date_end:getFormattedDate(selectedDate[1],'-',1)},{
+            Inertia.get(route('Get_Availability_For_Dates'), {date_start: getFormattedDate(selectedDate[0],'-',1),
+                date_end:getFormattedDate(selectedDate[1],'-',1),Type:reservationType},{
                 only:['availability_for_date_range'],
                 preserveScroll:true,
                 preserveState:true,
@@ -57,12 +47,12 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
     const handleSetDayUnavailable = () => {
         if(!dateIsRange){
             const date_to_disable = getFormattedDate(selectedDate,'-',1);
-            return Inertia.post(route('Disable_Day'),{Date:date_to_disable,Allow_Existing_Reservations:allowExistingReservations,Type:Type},
+            return Inertia.post(route('Disable_Day'),{Date:date_to_disable,Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},
                 {preserveScroll:true,preserveState:true, only:['Dinner_Reservations'],onSuccess:()=>setShow(false)});
         }
         const dates_to_disable = [getFormattedDate(selectedDate[0],'-',1),getFormattedDate(selectedDate[1],'-',1)];
         return Inertia.post(route('Disable_Days'),{Date_Start:dates_to_disable[0],Date_End:dates_to_disable[1],
-            Allow_Existing_Reservations:allowExistingReservations,Type:Type},{preserveScroll:true,preserveState:true,
+            Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},{preserveScroll:true,preserveState:true,
             only:['Dinner_Reservations'],onSuccess:()=>setShow(false)});
     };
 
@@ -72,17 +62,12 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
 
     return (<>
             <div className={'d-flex'}>
-                <Stack direction={'horizontal'} className={'mx-auto'}>
-                    {/* Button that is being returned to open the modal. */}
-                    <Button variant={'outline-danger'} className={'p-2 my-2'}
-                            disabled={current_date_availability === 'Disabled'}
-                            onClick={handleShow}>
-                        Ορισμός ως μη {!dateIsRange ? 'διαθέσιμη' : 'διαθέσιμες'}
-                    </Button>
-                    {/* Warning sign */}
-                    {(reservations.length > 0) &&
-                            <Image src={'Images/Icons/warning.png'} className={'ms-3'}/>}
-                </Stack>
+                {/* Button that is being returned to open the modal. */}
+                <Button variant={'outline-danger'} className={'p-2 my-2 mx-auto'}
+                        disabled={current_date_availability === 'Disabled'}
+                        onClick={handleShow}>
+                    Απενεργοποίηση
+                </Button>
             </div>
             <Modal show={show} onHide={handleClose} className={'day-unavailable-modal'}>
                 {/* Shows the date|s to be disabled as the title of the modal*/}
@@ -106,7 +91,7 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
                     <Button variant={'outline-danger'} className={'p-2 my-2'}
                             disabled={current_date_availability === 'Disabled'}
                             onClick={handleSetDayUnavailable}>
-                        Ορισμός ως μη {!dateIsRange  ? 'διαθέσιμη' : 'διαθέσιμες'}
+                        Απενεργοποίηση
                     </Button>
                 </Modal.Footer>
             </Modal>

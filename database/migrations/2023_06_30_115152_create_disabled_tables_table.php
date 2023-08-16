@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignUuid('gazebo_id');
             $table->string('Date');
+            $table->string('Type')->default('Dinner');
             $table->timestamps();
         });
     }

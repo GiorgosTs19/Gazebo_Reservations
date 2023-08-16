@@ -9,7 +9,7 @@ export function ReservationTypeSelectionMenu() {
         };
 
     return (
-        <Form className="m-auto ">
+        <Form className="m-auto pt-2">
             <h5 className={'user-select-none'}>
                 <Form.Check // prettier-ignore
                     type={'radio'}
