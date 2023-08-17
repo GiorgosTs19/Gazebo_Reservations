@@ -71,9 +71,23 @@ export default function AdminPanel(props) {
     };
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
-        SettingsContent =
-            <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}>
-            </SettingsPanel>;
+        SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,
+    typeAndViewSelectionPanel = <Row className={'p-0 w-100'}>
+        <Col lg={3} className={'d-flex box_shadow rounded-4 border flex-column my-3 my-lg-0 ' + (isMobile ? ' border-bottom ' :
+            ' border-end px-3')}>
+            <ReservationTypeSelectionMenu></ReservationTypeSelectionMenu>
+        </Col>
+        <Col lg={9} className={'d-flex flex-column mt-2 mt-lg-0 text-center'}>
+            <div className={'box_shadow px-0 px-xl-4 rounded-4 py-2 border my-auto'}>
+                {activeTabKey === 'Reservations' && <ViewSelectionMenu></ViewSelectionMenu>}
+                {activeTabKey === 'Menus' &&  activeMenusTabKey !== 'Edit' &&  <h4 className={'my-3'}>Διαχείριση Menu</h4>}
+                {activeTabKey === 'Settings' &&
+                    <h4 className={'my-3'}>Ρυθμίσεις {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
+                {activeMenusTabKey === 'Edit' && activeTabKey === 'Menus' && <h4 className={'my-3'}>Επεξεργασία {editingMenu.Name}</h4>}
+            </div>
+        </Col>
+    </Row>;
+
     useEffect(() => {
         const handleResize = () => {
             setInnerWidth(window.innerWidth);
@@ -93,31 +107,20 @@ export default function AdminPanel(props) {
                         <GazebosContext.Provider value={Gazebos}>
                             <MenuContext.Provider value={Menus}>
                                 <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                    <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}></NavigationBar>
-                                    <div className={'h-90 px-3 vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                        <Card className={"px-2 mx-sm-auto mx-lg-0 mx-3 border-0 pb-2 overflow-y-auto h-100 "} >
-                                            <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
-                                                <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
-                                                    <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>
+                                    <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
+                                        <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
+                                            <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>
+                                                <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}>
+                                                    {innerWidth < 992 && typeAndViewSelectionPanel}
+                                                </NavigationBar>
+                                                <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
+                                                    <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
                                                         <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
-                                                            <Card.Header className={'text-center border-0 bg-transparent mt-4 mt-lg-0'}>
-                                                                <Row className={'p-0'}>
-                                                                    <Col lg={3} className={'d-flex box_shadow rounded-4 border ' + (isMobile ? 'border-bottom px-3 py-3 my-4' :
-                                                                        ' border-end px-3 ')}>
-                                                                        <ReservationTypeSelectionMenu></ReservationTypeSelectionMenu>
-                                                                    </Col>
-                                                                    <Col lg={9}>
-                                                                        <div className={'box_shadow px-0 px-xl-4 rounded-4 py-2 border mt-4 mt-lg-0 '}>
-                                                                            {activeTabKey === 'Reservations' && <ViewSelectionMenu></ViewSelectionMenu>}
-                                                                            {activeTabKey === 'Menus' &&  activeMenusTabKey !== 'Edit' &&  <h4 className={'my-3'}>Διαχείριση Menu</h4>}
-                                                                            {activeTabKey === 'Settings' &&
-                                                                                <h4 className={'my-3'}>Ρυθμίσεις {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
-                                                                            {activeMenusTabKey === 'Edit' && activeTabKey === 'Menus' && <h4 className={'my-3'}>Επεξεργασία {editingMenu.Name}</h4>}
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Card.Header>
-                                                            <Card.Body className={'box_shadow px-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-75' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                            {innerWidth > 992 &&
+                                                                <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-4'}>
+                                                                    {typeAndViewSelectionPanel}
+                                                                </Card.Header>}
+                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-75' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
                                                                 <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                                                     <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
                                                                         {renderContent()}
@@ -125,11 +128,11 @@ export default function AdminPanel(props) {
                                                                 </PendingUnsavedChangesContext.Provider>
                                                             </Card.Body>
                                                         </MenuEditModeContext.Provider>
-                                                    </ActiveReservationContext.Provider>
-                                                </ViewContext.Provider>
-                                            </ActiveReservationTypeContext.Provider>
-                                        </Card>
-                                    </div>
+                                                    </Card>
+                                                </div>
+                                            </ActiveReservationContext.Provider>
+                                        </ViewContext.Provider>
+                                    </ActiveReservationTypeContext.Provider>
                                 </Container>
                             </MenuContext.Provider>
                         </GazebosContext.Provider>

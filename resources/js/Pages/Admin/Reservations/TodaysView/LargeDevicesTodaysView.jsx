@@ -36,7 +36,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
         ))
     };
     return (
-        <Row className={'pe-3 h-100'}>
+        <Row className={'pe-3 h-95 m-auto pt-4'}>
             <Col className={'border border-1 rounded-3 flex-column justify-content-between box_shadow my-3 my-xxl-0 h-100 px-0 '
                 + (reservations_of_current_date.length === 0 ? '' : ' d-flex')} hidden={reservations_of_current_date.length === 0}
                  lg={showFilters ? 2 : 1} >
@@ -46,7 +46,8 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
                                     <b>Κατάσταση</b>
                                 </p>
                                 <FiltersBar setReservationsFilter={setReservationsFilter}
-                                            reservationsFilter={reservationsFilter} direction={innerWidth > 1400 ? 'vertical' : 'horizontal'}>
+                                    reservationsFilter={reservationsFilter} direction={innerWidth > 1400 ? 'vertical' : 'horizontal'}
+                                className={'h-100'}>
                                 </FiltersBar>
                             </div>
                             <h6 onClick={()=>setShowFilters(false)} className={'cursor-pointer'}>
@@ -59,7 +60,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
             </Col>
             <Col lg={reservations_of_current_date.length === 0 ? 12 : (showFilters ? 10 : 11)} className={'p-0 h-100'}>
                 {children}
-                <Stack className={'p-3 text-center d-flex overflow-y-auto h-90'} >
+                <Stack className={'px-3 text-center d-flex overflow-y-auto h-88'} >
                     {reservationsToShow()}
                 </Stack>
             </Col>

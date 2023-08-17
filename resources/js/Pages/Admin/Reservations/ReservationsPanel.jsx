@@ -50,15 +50,16 @@ export function ReservationsPanel() {
 
     return (
         <Row className={'my-auto h-100 overflow-x-hidden'}>
-            <Col sm={12} lg={(activeReservation !== null || activeReservationsView === 'Weekly' || (activeReservationsView === 'Today' && today_reservations.length > 0)) ? 7 :12}
-                 className={'h-100 ' + (!isMobile && activeReservation !== null && 'border-end')}
+            <Col sm={12} md={activeReservation !== null ? 4 : 12} lg={(activeReservation !== null || activeReservationsView === 'Weekly' || (activeReservationsView === 'Today' && today_reservations.length > 0)) ? 7 :12}
+                 className={(innerWidth < 500 ? (activeReservation === null ? 'h-100 ' : 'h-25 sticky-top bg-white ') : 'h-100 ') + (!isMobile && activeReservation !== null && ' border-end')}
                  hidden={activeReservation !== null && isMobile && (activeReservationsView === 'Monthly' || activeReservationsView === 'Weekly' || activeReservationsView === 'Search')}>
                 {activeReservationsView === 'Today' && <TodaysView></TodaysView>}
                 {activeReservationsView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
                 {activeReservationsView === 'Monthly' && <MonthlyView></MonthlyView>}
                 {activeReservationsView === 'Search' && (isMobile ? activeReservation === null : true) && <SearchView></SearchView>}
             </Col>
-            {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 1200)) && <Col sm={isMobile ? 12 : 5}
+            {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 1200)) &&
+                <Col md={8} lg={5}
             className={'d-flex text-center overflow-y-auto reservation-long-view'} as={'div'}>
                 {showReservationLong()}
             </Col>}

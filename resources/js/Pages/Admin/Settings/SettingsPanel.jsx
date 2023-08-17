@@ -49,8 +49,8 @@ export function SettingsPanel({dinnerSettings}) {
 
 
     return (
-    <Row>
+    <>
         {renderContent()}
-    </Row>
+    </>
     )
 }

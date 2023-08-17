@@ -20,24 +20,19 @@ export function MobileMonthlyView({Calendar,reservationsToShow,WarningMessage,se
     };
     return (
         <Row className={'text-center h-100'}>
-             <Col className={'px-1 ' + (shouldShowCalendar ? 'py-5' : 'py-0')}>
+             <Col className={'px-1 ' + (shouldShowCalendar ? 'py-1' : 'py-0')}>
                 {shouldShowCalendar && <>
                     {Calendar}
                 </>
                 }
                 {!shouldShowCalendar &&
                     <>
-                        <LeftArrowSVG className={'my-4'} rotate={90} onClick={handleBackToCalendar}/>
+                        <LeftArrowSVG className={'my-2'} rotate={90} onClick={handleBackToCalendar}/>
                         <Stack className={'p-3 overflow-y-auto'} style={{maxHeight: '350px'}}>
                             {WarningMessage()}
                             {reservationsToShow()}
                         </Stack>
                     </>
-                }
-                {activeReservation !== null &&
-                    <Button size={'lg'} variant={'info'} onClick={() => setActiveReservation(null)} className={'my-1'}>
-                        &#x2190;
-                    </Button>
                 }
             </Col>
         </Row>

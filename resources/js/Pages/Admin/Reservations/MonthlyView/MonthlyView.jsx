@@ -98,7 +98,7 @@ export function MonthlyView() {
             return <h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
 
         // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = activeReservation !== null ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 1000 ? 2 : 1));
+        const reservationsToRender = activeReservation !== null ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 800 ? 2 : 1));
         const reservationChunks = [];
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
             reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
@@ -122,7 +122,7 @@ export function MonthlyView() {
                 ? 'disabled-day' : '';
     }
     const CalendarToShow = <>
-        <h6 className={'mb-4 mb-md-0 user-select-none'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
+        <h6 className={'mb-4 mb-lg-0 user-select-none'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
         <Calendar onChange={handleDateChange} value={selectedDate || today}
                   className={'m-auto rounded box_shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
                   tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}

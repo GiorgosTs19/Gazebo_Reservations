@@ -1,5 +1,5 @@
-import {getFormattedDate, getReservationsByDate} from "../../../../ExternalJs/Util";
-import {Accordion, Button, Col, ListGroup, Row} from "react-bootstrap";
+import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
+import {Accordion, Badge, Button, Col, ListGroup, Row} from "react-bootstrap";
 import {useState} from "react";
 import {useContext, useEffect} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
@@ -7,6 +7,7 @@ import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
+import {UnavailableSVG} from "../../../../SVGS/UnavailableSVG";
 
 export function MobileWeeklyView({currentDate, filter, children}) {
     const Reservations = useContext(ReservationsContext),
@@ -24,7 +25,7 @@ export function MobileWeeklyView({currentDate, filter, children}) {
                 });
 
             if(filteredReservations.length === 0)
-                return [<ListGroup.Item key={0} className={'p-1 d-flex '}>
+                return [<ListGroup.Item key={0} className={'p-1 d-flex'}>
                     <p className={'text-muted m-auto'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</p>
                 </ListGroup.Item>,0];
 
@@ -33,7 +34,7 @@ export function MobileWeeklyView({currentDate, filter, children}) {
                 reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
             }
             return [reservationChunks.map((chunk, index) => {
-                return <ListGroup.Item key={index+1} className={'p-1 d-flex'}>
+                return <ListGroup.Item key={index+1} className={'p-1 d-flex border-0'}>
                     {chunk.map(reservation => (
                         <ReservationShort Reservation={reservation} key={reservation.id} className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />
                     ))}
@@ -60,8 +61,10 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             day.setDate(currentDate.getDate() +index);
             const [reservations,reservationsCount] = reservationsToShow(day);
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
+            const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,Reservations);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
-                <Accordion.Header>{getFormattedDate(day,'/',3)} ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true)} )</Accordion.Header>
+                <Accordion.Header>{getFormattedDate(day,'/',3)} ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )
+                    {isDateDisabled &&   <Badge bg="danger" className={reservationsFilter === 'All' ? 'ms-auto' : 'mx-1'}><UnavailableSVG className={'px-0'} width={13} height={15}/></Badge>}</Accordion.Header>
                 <Accordion.Body>
                     <ListGroup horizontal={false} gap={5} className={'py-1'}>
                         {reservations}
@@ -72,14 +75,17 @@ export function MobileWeeklyView({currentDate, filter, children}) {
     };
     return (
         <div className={'text-center p-0 overflow-y-auto overflow-x-hidden h-100 d-flex flex-column'}>
-            <div className="navigation my-2">
-                {children}
+            <div className={'d-flex flex-column sticky-top bg-white'}>
+                <div className="navigation my-2 d-flex">
+                    {children}
+                </div>
+                <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
+                            reservationsFilter={reservationsFilter} className={'mx-auto'}>
+                </FiltersBar>
             </div>
-            <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
-                reservationsFilter={reservationsFilter} className={'mx-auto'}>
-            </FiltersBar>
             <Row>
                 <Col lg={12} className={'p-0'}>
+                        <Badge bg="danger" className={'m-2'}><UnavailableSVG className={'px-0'} width={13} height={15}/></Badge><span className={''}>: Απενεργοποιημένη Μέρα</span>
                     <Accordion className="week-days p-0 mx-3 overflow-auto" gap={2}>
                         {renderWeekDays()}
                     </Accordion>

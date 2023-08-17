@@ -35,8 +35,8 @@ export function WeeklyReservationsView() {
                 </LargeDevicesWeeklyView>
                 :
                 <MobileWeeklyView currentDate={currentDate} filter={{reservationsFilter,setReservationsFilter}}>
-                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
-                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}>Επόμενη Εβδομάδα</Button>
+                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 m-md-auto rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
+                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 m-md-auto rounded-3'}>Επόμενη Εβδομάδα</Button>
                 </MobileWeeklyView>
             }
         </>

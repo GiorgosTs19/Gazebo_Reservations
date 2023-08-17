@@ -12,15 +12,19 @@ import {PendingUnsavedChangesWarningModal} from "../../Menu/EditMenu/PendingUnsa
 import {ShouldShowUnsavedChangesModalContext} from "../../Contexts/ShouldShowUnsavedChangesModalContext";
 import {Arrival_Start_Error_Check} from "../Utility/Util";
 import {DinnerTableSettings} from "./DinnerTableSettings/DinnerTableSettings";
+import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {LargeDevicesSettings} from "./LargeDevicesSettings";
+import {MobileSettings} from "./MobileSettings";
+import {ReservationDateRangeSettings} from "./DinnerDateSettings/ReservationDateRangeSettings";
 
 export function DinnerSettings({Settings}) {
-
     const [errors,setErrors] = useState({
         Arrival : '',
         First_Day : '',
         Last_Day : '',
         Arrival_Times_Too_Close:''
-    });
+    }),
+    InnerWidth = useContext(InnerWidthContext);
 
     const local_settings_reducer = (localSettings,action) => {
         switch (action.type) {
@@ -103,7 +107,6 @@ export function DinnerSettings({Settings}) {
     // If Settings have changed, change the pendingUnsavedChanges, to alert for unsaved settings in case of Tab Switch
     useEffect(()=>{
         setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
-        console.log('Settings', settingsHaveChanged)
     },[settingsHaveChanged]);
     // Handles the closing of the UnsavedChangesWarningModal, reverting the recent changes
     // made to the settings and switching to the wanted Tab.
@@ -115,6 +118,7 @@ export function DinnerSettings({Settings}) {
     };
     const handleModalSaveChanges = () => {
         handleSaveChanges();
+        dispatchLocalSetting({type:'Revert_Recent_Changes',value: unModifiedLocalSettings});
         setShowUnsavedChangesWarningModal((prev)=> {return {...prev, Show: false}});
         handleSetActiveKey(showUnsavedChangesWarningModal.Key,true);
     }
@@ -126,23 +130,40 @@ export function DinnerSettings({Settings}) {
                     <PendingUnsavedChangesWarningModal handleCloseModal={handleCloseUnsavedChangesWarning}
                         shouldShowModal={showUnsavedChangesWarningModal.Show} SaveChanges={handleModalSaveChanges} >
                     </PendingUnsavedChangesWarningModal>
-                    <div className={'text-center'}>
-                        <Row className={'px-3 py-2 mt-4'}>
-                            <Col className={'my-auto'}>
+                    {
+                        InnerWidth > 992 ? <LargeDevicesSettings>
+                            <DinnerTimeSettings>
+                                <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                                        className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
+                                        onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
+                            </DinnerTimeSettings>
+                            <ReservationDateRangeSettings></ReservationDateRangeSettings>
+                        </LargeDevicesSettings> :
+                            <MobileSettings>
                                 <DinnerTimeSettings>
-                                    <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
-                                            className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
-                                            onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
                                 </DinnerTimeSettings>
-                            </Col>
-                            <Col xxl={3} className={'d-flex'}>
-                                <DinnerDateSettings></DinnerDateSettings>
-                            </Col>
-                            <Col xxl={5} className={'d-flex'}>
-                                <DinnerTableSettings></DinnerTableSettings>
-                            </Col>
-                        </Row>
-                    </div>
+                                <ReservationDateRangeSettings></ReservationDateRangeSettings>
+                                <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                                        className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
+                                        onClick={handleSaveChanges}>Αποθήκευση Αλλαγών
+                                </Button>
+                            </MobileSettings>
+                    }
+                        {/*<Row className={'px-3 py-2 mt-0 mt-lg-2 mx-auto text-center w-100'}>*/}
+                        {/*    <Col className={'my-auto'}>*/}
+                        {/*        <DinnerTimeSettings>*/}
+                        {/*            <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}*/}
+                        {/*                    className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}*/}
+                        {/*                    onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>*/}
+                        {/*        </DinnerTimeSettings>*/}
+                        {/*    </Col>*/}
+                        {/*    <Col xxl={4} className={'d-flex mt-4 mt-lg-0'}>*/}
+                        {/*        <DinnerDateSettings></DinnerDateSettings>*/}
+                        {/*    </Col>*/}
+                        {/*    <Col xxl={4} className={'d-flex'}>*/}
+                        {/*        <DinnerTableSettings></DinnerTableSettings>*/}
+                        {/*    </Col>*/}
+                        {/*</Row>*/}
                 </LocalisedSettingsContext.Provider>
             </LocalSettingsContext.Provider>
         </ErrorsContext.Provider>

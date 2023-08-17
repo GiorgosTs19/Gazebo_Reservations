@@ -138,7 +138,7 @@
 }
 
 .react-calendar__tile--active {
-    background: #006edc;
+    background: #006edc!important;
     color: white;
 }
 
@@ -152,4 +152,12 @@
 }
 .react-calendar__tile--active:disabled {
     color: black!important;
+}
+.react-calendar__tile--range {
+    background-color: white;
+    color: black;
+}
+
+.react-calendar__tile.selected {
+    /*background-color: #2d3748!important;*/
 }

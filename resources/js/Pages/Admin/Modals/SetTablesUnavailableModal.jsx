@@ -64,22 +64,22 @@ export function SetTablesUnavailableModal({gazebo}) {
         if(Array.isArray(selectedDate)) {
             if(selectedDate[0] === '')
                 return null;
-            return <Button variant={'outline-danger'} className={'p-2 my-2'} onClick={handleSetTableUnavailable}>Απενεργοποίηση</Button>;
+            return <Button variant={'outline-danger'} className={'p-2 my-2 mx-auto'} onClick={handleSetTableUnavailable}>Απενεργοποίηση</Button>;
         }
         if(selectedDate === '')
             return null;
         if(isDateDisabledByAdmin(selectedDate,contextReservations)[0])
-            return null;
+            return <h6 className={'mx-auto'}>Η μέρα είναι απενεργοποιημένη</h6>;
         if(disabledDates?.includes(getFormattedDate(selectedDate,'-',1)))
-            return <Button variant={'outline-success'} className={'p-2 my-2'} onClick={handleSetTableAvailable}>Ενεργοποίηση</Button>;
-        return <Button variant={'outline-danger'} className={'p-2 my-2'} onClick={handleSetTableUnavailable}>Απενεργοποίηση</Button>;
+            return <Button variant={'outline-success'} className={'p-2 my-2 mx-auto'} onClick={handleSetTableAvailable}>Ενεργοποίηση</Button>;
+        return <Button variant={'outline-danger'} className={'p-2 my-2 mx-auto'} onClick={handleSetTableUnavailable}>Απενεργοποίηση</Button>;
     };
 
     return (<>
             {/* Button that is being returned to open the modal. */}
             <Button variant={'outline-secondary'} className={'p-2 m-auto rounded-4'}
                     onClick={handleShow}>
-               Διαχείριση Τραπεζιού {gazebo.ascending_number}
+               Διαχείριση
             </Button>
             <Modal show={show} onHide={handleClose} className={'day-unavailable-modal'}>
                 {/* Shows the date|s to be disabled as the title of the modal*/}
@@ -93,10 +93,11 @@ export function SetTablesUnavailableModal({gazebo}) {
                     {/*<ActiveReservations reservations={reservations} dateIsRange={dateIsRange}/>*/}
                 </Modal.Body>
                 <Modal.Footer>
+                    {/*{!dateIsRange ? (isDateDisabledByAdmin(selectedDate,contextReservations)[0] && ) : null}*/}
                     {/* Modal button to close the modal. */}
-                    <Button variant="outline-secondary" className={'p-2 my-2'} onClick={handleClose}>
-                        Ακύρωση
-                    </Button>
+                    {/*<Button variant="outline-secondary" className={'p-2 my-2'} onClick={handleClose}>*/}
+                    {/*    Ακύρωση*/}
+                    {/*</Button>*/}
                     {/* Modal button to confirm and disable the selected date|s. */}
                     {getActionButton()}
                 </Modal.Footer>

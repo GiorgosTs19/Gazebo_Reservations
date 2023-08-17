@@ -12,7 +12,7 @@ export function DinnerDateSettings({DinnerReservations}) {
     reservations  = useContext(ReservationsContext);
 
     return (
-        <Card className={'box_shadow mx-auto user-select-none'} >
+        <Card className={'box_shadow mx-auto user-select-none w-100 mt-2 mt-lg-0'} >
             <Card.Header className={'bg-transparent'}>
                 Διαχείριση Διαθεσιμότητας
             </Card.Header>

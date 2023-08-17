@@ -32,7 +32,7 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
         if(filteredReservations.length === 0)
             return <h5 className={'my-auto text-wrap'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια.</h5>
 
-        if(innerWidth > 860) {
+        if(innerWidth > 800) {
             const reservationChunks = [];
             for (let i = 0; i < filteredReservations.length; i += 2) {
                 reservationChunks.push(filteredReservations.slice(i, i + 2));
@@ -52,25 +52,19 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
     return (
         <>
             <Row className={'h-100'}>
-                <Col md={3} >
+                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100' : 'h-25 sticky-top bg-white')}>
                     {children}
                     <FiltersBar setReservationsFilter={setReservationsFilter}
-                                reservationsFilter={reservationsFilter} direction={'vertical'}></FiltersBar>
+                                reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto'}></FiltersBar>
                 </Col>
-                <Col md={9} className={'h-75'}>
                     {shouldShowStack ?
-                        <div className={'d-flex flex-column h-100'}>
-                            <Stack className={'p-3 text-center mx-auto overflow-y-auto h-50'}>
+                        <Col md={9} lg={9} className={'d-flex flex-column h-100'}>
+                            <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto h-50'}>
                                 {reservationsToShow()}
                             </Stack>
-                        </div>
-                        :
-                        <div className={'d-flex'}>
-                            <Button size={'lg'} variant={'info'} onClick={handleBackToStack} className={'my-4 mx-auto'}>
-                                &#x2190;
-                            </Button>
-                        </div>}
-                </Col>
+                        </Col>
+                        : null }
+
             </Row>
         </>
     )

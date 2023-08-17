@@ -18,11 +18,6 @@ export function DinnerTimeSettings({children}) {
         innerWidth = useContext(InnerWidthContext),
         [useCustomMessage,setUseCustomMessage] = useState(false);
 
-    console.log(settings)
-    const handleShowChange = () => {
-        setShow(!show);
-    }
-
 
     useEffect(()=>{
         if(localSettings.Strict_Arrival_Time){
@@ -42,7 +37,7 @@ export function DinnerTimeSettings({children}) {
     },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
     return (
         // settings-header-border
-        <div className={'user-select-none'}>
+        <div className={'user-select-none text-center'}>
             {children}
             <Row>
                 <Col xl={6}>
@@ -52,7 +47,6 @@ export function DinnerTimeSettings({children}) {
                     <ArrivalMessageSettings></ArrivalMessageSettings>
                 </Col>
             </Row>
-            <ReservationDateRangeSettings></ReservationDateRangeSettings>
         </div>
     )
 }

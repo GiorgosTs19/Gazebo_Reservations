@@ -22,13 +22,13 @@ export function ReservationDateRangeSettings() {
         dispatchSetting({type:'Change_Last_Date',value : newTime})
     };
     return (
-        <Card className={'border-top- box_shadow  mt-5 w-100 h-100'} style={{width:'fit-content'}}>
+        <Card className={'border-top- box_shadow mt-1 mt-lg-5 w-100 h-90'} style={{width:'fit-content'}}>
             <Card.Header className={'bg-transparent'}>
                 <p className={'text-muted'}>Εύρος ημερομηνιών που είναι διαθέσιμες για κρατήσεις</p>
                 <p className={'text-muted'}>Οι πελάτες θα μπορούν να κάνουν κρατήσεις μέσα σε αυτό το εύρος ημερομηνιών.</p>
             </Card.Header>
             <Card.Body className={'px-2 py-3 mx-auto w-100 d-flex flex-column text-center'}>
-                <Row className={'my-auto'}>
+                <Row className={'my-1 my-lg-auto'}>
                     <Col className={'d-flex'}>
                         <FormGroup className={'p-2 m-auto text-center'}>
                                 <span className={'text-muted fst-italic ms-2'}>{settings.First_Day ? changeDateFormat(settings.First_Day,'-','-'):''}</span>

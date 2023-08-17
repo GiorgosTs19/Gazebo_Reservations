@@ -184,7 +184,18 @@ abbr[title] {
 }
 
 /*Calendar*/
-
+/* Settings */
+.carousel-inner {
+    display: flex;
+    flex-direction: column;
+}
+.carousel-inner {
+    height: 100%;
+}
+.carousel-control-prev, .carousel-control-next {
+    display: none;
+}
+/* Settings */
 
 /* More utility classes*/
 /* Width */
@@ -206,11 +217,14 @@ abbr[title] {
 .h-85 {
     height: 85%;
 }
-.h-85 {
-    height: 85%;
+.h-88 {
+    height: 88%;
 }
 .h-90 {
     height: 90%;
+}
+.h-95 {
+    height: 95%;
 }
 .mh-400px {
     max-height: 400px;
