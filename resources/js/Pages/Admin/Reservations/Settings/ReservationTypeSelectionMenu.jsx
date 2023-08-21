@@ -1,9 +1,11 @@
 import {Form} from "react-bootstrap";
 import {useContext} from "react";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {ViewContext} from "../../../../Contexts/ViewContext";
 
-export function ReservationTypeSelectionMenu() {
+export function ReservationTypeSelectionMenu({activeTabKey}) {
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
+        {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
         handleOnChange = (value) => {
             setReservationType(value);
         };
@@ -16,6 +18,7 @@ export function ReservationTypeSelectionMenu() {
                     label={`Kρατήσεις Seaside Dinner`}
                     name={'ReservationType'}
                     value={'Dinner'}
+                    disabled={activeTabKey === 'Reservations' && activeReservationsView === 'Search'}
                     checked={reservationType === 'Dinner'}
                     onChange={()=>handleOnChange('Dinner')}
                 />
@@ -26,6 +29,7 @@ export function ReservationTypeSelectionMenu() {
                     label={'Kρατήσεις Sea Bed'}
                     name={'ReservationType'}
                     value={'Bed'}
+                    disabled={activeTabKey === 'Reservations' && activeReservationsView === 'Search'}
                     checked={reservationType === 'Bed'}
                     onChange={()=>handleOnChange('Bed')}
                 />

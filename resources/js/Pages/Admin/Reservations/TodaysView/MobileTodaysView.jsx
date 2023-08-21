@@ -1,10 +1,9 @@
-import {Button, Col, Row, Stack} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {Col, Row, Stack} from "react-bootstrap";
+import {useCallback, useEffect, useState} from "react";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
-import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 
 export function MobileTodaysView({reservations_of_current_date,filter,children}) {
@@ -20,14 +19,15 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
         if(activeReservation !== null)
             setShouldShowStack(false);
     },[activeReservation]);
-    const reservationsToShow = ()=> {
+
+    const reservationsToShow = useCallback(()=> {
         if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted my-auto'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
 
         const filteredReservations = reservationsFilter === 'All' ?  reservations_of_current_date :
             reservations_of_current_date.filter((reservation)=>{
-            return reservation.Status === reservationsFilter;
-        });
+                return reservation.Status === reservationsFilter;
+            });
 
         if(filteredReservations.length === 0)
             return <h5 className={'my-auto text-wrap'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια.</h5>
@@ -48,18 +48,19 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
         return filteredReservations.map((reservation)=> {
             return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border'}></ReservationShortest>;
         });
-    };
+    },[reservations_of_current_date,reservationsFilter]);
+
     return (
         <>
             <Row className={'h-100'}>
-                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100' : 'h-25 sticky-top bg-white')}>
+                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100' : 'h-10 sticky-top bg-white')}>
                     {children}
-                    <FiltersBar setReservationsFilter={setReservationsFilter}
-                                reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto'}></FiltersBar>
+                    <FiltersBar setReservationsFilter={setReservationsFilter} disabled={reservations_of_current_date.length === 0}
+                                reservationsFilter={reservationsFilter} direction={innerWidth <500 ? 'horizontal' : 'vertical'} className={'my-auto my-md-5 my-lg-auto mx-auto'}></FiltersBar>
                 </Col>
                     {shouldShowStack ?
                         <Col md={9} lg={9} className={'d-flex flex-column h-100'}>
-                            <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto h-50'}>
+                            <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto h-75'}>
                                 {reservationsToShow()}
                             </Stack>
                         </Col>

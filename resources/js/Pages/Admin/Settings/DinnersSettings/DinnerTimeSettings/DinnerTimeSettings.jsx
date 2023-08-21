@@ -1,13 +1,11 @@
-import {Col, Image, Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
-import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
 import {InnerWidthContext} from "../../../../../Contexts/InnerWidthContext";
 import {getTimeDifferenceInMinutes} from "../../../../../ExternalJs/Util";
 import {ArrivalSettings} from "./ArrivalSettings";
 import {ArrivalMessageSettings} from "./ArrivalMessageSettings";
-import {ReservationDateRangeSettings} from "../DinnerDateSettings/ReservationDateRangeSettings";
 import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
 
 export function DinnerTimeSettings({children}) {
@@ -50,32 +48,3 @@ export function DinnerTimeSettings({children}) {
         </div>
     )
 }
-
-{/*    <Col xs={12} xl={6} className={'d-flex ' + (innerWidth > 992 ? 'border-end' : 'border-bottom')}>*/}
-
-{/*</Col>*/}
-{/*<Col xs={12} xl={6} className={'pb-3 pb-lg-0 text-center'}>*/}
-{/*<Row>*/}
-{/*<Col xl={5}>*/}
-{/*    <div className={'p-1'}>*/}
-{/*        <p className={'fw-bold fst-italic'}>Επισκόπηση Μηνύματος προς τους πελάτες</p>*/}
-{/*        <Form.Control as="textarea" rows={3} value={settings.Arrival_Message} style={{resize:'none'}}*/}
-{/*                      onChange={handleChangeArrivalMessage}/>*/}
-{/*        <p className={'text-muted text-center mb-0'}>Το παραπάνω μήνυμα εμφανίζεται στην φόρμας κράτησης.</p>*/}
-{/*    </div>*/}
-{/*</Col>*/}
-{/*<Col xl={5}>*/}
-{/*    <p className={'fw-bold fst-italic'}>Μπορείτε να χρησιμοποιήσετε το μήνυμα που*/}
-{/*        δημιουργείται αυτόματα από το σύστημα, ή μπορείτε να θέσετε κάποιο δικό σας.</p>*/}
-{/*    <p>Η χρησιμότητα αυτού του μηνύματος είναι η μετάβαση πληροφοριών στους πελάτες όπως,*/}
-{/*        η ώρα άφιξης για την κράτηση που θα κάνουν, είτε για οτιδήποτε άλλο χρειάζεται να είναι ενήμεροι.</p>*/}
-{/*</Col>*/}
-{/*<Col xl={2} className={'d-flex flex-column'}>*/}
-{/*    <div className={'my-auto'}>*/}
-{/*        <FormLabel>Αυτόματο</FormLabel>*/}
-{/*        <Form.Switch className={'mx-3'} checked={!useCustomMessage} onChange={handleChangeUseCustomMessage}></Form.Switch>*/}
-{/*    </div>*/}
-{/*</Col>*/}
-{/*</Row>*/}
-
-{/*</Col>*/}

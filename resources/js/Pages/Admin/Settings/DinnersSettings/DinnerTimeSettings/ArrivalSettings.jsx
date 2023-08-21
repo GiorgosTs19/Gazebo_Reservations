@@ -1,10 +1,10 @@
 import {Card, Col, Form, FormLabel, Image, Row, Stack} from "react-bootstrap";
 import {TimePicker} from "../../Components/TimePicker";
-import {useContext} from "react";
-import {DatabaseSettingsContext} from "../../../Contexts/DatabaseSettingsContext";
+import {useContext,useEffect} from "react";
 import {LocalSettingsContext} from "../../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../../Contexts/ErrorsContext";
 import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsContext";
+import {Arrival_Start_Error_Check} from "../../Utility/Util";
 
 export function ArrivalSettings() {
     const {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
@@ -21,9 +21,15 @@ export function ArrivalSettings() {
         const isChecked = !e.target.checked;
         dispatchLocalSetting({type:'Set_Arrival_Time_Strict',value:isChecked});
     };
+    useEffect(()=>{
+        return Arrival_Start_Error_Check(localSettings,settings,{errors,setErrors});
+    },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
+
+
+
     return (
         <Card className={'border-top box_shadow mx-auto my-4 my-xxl-0 w-100 h-100'} >
-            <Card.Header className={'d-flex bg-transparent '}>
+            <Card.Header className={'d-flex bg-transparent'}>
                 <Stack direction={'horizontal'} className={'mx-auto'}>
                     <h6>Συγκεκριμένη Ώρα</h6>
                     <Form.Switch className={'mx-3'} checked={!localSettings.Strict_Arrival_Time} onChange={handleStrictArrivalTimeChange}></Form.Switch>

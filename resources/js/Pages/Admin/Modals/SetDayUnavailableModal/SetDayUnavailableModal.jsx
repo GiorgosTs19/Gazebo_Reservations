@@ -7,7 +7,7 @@ import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationType
 import {ActiveReservations} from "./ActiveReservations";
 import {Warnings} from "./Warnings";
 
-export function SetDayUnavailableModal({selectedDate,current_date_availability}) {
+export function SetDayUnavailableModal({selectedDate}) {
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const [show, setShow] = useState(false),
     innerWidth = useContext(InnerWidthContext),
@@ -16,7 +16,6 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
     const dateIsRange = Array.isArray(selectedDate);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    console.log(reservationType)
 
     useEffect(()=>{
         if(show) {
@@ -64,7 +63,6 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
             <div className={'d-flex'}>
                 {/* Button that is being returned to open the modal. */}
                 <Button variant={'outline-danger'} className={'p-2 my-2 mx-auto'}
-                        disabled={current_date_availability === 'Disabled'}
                         onClick={handleShow}>
                     Απενεργοποίηση
                 </Button>
@@ -72,7 +70,7 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
             <Modal show={show} onHide={handleClose} className={'day-unavailable-modal'}>
                 {/* Shows the date|s to be disabled as the title of the modal*/}
                 <Modal.Header closeButton>
-                    <Modal.Title>Ορισμός {!dateIsRange ? formatted_date : `από ${formatted_date[0]} έως ${formatted_date[1]}`} ως μη {!dateIsRange ? 'διαθέσιμη' : 'διαθέσιμες'}</Modal.Title>
+                    <Modal.Title>Απενεργοποίηση {!dateIsRange ? formatted_date : `από ${formatted_date[0]} έως ${formatted_date[1]}`}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className={'fst-italic text-center overflow-y-auto mh-600px'}>
                     {/* Shows warnings, if there are any reservations that fall withing the range of dates or date to be disabled*/}
@@ -80,7 +78,7 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
                     aboutExistingReservations={{allowExistingReservations,setAllowExistingReservations}} show={show}
                               dates={{dateIsRange, formatted_date,selectedDate}}></Warnings>
                    {/* Shows the reservations that fall withing the range to be disabled || the date to be disabled */}
-                   <ActiveReservations reservations={reservations} dateIsRange={dateIsRange}/>
+                    {reservations.length > 0 && <ActiveReservations reservations={reservations} dateIsRange={dateIsRange}/>}
                 </Modal.Body>
                 <Modal.Footer>
                     {/* Modal button to close the modal. */}
@@ -89,7 +87,6 @@ export function SetDayUnavailableModal({selectedDate,current_date_availability})
                     </Button>
                     {/* Modal button to confirm and disable the selected date|s. */}
                     <Button variant={'outline-danger'} className={'p-2 my-2'}
-                            disabled={current_date_availability === 'Disabled'}
                             onClick={handleSetDayUnavailable}>
                         Απενεργοποίηση
                     </Button>

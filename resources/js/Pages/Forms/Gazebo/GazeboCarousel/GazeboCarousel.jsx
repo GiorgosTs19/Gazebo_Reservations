@@ -15,7 +15,7 @@ export function GazeboCarousel({Gazebos}) {
         setIndex(selectedIndex);
     };
     const gazebosToShow = Gazebos.map((gazebo)=>{
-        const isAvailable = getTableAvailabilityBoolean(gazebo.id,getAvailabilityByDate(bookingDetails.date,Availability))
+        const isAvailable = getTableAvailabilityBoolean(gazebo.id,getAvailabilityByDate(bookingDetails.date,Availability));
         return (<Carousel.Item key={gazebo.id}>
             <GazeboCarouselItem Gazebo={gazebo} isAvailable={isAvailable}></GazeboCarouselItem>
         </Carousel.Item>)

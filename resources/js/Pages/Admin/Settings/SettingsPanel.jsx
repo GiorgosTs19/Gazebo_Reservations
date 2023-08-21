@@ -1,4 +1,3 @@
-import {Row} from "react-bootstrap";
 import {useContext} from "react";
 import {DinnerSettings} from "./DinnersSettings/DinnerSettings";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";

@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from "react";
-import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {Inertia} from "@inertiajs/inertia";
 import {Button, Modal} from "react-bootstrap";
 import {SelectedDateContext} from "../Contexts/SelectedDateContext";
@@ -13,7 +12,7 @@ export function SetTablesUnavailableModal({gazebo}) {
     const [show, setShow] = useState(false);
     const [selectedDate,setSelectedDate] = useState('');
     const [reservations,setReservations] = useState([]);
-    const [disabledDates,setDisabledDays] = useState([]);
+    const [disabledDays,setDisabledDays] = useState([]);
     const dateIsRange = Array.isArray(selectedDate),
     Gazebos = useContext(GazebosContext);
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
@@ -60,6 +59,7 @@ export function SetTablesUnavailableModal({gazebo}) {
         Inertia.delete(route('Enable_Table'),{headers: {'X-Date': date_to_enable,'X-Type':reservationType,'X-Table_id':gazebo.id},
             preserveScroll:true,preserveState:true,only:['disabled_days_for_table'],onSuccess:(res)=>setDisabledDays(res.props.disabled_days_for_table)});
     }
+
     const getActionButton = () => {
         if(Array.isArray(selectedDate)) {
             if(selectedDate[0] === '')
@@ -70,7 +70,7 @@ export function SetTablesUnavailableModal({gazebo}) {
             return null;
         if(isDateDisabledByAdmin(selectedDate,contextReservations)[0])
             return <h6 className={'mx-auto'}>Η μέρα είναι απενεργοποιημένη</h6>;
-        if(disabledDates?.includes(getFormattedDate(selectedDate,'-',1)))
+        if(disabledDays?.includes(getFormattedDate(selectedDate,'-',1)))
             return <Button variant={'outline-success'} className={'p-2 my-2 mx-auto'} onClick={handleSetTableAvailable}>Ενεργοποίηση</Button>;
         return <Button variant={'outline-danger'} className={'p-2 my-2 mx-auto'} onClick={handleSetTableUnavailable}>Απενεργοποίηση</Button>;
     };
@@ -88,7 +88,7 @@ export function SetTablesUnavailableModal({gazebo}) {
                 </Modal.Header>
                 <Modal.Body className={'fst-italic text-center overflow-y-auto mh-720px'}>
                     <SelectedDateContext.Provider value={{selectedDate,setSelectedDate}}>
-                        <CalendarSettings allowClickOnDisabledDays={false} isInTableSettings Reservations={reservations} Disabled_Days={disabledDates}></CalendarSettings>
+                        <CalendarSettings allowClickOnDisabledDays={false} isInTableSettings Reservations={reservations} Disabled_Days={disabledDays}></CalendarSettings>
                     </SelectedDateContext.Provider>
                     {/*<ActiveReservations reservations={reservations} dateIsRange={dateIsRange}/>*/}
                 </Modal.Body>

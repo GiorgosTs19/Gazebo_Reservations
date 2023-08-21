@@ -1,9 +1,10 @@
-import {Button, Col, FloatingLabel, Form, InputGroup, Row, Stack} from "react-bootstrap";
+import {Badge, Col, Row, Stack} from "react-bootstrap";
 import {useContext, useEffect, useReducer, useRef, useState} from "react";
 import {Inertia} from "@inertiajs/inertia";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import gsap from "gsap";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {SearchFilters} from "./SearchFilters";
 
 export function SearchView() {
     const [searchResult,setSearchResult] = useState(null);
@@ -40,35 +41,38 @@ export function SearchView() {
             }
         });
     };
-    // useEffect(()=>{
-    //     animateInputFocus(null);
-    // },[]);
+
     const searchCriteriaReducer = (state,action) => {
         switch (action.type) {
             case 'Set_Email' : {
-                if(action.value.length === '' || state.email.length === 0)
+                if(action.value.length === 0 || state.email.length === 0)
                     animateInputFocus(emailInputRef.current);
                 return {...state,email:action.value};
             }
             case 'Set_Phone' : {
-                if(action.value.length === '' || state.phone_number.length === 0)
+                if(action.value.length === 0 || state.phone_number.length === 0)
                     animateInputFocus(phoneInputRef.current);
                 return {...state,phone_number:action.value};
             }
             case 'Set_Confirmation_Number' : {
-                if(action.value.length === '' || state.conf_number.length === 0)
+                if(action.value.length === 0 || state.conf_number.length === 0)
                     animateInputFocus(confNumberInputRef.current);
                 return {...state,conf_number:action.value};
             }
-            case 'Set_Room_Number' : {
-                return {...state,room_number:action.value};
+            case 'Set_Reservation_Type' : {
+                return {...state,type:action.value};
             }
+            // case 'Set_Room_Number' : {
+            //     return {...state,room_number:action.value};
+            // }
             case 'Reset' : {
                 setSearchResult(null);
                 return {conf_number:'',
                     email:'',
                     phone_number:'',
-                    room_number:''};
+                    type:'All'
+                    // room_number:'',
+                };
             }
         }
     };
@@ -76,9 +80,12 @@ export function SearchView() {
         conf_number:'',
         email:'',
         phone_number:'',
-        room_number:''
+        type:'All'
+        // room_number:'',
     });
-    const noCriteriaActive = Object.values(searchCriteria).every((criteria)=>criteria === '');
+
+    const noCriteriaActive = searchCriteria.email === '' && searchCriteria.conf_number === ''
+    && searchCriteria.phone_number === '' && searchCriteria.type === 'All';
 
     useEffect(()=>{
         if(noCriteriaActive) {
@@ -87,12 +94,13 @@ export function SearchView() {
             animateInputFocus(null);
             return setSearchResult(null);
         }
-        Inertia.get(route('Search_Reservations'),searchCriteria,{
-            only:['search_result'],
-            preserveScroll:true,
-            preserveState:true,
-            onSuccess:(res)=>{setSearchResult(res.props.search_result)}
-        })
+        if(searchCriteria.email !== '' || searchCriteria.conf_number !== '' || searchCriteria.phone_number !== '')
+            Inertia.get(route('Search_Reservations'),searchCriteria,{
+                only:['search_result'],
+                preserveScroll:true,
+                preserveState:true,
+                onSuccess:(res)=>{setSearchResult(res.props.search_result)}
+            });
     },[searchCriteria]);
 
     // Generates the reservations to show for the selected date.
@@ -104,7 +112,7 @@ export function SearchView() {
             return <h5 className={'my-auto text-wrap'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης.</h5>
 
         // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = innerWidth > 1500 ? 3 : (innerWidth > 1000 ? 2 : 1);
+        const reservationsToRender = innerWidth > 1500 ? (activeReservation === null ? 3 : 2) : (innerWidth > 1000 ? 2 : 1);
         const reservationChunks = [];
         for (let i = 0; i < searchResult.length; i += reservationsToRender) {
             reservationChunks.push(searchResult.slice(i, i + reservationsToRender));
@@ -117,55 +125,34 @@ export function SearchView() {
             </div>
         ))
     };
+
+    const getCriteriaLabels = () => {
+        let criteria = [];
+        if(searchCriteria.email !== '')
+            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.email}`}</Badge>];
+        if(searchCriteria.conf_number !== '')
+            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.conf_number}`}</Badge>];
+        if(searchCriteria.phone_number !== '')
+            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.phone_number}`}</Badge>];
+
+        return <Stack direction={'horizontal'}>
+            {criteria.map(badge => badge)}
+        </Stack>
+    };
     return (
-        <Row className={'h-100'}>
-            <Col className={'box_shadow text-center d-flex flex-column m-auto rounded-4 border border-2'} xs={12} md={6}
+        <Row className={'h-100 px-2 pt-2 px-lg-0 pt-lg-0'}>
+            <Col className={'box_shadow text-center d-flex flex-column mt-1  my-lg-auto rounded-4 border border-2 h-fit-content'} xs={12} md={6}
                  lg={3}>
-                <h5 className={'my-3'}>Αναζήτηση με</h5>
-                <Stack className={'m-auto w-90'}>
-                    <div ref={confNumberInputRef}>
-                        <FloatingLabel controlId="conf_number_search_input" label={'Αριθμός Κράτησης'} className="my-3 mx-auto">
-                            <Form.Control
-                                type="text" placeholder="Αρ. Κράτησης" onChange={(e) => dispatchSearchCriteria(
-                                {type: 'Set_Confirmation_Number', value: e.target.value})}
-                                value={searchCriteria.conf_number} required aria-label="Reservation Number"
-                                aria-describedby="Reservation Number"
-                            />
-                        </FloatingLabel>
-                    </div>
-                    <div ref={emailInputRef}>
-                        <FloatingLabel controlId="email_search_input" label={'Email'} className="my-3 mx-auto">
-                            <Form.Control
-                                type="email" placeholder="Email" onChange={(e) => dispatchSearchCriteria(
-                                {type: 'Set_Email', value: e.target.value})}
-                                value={searchCriteria.email} required aria-label="Email"
-                                aria-describedby="Email"
-                            />
-                        </FloatingLabel>
-                    </div>
-                    <div ref={phoneInputRef}>
-                        <FloatingLabel controlId="phone_number_search_input" label={'Τηλέφωνο'} className="my-3 mx-auto">
-                            <Form.Control
-                                type="email" placeholder="Τηλέφωνο" aria-label="Phone Number" aria-describedby="Phone Number"
-                                value={searchCriteria.phone_number}
-                                onChange={(e) => dispatchSearchCriteria(
-                                    {type: 'Set_Phone', value: e.target.value})
-                                }
-                            />
-                        </FloatingLabel>
-                    </div>
-                    <Button variant={'outline-secondary'} className={'my-3 w-fit-content mx-auto'}
-                            disabled={noCriteriaActive}
-                            onClick={() => dispatchSearchCriteria({type: 'Reset'})}>
-                        Καθαρισμός φίλτρων
-                    </Button>
-                </Stack>
+                {/*<h5 className={'my-3'}>Αναζήτηση με</h5>*/}
+                <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}>
+                </SearchFilters>
             </Col>
             <Col className={'d-flex flex-column text-center mt-4 mt-xl-0 ' +
                 (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')} s={12} md={6} lg={9}>
                 {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
                     {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
                 </h5>}
+                {getCriteriaLabels()}
                 {<Stack className={'p-3 text-center d-flex overflow-y-auto h-90 my-auto'}>
                     {reservationsToShow()}
                 </Stack>}

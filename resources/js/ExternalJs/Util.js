@@ -78,13 +78,13 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false) {
 
 /**
  *
- * @param id Requested Gazepo's ID
- * @param Gazepos_Array Array of all Gazepos
- * @returns the Gazepo object's ascending number whose id matches the ID passed into the function.
+ * @param id Requested Gazebo's ID
+ * @param Gazebos_Array Array of all Gazebos
+ * @returns the Gazebo object's ascending number whose id matches the ID passed into the function.
  */
-export function getTableAA (id,Gazepos_Array) {
-    if(typeof Gazepos_Array.find(gazepo=>gazepo.id===id) !== "undefined")
-        return (Gazepos_Array.find(gazepo=>gazepo.id===id).ascending_number);
+export function getTableAA (id,Gazebos_Array) {
+    if(typeof Gazebos_Array.find(gazepo=>gazepo.id===id) !== "undefined")
+        return (Gazebos_Array.find(gazepo=>gazepo.id===id).ascending_number);
 }
 
 /**
@@ -103,7 +103,6 @@ export function getAvailabilityByDate(date,AvailabilityArray) {
     }
 }
 
-
 export function getReservationsByDate(date,ReservationsArray) {
     if (typeof date === 'string') {
         const reservations =  ReservationsArray.find(
@@ -118,40 +117,9 @@ export function getReservationsByDate(date,ReservationsArray) {
     }
 }
 
-
-
-export function getGazepoAvailabilityColor(gazepo_id,current_date_availability) {
-    if(current_date_availability === 'All')
-        return '#00A36C';
-    else if(Array.isArray(current_date_availability)){
-        if (current_date_availability.some(obj => obj.hasOwnProperty(gazepo_id)))
-            return '#00A36C';
-        return '#FF5733';
-    }
+export function getTableAvailabilityBoolean(gazepo_id, current_date_availability) {
+        return current_date_availability.find(obj => obj.hasOwnProperty(gazepo_id))[gazepo_id];
 }
-
-export function getTableAvailabilityBoolean(gazepo_id, current_date_availability, fromReservations = false) {
-    if(current_date_availability === 'All')
-        return true;
-    else if(Array.isArray(current_date_availability)) {
-        if (fromReservations)
-            return current_date_availability.some(obj => obj.Gazebo === gazepo_id);
-        return !!current_date_availability.some(obj => obj.hasOwnProperty(gazepo_id));
-
-    }
-}
-
-export function getGazepoShapesByTitle(title,shapes) {
-    const availability =  shapes.find(shape=> shape.className === 'Text' &&
-        shape.getAttrs().name === (title + ' Availability')
-    );
-    const table = shapes.find(shape=> shape.className === 'Rect' &&
-        shape.getAttrs().name === title
-    );
-
-    return [availability,table];
-}
-
 
 export function formatDateInGreek(dateString) {
     const daysOfWeek = [
@@ -247,15 +215,17 @@ export function getTimeDifferenceInMinutes(time1, time2) {
     return Math.floor(timeDiff / (1000 * 60));
 }
 
-export function isDateDisabledByAdmin (date,Reservations) {
-    if(typeof date === 'string'){
-        const selectedDate = Reservations.find(date => date.Date === date);
+export function isDateDisabledByAdmin (givenDate,Reservations) {
+    if(typeof givenDate === 'string') {
+        console.log('Called as string')
+        const selectedDate = Reservations.find(date => date.Date === givenDate);
+        console.log(selectedDate)
         if(selectedDate)
             return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
         return [false,true];
     }
-    if(typeof date === 'object') {
-        const newDate = getFormattedDate(date,'-',1);
+    if(typeof givenDate === 'object') {
+        const newDate = getFormattedDate(givenDate,'-',1);
         const selectedDate = Reservations.find(date => date.Date === newDate);
         if(selectedDate)
             return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
@@ -283,9 +253,14 @@ export function getAvailabilityPercentage (Availability_Array) {
     const totalTables = Availability_Array.length;
     let availableTables = 0;
     for (let index in Availability_Array) {
-
         if(Availability_Array[index].isAvailable === true)
             availableTables++;
     }
     return [availableTables,totalTables,availableTables/totalTables]
+}
+
+Date.prototype.addDays = function(days) {
+    const date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
 }

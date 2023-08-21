@@ -37,7 +37,7 @@ export function ChangeReservationTableSameDay() {
     const [tables,setTables] = useState([]);
     useEffect(()=>{
         if(date !== null) {
-            Inertia.get(route('Get_Availability_For_Date'), {date: date},{
+            Inertia.get(route('Get_Availability_For_Date'), {date: date, type:reservationType},{
                 only:['availability_for_date'],
                 preserveScroll:true,
                 preserveState:true,

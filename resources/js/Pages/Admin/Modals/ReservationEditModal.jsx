@@ -5,11 +5,10 @@ import {EditReservationModalTitleContext} from "../Contexts/EditReservationModal
 import {ShowEditReservationModalContext} from "../Contexts/ShowEditReservationModalContext";
 import {EditModalContentContext} from "../Contexts/EditModalContentContext";
 import {LeftArrowSVG} from "../../../SVGS/LeftArrowSVG";
-export function ReservationEditModal({Reservation,Status}) {
+export function ReservationEditModal({Reservation,Status, className, isReservationInConflict = false}) {
     const [showEditModal, setShowEditModal] = useState(false);
     const handleShow = () => {
-        // Inertia.get(route('ShowAdminPanel'),{},{preserveScroll:true,preserveState:true,only:['Dinner_Reservations'],onSuccess:()=>{
-        //     }});
+        // isInConflict && setConflictReservation();
         setShowEditModal(true);
     };
     const [content,setContent] = useState('Options');
@@ -19,7 +18,8 @@ export function ReservationEditModal({Reservation,Status}) {
     return (
         <>
             <Button variant={'outline-dark'}
-                    className={'mx-auto px-2 py-2 rounded-3'} onClick={handleShow} disabled={Status === 'Pending' || Status === 'Cancelled'}>
+                     className={'mx-auto px-2 py-2 rounded-3 ' + className} onClick={handleShow}
+                     disabled={!isReservationInConflict ? (Status === 'Pending' || Status === 'Cancelled') : false}>
                 Επεξεργασία
             </Button>
 

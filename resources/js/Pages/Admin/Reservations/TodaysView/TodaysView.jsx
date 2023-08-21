@@ -5,13 +5,11 @@ import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {LargeDevicesTodaysView} from "./LargeDevicesTodaysView";
 import {MobileTodaysView} from "./MobileTodaysView";
 import {Badge} from "react-bootstrap";
-import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
 export function TodaysView() {
     const today = new Date(),
     Reservations = useContext(ReservationsContext),
-    innerWidth = useContext(InnerWidthContext),
-    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
+    innerWidth = useContext(InnerWidthContext);
     const reservations_of_current_date = getReservationsByDate(today,Reservations),
         [reservationsFilter,setReservationsFilter] = useState('All');
 

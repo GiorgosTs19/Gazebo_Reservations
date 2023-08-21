@@ -1,10 +1,8 @@
 import {Stack} from "react-bootstrap";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {getFormattedDate} from "../../../../ExternalJs/Util";
-import {ExpandSVG} from "../../../../SVGS/ExpandSVG";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
-import {CompressSVG} from "../../../../SVGS/CompressSVG";
-import {useState} from "react";
+import {MinimizeSVG} from "../../../../SVGS/MinimizeSVG";
 
 export function LargeWeekDayDisplay({dateToDisplay,reservations,reservationsFilter, largeWeekDayHandling}) {
     const {largeWeekDay,setLargeWeekDay} = largeWeekDayHandling;
@@ -37,7 +35,7 @@ export function LargeWeekDayDisplay({dateToDisplay,reservations,reservationsFilt
     return (
         <>
             <div className={'d-flex flex-row'}>
-            {<CompressSVG rotate={'0deg'} className={'my-auto'} onClick={()=>setLargeWeekDay([null,[]])}></CompressSVG>}
+            {<MinimizeSVG rotate={'0deg'} className={'my-auto'} onClick={()=>setLargeWeekDay([null,[]])}></MinimizeSVG>}
             <h4 className={'m-auto'}>{getFormattedDate(dateToDisplay,'-',1)}</h4>
             {count > 0 && <p className={'my-2 border-bottom py-2 px-4 box_shadow rounded-5 mx-auto user-select-none'} style={{width:'fit-content'}}>
                 {count} {useFilteredReservationsCountText(reservationsFilter,count)}</p>}

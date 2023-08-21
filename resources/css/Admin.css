@@ -24,10 +24,10 @@
 /* Reservations */
 
 
- .tab-pane {
-    height: 90vh;
-    position: relative;
-}
+/* .tab-pane {*/
+/*    height: 90vh;*/
+/*    position: relative;*/
+/*}*/
 /* Shadow utility classes */
 
 .box_shadow {
@@ -208,11 +208,20 @@ abbr[title] {
 /* Width */
 
 /* Height */
+.h-fit-content {
+    height: fit-content;
+}
 .mh-100 {
     max-height: 100%;
 }
 .mh-75 {
     max-height: 75%;
+}
+.h-10 {
+    height: 10%;
+}
+.h-77 {
+    height: 77%;
 }
 .h-85 {
     height: 85%;
@@ -245,6 +254,13 @@ abbr[title] {
     cursor: pointer;
 }
 /* Cursor */
+.nav-link.primary {
+    font-weight: 550;
+}
+
+.nav-link.disabled, .nav-link:disabled {
+    opacity: 50%!important;
+}
 
 @media (max-width: 500px) {
     .vh-100-70px {
@@ -256,11 +272,26 @@ abbr[title] {
     .filters-bar-stack {
         font-size: 13px;
     }
+    .navbar-brand {
+        font-size: 17px;
+    }
 }
 
 @media screen and (min-width: 500px) and (max-width: 768px) {
     .search-view-reservations {
         height: 55% !important;
+    }
+}
+@media screen and (max-width: 500px) {
+    .nav-link {
+        font-size: 23px;
+        border: none !important;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .nav-link {
+        font-size: 20px;
+        border: none !important;
     }
 }
 @media screen and (min-width: 768px) and (max-width: 1200px) {
@@ -292,13 +323,14 @@ abbr[title] {
     top: 50%; /* Adjust as needed */
     left: 50%; /* Adjust as needed */
     transform: translate(-50%, -35%);
-    font-size: 23px;
+    font-size: 17px;
     font-weight: bold;
     color: black;
     /*background-color: rgba(0, 0, 0, 0.5); !* Adjust opacity and color *!*/
     padding: 8px 12px;
     border-radius: 5px;
 }
+
 .image-container {
     position: relative;
     display: inline-block;
@@ -314,6 +346,19 @@ abbr[title] {
     max-height: 900px;
 }
 
+.tab-content, .tab-pane {
+    max-height: 35vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.popover {
+    max-width: 300px;
+}
+
+ul {
+    list-style-type: none;
+}
 /* Font Size */
 
 /* Font Size */

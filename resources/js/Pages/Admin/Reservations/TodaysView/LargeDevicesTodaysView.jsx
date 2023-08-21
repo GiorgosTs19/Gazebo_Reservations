@@ -1,8 +1,7 @@
 import {Col, Row, Stack} from "react-bootstrap";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {ExpandSVG} from "../../../../SVGS/ExpandSVG";
-import {useState} from "react";
-import {ReservationShortest} from "../ReservationViews/ReservationShortest";
+import {useCallback, useState} from "react";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 
 export function LargeDevicesTodaysView({reservations_of_current_date,filter,children}) {
@@ -10,7 +9,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
         [showFilters,setShowFilters] = useState(false);
 
     // Generates the reservations to show for the selected date.
-    const reservationsToShow = ()=> {
+    const reservationsToShow = useCallback(()=> {
         if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
 
@@ -34,9 +33,9 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
                 ))}
             </div>
         ))
-    };
+    },[reservations_of_current_date,reservationsFilter])
     return (
-        <Row className={'pe-3 h-95 m-auto pt-4'}>
+        <Row className={'pe-3 pb-3 h-100 m-auto pt-4'}>
             <Col className={'border border-1 rounded-3 flex-column justify-content-between box_shadow my-3 my-xxl-0 h-100 px-0 '
                 + (reservations_of_current_date.length === 0 ? '' : ' d-flex')} hidden={reservations_of_current_date.length === 0}
                  lg={showFilters ? 2 : 1} >
@@ -60,7 +59,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
             </Col>
             <Col lg={reservations_of_current_date.length === 0 ? 12 : (showFilters ? 10 : 11)} className={'p-0 h-100'}>
                 {children}
-                <Stack className={'px-3 text-center d-flex overflow-y-auto h-88'} >
+                <Stack className={'px-3 text-center d-flex overflow-y-auto h-95'} >
                     {reservationsToShow()}
                 </Stack>
             </Col>

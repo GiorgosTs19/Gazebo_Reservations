@@ -1,7 +1,7 @@
 import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {created_at, getTableAA} from "../../../../ExternalJs/Util";
+import {changeDateFormat, created_at, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
@@ -39,17 +39,20 @@ export function ReservationShort({Reservation,className}) {
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
             <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
             <p className={'my-1 user-select-none'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>
-            <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow user-select-none'}>
-                {status}
-            </Badge>
             <Row className={'p-2'} >
                 <Col className={'border border-start-0 border-top-0 border-bottom-0'}>
+                    <Badge pill bg={'light'} text={'dark'} className={'mb-4 mx-auto box_shadow user-select-none'}>
+                        {changeDateFormat(Reservation.Date,'-')}
+                    </Badge>
                     <h6 className={'mb-3 user-select-none'}>Στοιχεία Πελάτη</h6>
                     <p className={'my-3'}>{Name}</p>
                     <p className={'my-3 info-text'}>{ContactDetails.Email}</p>
                     <p className={'my-3 info-text'}>{ContactDetails.Phone}</p>
                 </Col>
                 <Col className={'d-flex flex-column user-select-none'}>
+                    <Badge pill bg={getStatusColor().split('-')[1]} className={'mb-4 mx-auto box_shadow user-select-none'}>
+                        {status}
+                    </Badge>
                     <h6 className={'mb-2'}>Στοιχεία Κράτησης</h6>
                     <p className={'my-2'}>
                         <span> {Rooms.length > 1 ? 'Δωμάτια : ' : 'Δωμάτιο : '}</span>

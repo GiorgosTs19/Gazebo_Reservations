@@ -2,7 +2,7 @@ import {useContext, useEffect, useState,useRef} from "react";
 import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 import {SelectedDateContext} from "../../Contexts/SelectedDateContext";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
-import {Button, Form, Row, Stack} from "react-bootstrap";
+import {Button, Form, Stack} from "react-bootstrap";
 import {getAvailabilityByDate, getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import Calendar from "react-calendar";
 
@@ -25,26 +25,27 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
         setSelectedDate('');
     },[canSelectRange]);
 
-    const handleDayClick = (date) => {
-        // if(!canSelectRange)
-        //     return;
-        const formattedDate = getFormattedDate(date,'-',1);
-        console.log(formattedDate)
-        if (selectedDate.includes(formattedDate)) {
-            setSelectedDate(selectedDate.filter(d => d !== formattedDate));
-        } else {
-            setSelectedDate([...selectedDate, formattedDate]);
-        }
-    };
+    // const handleDayClick = (date) => {
+    //     // if(!canSelectRange)
+    //     //     return;
+    //     const formattedDate = getFormattedDate(date,'-',1);
+    //     if (selectedDate.includes(formattedDate)) {
+    //         setSelectedDate(selectedDate.filter(d => d !== formattedDate));
+    //     } else {
+    //         setSelectedDate([...selectedDate, formattedDate]);
+    //     }
+    // };
 
     const disabledDueToAvailability = (date) =>{
         const current_date_availability = getAvailabilityByDate(date,contextReservations);
-        console.log(current_date_availability)
         return Array.isArray(current_date_availability) && current_date_availability.length === 0;
     };
-
-    const isDateDisabled = (date) => (date <= yesterday) || (date >= Last_Day)
-        || (canSelectRange && isDateDisabledByAdmin(date,contextReservations)[0])
+    const isDateDisabled = (date) => {
+        if(canSelectRange)
+            return (date <= yesterday) || (date >= Last_Day) || isDateDisabledByAdmin(date, contextReservations)[0] ||
+                (isInTableSettings && Disabled_Days?.includes(getFormattedDate(date, '-', 1)))
+        return (date <= yesterday) || (date >= Last_Day)
+    }
             // || (isInTableSettings && Disabled_Days.includes(getFormattedDate(date,'-',1)) )));
 
     const handleDateChange = (date)=> {
@@ -53,19 +54,16 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
 
     const getTileClassName = ({ activeStartDate, date, view }) => {
         if(date>today && date<Last_Day)
-            return (view === 'month' && isDateDisabledByAdmin(date,contextReservations)[0])
+            return (isDateDisabledByAdmin(date,contextReservations)[0])
                 ? 'disabled-day ' : '';
     }
-
-    useEffect(()=>{
-        console.log(selectedDate);
-    },[selectedDate]);
 
     const isPrevLabelDisabled = () =>{
         if(activeMonth === today.getMonth())
             return null;
         return "‹";
     };
+
     const isNextLabelDisabled = () =>{
         if(activeMonth === Last_Day.getMonth())
             return null;
@@ -87,7 +85,7 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
 
 
     const getTileContent = (day) => {
-        if(isDateDisabledByAdmin(day,contextReservations)[0] || day > Last_Day)
+        if(isDateDisabledByAdmin(day,contextReservations)[0] || day > Last_Day || day < yesterday)
             return null;
         if(getBoolean(day,'Disabled'))
             return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#000000',width:'76%', height:'4px'}}></div>;
@@ -108,7 +106,7 @@ export function CalendarSettings({allowClickOnDisabledDays=true,isInTableSetting
                 ></Form.Switch>
                 <h5>Εύρος Ημερών</h5>
             </Stack>
-            <Button className={'my-2 px-2 py-0 m-auto'} onClick={()=>setSelectedDate(canSelectRange ? [] : [])}
+            <Button className={'my-2 px-2 py-0 m-auto'} onClick={()=>setSelectedDate(canSelectRange ? [] : '')}
                     disabled={canSelectRange ? (selectedDate[0] === '' && selectedDate[1] === '') : selectedDate === ''}>Καθαρισμός επιλογής</Button>
             <h6 className={'mb-3 user-select-none'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
             <Calendar className={'rounded box_shadow m-auto '} tileDisabled={({ date }) => isDateDisabled(date)}

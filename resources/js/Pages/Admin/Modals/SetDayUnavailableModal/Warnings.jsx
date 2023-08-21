@@ -37,13 +37,13 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
     }
     return (
         <>
-            <section className={'text-warning'}>
-                Είστε σίγουροι πως θέλετε να θέσετε {!dateIsRange ? `την ${formatted_date}` : `τις ημέρες από ${formatted_date[0]} έως ${formatted_date[1]}`} ως μή {!dateIsRange ? 'διαθέσιμη' : 'διαθέσιμες'}?
+            <section className={'fw-bold'}>
+                Είστε σίγουροι πως θέλετε να απενεργοποιήσετε {!dateIsRange ? `την ${formatted_date}` : `τις ημέρες από ${formatted_date[0]} έως ${formatted_date[1]}`};
             </section>
-            <section className={'text-warning ' + (reservations.length ? 'border-bottom pb-3 ' : '')}>
-                Δεν θα μπορούν να καταχωρηθούν {reservations.length ? 'άλλες' : ''} {!dateIsRange ?
-                'κρατήσεις για αυτήν την μέρα, μέχρι να την ξανά ορίσετε ώς διαθέσιμη.' :
-                'κρατήσεις για αυτές τις μέρες, μέχρι να τις ξανά ορίσετε διαθέσιμες.'}
+            <section className={(reservations.length > 0 ? 'border-bottom pb-3 ' : '')}>
+                Δεν θα μπορούν να καταχωρηθούν {reservations.length > 0 ? 'άλλες' : ''} {!dateIsRange ?
+                'κρατήσεις για αυτήν την μέρα, μέχρι να την ξανά ενεργοποιήσετε.' :
+                'κρατήσεις για αυτές τις μέρες, μέχρι να τις ξανά ενεργοποιήσετε.'}
             </section>
             {reservations.length > 0 && <section className={'p-2 my-1'}>
                 <p>
@@ -73,9 +73,6 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
                     </Form>
                 </section>
                 {getWarningMessage()}
-            </section>}
-            {!reservations.length && !dateIsRange && <section className={'my-3'}>
-                <h6>Δεν υπάρχει κάποια κράτηση για αυτήν την ημέρα.</h6>
             </section>}
             {dateIsRange && <section>
                 {dateRangeWarningMessage}

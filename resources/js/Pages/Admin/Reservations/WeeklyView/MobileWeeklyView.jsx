@@ -1,8 +1,6 @@
 import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
-import {Accordion, Badge, Button, Col, ListGroup, Row} from "react-bootstrap";
-import {useState} from "react";
-import {useContext, useEffect} from "react";
-import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {Accordion, Badge, Col, ListGroup, Row} from "react-bootstrap";
+import {useContext, useCallback} from "react";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
@@ -42,18 +40,9 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             }
             ),filteredReservations.length]
         };
-    const [shouldShowDays,setShouldShowDays] = useState(true),
-    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-    handleBackToDays = () => {
-        setShouldShowDays(true);
-        setActiveReservation(null);
-    };
-    useEffect(()=>{
-        if(activeReservation !== null)
-            setShouldShowDays(false);
-    },[activeReservation]);
 
-    const renderWeekDays = () => {
+    // Render days of current week. Will only be called when the currentDate changes or the filters
+    const renderWeekDays = useCallback(() => {
         return Array(7).fill(null).map((_,index)=>{
             const day = new Date(currentDate.getTime());
             const today = new Date();
@@ -63,8 +52,7 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
             const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,Reservations);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
-                <Accordion.Header>{getFormattedDate(day,'/',3)} ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )
-                    {isDateDisabled &&   <Badge bg="danger" className={reservationsFilter === 'All' ? 'ms-auto' : 'mx-1'}><UnavailableSVG className={'px-0'} width={13} height={15}/></Badge>}</Accordion.Header>
+                <Accordion.Header><span className={' me-1 ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
                 <Accordion.Body>
                     <ListGroup horizontal={false} gap={5} className={'py-1'}>
                         {reservations}
@@ -72,7 +60,8 @@ export function MobileWeeklyView({currentDate, filter, children}) {
                 </Accordion.Body>
             </Accordion.Item>;
         })
-    };
+    },[currentDate,reservationsFilter,Reservations]);
+
     return (
         <div className={'text-center p-0 overflow-y-auto overflow-x-hidden h-100 d-flex flex-column'}>
             <div className={'d-flex flex-column sticky-top bg-white'}>
@@ -85,7 +74,7 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             </div>
             <Row>
                 <Col lg={12} className={'p-0'}>
-                        <Badge bg="danger" className={'m-2'}><UnavailableSVG className={'px-0'} width={13} height={15}/></Badge><span className={''}>: Απενεργοποιημένη Μέρα</span>
+                        <p><span className={'disabled-day'}>Ημέρα </span>: Απενεργοποιημένη Μέρα</p>
                     <Accordion className="week-days p-0 mx-3 overflow-auto" gap={2}>
                         {renderWeekDays()}
                     </Accordion>

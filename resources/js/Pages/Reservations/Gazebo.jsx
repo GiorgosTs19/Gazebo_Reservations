@@ -81,6 +81,7 @@ export default function Gazebo(props) {
             return 'hidden'
         return 'auto';
     };
+
     useEffect(() => {
         const handleResize = () => {
             setInnerWidth(window.innerWidth);
@@ -95,6 +96,7 @@ export default function Gazebo(props) {
     useEffect(()=>{
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
     },[bookingDetails.number_of_people,bookingDetails.date]);
+
     useEffect(()=>{
         const tl = gsap.timeline();
         switch (progress) {
@@ -108,6 +110,7 @@ export default function Gazebo(props) {
             }
         }
     },[progress]);
+
     return (
         <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
             <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>

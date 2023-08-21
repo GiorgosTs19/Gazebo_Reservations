@@ -9,7 +9,7 @@ export function MobileSettings({children}) {
     const handleSelect = (selectedIndex) => {
         setIndex(selectedIndex);
     };
-    console.log(children)
+
     return (
         <Carousel variant={'dark'} className={'px-2 text-center h-100'} slide={false} activeIndex={index}
                   onSelect={handleSelect} interval={null}>

@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {Badge, Button, Col, Row} from "react-bootstrap";
+import {Badge, Button, Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 import {changeDateFormat, created_at, getMenuName, getTableAA} from "../../../../ExternalJs/Util";
 import {ReservationEditModal} from "../../Modals/ReservationEditModal";
 import {MenuContext} from "../../../../Contexts/MenuContext";
@@ -10,6 +10,8 @@ import {handleChangeReservationStatus} from "../../../../Inertia_Requests/Admin_
 import {ViewContext} from "../../../../Contexts/ViewContext";
 import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import useGetStatusColor from "../../../../CustomHooks/useGetStatusColor";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
 
 export function DinnerReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
@@ -29,21 +31,9 @@ export function DinnerReservationLong() {
     hasChanges = Placed_At !== Updated_At,
     MenuCatalog = useContext(MenuContext),
     InnerWidth = useContext(InnerWidthContext);
-    const getStatusColor = () =>{
-        switch (activeReservation.Status) {
-            case 'Cancelled' : {
-                return 'text-danger';
-            }
-            case 'Confirmed' : {
-                return 'text-success';
-            }
-            default : {
-                return 'text-warning'
-            }
-        }
-    };
+    const [isConflicted,conflictType,conflictMessage] = useCheckConflict(activeReservation.id)
     const status = useGetReservationStatusText(activeReservation.Status);
-
+    console.log(conflictMessage)
     return (
         <div className={'text-center p-3 mx-auto'}>
             <Row className={''}>
@@ -53,12 +43,12 @@ export function DinnerReservationLong() {
                             {InnerWidth < 992 &&
                                 <LeftArrowSVG className={'mb-2'} onClick={() => setActiveReservation(null)}/>}
                             <Col lg={12}>
-                                <ReservationEditModal Reservation={activeReservation} Status={activeReservation.Status}></ReservationEditModal>
+                                <ReservationEditModal Reservation={activeReservation} Status={activeReservation.Status} isReservationInConflict={isConflicted}></ReservationEditModal>
                             </Col>
                             {
                                 activeReservation.Status === 'Pending' &&
                                 <Col className={'d-flex flex-row my-3 mx-auto'}>
-                                    <Button className={'m-auto '} variant={'outline-success'}
+                                    <Button className={'m-auto '} variant={'outline-success'} disabled={isConflicted}
                                             onClick={()=>handleChangeReservationStatus('Confirmed',{activeReservation,setActiveReservation})}>
                                         Επιβεβαίωση
                                     </Button>
@@ -75,10 +65,12 @@ export function DinnerReservationLong() {
                 </Col>
                 <Col className={'d-flex flex-column my-1 my-lg-3 my-xxl-0'} xxl={5}>
                     <h6 className={'mx-auto user-select-none'}>Κατάσταση</h6>
-                    <Badge pill bg={getStatusColor().split('-')[1]} className={'m-auto p-2 box_shadow user-select-none'}>
+                    <Badge pill bg={useGetStatusColor(activeReservation.Status)} className={'m-auto p-2 box_shadow user-select-none'}>
                         {status}
                     </Badge>
-                    {activeReservation.Status === 'Pending' && <h6 className={'text-warning my-3 my-xxl-0 user-select-none'}>Η κράτηση δεν έχει επιβεβαιωθεί ακόμη, δεν επιτρέπονται αλλαγές.</h6>}
+                    {!isConflicted ? (activeReservation.Status === 'Pending' && <h6 className={'text-warning my-3 my-xxl-0 user-select-none'}>
+                        Η κράτηση δεν έχει επιβεβαιωθεί ακόμη, δεν επιτρέπονται αλλαγές.
+                    </h6>) : <h6 className={'text-warning my-3 my-xxl-3 user-select-none'}>{conflictMessage}</h6>}
                 </Col>
             </Row>
             <Row className={'my-3 my-lg-4 mt-xxl-2'}>

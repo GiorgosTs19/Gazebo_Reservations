@@ -67,7 +67,7 @@ class Reservation extends Model {
     }
     public function scopeDate($query,$date_start, $date_end = null) {
         if(!$date_end)
-            return $query->where('Date',$date_start);
+            return $query->whereDate('Date',$date_start);
 
         return $query->whereBetween('Date',[$date_start,$date_end]);
     }
@@ -81,6 +81,11 @@ class Reservation extends Model {
         return $query->orderBy('Date',$direction);
     }
     public function scopeType($query,$type) {
+        if($type === 'All')
+            return $query;
         return $query->where('Type',$type);
+    }
+    public function scopeAfterToday($query) {
+        return $query->whereDate('Date','>=',date("Y-m-d"));
     }
 }

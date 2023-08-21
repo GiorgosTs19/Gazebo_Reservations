@@ -4,16 +4,13 @@ import {ViewSelectionMenu} from "./Settings/ViewSelectionMenu";
 import {useState} from "react";
 import {MonthlyView} from "./MonthlyView/MonthlyView";
 import {ViewContext} from "../../../Contexts/ViewContext";
-import {useContext} from "react";
+import {useContext,useEffect} from "react";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 import {DinnerReservationLong} from "./ReservationViews/DinnerReservationLong";
-import {useEffect} from "react";
 import {TodaysView} from "./TodaysView/TodaysView";
-import {ReservationTypeSelectionMenu} from "./Settings/ReservationTypeSelectionMenu";
 import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
-import {DatabaseSettingsContext} from "../Contexts/DatabaseSettingsContext";
 import {SearchView} from "./SearchView/SearchView";
 import {getReservationsByDate} from "../../../ExternalJs/Util";
 
@@ -41,7 +38,6 @@ export function ReservationsPanel() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    console.log()
     useEffect(()=>{
         setActiveReservation(null);
     },[reservationType]);

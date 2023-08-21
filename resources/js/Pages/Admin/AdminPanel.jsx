@@ -20,6 +20,7 @@ import {ActiveReservationContext} from "./Contexts/ActiveReservationContext";
 import {DatabaseSettingsContext} from "./Contexts/DatabaseSettingsContext";
 import {ReservationsContext} from "../../Contexts/ReservationsContext";
 import {MenuEditModeContext} from "./Contexts/MenuEditModeContext";
+import {ConflictsContext} from "./Contexts/ConflictsContext";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -37,7 +38,8 @@ export default function AdminPanel(props) {
     const [activeTabKey, setActiveTabKey] = useState(ActiveTab),
     [activeMenusTabKey, setActiveMenusTabKey] = useState('Existing');
     const [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false}),
-    [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Show:false,Key:''});
+    [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Show:false,Key:''}),
+    Conflicts = props.Conflicts;
     const renderContent = () => {
         switch (activeTabKey) {
             case 'Settings' : {
@@ -58,6 +60,8 @@ export default function AdminPanel(props) {
                 setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Show:true,Key:k});
                 return;
             }
+        if(k === 'Menus')
+            setActiveMenusTabKey('Existing');
         setActiveTabKey(k);
     }
 
@@ -69,21 +73,24 @@ export default function AdminPanel(props) {
                 return Bed_Reservations;
         }
     };
+    console.log(props)
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,
-    typeAndViewSelectionPanel = <Row className={'p-0 w-100'}>
-        <Col lg={3} className={'d-flex box_shadow rounded-4 border flex-column my-3 my-lg-0 ' + (isMobile ? ' border-bottom ' :
+    typeAndViewSelectionPanel = <Row className={'p-0 w-100 d-flex flex-row'}>
+        <Col lg={4} className={'d-flex box_shadow rounded-4 border flex-column my-3 my-lg-0 ' + (isMobile ? ' border-bottom ' :
             ' border-end px-3')}>
-            <ReservationTypeSelectionMenu></ReservationTypeSelectionMenu>
+            <ReservationTypeSelectionMenu activeTabKey={activeTabKey}></ReservationTypeSelectionMenu>
         </Col>
-        <Col lg={9} className={'d-flex flex-column mt-2 mt-lg-0 text-center'}>
-            <div className={'box_shadow px-0 px-xl-4 rounded-4 py-2 border my-auto'}>
+        <Col lg={8} className={'d-flex flex-column mt-2 mt-lg-0 text-center'}>
+            <div className={'box_shadow px-2 px-lg-0 px-xl-4 rounded-4 py-2 border my-auto mx-auto mx-md-0 ms-lg-5'}>
                 {activeTabKey === 'Reservations' && <ViewSelectionMenu></ViewSelectionMenu>}
-                {activeTabKey === 'Menus' &&  activeMenusTabKey !== 'Edit' &&  <h4 className={'my-3'}>Διαχείριση Menu</h4>}
+                {activeTabKey === 'Menus' && activeMenusTabKey !== 'Edit' &&
+                    <h4 className={'my-3'}>Διαχείριση Menu {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
                 {activeTabKey === 'Settings' &&
                     <h4 className={'my-3'}>Ρυθμίσεις {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
-                {activeMenusTabKey === 'Edit' && activeTabKey === 'Menus' && <h4 className={'my-3'}>Επεξεργασία {editingMenu.Name}</h4>}
+                {activeMenusTabKey === 'Edit' && activeTabKey === 'Menus' &&
+                    <h4 className={'my-3'}>Επεξεργασία {editingMenu.Name}</h4>}
             </div>
         </Col>
     </Row>;
@@ -99,6 +106,7 @@ export default function AdminPanel(props) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
     return (
         <AuthenticatedUserContext.Provider value={User}>
             <DatabaseSettingsContext.Provider value={{settings : reservationType === 'Dinner' ? Dinner_Settings : Bed_Settings}}>
@@ -110,26 +118,29 @@ export default function AdminPanel(props) {
                                     <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
                                         <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
                                             <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>
-                                                <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}>
-                                                    {innerWidth < 992 && typeAndViewSelectionPanel}
-                                                </NavigationBar>
-                                                <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                                    <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
-                                                        <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
-                                                            {innerWidth > 992 &&
-                                                                <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-4'}>
-                                                                    {typeAndViewSelectionPanel}
-                                                                </Card.Header>}
-                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-75' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
-                                                                <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-                                                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
-                                                                        {renderContent()}
-                                                                    </ShouldShowUnsavedChangesModalContext.Provider>
-                                                                </PendingUnsavedChangesContext.Provider>
-                                                            </Card.Body>
-                                                        </MenuEditModeContext.Provider>
-                                                    </Card>
-                                                </div>
+                                                <ConflictsContext.Provider value={Conflicts}>
+                                                    <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
+                                                    conflicts={props.Conflicts}>
+                                                        {innerWidth < 992 && typeAndViewSelectionPanel}
+                                                    </NavigationBar>
+                                                    <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
+                                                        <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
+                                                            <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
+                                                                {innerWidth > 992 &&
+                                                                    <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
+                                                                        {typeAndViewSelectionPanel}
+                                                                    </Card.Header>}
+                                                                <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                                    <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
+                                                                        <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
+                                                                            {renderContent()}
+                                                                        </ShouldShowUnsavedChangesModalContext.Provider>
+                                                                    </PendingUnsavedChangesContext.Provider>
+                                                                </Card.Body>
+                                                            </MenuEditModeContext.Provider>
+                                                        </Card>
+                                                    </div>
+                                                </ConflictsContext.Provider>
                                             </ActiveReservationContext.Provider>
                                         </ViewContext.Provider>
                                     </ActiveReservationTypeContext.Provider>

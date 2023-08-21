@@ -9,19 +9,21 @@ import {WeeklyViewSVG} from "../../../../SVGS/WeeklyViewSVG";
 import {MonthlyViewSVG} from "../../../../SVGS/MonthlyViewSVG";
 import {SearchViewSVG} from "../../../../SVGS/SearchViewSVG";
 import {getFormattedDate} from "../../../../ExternalJs/Util";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 
 export function ViewSelectionMenu() {
     const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     handleSetActiveView = (view) =>{
         setActiveReservationsView(view);
         setActiveReservation(null);
     }
     const getReservationViewText = () => {
         switch (activeReservationsView) {
-            case 'Today' : return `Σημερινές Κρατήσεις`;
-            case 'Weekly' : return `Κρατήσεις ανά εβδομάδα`;
-            case 'Monthly' : return 'Κρατήσεις ανά μήνα';
+            case 'Today' : return `Σημερινές Κρατήσεις ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
+            case 'Weekly' : return `Κρατήσεις ανά εβδομάδα ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
+            case 'Monthly' : return `Κρατήσεις ανά μήνα ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
             case 'Search' : return 'Αναζήτηση Κρατήσεων'
         }
     };
@@ -42,7 +44,7 @@ export function ViewSelectionMenu() {
 
     return (
         <>
-            <h5 className={'user-select-none mb-4 px-2 px-md-0'}>{getReservationViewText()}</h5>
+            <h5 className={'user-select-none mb-2 px-2 px-md-0'}>{getReservationViewText()}</h5>
             <ListGroup horizontal className={'p-0 my-auto'}>
                 {TodayViewIcon}
                 {WeeklyViewIcon}

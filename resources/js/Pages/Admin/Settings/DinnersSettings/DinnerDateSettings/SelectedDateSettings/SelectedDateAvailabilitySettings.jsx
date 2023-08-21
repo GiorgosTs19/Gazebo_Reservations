@@ -1,5 +1,5 @@
 import {SetDayUnavailableModal} from "../../../../Modals/SetDayUnavailableModal/SetDayUnavailableModal";
-import {Badge, Button} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {getFormattedDate} from "../../../../../../ExternalJs/Util";
 import {Inertia} from "@inertiajs/inertia";
 import {useContext} from "react";
@@ -18,7 +18,6 @@ export function SelectedDateAvailabilitySettings({isDateDisabled,selectedDate}) 
             {!isDateDisabled &&
                 <SetDayUnavailableModal current_date_availability={isDateDisabled} selectedDate={selectedDate}>
                 </SetDayUnavailableModal>}
-            {isDateDisabled  && !dateIsRange &&  <Badge bg="danger" className={'mx-auto my-1'}>Απενεργοποιημένη</Badge>}
             {isDateDisabled &&
                 <Button variant={'outline-success'} className={'p-2 my-2'}
                         disabled={!isDateDisabled}

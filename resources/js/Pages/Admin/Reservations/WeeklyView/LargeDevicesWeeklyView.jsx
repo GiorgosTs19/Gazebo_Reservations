@@ -1,14 +1,15 @@
-import {getFormattedDate, getReservationsByDate} from "../../../../ExternalJs/Util";
+import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {Button, Col, ListGroup, Row, Stack} from "react-bootstrap";
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
-import {useContext, useState} from "react";
+import {useCallback, useContext, useState} from "react";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {ExpandSVG} from "../../../../SVGS/ExpandSVG";
 import {LargeWeekDayDisplay} from "./LargeWeekDayDisplay";
+import {MaximizeSVG} from "../../../../SVGS/MaximizeSVG";
 
-export function LargeDevicesWeeklyView({currentDate, direction, filter, children}) {
+export function LargeDevicesWeeklyView({currentDate, direction, filter, navigateWeeks, isToday, isLastWeek}) {
     const Reservations = useContext(ReservationsContext),
     [showFilters,setShowFilters] = useState(false),
     {reservationsFilter, setReservationsFilter} = filter,
@@ -38,7 +39,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, children
     };
 
     // Generates the days of the active week and counts the total amount of reservations for that week.
-    const generateWeekDays = () => {
+    const generateWeekDays = useCallback(() => {
         let totalWeekReservations = 0;
         return [Array(7).fill(null).map((_,index)=>{
             const day = new Date(currentDate.getTime());
@@ -48,33 +49,41 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, children
             totalWeekReservations += totalReservations;
             return <ListGroup.Item className={'my-2 d-flex flex-column box_shadow '} key={index}>
                 <div className={'d-flex flex-row'}>
-                    {reservationsCount >= 3 && <ExpandSVG rotate={'0deg'} className={'my-auto'} onClick={()=>setLargeWeekDay([day,unlistedReservations])}></ExpandSVG>}
+                    {reservationsCount >= 3 && <MaximizeSVG rotate={'0deg'} className={'my-auto'} onClick={()=>setLargeWeekDay([day,unlistedReservations])}></MaximizeSVG>}
                     {reservationsCount > 0 && <p className={'my-2 border-bottom py-2 px-4 box_shadow rounded-5 mx-auto user-select-none'} style={{width:'fit-content'}}>
                         {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount)}</p>}
                 </div>
-                    <Stack direction={'horizontal'} key={'Stack'} className={''}>
-                        <h3 className={'me-1 border-end pe-3 user-select-none'}>
-                            {getFormattedDate(day,'/',3)}
-                        </h3>
-                        <ListGroup horizontal={'xl'} gap={5} className={'p-1 scrollable-x-not-vw mt-2 '} style={{overflowX:'auto'}} key={'List'}>
-                            {reservations}
-                        </ListGroup>
-                    </Stack>
-                </ListGroup.Item>
-            ;
+                <Stack direction={'horizontal'} key={'Stack'} className={''}>
+                    <h3 className={'me-1 border-end pe-3 user-select-none ' + (isDateDisabledByAdmin(day,Reservations)[0] ? 'disabled-day' : '')}>
+                        {getFormattedDate(day,'/',3)}
+                    </h3>
+                    <ListGroup horizontal={'xl'} gap={5} className={'p-1 scrollable-x-not-vw mt-2 '} style={{overflowX:'auto'}} key={'List'}>
+                        {reservations}
+                    </ListGroup>
+                </Stack>
+            </ListGroup.Item>
+                ;
         }),totalWeekReservations]
-    };
+    },[currentDate,reservationsFilter,Reservations])
     // Get the days of the active week and the total number of reservations for that week.
     const [weekDays,totalWeekReservations] = generateWeekDays();
     // Buttons to navigate to the previous and next week.
-    const [prevWeekButton,nextWeekButton] = children;
+    const {goToPreviousWeek, goToNextWeek} = navigateWeeks;
+    const handlePrevWeek = () => {
+        goToPreviousWeek();
+        setLargeWeekDay([null,[]]);
+    }
+    const handleNextWeek = () => {
+        goToNextWeek();
+        setLargeWeekDay([null,[]]);
+    }
 
     return (
             <div className={'text-center p-0 h-90 position-relative'} >
                 <div className="navigation my-2 d-flex flex-row">
-                    {prevWeekButton}
+                    <Button onClick={handlePrevWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
                     <h6 className={'m-auto user-select-none'}>Κρατήσεις Εβδομάδας : {totalWeekReservations}</h6>
-                    {nextWeekButton}
+                    <Button onClick={handleNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
                 </div>
                 <Row className={'h-100'}>
                     <Col lg={showFilters ? 2 : 1} className={'border border-1 rounded-3 d-flex flex-column justify-content-between box_shadow h-100'}>

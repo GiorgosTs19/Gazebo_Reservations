@@ -1,4 +1,4 @@
-import {useContext, useRef} from "react";
+import {useCallback, useContext, useRef} from "react";
 import {useState} from "react";
 import {getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
@@ -12,26 +12,26 @@ import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
-        Settings = useContext(DatabaseSettingsContext),
+        {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+        Reservations = useContext(ReservationsContext),
+        innerWidth = useContext(InnerWidthContext),
+        Settings = useContext(DatabaseSettingsContext).settings,
         CalendarRef = useRef(null),
         today = new Date(),
         yesterday = new Date(today),
         tomorrow = new Date(today),
         Last_Day = new Date(Settings.Last_Day),
-        Reservations = useContext(ReservationsContext),
-        innerWidth = useContext(InnerWidthContext),
         [reservationsFilter,setReservationsFilter] = useState('All'),
         [activeMonth,setActiveMonth] = useState(today.getMonth());
-        yesterday.setDate(today.getDate() - 1)
-        tomorrow.setDate(tomorrow.getDate() + 1)
+        yesterday.setDate(today.getDate() - 1);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
         // Checks if the date passed in the function has to be disabled on the calendar, either because this day has passed,
         // or is out of the reservation date boundaries set by the administrators.
         const isDateDisabled = (date,view,activeStartDate) => {
-            console.log()
             if(view === 'month')
                 return (date < yesterday) || (date > Last_Day)
         },
-        {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         // Handles the change of date on the calendar.
         handleDateChange = (date)=> {
                 setSelectedDate(date);
@@ -73,15 +73,19 @@ export function MonthlyView() {
         return "‹";
     };
 
+    // Will always try to show as many reservations per line, to save space.
+    const reservationsToRender = (activeReservation !== null) ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 800 ? 2 : 1));
     // Returns whether the toNextMonth button should be disabled ( True when viewing the last month,
     // based on the reservation date boundaries set by the administrators )
+
     const isNextLabelDisabled = () => {
         if(activeMonth === Last_Day.getMonth())
             return null;
         return "›";
     };
+
     // Renders the reservations to show for the selected date.
-    const reservationsToShow = ()=> {
+    const reservationsToShow = useCallback(()=> {
         if(selectedDate === '')
             return <h4 className={'text-muted my-auto user-select-none'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
@@ -97,8 +101,6 @@ export function MonthlyView() {
         if(filteredReservations.length === 0)
             return <h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
 
-        // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = activeReservation !== null ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 800 ? 2 : 1));
         const reservationChunks = [];
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
             reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
@@ -106,11 +108,11 @@ export function MonthlyView() {
         return reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
                 {chunk.map(reservation => (
-                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-3 my-5'} />
+                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-2 my-4'} />
                 ))}
             </div>
         ))
-    };
+    },[selectedDate,reservationsFilter,reservationsToRender,Reservations]);
 
     const reservations_of_current_date = selectedDate ?  getReservationsByDate(selectedDate,Reservations) : [];
     const [isDateDisabledByA,existingReservationsAllowed] = selectedDate ? isDateDisabledByAdmin(selectedDate,Reservations) : [false,true],
@@ -118,8 +120,7 @@ export function MonthlyView() {
 
     const getTileClassName = ({ activeStartDate, date, view }) => {
         if(date>today && date<Last_Day)
-            return (view === 'month' && isDateDisabledByAdmin(date,Reservations)[0])
-                ? 'disabled-day' : '';
+            return isDateDisabledByAdmin(date,Reservations)[0] ? ' disabled-day' : '';
     }
     const CalendarToShow = <>
         <h6 className={'mb-4 mb-lg-0 user-select-none'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
@@ -139,12 +140,11 @@ export function MonthlyView() {
                 switch (existingReservationsAllowed) {
                     case 1 : {
                         return <div>
-                                    <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>
+                                    <h5 className={'text-warning'}>Έχετε απενεργοποιήσει αυτή τη μέρα!</h5>
                                     <h6  className={'text-warning'}>
                                         Οι παρακάτω κρατήσεις μπορούν να πραγματοποιηθούν.
                                     </h6>
                                 </div>
-
                     }
 
                     case 0 : {
@@ -154,11 +154,10 @@ export function MonthlyView() {
                                         ΠΡΕΠΕΙ να γίνει μεταφορά τους σε άλλη μέρα.
                                     </h6>
                                 </div>
-
                     }
                 }
             }
-            return <h5 className={'text-warning'}>Έχετε θέσει την ημέρα ως μη διαθέσιμη!</h5>;
+            return <h5 className={'text-warning'}>Έχετε απενεργοποιήσει αυτή τη μέρα!</h5>;
         }
     };
 

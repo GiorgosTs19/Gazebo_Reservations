@@ -8,24 +8,21 @@ import {LocalisedSettingsContext} from "../../../Contexts/LocalisedSettingsConte
 export function ArrivalMessageSettings() {
     const {settings,dispatchSetting} = useContext(LocalisedSettingsContext),
         {localSettings,dispatchLocalSetting} = useContext(LocalSettingsContext),
-        {errors,setErrors} = useContext(ErrorsContext),
-        [useCustomMessage,setUseCustomMessage] = useState(false);
+        {errors,setErrors} = useContext(ErrorsContext);
 
     const handleChangeArrivalMessage = (e) => {
         const Message = e.target.value;
         dispatchSetting({type:'Change_Arrival_Message',value:Message});
     };
-    const handleChangeUseCustomMessage = (e) => {
-        const isChecked = !e.target.checked;
-        setUseCustomMessage(isChecked);
-    };
 
     useEffect(()=>{
-        if(useCustomMessage)
-            return;
-        let Message = '';
-        if(!localSettings.Strict_Arrival_Time)
+        let Message;
+
+        if(!localSettings.Strict_Arrival_Time) {
+            if(settings.Arrival_End === '')
+                return;
             Message = 'Please note that this reservation requires an arrival time between ' +  settings.Arrival_Start + ' and ' + (settings.Arrival_End ?? '') + '.';
+        }
         else
             Message = 'Please note that this reservation requires an arrival time of ' + settings.Arrival_Start + '.';
         return dispatchSetting({type:'Change_Arrival_Message',value:Message});

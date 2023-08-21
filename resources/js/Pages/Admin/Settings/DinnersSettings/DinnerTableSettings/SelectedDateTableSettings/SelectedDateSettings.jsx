@@ -4,7 +4,7 @@ import {getFormattedDate, isDateDisabledByAdmin
 } from "../../../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../../../Contexts/ReservationsContext";
 import {Col, Row} from "react-bootstrap";
-import {SelectedDateTableSettings} from "./SelectedDateTableSettings";
+
 
 export function SelectedDateSettings({Reservations}) {
     const {selectedDate, setSelectedDate}= useContext(SelectedDateContext),
