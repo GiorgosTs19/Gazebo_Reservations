@@ -26,6 +26,7 @@ class ReservationResource extends JsonResource {
             'Rooms' => $this->Rooms,
             'Attendees' => $this->Attendees,
             'Menus' => MenuSelectionResource::collection($this->Menus),
+            'Status' => $this->Status,
             'Type' => $this->Type,
             'Placed_At' => $this->created_at,
             'Updated_At' => $this->updated_at

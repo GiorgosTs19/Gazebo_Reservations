@@ -10,20 +10,21 @@ export function AttendeesNamesFields({requirementsCheck}) {
         updatedAttendees[index] = e.target.value;
         setBookingDetails({...bookingDetails,attendees:updatedAttendees});
     }
+    console.log(bookingDetails)
     return (
         <>
             {
-                bookingDetails.email.length>0 && bookingDetails.phone_number.length>0 && bookingDetails.number_of_people > 1 && requirementsCheck()
+                bookingDetails.email.length > 0 && bookingDetails.phone_number.length>0 && bookingDetails.number_of_people > 1 && requirementsCheck()
                 &&
                 <>
-                    <p className={'text-secondary'}>Please provide the first {bookingDetails.attendees.length > 1 ? 'names ' : 'name '}
-                        of the additional {bookingDetails.attendees.length > 1 ? 'attendees ' : 'attendee '} accompanying you.</p>
+                    <p >Please provide the first {bookingDetails.number_of_people > 2 ? 'names ' : 'name '}
+                        of the additional {bookingDetails.number_of_people > 2 ? 'attendees ' : 'attendee '} accompanying you.</p>
                     <InputGroup className="mb-3">
                         {/*Return inputs for attendee's first names based on the number of people variables */}
                         {Array.from({ length:bookingDetails.number_of_people-1 }).map((_, index)=>{
                             let number = index +2;
                             return <Form.Control key={'Attendee ' + number} type="text" placeholder={"Name " + number}
-                                                 size={"sm"} className={'mb-2 text-center'} value={bookingDetails.attendees[index] || ''}
+                                                 size={"sm"} className={'mb-2 text-center '} value={bookingDetails.attendees[index] || ''}
                                                  onChange={(e)=>handleAttendeeNameChange(e,index)}/>
                         })}
                     </InputGroup>

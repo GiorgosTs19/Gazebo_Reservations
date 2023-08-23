@@ -2,6 +2,7 @@ import {Button, Col, Form, Image, InputGroup, ListGroup, Row, Stack} from "react
 import {useRef} from "react";
 import {useEffect} from "react";
 import {useState} from "react";
+import {RemoveSVG} from "../../../../SVGS/RemoveSVG";
 
 export function MenuItemsList({menuItemsState,checkRequirements,menu,action}) {
     const stackRef = useRef(null),
@@ -140,9 +141,7 @@ export function MenuItemsList({menuItemsState,checkRequirements,menu,action}) {
                                         </div>
                                         <Form.Control.Feedback type="invalid">Το πεδίο είναι υποχρεωτικό.</Form.Control.Feedback>
                                     </InputGroup>
-                                    <Button variant={'danger'} style={{height:'fit-content'}} className={'my-auto mx-auto mx-lg-0'} onClick={() => handleDeleteMenuItem(index)}>
-                                        X
-                                    </Button>
+                                    <RemoveSVG className={'m-auto'} height={35} width={35} onClick={() => handleDeleteMenuItem(index)}/>
                                 </Stack>
                             </Col>
                         </Row>

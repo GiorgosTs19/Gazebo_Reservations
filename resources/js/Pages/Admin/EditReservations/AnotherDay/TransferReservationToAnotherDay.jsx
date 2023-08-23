@@ -1,24 +1,34 @@
 import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {ChangeReservationDateCalendar} from "./ChangeReservationDateCalendar";
-import {useEffect, useRef, useState} from "react";
-import {changeDateFormat, getTableAA} from "../../../../ExternalJs/Util";
-import {useContext} from "react";
+import {useEffect, useRef, useState,useContext} from "react";
+import {changeDateFormat, getFormattedDate, getTableAA,} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {EditReservationModalTitleContext} from "../../Contexts/EditReservationModalTitleContext";
 import {Inertia} from "@inertiajs/inertia";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {ShowEditReservationModalContext} from "../../Contexts/ShowEditReservationModalContext";
+import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
+import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 
-export function TransferReservationToAnotherDay() {
+export function TransferReservationToAnotherDay({willResolveConflict = false}) {
     const [selectedDateAvailability,setSelectedDateAvailability] = useState(null),
-    Gazebos = useContext(GazebosContext);
-    const date = selectedDateAvailability ? selectedDateAvailability[0] : null,
-        tables = selectedDateAvailability ? selectedDateAvailability[1] : [];
+    Gazebos = useContext(GazebosContext),
+    {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
+    // A boolean to indicate if all tables will be shown in the list, or just the ones that can actually be selected,
+    // basically the available ones.
+    const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
+    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
+    const date = selectedDateAvailability ? selectedDateAvailability[0] : null;
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
-    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
-    {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext);
+    const {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext),
+    {content,setContent} = useContext(EditModalContentContext);
+    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
+    // Handles the selection of a table from the list, as well as the scrolling to the appropriate height
+    // of the list, to match the currently selected table
     const handleSelectTable = (table,index) => {
         if(table.isAvailable)
             setSelectedTable(table.id);
@@ -33,32 +43,41 @@ export function TransferReservationToAnotherDay() {
             }
         }
     };
-    const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
-    const handleShowOnlyAvailableTablesChange = (e) => {
+
+    const handleShowOnlyAvailableTablesChange = () => {
         setShowOnlyAvailableTables(!showOnlyAvailableTables);
     };
-    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
-    const sameTable = selectedDateAvailability ? tables.find(table =>{
+
+    // Gets the reservation's current table, no matter the availability of it on the current date.
+    const sameTable = selectedDateAvailability ? selectedDateAvailability[1].find(table =>{
         return table.id === activeReservation.Gazebo;
     }) : null;
-    const AvailableTables = selectedDateAvailability[1].filter((table)=>{
-        return table.isAvailable === true;
-    });
-    const sameTableIsAvailable = sameTable ? sameTable.isAvailable : ''
-    useEffect(()=> {
-        if(AvailableTables.length === 1){
-            return handleSelectTable(AvailableTables[0],tables.indexOf(AvailableTables[0]));
-        }
-        if(selectedDateAvailability) {
-            if(sameTableIsAvailable)
-                return handleSelectTable(sameTable.id,tables.indexOf(tables.find((table)=>{return table.id === sameTable.id})))
-            return setSelectedTable('');
-        }
-    },[selectedDateAvailability]);
-    // isTableSameAsReservationsCurrent;
 
+    // Filters out only the available tables out of all in the list.
+    const AvailableTables = selectedDateAvailability ? selectedDateAvailability[1].filter((table)=>{
+        return table.isAvailable === true;
+    }) : [];
+
+    // Checks if the same table as the reservation's current is available.
+    const sameTableIsAvailable = sameTable ? sameTable.isAvailable : '';
+    // It runs basically every the date changes, thus the availability changes. It checks to see if there's only 1 available table and if yes select it.
+    // It will also check if the same table as the reservation's is available for the selected date, and if yes select it again.
+    // If none of the above, simply set the selected table to empty so the user can select another one.
+    useEffect(()=> {
+        if(AvailableTables.length === 1) {
+            return handleSelectTable(AvailableTables[0],selectedDateAvailability[1].indexOf(AvailableTables[0]));
+        }
+        if(sameTableIsAvailable)
+            return handleSelectTable(sameTable,selectedDateAvailability[1].indexOf(selectedDateAvailability[1].find((table)=>{return table.id === sameTable.id})));
+        if(TablesListRef.current)
+            TablesListRef.current.scrollTop = 0;
+        return setSelectedTable('');
+    },[selectedDateAvailability]);
+
+    // Checks if the selected date is the same as the reservation's current date.
     const isSelectedDateSameAsReservationsCurrent = date === activeReservation.Date;
 
+    // Gets the availability text of each table. Current || Available || Reserved .
     const getTableAvailabilityText = (table) => {
         if(selectedTable === table.id)
             return <span>Επιλεγμένο</span>;
@@ -69,12 +88,14 @@ export function TransferReservationToAnotherDay() {
         else
             return <span className={'text-danger'}>Μη διαθέσιμο</span>;
     };
+    // Gets the list item's opacity ( table opacity ) based on the table's availability Current || Available || Reserved .
     const getTableOpacity = (table) => {
         if(table.id === activeReservation.Gazebo && isSelectedDateSameAsReservationsCurrent)
             return 'opacity-50';
         if(!table.isAvailable)
             return 'opacity-25';
     };
+
     const getAvailableTablesTextWarning = () => {
         if(AvailableTables.length === 1)
             return <p className={'text-info sticky-top bg-white'}>Το μοναδικό διαθέσιμο τραπέζι επιλέχθηκε αυτόματα.</p>;
@@ -84,18 +105,20 @@ export function TransferReservationToAnotherDay() {
             return <p className={'text-danger'}>Το ίδιο τραπέζι δεν είναι διαθέσιμο, επιλέξτε κάποιο άλλο.</p>;
         }
     }
+    // Renders the list with the tables of the current date. If showOnlyAvailableTables is set to true,
+    // it will only render the available ones.
     const getTablesList = () =>{
         if(!selectedDateAvailability)
             return <ListGroup.Item key={0} className={'text-info'}>
                 Επιλέξτε μία ημέρα για να δείτε διαθεσιμότητα.
             </ListGroup.Item>
             if(showOnlyAvailableTables)
-                return tables.filter(table=>{
+                return selectedDateAvailability[1].filter(table=>{
                     return table.isAvailable === true;
                 }).map((table,index)=>{
                     return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
-                                           style={{cursor:table.isAvailable ? 'pointer' : ''}}
-                                           className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
+                       style={{cursor:table.isAvailable ? 'pointer' : ''}}
+                       className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                         <Row>
                             <Col>
                                 Τραπέζι {getTableAA(table.id,Gazebos)}
@@ -106,9 +129,9 @@ export function TransferReservationToAnotherDay() {
                         </Row>
                     </ListGroup.Item>;
                 })
-            return tables.map((table,index)=>{
+            return selectedDateAvailability[1].map((table,index)=>{
                 return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
-                   style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed') }}
+                   style={{cursor:(table.isAvailable ? 'pointer ' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed'))}}
                    className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                         <Row>
                             <Col>
@@ -121,16 +144,24 @@ export function TransferReservationToAnotherDay() {
                     </ListGroup.Item>;
             })
     }
-    const unavailableTablesExist = tables.some(table=>{return table.isAvailable === false});
+    // Checks if there are any reserved tables on the selected date.
+    const unavailableTablesExist = selectedDateAvailability ?  selectedDateAvailability[1].some(table=>{return table.isAvailable === false}) : false;
 
     const handleSaveChanges = () => {
         Inertia.patch(route('Change_Reservation_Date'),{Reservation_id:activeReservation.id,Date:selectedDateAvailability[0],
-        Table_id:selectedTable},{preserveScroll:true,only:reservationType === 'Dinner' ?
-                ['Dinner_Reservations'] : ['Bed_Reservations'],onSuccess:()=>setShowEditModal(false)});
+        Table_id:selectedTable},{preserveScroll:true,only:[activeReservation.Type === 'Dinner' ?'Dinner_Reservations' : 'Bed_Reservations',
+                'activeReservation',isReservationInConflict ? 'Conflicts' : ''], onSuccess:(res)=> {
+                setContent('Options');
+                resolvingConflict[0] && setResolvingConflict(false);
+                resolvingConflict[0] && handleSetActiveKey(resolvingConflict[1]);
+                setShowEditModal(false);
+                setActiveReservation(res.props.activeReservation);
+            }});
     };
+
     return (
         <>
-            <Row className={'my-2'}>
+            <Row className={'my-2 h-100'}>
                 <p>Τρέχουσες Πληροφορίες Κράτησης</p>
                 <p className={'border-bottom pb-3'}>
                     <span><b>Ημερομηνία :</b> <i>{changeDateFormat(activeReservation.Date,'-','-')}</i>, </span>
@@ -144,10 +175,10 @@ export function TransferReservationToAnotherDay() {
                     </Stack>}
                 </div>
             </Row>
-            <Row className={'my-4'}>
-                <Col>
+            <Row className={'my-4 h-100'}>
+                <Col className={'h-100'}>
                     {!selectedDateAvailability && <h6 className={'text-info mb-4'}>Επιλέξτε νέα ημέρα κράτησης</h6>}
-                    <ChangeReservationDateCalendar SelectedDateAvailability={{selectedDateAvailability,setSelectedDateAvailability}}>
+                    <ChangeReservationDateCalendar SelectedDateAvailability={{selectedDateAvailability,setSelectedDateAvailability}} className={'h-100'}>
 
                     </ChangeReservationDateCalendar>
                 </Col>
@@ -157,7 +188,7 @@ export function TransferReservationToAnotherDay() {
                             Διαθέσιμα Τραπέζια για {changeDateFormat(date, '-', '-')}
                         </Card.Header>
                         <Card.Body className={'d-flex flex-column'}>
-                            <ListGroup variant="flush" style={{height: '300px', overflowY: 'auto'}} ref={TablesListRef}>
+                            <ListGroup variant="flush" style={{height: '255px'}} ref={TablesListRef} className={'overflow-y-auto'}>
                                 {getAvailableTablesTextWarning()}
                                 {getTablesList()}
                             </ListGroup>

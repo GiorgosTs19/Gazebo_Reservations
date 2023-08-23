@@ -8,7 +8,7 @@ import {Inertia} from "@inertiajs/inertia";
 export function CancelEditingModal({hasChanges,menu, checkRequirements}) {
     const [show, setShow] = useState(false),
     {editingMenu,setEditingMenu} = useContext(MenuEditModeContext),
-    {activeTabKey, setActiveTabKey} = useContext(ActiveTabKeyContext),
+    {activeMenusTabKey,setActiveMenusTabKey}  = useContext(ActiveTabKeyContext),
     [menu_id,menuName,menuItems,menuType,menuCategory] = menu;
 
     const handleClose = () => {setShow(false)};
@@ -17,13 +17,13 @@ export function CancelEditingModal({hasChanges,menu, checkRequirements}) {
             setShow(true);
         else {
             setEditingMenu(null);
-            setActiveTabKey('Existing');
+            setActiveMenusTabKey('Existing');
         }
     };
 
     const handleCancelEditing = () => {
         setEditingMenu(null);
-        setActiveTabKey('Existing');
+        setActiveMenusTabKey('Existing');
         setShow(false)
     };
     const handleSubmit = (e) => {
@@ -33,7 +33,7 @@ export function CancelEditingModal({hasChanges,menu, checkRequirements}) {
                     Menu_Type:menuType,Menu_Category:menuCategory},
                 {preserveState:true,preserveScroll:true,onSuccess:
                         ()=>{
-                            setActiveTabKey('Existing');
+                            setActiveMenusTabKey('Existing');
                             setEditingMenu(null);
                             setShow(false);
                         }

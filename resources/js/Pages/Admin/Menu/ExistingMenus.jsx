@@ -1,26 +1,16 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {DinnerMenus} from "./DinnerMenus";
 import {SeaBedMenus} from "./SeaBedMenus";
 import {Form, FormCheck, Stack} from "react-bootstrap";
+import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
 export function ExistingMenus({Menus}) {
     const Dinner_Menus = Menus.Dinner,
         Bed_Menus = Menus.Bed,
-    [menusToShow,setMenusToShow] = useState('Dinner'),
-    handleMenusToShowChange = (event) => {
-        setMenusToShow(event.target.checked ? 'Dinner' : 'Bed');
-    };
+        {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     return (
-        <div className={'p-3'} style={{overflowY:'auto',height:'75vh'}}>
-            <div className={'d-flex mb-4'}>
-                <Stack direction={'horizontal'} className={'mx-auto border-bottom'}>
-                    <h5>Πρωινά Πακέτα</h5>
-                    <Form.Switch className={'mx-3'} checked={menusToShow === 'Dinner'}
-                        onChange={handleMenusToShowChange}></Form.Switch>
-                    <h5>Βραδινά Μενού</h5>
-                </Stack>
-            </div>
-            {menusToShow === 'Dinner' ? <DinnerMenus DinnerMenus={Dinner_Menus}></DinnerMenus> :
+        <div className={'p-3 overflow-y-auto h-100'} >
+            {reservationType === 'Dinner' ? <DinnerMenus DinnerMenus={Dinner_Menus}></DinnerMenus> :
             <SeaBedMenus BedMenus={Bed_Menus}></SeaBedMenus>}
         </div>
     )

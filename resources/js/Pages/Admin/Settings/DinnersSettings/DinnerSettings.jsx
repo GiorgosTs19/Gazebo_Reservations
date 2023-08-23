@@ -1,26 +1,31 @@
-import {Button} from "react-bootstrap";
-import {SettingsContext} from "../../Contexts/SettingsContext";
+import {Button, Col, Row} from "react-bootstrap";
+import {LocalisedSettingsContext} from "../../Contexts/LocalisedSettingsContext";
 import {LocalSettingsContext} from "../../Contexts/LocalSettingsContext";
 import {ErrorsContext} from "../../Contexts/ErrorsContext";
 import {DinnerTimeSettings} from "./DinnerTimeSettings/DinnerTimeSettings";
 import {useReducer,useState,useContext, useEffect} from "react";
 import {DinnerDateSettings} from "./DinnerDateSettings/DinnerDateSettings";
-import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {Inertia} from "@inertiajs/inertia";
 import {isEqual} from "lodash";
 import {PendingUnsavedChangesContext} from "../../Contexts/PendingUnsavedChangesContext";
 import {PendingUnsavedChangesWarningModal} from "../../Menu/EditMenu/PendingUnsavedChangesWarningModal";
 import {ShouldShowUnsavedChangesModalContext} from "../../Contexts/ShouldShowUnsavedChangesModalContext";
 import {Arrival_Start_Error_Check} from "../Utility/Util";
+import {DinnerTableSettings} from "./DinnerTableSettings/DinnerTableSettings";
+import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {LargeDevicesSettings} from "./LargeDevicesSettings";
+import {MobileSettings} from "./MobileSettings";
+import {ReservationDateRangeSettings} from "./DinnerDateSettings/ReservationDateRangeSettings";
+import useUpdateEffect from "../../../../CustomHooks/useUpdateEffect";
 
 export function DinnerSettings({Settings}) {
-    const innerWidth = useContext(InnerWidthContext);
     const [errors,setErrors] = useState({
         Arrival : '',
         First_Day : '',
         Last_Day : '',
         Arrival_Times_Too_Close:''
-    });
+    }),
+    InnerWidth = useContext(InnerWidthContext);
 
     const local_settings_reducer = (localSettings,action) => {
         switch (action.type) {
@@ -28,28 +33,22 @@ export function DinnerSettings({Settings}) {
                 return {...localSettings,Strict_Arrival_Time : action.value};
             }
 
-            case 'Set_No_Departure_Time' : {
-                return {...localSettings,No_Departure_Time : action.value};
-            }
-
-            case 'Set_Departure_Next_Day' : {
-                return {...localSettings,Departure_Is_Next_Day : action.value};
-            }
             case 'Revert_Recent_Changes' : {
                 return {...action.value};
             }
         }
     };
+
     const [localSettings,dispatchLocalSetting] = useReducer(local_settings_reducer,{
         Strict_Arrival_Time : Settings.Arrival_End === '',
         Departure_Is_Next_Day : false,
         No_Departure_Time : Settings.Departure === ''
     });
+
     const unModifiedLocalSettings = {
         Strict_Arrival_Time : Settings.Arrival_End === '',
-        Departure_Is_Next_Day : false,
-        No_Departure_Time : Settings.Departure === ''
     };
+
     const settings_reducer = (settings,action) => {
         switch (action.type) {
             case 'Change_Arrival_Start' : {
@@ -72,70 +71,85 @@ export function DinnerSettings({Settings}) {
             }
         }
     };
-    const getPreviewText = () => {
 
-    }
     const [settings, dispatchSetting] = useReducer(settings_reducer, {
         Arrival_Start: Settings.Arrival_Start,
         Arrival_End: Settings.Arrival_End,
         First_Day: Settings.First_Day,
         Last_Day: Settings.Last_Day,
-        Arrival_Message : Settings.Arrival_Message ?? getPreviewText(),
+        Arrival_Message : Settings.Arrival_Message,
     });
 
-
-
-    useEffect(()=>{
-        return Arrival_Start_Error_Check(localSettings,settings,{errors,setErrors});
-    },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
-
+    useUpdateEffect(()=>{
+        if(localSettings.Strict_Arrival_Time)
+            dispatchSetting({type:'Change_Arrival_Message',value:Settings.Arrival_Message});
+            dispatchSetting({type:'Change_Arrival_End',value:''});
+    },[localSettings.Strict_Arrival_Time])
     const settingsHaveErrors = errors.Arrival !== '' || errors.First_Day !== '' || errors.Last_Day !== '';
 
     const handleSaveChanges = () => {
         if(!settingsHaveErrors)
             Inertia.post(route('Save_Dinner_Settings'),settings,{preserveScroll:true,preserveState:true,
-                only:['Dinner_Settings']});
+                only:['Dinner_Settings'],onSuccess:()=>{
+                    if(settings.Arrival_End === '') {
+                        dispatchLocalSetting({type:'Set_Arrival_Time_Strict',value:false})
+                    }
+                }});
     };
+
     // Make a deep copy of the settings from the database, in case that the setting changes need to be reverted.
     const unModifiedSettings = structuredClone(Settings);
     const {pendingUnsavedChanges,setPendingUnsavedChanges} = useContext(PendingUnsavedChangesContext);
     const settingsHaveChanged = !isEqual(settings,Settings);
-    const {showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,setActiveTabKey} = useContext(ShouldShowUnsavedChangesModalContext);
+    const {showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey} = useContext(ShouldShowUnsavedChangesModalContext);
     // If Settings have changed, change the pendingUnsavedChanges, to alert for unsaved settings in case of Tab Switch
-    useEffect(()=>{
+    useUpdateEffect(()=>{
         setPendingUnsavedChanges({...pendingUnsavedChanges,Dinner:settingsHaveChanged});
     },[settingsHaveChanged]);
+
     // Handles the closing of the UnsavedChangesWarningModal, reverting the recent changes
     // made to the settings and switching to the wanted Tab.
     const handleCloseUnsavedChangesWarning = () => {
-        dispatchLocalSetting({type:'Revert_Recent_Changes',value: unModifiedLocalSettings});
-        dispatchSetting({type:'Revert_Recent_Changes',value: unModifiedSettings});
-        setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:false});
-        setActiveTabKey(showUnsavedChangesWarningModal.Key);
+        dispatchLocalSetting({type:'Revert_Recent_Changes',value:unModifiedLocalSettings});
+        dispatchSetting({type:'Revert_Recent_Changes',value:unModifiedSettings});
+        setShowUnsavedChangesWarningModal((prev)=> {return {...prev, Show: false}});
+        handleSetActiveKey(showUnsavedChangesWarningModal.Key,true);
     };
+
     const handleModalSaveChanges = () => {
         handleSaveChanges();
-        setShowUnsavedChangesWarningModal({...showUnsavedChangesWarningModal,Dinner:false});
-        setActiveTabKey(showUnsavedChangesWarningModal.Key);
+        // dispatchLocalSetting({type:'Revert_Recent_Changes',value: unModifiedLocalSettings});
+        setShowUnsavedChangesWarningModal((prev)=> {return {...prev, Show: false}});
+        handleSetActiveKey(showUnsavedChangesWarningModal.Key,true);
     }
 
     return (
         <ErrorsContext.Provider value={{errors,setErrors}}>
             <LocalSettingsContext.Provider value={{localSettings, dispatchLocalSetting}}>
-                <SettingsContext.Provider value={{settings,dispatchSetting}}>
+                <LocalisedSettingsContext.Provider value={{settings,dispatchSetting}}>
                     <PendingUnsavedChangesWarningModal handleCloseModal={handleCloseUnsavedChangesWarning}
-                        shouldShowModal={showUnsavedChangesWarningModal.Dinner} SaveChanges={handleSaveChanges} >
+                        shouldShowModal={showUnsavedChangesWarningModal.Show} SaveChanges={handleModalSaveChanges} >
                     </PendingUnsavedChangesWarningModal>
-                    <div className={'text-center'}>
-                        {settingsHaveChanged && <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
-                                 className={'rounded-5 shadow-sm'}
-                                 onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>}
-                        <div  className={'pt-5'}>
-                            <DinnerTimeSettings></DinnerTimeSettings>
-                            <DinnerDateSettings></DinnerDateSettings>
-                        </div>
-                    </div>
-                </SettingsContext.Provider>
+                    {
+                        InnerWidth > 992 ? <LargeDevicesSettings>
+                            <DinnerTimeSettings>
+                                <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                                        className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
+                                        onClick={handleSaveChanges}>Αποθήκευση Αλλαγών</Button>
+                            </DinnerTimeSettings>
+                            <ReservationDateRangeSettings></ReservationDateRangeSettings>
+                        </LargeDevicesSettings> :
+                            <MobileSettings>
+                                <DinnerTimeSettings>
+                                </DinnerTimeSettings>
+                                <ReservationDateRangeSettings></ReservationDateRangeSettings>
+                                <Button variant={'outline-success'} disabled={!settingsHaveChanged || settingsHaveErrors}
+                                        className={'rounded-5 shadow-sm mt-3 mt-xxl-0 mb-3'}
+                                        onClick={handleSaveChanges}>Αποθήκευση Αλλαγών
+                                </Button>
+                            </MobileSettings>
+                    }
+                </LocalisedSettingsContext.Provider>
             </LocalSettingsContext.Provider>
         </ErrorsContext.Provider>
     )

@@ -32,10 +32,10 @@ export function MultipleRoomsField() {
                 {/*<p className={'mx-auto text-danger'}>*/}
                 {/*    You have selected to make a reservation for more than 2 guests.*/}
                 {/*</p>*/}
-                <p className={'mx-auto my-1 text-danger'}>
+                <p className={'mx-auto my-1'}>
                     If the guests in your reservation are from multiple rooms,
                 </p>
-                <p className={'mx-auto mb-2 mt-1 text-danger'}>
+                <p className={'mx-auto mb-2 mt-1'}>
                     please let us know.
                 </p>
                 <div className="mb-3">

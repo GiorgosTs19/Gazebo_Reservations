@@ -7,10 +7,10 @@ import {ActiveTabKeyContext} from "../Contexts/ActiveTabKeyContext";
 
 export function Menu({menu,index,inModal}) {
     const {editingMenu,setEditingMenu} = useContext(MenuEditModeContext),
-    {activeTabKey, setActiveTabKey} = useContext(ActiveTabKeyContext),
+        {activeMenusTabKey,setActiveMenusTabKey} = useContext(ActiveTabKeyContext),
     handleEditMenu = () => {
         setEditingMenu(menu);
-        setActiveTabKey('Edit');
+        setActiveMenusTabKey('Edit');
     };
     return (
         <Accordion.Item eventKey={index} key={menu.id} className={'border-start-0 border-end-0 border-top-0'}>
@@ -27,8 +27,8 @@ export function Menu({menu,index,inModal}) {
                                 </ListGroup>
                             </Card.Body>
                         </Col>
-                        {!inModal && <Col lg={3} className={innerWidth > 992 ? 'border-start' : 'border-top'}>
-                            <Card.Footer style={{backgroundColor: 'white'}} className={'border-top-0 my-5'}>
+                        {!inModal && <Col lg={3} className={'d-flex flex-column ' + ( innerWidth > 992 ? 'border-start' : 'border-top')}>
+                            <Card.Footer style={{backgroundColor: 'white'}} className={'border-top-0 my-auto'}>
                                 <Stack gap={3}>
                                     {!inModal && <Button variant={'outline-info'} className={'rounded-5 shadow-sm'}
                                          onClick={handleEditMenu} disabled={editingMenu !== null}>

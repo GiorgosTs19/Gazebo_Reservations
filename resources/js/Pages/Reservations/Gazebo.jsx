@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import 'react-calendar/dist/Calendar.css';
 import {ReservationInfoForm} from "../Forms/ReservationDetails/ReservationInfoForm";
-import {DateSelectionForm} from "../Forms/Date/DateSelectionForm";
 import {GazeboSelectionForm} from "../Forms/Gazebo/GazeboSelectionForm";
 import {FormProgressContext} from "../../Contexts/FormProgressContext";
 import {GazeboBookingProgressBar} from "../../ProgressBars/GazeboBookingProgressBar";
@@ -16,12 +15,14 @@ import {TypeSelectionForm} from "../Forms/ReservationTypeSelection/TypeSelection
 import '../../../css/Reservations.css'
 import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
 import {Container} from "react-bootstrap";
+import gsap from "gsap";
+import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext";
 
 export default function Gazebo(props) {
-    const [progress, setProgress] = useState('Date'),
+    const [progress, setProgress] = useState('Type'),
     [bookingDetails, setBookingDetails] = useState(
         {
-            date:null,
+            date:'',
             table:'',
             number_of_people:0,
             more_rooms:false,
@@ -38,35 +39,46 @@ export default function Gazebo(props) {
             type:'',
         }),
     [innerWidth, setInnerWidth] = useState(window.innerWidth),
+    DinnerSettings = props.Settings.Dinner,
+    BedSettings = props.Settings.Bed,
     ContainerRef = useRef(),
     Gazebos = props.Gazebos,
     Menus = props.Menu,
     Availability = props.Availability,
-    getWidth = () => {
-        if(innerWidth < 992)
-            return '95vw';
-
-        switch (bookingDetails.type) {
-            case '' :
-                return '75vw';
-            default :{
-                if(progress === 'Details')
-                    return '65vw'
-                return '45vw';
+    typeRef = useRef(null),
+    tableRef = useRef(null),
+    detailsRef = useRef(null),
+    menuRef = useRef(null),
+    finalizeRef = useRef(null),
+    getHeight = (content) => {
+        switch (content) {
+            case 'Nav' : {
+                if(bookingDetails.type === '')
+                    return 0;
+                if(innerWidth < 1000) {
+                    if (window.innerWidth > window.innerHeight)
+                        return '20%';
+                }
+                return '8%';
+            }
+            case 'Con' : {
+                if(bookingDetails.type === '')
+                    return '100%';
+                if(innerWidth < 1000) {
+                    if(window.innerWidth > window.innerHeight)
+                        return '80vh';
+                }
+                return '90%';
             }
         }
     },
     isTouchDevice = () => {
         return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     };
+
     const shouldShowScroll = () => {
-        if(innerWidth > 992)
-            switch (progress) {
-                case 'Date' :
-                    return 'hidden';
-                default :
-                    return 'auto';
-            }
+        if ( innerWidth > 1440)
+            return 'hidden'
         return 'auto';
     };
 
@@ -78,52 +90,64 @@ export default function Gazebo(props) {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
+
     }, []);
 
     useEffect(()=>{
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
-    },[bookingDetails.number_of_people]);
+    },[bookingDetails.number_of_people,bookingDetails.date]);
 
-    console.log(props)
+    useEffect(()=>{
+        const tl = gsap.timeline();
+        switch (progress) {
+            case 'Table' : {
+                tl.from(tableRef.current,{y:'1500px',duration:1},'>');
+                break;
+            }
+            case 'Details' : {
+                tl.from(detailsRef.current,{y:'1500px',duration:1},'>');
+                break;
+            }
+        }
+    },[progress]);
+
     return (
-        <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
-            <FormProgressContext.Provider value={{progress,setProgress}}>
-                <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
-                    <GazeboAvailabilityContext.Provider value={(bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning)}>
-                        <GazebosContext.Provider value={Gazebos}>
-                            <IsTouchableContext.Provider value={isTouchDevice()}>
-                                <InnerWidthContext.Provider value={innerWidth}>
-                                    <Container className={'px-1 pb-1 pt-0 text-center mx-auto mt-0'} style={{width:getWidth(),overflowY:shouldShowScroll(),height:'95vh'}}>
-                                        <div  className={'mx-auto sticky-top pt-2'} style={{backgroundColor:'white'}}>
-                                            <h1 className={'mb-2 mt-0'} style={{color:'#7a7a7a'}}>Sentido Port Royal</h1>
-                                            {bookingDetails.type !=='' &&
+        <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
+            <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
+                <FormProgressContext.Provider value={{progress,setProgress}}>
+                    <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
+                        <GazeboAvailabilityContext.Provider value={(bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning)}>
+                            <GazebosContext.Provider value={Gazebos}>
+                                <IsTouchableContext.Provider value={isTouchDevice()}>
+                                    <InnerWidthContext.Provider value={innerWidth}>
+                                        <Container fluid className={'px-1 pb-1 pt-0 text-center mx-auto mt-0 vh-100 bg'}>
+                                            {progress !== 'Type' && <div  className={'mx-auto sticky-top pt-2'} style={{height:getHeight('Nav')}}>
                                                 <div style={{width: (innerWidth > 1000 ? 'fit-content' : '95%')}}
                                                      className={'mx-auto d-flex'}>
                                                     <GazeboBookingProgressBar></GazeboBookingProgressBar>
-                                                </div>}
-                                        </div>
-                                        <div className={'px-2 pt-2 pb-3'}
-                                            ref={ContainerRef}>
-                                            {bookingDetails.type !=='' ?
-                                                <>
-                                                    {progress === 'Date' && <DateSelectionForm></DateSelectionForm>}
-                                                    {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos}></GazeboSelectionForm>}
-                                                    {progress === 'Details' && <ReservationInfoForm></ReservationInfoForm>}
-                                                    {progress === 'Menu' && <MenuSelectionForm></MenuSelectionForm>}
-                                                    {progress === 'Finalize' && <FinalizeReservation Gazepos={Gazebos}></FinalizeReservation>}
-                                                </>:
-                                                <div className={'d-flex h-100 my-2'}>
-                                                    <TypeSelectionForm></TypeSelectionForm>
                                                 </div>
-                                            }
-                                        </div>
-                                    </Container>
-                                </InnerWidthContext.Provider>
-                            </IsTouchableContext.Provider>
-                        </GazebosContext.Provider>
-                    </GazeboAvailabilityContext.Provider>
-                </MenuContext.Provider>
-            </FormProgressContext.Provider>
-        </BookingDetailsContext.Provider>
+                                            </div>}
+                                            <div className={'px-2 py-3 my-1 d-flex flex-column scrollable-y'}
+                                                 ref={ContainerRef} style={{overflowY:shouldShowScroll(),overflowX:'hidden'}}>
+                                                <TypeSelectionForm ref={typeRef}>
+                                                    {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}>
+                                                    </GazeboSelectionForm>}
+                                                    {progress === 'Details' && <ReservationInfoForm ref={detailsRef}>
+                                                    </ReservationInfoForm>}
+                                                    {progress === 'Menu' &&
+                                                        <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
+                                                    {progress === 'Finalize' &&
+                                                        <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
+                                                </TypeSelectionForm>
+                                            </div>
+                                        </Container>
+                                    </InnerWidthContext.Provider>
+                                </IsTouchableContext.Provider>
+                            </GazebosContext.Provider>
+                        </GazeboAvailabilityContext.Provider>
+                    </MenuContext.Provider>
+                </FormProgressContext.Provider>
+            </BookingDetailsContext.Provider>
+        </DatabaseSettingsContext.Provider>
     )
 }

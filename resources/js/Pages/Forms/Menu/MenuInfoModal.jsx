@@ -1,13 +1,14 @@
 import {Badge, Col, Image, ListGroup, Modal, Row, Stack} from "react-bootstrap";
 import {useState} from "react";
 import {MenuItem} from "../../Admin/Menu/MenuItem";
+import {InfoSVG} from "../../../SVGS/InfoSVG";
 
 export function MenuInfoModal({menu}) {
     const [show, setShow] = useState(false);
     return (
         <>
             <Badge bg="info" pill className={'my-auto'} onClick={() => setShow(true)}>
-                i
+                <InfoSVG/>
             </Badge>
             <Modal size="sm" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
             style={{maxHeight:'80vh'}}>

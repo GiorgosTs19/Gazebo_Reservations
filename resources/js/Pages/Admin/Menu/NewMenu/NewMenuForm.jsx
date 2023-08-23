@@ -7,6 +7,7 @@ import {MenuCategorySelectionRadios} from "../Components/MenuCategorySelectionRa
 import {MenuNameField} from "../Components/MenuNameField";
 import {MenuItemsList} from "../Components/MenuItemsList";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
+import {AddSVG} from "../../../../SVGS/AddSVG";
 
 export function NewMenuForm() {
     const [menuItems, setMenuItems] = useState([]),
@@ -83,10 +84,8 @@ export function NewMenuForm() {
                                 <Card.Subtitle className="mb-2 text-muted text-wrap mx-auto" style={{width:'fit-content'}}>
                                     Πιέστε το <h5 className={'text-success'}>[+]</h5> για να προσθέσετε προϊόντα.
                                 </Card.Subtitle>
-                                <Button variant="success" style={{width:'fit-content'}} onClick={handleAddMenuItem}
-                                    className={'mx-auto rounded-5 shadow-sm'}>
-                                    +
-                                </Button>
+                                <AddSVG onClick={handleAddMenuItem} width={30} height={30}
+                                    className={'mx-auto'}/>
                                 <Button type={'submit'} style={{width:'fit-content'}} onClick={handleSubmit}
                                     disabled={!(menuName !== '' && menuItems.length>0)} className={'mx-auto rounded-5 shadow-sm'}>
                                     Δημιουργία

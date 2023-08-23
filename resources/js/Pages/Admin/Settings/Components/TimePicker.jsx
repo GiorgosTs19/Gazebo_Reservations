@@ -3,7 +3,7 @@ import Select from "react-select";
 import {Stack} from "react-bootstrap";
 import {value} from "lodash/seq";
 
-export function TimePicker({onChange, inputValue,className,textPrefix}) {
+export function TimePicker({onChange, inputValue,className,textPrefix, direction='horizontal'}) {
     const hourOptions = Array.from(Array(24).keys()).map((hour) => ({
         value: hour < 10 ? `0${hour}` : `${hour}`,
         label: hour < 10 ? `0${hour}` : `${hour}`,
@@ -30,24 +30,26 @@ export function TimePicker({onChange, inputValue,className,textPrefix}) {
 
     return (
         <div className={'d-flex flex-row'}>
-            <Stack className={'' + className}>
+            <Stack className={'' + className} >
                 {<span
                     className={'text-muted fst-italic mb-2 p-0'}>{(textPrefix ?? '') + ' ' + ((hours?.value ?? '') + ':' + (minutes?.value ?? ''))}</span>}
-                <Stack direction={'horizontal'} className={'mx-auto'}>
+                <Stack  className={direction ==='horizontal' ? 'mx-auto' : ''} direction={direction}>
                     <Select
                         id="hours"
                         value={hourOptions.find(obj => obj.value === inputValue.split(':')[0])}
                         options={hourOptions}
                         onChange={handleHoursChange}
-                        className={'mx-1'}
+                        className={'m-2'}
+                        placeholder={'Ώρα'}
                     />
-                    <Select
-                        id="minutes"
-                        value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
-                        options={minuteOptions}
-                        onChange={handleMinutesChange}
-                        className={'mx-1'}
-                    />
+                        <Select
+                            id="minutes"
+                            value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
+                            options={minuteOptions}
+                            onChange={handleMinutesChange}
+                            className={'m-2'}
+                            placeholder={'Λεπτά'}
+                        />
                 </Stack>
             </Stack>
         </div>

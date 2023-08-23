@@ -1,19 +1,67 @@
+* {
+    box-sizing: border-box;
+}
+/* Reservations */
+
 .reservation-view {
     opacity: 1;
     transition: opacity 0.3s ease; /* Add a smooth transition effect */
 }
 .reservation-view:hover {
-    opacity: 0.40;
+    background-color: #fcf9f9;
+}
+.active-reservation {
+    background-color: #f5fafa;
+    /*border: 3px black !important;*/
+}
+.reservation-long-view {
+    height: 100%;
 }
 
-/* Input container */
+.monthly-reservation-stack {
+    /*height: 250px;*/
+}
+/* Reservations */
+
+
+/* .tab-pane {*/
+/*    height: 90vh;*/
+/*    position: relative;*/
+/*}*/
+/* Shadow utility classes */
+
+.box_shadow {
+    box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, 0.3) 0 3px 7px -3px;
+}
+
+
+/* Shadow utility classes */
+
+/* Scrollables utility classes*/
+.scrollable-y {
+    height: calc(100vh - 150px);
+    overflow-x: hidden;
+}
+.scrollable-y-not-vh {
+    height: calc(100% - 130px);
+    overflow-x: hidden;
+}
+.scrollable-y-50vh {
+    height: calc(65vh);
+    overflow-x: hidden;
+}
+.scrollable-x-not-vw {
+    width: calc(100% - 20px);
+    overflow-y: hidden;
+}
+/* Scrollables utility Classes*/
+
+/* Input fields */
 .input-container {
     position: relative;
     margin: 20px;
     width: 85%;
 }
-
-/* Input field */
 .input-field {
     display: block;
     width: 100%;
@@ -57,7 +105,22 @@
 .input-field:focus + .input-label + .input-highlight {
     width: 100%;
 }
+/* Input fields */
 
+/* Text */
+.info-text, .info-text-lg {
+    opacity: 70%;
+}
+.info-text {
+    font-size : 14px;
+}
+.info-text-lg {
+    font-size : 15px;
+}
+
+/* Text */
+
+/* Settings */
 .settings-header-border {
     width: 100%;
     margin-bottom: 10px;
@@ -80,27 +143,241 @@
 .settings-header-border .settings-heading-subtitle > span:after {
     top: -13px;
 }
-
-.react-calendar__month-view__days__day--weekend {
-    color: black !important;
-}
+/* Settings */
 
 .disabled-day {
-    color: #ea1414 !important;
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
 }
 
+.disabled-day-no-click {
+    /*color: #ea1414 !important;*/
+    /*pointer-events: none;*/
+    /*cursor: not-allowed !important;*/
+    /*opacity: 65%;*/
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+}
+
+abbr[title] {
+    text-decoration: none !important;
+}
 .disabled-day_transfer {
     color: #ea1414 !important;
     opacity: 25% !important;
     pointer-events: none;
 }
+/*Calendar*/
 
 .react-calendar__tile:disabled {
     background-color: white !important;
     opacity: 50% !important;
     cursor: not-allowed;
 }
+/*.react-calendar__month-view__days__day--weekend {*/
+/*    color: black !important;*/
+/*}*/
+
 .react-calendar__navigation button:disabled {
     background-color: transparent !important;
     color: black !important;
 }
+
+/*Calendar*/
+/* Settings */
+.carousel-inner {
+    display: flex;
+    flex-direction: column;
+}
+.carousel-inner {
+    height: 100%;
+}
+.carousel-control-prev, .carousel-control-next {
+    display: none;
+}
+/* Settings */
+
+/* More utility classes*/
+/* Width */
+.w-fit-content {
+    width: fit-content;
+}
+.w-90 {
+    width: 90%;
+}
+/* Width */
+
+/* Height */
+.h-fit-content {
+    height: fit-content;
+}
+.mh-100 {
+    max-height: 100%;
+}
+.mh-75 {
+    max-height: 75%;
+}
+.h-10 {
+    height: 10%;
+}
+.h-77 {
+    height: 77%;
+}
+.h-85 {
+    height: 85%;
+}
+.h-88 {
+    height: 88%;
+}
+.h-90 {
+    height: 90%;
+}
+.h-95 {
+    height: 95%;
+}
+.mh-400px {
+    max-height: 400px;
+}
+.mh-600px {
+    max-height: 600px;
+}
+.mh-720px {
+    max-height: 720px;
+}
+.vh-100-70px {
+    height: calc(100vh - 70px);
+}
+
+/* Height */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+/* Cursor */
+.nav-link.primary {
+    font-weight: 550;
+}
+
+.nav-link.disabled, .nav-link:disabled {
+    opacity: 50%!important;
+}
+
+@media (max-width: 500px) {
+    .vh-100-70px {
+        height: calc(100vh - 50px);
+    }
+    .search-view-reservations {
+        height: 65% !important;
+    }
+    .filters-bar-stack {
+        font-size: 13px;
+    }
+    .navbar-brand {
+        font-size: 17px;
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 768px) {
+    .search-view-reservations {
+        height: 55% !important;
+    }
+    .reservation-long-view {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 500px) {
+    .nav-link {
+        font-size: 23px;
+        border: none !important;
+    }
+    .table-settings-stack {
+        max-height: 100%;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .nav-link {
+        font-size: 20px;
+        border: none !important;
+    }
+    .reservation-long-view {
+        width: 100%;
+    }
+}
+@media screen and (min-width: 992px) {
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+    .search-view-reservations {
+        height: 90% !important;
+    }
+    .filters-bar-stack {
+        font-size: 13px;
+    }
+}
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
+    .filters-bar-stack {
+        font-size: 13px;
+    }
+    .table-settings-stack {
+        max-height: 600px;
+    }
+}
+@media (min-width: 1200px) {
+    .search-view-reservations {
+        height: 100% !important;
+    }
+    .reservation-long-view-conflicted {
+        width: 50%;
+    }
+}
+@media (min-width: 1400px) {
+    .filters-bar-stack {
+        font-size: 16px;
+    }
+}
+
+.overlay-number {
+    position: absolute;
+    top: 50%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    transform: translate(-50%, -35%);
+    font-size: 17px;
+    font-weight: bold;
+    color: black;
+    /*background-color: rgba(0, 0, 0, 0.5); !* Adjust opacity and color *!*/
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the image */
+.image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.day-unavailable-modal {
+    max-height: 900px;
+}
+
+.tab-content, .tab-pane {
+    max-height: 35vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.popover {
+    max-width: 300px;
+}
+
+ul {
+    list-style-type: none;
+}
+/* Font Size */
+
+/* Font Size */

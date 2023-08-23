@@ -1,15 +1,20 @@
-import {Col, Row, Tab, Tabs} from "react-bootstrap";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {DinnerSettings} from "./DinnersSettings/DinnerSettings";
-import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
-export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettings,BedSettings}) {
-    const [activeTabKey, setActiveTabKey] = useState('Dinner'),
+export function SettingsPanel({dinnerSettings}) {
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     innerWidth = useContext(InnerWidthContext);
-    const handleTabSelect = (k) => {
-        setActiveTabKey(k)
+    const renderContent = () => {
+        switch (reservationType) {
+            case 'Dinner' : {
+                return <DinnerSettings Settings={dinnerSettings}></DinnerSettings>;
+            }
+            case 'Bed' : {
+                return null;
+            }
+        }
     }
 
 
@@ -43,22 +48,8 @@ export function SettingsPanel({Bed_Reservations,Dinner_Reservations,dinnerSettin
 
 
     return (
-        <ActiveReservationTypeContext.Provider value={activeTabKey}>
-            <Row>
-                <Tabs defaultActiveKey="Dinner" className="mb-3" activeKey={activeTabKey}
-                      onSelect={(k) => handleTabSelect(k)}>
-                    <Tab eventKey="Dinner" title="Βραδινά">
-                        <Col style={{height:innerWidth > 1200 ? '85vh' : '75vh',overflowY:'auto'}}>
-                            <ReservationsContext.Provider value={Dinner_Reservations}>
-                                <DinnerSettings Settings={dinnerSettings}></DinnerSettings>
-                            </ReservationsContext.Provider>
-                        </Col>
-                    </Tab>
-                    <Tab eventKey="Bed" title="Πρωινά">
-
-                    </Tab>
-                </Tabs>
-            </Row>
-        </ActiveReservationTypeContext.Provider>
+    <>
+        {renderContent()}
+    </>
     )
 }
