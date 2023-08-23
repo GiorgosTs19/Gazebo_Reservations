@@ -21,7 +21,7 @@ export default function Login({ status, canResetPassword }) {
         // Inertia.post(route('login'),data);
     };
     return (
-        <Container fluid className={'p-3 vh-100'}>
+        <Container fluid className={'p-3 vh-100 text-center'}>
             <title title="Log in" />
 
             {status && <div className="mb-4 text-sm ">{status}</div>}
@@ -59,8 +59,11 @@ export default function Login({ status, canResetPassword }) {
                         {/*            Forgot your password?*/}
                         {/*        </Link>*/}
                         {/*    )}*/}
-
-                            <Button className="ml-4" disabled={processing} type={'submit'} >
+                            <div className={'m-auto d-flex flex-column'}>
+                                <p className={'mx-auto'}>Δεν έχεις λογαριασμό;</p>
+                                <a href={route('register')} className={'mx-auto'}>Δημιούργησε Λογαριασμό</a>
+                            </div>
+                            <Button className="my-4 mx-auto" disabled={processing} type={'submit'} >
                                 Log in
                             </Button>
                         </div>
