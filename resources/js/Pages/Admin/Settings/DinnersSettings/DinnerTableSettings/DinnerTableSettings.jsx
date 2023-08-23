@@ -78,7 +78,7 @@ export function DinnerTableSettings() {
             <Card.Header className={'bg-transparent user-select-none'}>
                 Διαχείριση Διαθεσιμότητας Τραπεζιών
             </Card.Header>
-                <Card.Body className={'d-flex flex-column mh-600px overflow-y-auto'}>
+                <Card.Body className={'d-flex flex-column table-settings-stack  overflow-y-auto'}>
                     {
                         renderGazebos()
                     }

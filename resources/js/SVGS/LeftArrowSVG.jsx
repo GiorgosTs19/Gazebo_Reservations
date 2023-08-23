@@ -1,4 +1,5 @@
-export function LeftArrowSVG({height=24,width=24,className,rotate=0,onClick = ()=>{}}) {
+export function LeftArrowSVG({height=24, width=24, className, rotate=0,
+    onClick = ()=>{}, cursor='pointer'}) {
     return (
         <svg
             width={height}
@@ -7,7 +8,7 @@ export function LeftArrowSVG({height=24,width=24,className,rotate=0,onClick = ()
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className={className}
-            style={{rotate:rotate}}
+            style={{cursor:cursor, rotate:rotate}}
             onClick={onClick}
         >
             <path

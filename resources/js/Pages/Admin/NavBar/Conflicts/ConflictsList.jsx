@@ -5,10 +5,14 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 import useGetStatusColor from "../../../../CustomHooks/useGetStatusColor";
+import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
+import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 
 export function ConflictsList({reservations,type}) {
     const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
-        ContextReservations = useContext(ReservationsContext);
+        ContextReservations = useContext(ReservationsContext),
+        {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
+        {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
 
     const handleFindReservation = (reservation) => {
         const reservationFound = ContextReservations.filter(item => {
@@ -16,7 +20,11 @@ export function ConflictsList({reservations,type}) {
         })[0].Reservations.filter(item => {
             return item.id === reservation.id;
         })[0];
-        setActiveReservation(reservationFound);
+        if(reservationFound) {
+            setResolvingConflict([true, activeTabKey]);
+            handleSetActiveKey('ResolveConflict');
+            setActiveReservation(reservationFound);
+        }
     }
 
     const reservationsList = reservations.length > 0 ? reservations.map(reservation => {

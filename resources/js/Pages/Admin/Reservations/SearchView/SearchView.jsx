@@ -17,14 +17,15 @@ export function SearchView() {
         const inputRefs = [emailInputRef, phoneInputRef, confNumberInputRef];
         inputRefs.forEach((ref) => {
             const tl = gsap.timeline();
-            tl.to(ref.current, {
-                x: 0, // Set the default position to 0
-                opacity: 1, // Set the default opacity to 1
-                duration: 0.3,
-                ease: 'power3.out', // Add easing for smoother animation
-                overwrite: 'auto', // Automatically handle conflicting animations
-                display:'block'
-            });
+            if(inputRef === null || inputRef === ref.current)
+                tl.to(ref.current, {
+                    x: 0, // Set the default position to 0
+                    opacity: 1, // Set the default opacity to 1
+                    duration: 0.3,
+                    ease: 'power3.out', // Add easing for smoother animation
+                    overwrite: 'auto', // Automatically handle conflicting animations
+                    display:'block'
+                });
 
             if (inputRef !== null && ref.current !== inputRef) {
                 tl.to(ref.current, {
@@ -45,17 +46,17 @@ export function SearchView() {
     const searchCriteriaReducer = (state,action) => {
         switch (action.type) {
             case 'Set_Email' : {
-                if(action.value.length === 0 || state.email.length === 0)
+                // if(action.value.length === 0 || state.email.length === 0)
                     animateInputFocus(emailInputRef.current);
                 return {...state,email:action.value};
             }
             case 'Set_Phone' : {
-                if(action.value.length === 0 || state.phone_number.length === 0)
+                // if(action.value.length === 0 || state.phone_number.length === 0)
                     animateInputFocus(phoneInputRef.current);
                 return {...state,phone_number:action.value};
             }
             case 'Set_Confirmation_Number' : {
-                if(action.value.length === 0 || state.conf_number.length === 0)
+                // if(action.value.length === 0 || state.conf_number.length === 0)
                     animateInputFocus(confNumberInputRef.current);
                 return {...state,conf_number:action.value};
             }
@@ -85,8 +86,8 @@ export function SearchView() {
     });
 
     const noCriteriaActive = searchCriteria.email === '' && searchCriteria.conf_number === ''
-    && searchCriteria.phone_number === '' && searchCriteria.type === 'All';
-
+    && searchCriteria.phone_number === '';
+    console.log(noCriteriaActive)
     useEffect(()=>{
         if(noCriteriaActive) {
             if(activeReservation !== null)

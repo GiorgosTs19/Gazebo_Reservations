@@ -28,7 +28,7 @@ export function ArrivalSettings() {
 
 
     return (
-        <Card className={'border-top box_shadow mx-auto my-4 my-xxl-0 w-100 h-100'} >
+        <Card className={'border-top box_shadow mx-auto my-3 my-xxl-0 w-100 h-fit-content'} >
             <Card.Header className={'d-flex bg-transparent'}>
                 <Stack direction={'horizontal'} className={'mx-auto'}>
                     <h6>Συγκεκριμένη Ώρα</h6>
@@ -38,7 +38,7 @@ export function ArrivalSettings() {
             </Card.Header>
             <Card.Body className={'px-2 py-3 mx-auto w-100 d-flex flex-column text-center'}>
             <FormLabel is={'string'}  className={'mx-auto'}>{localSettings.Strict_Arrival_Time ? 'Ώρα' : 'Ωράριο'} άφιξης πελατών</FormLabel>
-            <Row direction={'horizontal'} className={'my-3 my-lg-3 mx-auto w-100'}>
+            <Row direction={'horizontal'} className={'my-3 my-lg-0 mt-lg-1 mb-lg-2 mx-auto w-100'}>
                 <Col md={localSettings.Strict_Arrival_Time ? 12 : 6} className={'' + (!localSettings.Strict_Arrival_Time ? 'border-end px-0' : '')}>
                     <Stack>
                         <TimePicker onChange={handleArrivalTimeStartChange} inputValue={settings.Arrival_Start} Name={'Arrival_Start'}

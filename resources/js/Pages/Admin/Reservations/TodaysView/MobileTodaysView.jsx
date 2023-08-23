@@ -53,7 +53,7 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
     return (
         <>
             <Row className={'h-100'}>
-                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100' : 'h-10 sticky-top bg-white')}>
+                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100 ' : ' h-10 sticky-top bg-white')}>
                     {children}
                     <FiltersBar setReservationsFilter={setReservationsFilter} disabled={reservations_of_current_date.length === 0}
                                 reservationsFilter={reservationsFilter} direction={innerWidth <500 ? 'horizontal' : 'vertical'} className={'my-auto my-md-5 my-lg-auto mx-auto'}></FiltersBar>

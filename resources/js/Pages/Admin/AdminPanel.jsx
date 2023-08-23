@@ -21,6 +21,9 @@ import {DatabaseSettingsContext} from "./Contexts/DatabaseSettingsContext";
 import {ReservationsContext} from "../../Contexts/ReservationsContext";
 import {MenuEditModeContext} from "./Contexts/MenuEditModeContext";
 import {ConflictsContext} from "./Contexts/ConflictsContext";
+import {ResolvingConflictContext} from "./Contexts/ResolvingConflictContext";
+import {DinnerReservationLong} from "./Reservations/ReservationViews/DinnerReservationLong";
+import {ActiveTabKeyContext} from "./Contexts/ActiveTabKeyContext";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -39,21 +42,33 @@ export default function AdminPanel(props) {
     [activeMenusTabKey, setActiveMenusTabKey] = useState('Existing');
     const [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false}),
     [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Show:false,Key:''}),
+        // A boolean to indicate if the active reservation showing fullScreen is about a conflict resolution,
+        // it also stores the previous ActiveTabKey to return to after the actions are done.
+    [resolvingConflict,setResolvingConflict] = useState([false,'']),
     Conflicts = props.Conflicts;
     const renderContent = () => {
         switch (activeTabKey) {
             case 'Settings' : {
+                if(resolvingConflict[0])
+                    setResolvingConflict([false,'']);
                 return SettingsContent;
             }
             case 'Reservations' : {
+                if(resolvingConflict[0])
+                    setResolvingConflict([false,'']);
                 return ReservationsContent;
             }
             case 'Menus' : {
+                if(resolvingConflict[0])
+                    setResolvingConflict([false,'']);
                 return MenuContent;
+            }
+            case 'ResolveConflict' : {
+                return <DinnerReservationLong></DinnerReservationLong>;
+
             }
         }
     };
-
     const handleSetActiveKey = (k,bypass=false) => {
         if(!bypass)
             if(activeTabKey === 'Settings' && (pendingUnsavedChanges.Dinner || pendingUnsavedChanges.Bed)) {
@@ -118,29 +133,33 @@ export default function AdminPanel(props) {
                                     <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
                                         <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
                                             <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>
-                                                <ConflictsContext.Provider value={Conflicts}>
-                                                    <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
-                                                    conflicts={props.Conflicts}>
-                                                        {innerWidth < 992 && typeAndViewSelectionPanel}
-                                                    </NavigationBar>
-                                                    <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                                        <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
-                                                            <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
-                                                                {innerWidth > 992 &&
-                                                                    <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
-                                                                        {typeAndViewSelectionPanel}
-                                                                    </Card.Header>}
-                                                                <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
-                                                                    <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-                                                                        <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
-                                                                            {renderContent()}
-                                                                        </ShouldShowUnsavedChangesModalContext.Provider>
-                                                                    </PendingUnsavedChangesContext.Provider>
-                                                                </Card.Body>
-                                                            </MenuEditModeContext.Provider>
-                                                        </Card>
-                                                    </div>
-                                                </ConflictsContext.Provider>
+                                                <ResolvingConflictContext.Provider value={{resolvingConflict,setResolvingConflict}}>
+                                                    <ActiveTabKeyContext.Provider value={{activeTabKey,handleSetActiveKey}}>
+                                                        <ConflictsContext.Provider value={Conflicts}>
+                                                            <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
+                                                                           conflicts={props.Conflicts}>
+                                                                {innerWidth < 992 && typeAndViewSelectionPanel}
+                                                            </NavigationBar>
+                                                                <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
+                                                                    <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
+                                                                        <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
+                                                                            {innerWidth > 992 &&
+                                                                                <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
+                                                                                    {typeAndViewSelectionPanel}
+                                                                                </Card.Header>}
+                                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                                                <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
+                                                                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
+                                                                                        {renderContent()}
+                                                                                    </ShouldShowUnsavedChangesModalContext.Provider>
+                                                                                </PendingUnsavedChangesContext.Provider>
+                                                                            </Card.Body>
+                                                                        </MenuEditModeContext.Provider>
+                                                                    </Card>
+                                                                </div>
+                                                        </ConflictsContext.Provider>
+                                                    </ActiveTabKeyContext.Provider>
+                                                </ResolvingConflictContext.Provider>
                                             </ActiveReservationContext.Provider>
                                         </ViewContext.Provider>
                                     </ActiveReservationTypeContext.Provider>

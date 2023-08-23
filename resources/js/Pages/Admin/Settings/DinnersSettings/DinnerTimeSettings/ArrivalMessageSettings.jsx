@@ -30,14 +30,14 @@ export function ArrivalMessageSettings() {
 
 
     return (
-        <Card className={'border-top box_shadow d-flex m-auto w-100 h-100 mt-4 mt-xxl-0'} style={{width:"fit-content"}}>
+        <Card className={'border-top box_shadow d-flex m-auto w-100 h-fit-content '} style={{width:"fit-content"}}>
             <Card.Header className={'d-flex bg-transparent m-auto'}>
                 <p className={'fw-bold fst-italic text-center'}>Μήνυμα προς τους πελάτες</p>
             </Card.Header>
             <Card.Body className={'p-3 m-auto w-100 d-flex flex-column text-center'}>
                 <Form.Control as="textarea" rows={3} value={settings.Arrival_Message} style={{resize:'none'}}
                               onChange={handleChangeArrivalMessage} className={'m-auto'}/>
-                <p className={'text-muted text-center mb-0 user-select-none'}>Το παραπάνω μήνυμα εμφανίζεται στην φόρμας κράτησης.</p>
+                {/*<p className={'text-muted text-center mb-0 user-select-none'}>Το παραπάνω μήνυμα εμφανίζεται στην φόρμας κράτησης.</p>*/}
             </Card.Body>
         </Card>
     )

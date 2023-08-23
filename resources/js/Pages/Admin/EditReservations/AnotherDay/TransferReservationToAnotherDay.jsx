@@ -8,16 +8,25 @@ import {Inertia} from "@inertiajs/inertia";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {ShowEditReservationModalContext} from "../../Contexts/ShowEditReservationModalContext";
 import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
+import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 
 export function TransferReservationToAnotherDay({willResolveConflict = false}) {
     const [selectedDateAvailability,setSelectedDateAvailability] = useState(null),
     Gazebos = useContext(GazebosContext),
-    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
+    {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
+    // A boolean to indicate if all tables will be shown in the list, or just the ones that can actually be selected,
+    // basically the available ones.
+    const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
+    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
     const date = selectedDateAvailability ? selectedDateAvailability[0] : null;
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
     const {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext),
     {content,setContent} = useContext(EditModalContentContext);
+    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     // Handles the selection of a table from the list, as well as the scrolling to the appropriate height
     // of the list, to match the currently selected table
     const handleSelectTable = (table,index) => {
@@ -35,13 +44,9 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
         }
     };
 
-    // A boolean to indicate if all tables will be shown in the list, or just the ones that can actually be selected,
-    // basically the available ones.
-    const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
     const handleShowOnlyAvailableTablesChange = () => {
         setShowOnlyAvailableTables(!showOnlyAvailableTables);
     };
-    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
 
     // Gets the reservation's current table, no matter the availability of it on the current date.
     const sameTable = selectedDateAvailability ? selectedDateAvailability[1].find(table =>{
@@ -144,9 +149,11 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
 
     const handleSaveChanges = () => {
         Inertia.patch(route('Change_Reservation_Date'),{Reservation_id:activeReservation.id,Date:selectedDateAvailability[0],
-        Table_id:selectedTable},{preserveScroll:true,only:reservationType === 'Dinner' ?
-                ['Dinner_Reservations','activeReservation'] : ['Bed_Reservations','activeReservation'],onSuccess:(res)=> {
+        Table_id:selectedTable},{preserveScroll:true,only:[activeReservation.Type === 'Dinner' ?'Dinner_Reservations' : 'Bed_Reservations',
+                'activeReservation',isReservationInConflict ? 'Conflicts' : ''], onSuccess:(res)=> {
                 setContent('Options');
+                resolvingConflict[0] && setResolvingConflict(false);
+                resolvingConflict[0] && handleSetActiveKey(resolvingConflict[1]);
                 setShowEditModal(false);
                 setActiveReservation(res.props.activeReservation);
             }});

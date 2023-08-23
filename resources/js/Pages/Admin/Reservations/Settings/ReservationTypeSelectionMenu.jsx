@@ -18,7 +18,7 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
                     label={`Kρατήσεις Seaside Dinner`}
                     name={'ReservationType'}
                     value={'Dinner'}
-                    disabled={activeTabKey === 'Reservations' && activeReservationsView === 'Search'}
+                    disabled={(activeTabKey === 'Reservations' && activeReservationsView === 'Search' ) || activeTabKey === 'ResolveConflict'}
                     checked={reservationType === 'Dinner'}
                     onChange={()=>handleOnChange('Dinner')}
                 />
@@ -29,7 +29,7 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
                     label={'Kρατήσεις Sea Bed'}
                     name={'ReservationType'}
                     value={'Bed'}
-                    disabled={activeTabKey === 'Reservations' && activeReservationsView === 'Search'}
+                    disabled={(activeTabKey === 'Reservations' && activeReservationsView === 'Search'  ) || activeTabKey === 'ResolveConflict'}
                     checked={reservationType === 'Bed'}
                     onChange={()=>handleOnChange('Bed')}
                 />

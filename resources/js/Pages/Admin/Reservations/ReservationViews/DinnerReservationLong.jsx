@@ -12,11 +12,14 @@ import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import useGetStatusColor from "../../../../CustomHooks/useGetStatusColor";
 import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
+import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
 
 export function DinnerReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-    {activeView,setActiveView} = useContext(ViewContext),
-    Tables = useContext(GazebosContext),
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const Tables = useContext(GazebosContext),
+    {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
     Date = changeDateFormat(activeReservation.Date, '-', '-',true),
     Name = activeReservation?.Name.First + ' ' + activeReservation?.Name.Last,
     ContactDetails = activeReservation?.Contact,
@@ -33,15 +36,22 @@ export function DinnerReservationLong() {
     InnerWidth = useContext(InnerWidthContext);
     const [isConflicted,conflictType,conflictMessage] = useCheckConflict(activeReservation.id)
     const status = useGetReservationStatusText(activeReservation.Status);
-    console.log(conflictMessage)
+    const handleBack = () => {
+        setActiveReservation(null);
+        if(resolvingConflict[0]) {
+            handleSetActiveKey(resolvingConflict[1]);
+            setResolvingConflict([false,'']);
+        }
+    };
+
     return (
-        <div className={'text-center p-3 mx-auto'}>
+        <div className={'text-center p-3 mx-auto ' + (resolvingConflict[0] ? 'reservation-long-view-conflicted' : '')}>
             <Row className={''}>
+                {(InnerWidth < 992 || resolvingConflict[0]) &&
+                    <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
                 <Col className={'text-center d-flex flex-column ' + ( InnerWidth > 992 ? ' border border-1 border-start-0 border-top-0 border-bottom-0 ' : '')} xxl={7}>
                     <h6>Ενέργειες</h6>
                         <Row className={'my-2 my-lg-3 mx-auto'}>
-                            {InnerWidth < 992 &&
-                                <LeftArrowSVG className={'mb-2'} onClick={() => setActiveReservation(null)}/>}
                             <Col lg={12}>
                                 <ReservationEditModal Reservation={activeReservation} Status={activeReservation.Status} isReservationInConflict={isConflicted}></ReservationEditModal>
                             </Col>

@@ -62,7 +62,7 @@ export function ReservationEditingOptions({Content,ModalTitle}) {
                 </Col>}
                 <Col className={'d-flex flex-column my-3 my-lg-0'} lg={isDateDisabled ? 6 :4}>
                     <p className={'info-text-lg my-auto'}>Αλλαγή των επιλεγμένων Μενού της κράτησης.</p>
-                    <Button variant={'outline-dark'} className={'mt-3 mx-auto'}>Αλλαγή Μενού</Button>
+                    <Button variant={'outline-dark'} className={'mt-3 mx-auto'} disabled>Προσωρινά μη Διαθέσιμο</Button>
                 </Col>
             </Row>
         </>

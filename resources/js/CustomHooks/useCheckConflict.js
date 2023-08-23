@@ -10,7 +10,7 @@ export default function useCheckConflict(reservationId) {
 
         const tableConflictFound = Disabled_Table_Reservations.find(item=>item.id === reservationId);
         if(tableConflictFound)
-            return [tableConflictFound, 'Table','Η κράτηση απαιτεί αλλαγή τραπεζιού'];
+            return [true, 'Table','Η κράτηση απαιτεί αλλαγή τραπεζιού'];
 
         return [false,null,''];
 }

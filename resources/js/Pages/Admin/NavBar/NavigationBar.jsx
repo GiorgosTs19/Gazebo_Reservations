@@ -5,6 +5,7 @@ import {AuthenticatedUserContext} from "../Contexts/AuthenticatedUserContext";
 import {Inertia} from "@inertiajs/inertia";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ConflictsContainer} from "./Conflicts/ConflictsContainer";
+import {IconExplanationsModal} from "../Modals/IconExplanationsModal";
 
 export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
     const {activeTabKey,handleSetActiveKey} = activeTab,
@@ -13,10 +14,11 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
     InnerWidth = useContext(InnerWidthContext);
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary rounded-3 border mx-4">
+        <Navbar expand="xl" className="bg-body-tertiary rounded-3 border mx-4">
             <Container fluid className={'mx-lg-3'}>
                 <Navbar.Brand href="#home" className={'user-select-none'}>Sentido Port Royal</Navbar.Brand>
                 <ConflictsContainer conflicts={conflicts}></ConflictsContainer>
+                <IconExplanationsModal></IconExplanationsModal>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Offcanvas
                     id={`Navbar-expand`}
@@ -27,13 +29,13 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
                             Μενού
                         </Offcanvas.Title>
                     </Offcanvas.Header>
-                    <Offcanvas.Body className={'pe-0 ps-4 d-flex flex-column flex-lg-row'}>
-                        <Navbar.Text className={'fw-bold order-1 order-lg-2 ms-lg-auto text-center'}>
+                    <Offcanvas.Body className={'pe-0 ps-4 d-flex flex-column flex-xl-row'}>
+                        <Navbar.Text className={'fw-bold order-1 order-xl-2 ms-xl-auto text-center'}>
                             Συνδεδεμένος / η ώς : {User.first_name + ' '+ User.last_name}
                         </Navbar.Text>
-                        <Nav className="user-select-none w-50 order-2 order-lg-1">
-                            <Nav.Link href="#Κρατήσεις" className={'primary'} onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
-                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary'}
+                        <Nav className="user-select-none w-50 order-2 order-xl-1">
+                            <Nav.Link href="#Κρατήσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
+                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary my-auto'}
                                 disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Υπάρχοντα"
                                                                    className={'border-start px-2 ms-1 my-2 my-md-0 secondary'}
@@ -42,12 +44,12 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
                                                                    className={'border-end px-2 ms-1 my-2 my-md-0 secondary'}
                                                                    onClick={() => setActiveMenusTabKey("New")} disabled={activeMenusTabKey === 'New'}>Δημιουργία</Nav.Link>}
 
-                            <Nav.Link href="#Ρυθμίσεις" className={'primary'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
+                            <Nav.Link href="#Ρυθμίσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
                         </Nav>
-                        <div className={'order-1 order-lg-3 mb-5 mb-md-4'}>
+                        <div className={'order-1 order-xl-3 mb-5 mb-md-4'}>
                             {children}
                         </div>
-                        <Button variant={"outline-secondary"} className={'mt-auto mt-lg-0 my-lg-auto ms-lg-3 order-3 mx-auto mx-lg-0'} onClick={()=>Inertia.post(route('logout'))}>
+                        <Button variant={"outline-secondary"} className={'mt-auto mt-lg-0 my-xl-auto ms-xl-3 order-3 mx-auto mx-xl-0'} onClick={()=>Inertia.post(route('logout'))}>
                             Αποσύνδεση
                         </Button>
                     </Offcanvas.Body>

@@ -1,10 +1,12 @@
-import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
+import {Badge, Col, Row} from "react-bootstrap";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {changeDateFormat, created_at, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
+import {BellSVG} from "../../../../SVGS/BellSVG";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
 
 export function ReservationShort({Reservation,className}) {
     const Name = Reservation.Name.First + ' ' + Reservation.Name.Last,
@@ -13,6 +15,7 @@ export function ReservationShort({Reservation,className}) {
         Rooms = Reservation.Rooms,
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         Tables = useContext(GazebosContext);
+    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(Reservation.id);
     const getStatusColor = () =>{
       switch (Reservation.Status) {
           case 'Cancelled' : {
@@ -37,7 +40,9 @@ export function ReservationShort({Reservation,className}) {
             (activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}
          onClick={()=>setActiveReservation(Reservation)}>
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
-            <p className={'my-1'}>Αρ. Κράτησης : {Confirmation_Number}</p>
+            <p className={'my-1'}>{isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}
+                Αρ. Κράτησης : {Confirmation_Number}
+            </p>
             <p className={'my-1 user-select-none'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>
             <Row className={'p-2'} >
                 <Col className={'border border-start-0 border-top-0 border-bottom-0'}>

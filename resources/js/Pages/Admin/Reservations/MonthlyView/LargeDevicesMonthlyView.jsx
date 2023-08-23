@@ -14,7 +14,7 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,WarningMess
                     disabled={selectedDate === ''}
                      setReservationsFilter={setReservationsFilter} className={'mx-auto mt-3'}></FiltersBar>
                 {WarningMessage()}
-                <Stack className={'px-0 overflow-y-auto monthly-reservation-stack '} >
+                <Stack className={'px-0 overflow-y-auto monthly-reservation-stack'} >
                     {reservations}
                 </Stack>
             </Col>

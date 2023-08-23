@@ -45,9 +45,9 @@ export function ReservationsPanel() {
         today_reservations = getReservationsByDate(today,Reservations);
 
     return (
-        <Row className={'my-auto h-100 overflow-x-hidden'}>
+        <Row className={'m-auto h-100 overflow-x-hidden w-100'}>
             <Col sm={12} md={activeReservation !== null ? 4 : 12} lg={(activeReservation !== null || activeReservationsView === 'Weekly' || (activeReservationsView === 'Today' && today_reservations.length > 0)) ? 7 :12}
-                 className={(innerWidth < 500 ? (activeReservation === null ? 'h-100 ' : 'h-25 sticky-top bg-white ') : 'h-100 ') + (!isMobile && activeReservation !== null && ' border-end')}
+                 className={(innerWidth < 500 ? (activeReservation === null ? 'h-100 ' : 'h-10 sticky-top bg-white ') : 'h-100 ') + (!isMobile && activeReservation !== null && ' border-end')}
                  hidden={activeReservation !== null && isMobile && (activeReservationsView === 'Monthly' || activeReservationsView === 'Weekly' || activeReservationsView === 'Search')}>
                 {activeReservationsView === 'Today' && <TodaysView></TodaysView>}
                 {activeReservationsView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
