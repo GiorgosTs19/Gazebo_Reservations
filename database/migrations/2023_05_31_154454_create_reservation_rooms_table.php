@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void {
         Schema::create('reservation_rooms', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('reservation_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('reservation_id');
+//                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('Room_Number');
             $table->timestamps();
         });

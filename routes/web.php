@@ -50,6 +50,7 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         'showAdminPanel'])->name('ShowAdminPanel');
 
     Route::prefix('/Settings')->group(function () {
+        Route::get('/Initialize',[\App\Http\Controllers\SettingsController::class,'initializeSettings'])->name('Initialize_Settings');
         Route::prefix('/Dinner')->group(function () {
             Route::post('/Save', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
         });
