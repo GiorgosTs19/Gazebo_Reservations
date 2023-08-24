@@ -9,17 +9,17 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void  {
-//        Schema::create('gazebos', function (Blueprint $table) {
-//            $table->uuid('id');
-//            $table->integer('Number');
-//            $table->timestamps();
-//        });
+        Schema::create('gazebos', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->integer('Number');
+            $table->timestamps();
+        });
     }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void    {
-        Schema::dropIfExists('gazepos');
+        Schema::dropIfExists('gazebos');
     }
 };
