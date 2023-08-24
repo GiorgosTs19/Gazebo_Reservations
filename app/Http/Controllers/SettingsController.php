@@ -15,7 +15,7 @@ class SettingsController extends Controller {
 //        if(!$DinnerSettings) {
             $NewDinnerSettings = new DinnerSetting;
             $NewDinnerSettings->Starting_Date = date('Y-m-d');
-            $NewDinnerSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));;
+            $NewDinnerSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));
             $NewDinnerSettings->Arrival_Time_Start = '21:00';
             $NewDinnerSettings->save();
 //        }
@@ -109,7 +109,7 @@ class SettingsController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(c $c)
+    public function destroy()
     {
         //
     }
