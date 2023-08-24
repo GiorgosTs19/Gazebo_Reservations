@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->date('Ending_Date');
             $table->string('Arrival_Time_Start');
             $table->string('Arrival_Time_End')->nullable();
-            $table->string('Departure_Time');
+            $table->string('Departure_Time')->nullable();
             $table->tinyText('Date_Notes')->nullable();
             $table->tinyText('Finalization_Notes')->nullable();
             $table->timestamps();
