@@ -14,17 +14,17 @@ class SettingsController extends Controller {
 //        $DinnerSettings = DinnerSetting::first();
 //        if(!$DinnerSettings) {
             $NewDinnerSettings = new DinnerSetting;
-            $NewDinnerSettings->Starting_Date = date('Y-m-d');
-            $NewDinnerSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));
-            $NewDinnerSettings->Arrival_Time_Start = '21:00';
+//            $NewDinnerSettings->Starting_Date = date('Y-m-d');
+//            $NewDinnerSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));
+//            $NewDinnerSettings->Arrival_Time_Start = '21:00';
             $NewDinnerSettings->save();
 //        }
 //        $BedSettings = BedSetting::first();
 //        if(!$BedSettings) {
             $NewBedSettings = new BedSetting;
-            $NewBedSettings->Starting_Date = date('Y-m-d');
-            $NewBedSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));;
-            $NewBedSettings->Arrival_Time = '08:00';
+//            $NewBedSettings->Starting_Date = date('Y-m-d');
+//            $NewBedSettings->Ending_Date = date('Y-m-d', strtotime('Dec 31'));;
+//            $NewBedSettings->Arrival_Time = '08:00';
             $NewBedSettings->save();
 //        }
     }

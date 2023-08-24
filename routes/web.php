@@ -44,13 +44,13 @@ Route::get('/Reserve', [\App\Http\Controllers\GazeboController::class,
 Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::class,'create'])->name('Create_Reservation');
 //Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
 Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
-
+Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
 Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
 
     Route::prefix('/Settings')->group(function () {
-        Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
+
 
         Route::prefix('/Dinner')->group(function () {
             Route::post('/Save', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
