@@ -50,7 +50,8 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         'showAdminPanel'])->name('ShowAdminPanel');
 
     Route::prefix('/Settings')->group(function () {
-        Route::get('/Initialize',[\App\Http\Controllers\SettingsController::class,'initializeSettings'])->name('Initialize_Settings');
+        Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
+
         Route::prefix('/Dinner')->group(function () {
             Route::post('/Save', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
         });
@@ -103,6 +104,7 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         Route::post('/Day', [\App\Http\Controllers\DisabledDayController::class, 'Disable_Day'])->name('Disable_Day');
         Route::post('/Table', [\App\Http\Controllers\DisabledTableController::class, 'Disable_Table'])->name('Disable_Table');
     });
+
     Route::prefix('/Enable')->group(function () {
         Route::delete('/Day', [\App\Http\Controllers\DisabledDayController::class, 'Enable_Day'])->name('Enable_Day');
         Route::delete('/Table', [\App\Http\Controllers\DisabledTableController::class, 'Enable_Table'])->name('Enable_Table');
