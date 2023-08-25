@@ -88,7 +88,7 @@ export default function AdminPanel(props) {
                 return Bed_Reservations;
         }
     };
-    console.log(props)
+    // console.log(props)
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,
@@ -129,7 +129,7 @@ export default function AdminPanel(props) {
                     <InnerWidthContext.Provider value={innerWidth}>
                         <GazebosContext.Provider value={Gazebos}>
                             <MenuContext.Provider value={Menus}>
-                                <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
+                                <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute overflow-x-hidden'}>
                                     <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
                                         <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
                                             <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>

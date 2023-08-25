@@ -16,7 +16,7 @@ export function MenuAdminPanel({Menus,activeKey}) {
                 return <ExistingMenus Menus={Menus}></ExistingMenus>;
             }
             case 'New' : {
-                return <NewMenuForm></NewMenuForm>;
+                return <NewMenuForm MenuTabKeys={{activeMenusTabKey,setActiveMenusTabKey}}></NewMenuForm>;
             }
             case 'Edit' : {
                 return <EditingMenuForm menu={editingMenu}></EditingMenuForm>;

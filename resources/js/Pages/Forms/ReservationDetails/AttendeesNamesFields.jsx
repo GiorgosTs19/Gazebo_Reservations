@@ -10,7 +10,6 @@ export function AttendeesNamesFields({requirementsCheck}) {
         updatedAttendees[index] = e.target.value;
         setBookingDetails({...bookingDetails,attendees:updatedAttendees});
     }
-    console.log(bookingDetails)
     return (
         <>
             {

@@ -45,12 +45,12 @@ export function SetDayUnavailableModal({selectedDate}) {
         if(!dateIsRange){
             const date_to_disable = getFormattedDate(selectedDate,'-',1);
             return Inertia.post(route('Disable_Day'),{Date:date_to_disable,Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},
-                {preserveScroll:true,preserveState:true, only:['Dinner_Reservations'],onSuccess:()=>setShow(false)});
+                {preserveScroll:true,preserveState:true, only:['Dinner_Reservations','Conflicts'],onSuccess:()=>setShow(false)});
         }
         const dates_to_disable = [getFormattedDate(selectedDate[0],'-',1),getFormattedDate(selectedDate[1],'-',1)];
         return Inertia.post(route('Disable_Days'),{Date_Start:dates_to_disable[0],Date_End:dates_to_disable[1],
             Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},{preserveScroll:true,preserveState:true,
-            only:['Dinner_Reservations'],onSuccess:()=>setShow(false)});
+            only:['Dinner_Reservations','Conflicts'],onSuccess:()=>setShow(false)});
     };
 
     const formatted_date = show && (!dateIsRange ? getFormattedDate(selectedDate, '-', 2) :

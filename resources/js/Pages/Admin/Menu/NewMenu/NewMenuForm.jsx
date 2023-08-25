@@ -9,14 +9,14 @@ import {MenuItemsList} from "../Components/MenuItemsList";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {AddSVG} from "../../../../SVGS/AddSVG";
 
-export function NewMenuForm() {
+export function NewMenuForm({MenuTabKeys}) {
     const [menuItems, setMenuItems] = useState([]),
     [submitButtonClicked, setSubmitButtonClicked] = useState(false),
     [menuName,setMenuName] = useState(''),formRef = useRef(),
     innerWidth = useContext(InnerWidthContext),
     [menuType,setMenuType] = useState('Dinner'),
     [menuCategory,setMenuCategory] = useState('Main'),
-    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    {activeMenusTabKey,setActiveMenusTabKey} = MenuTabKeys;
 
     const handleAddMenuItem = () => {
         setMenuItems(prevItems => [...prevItems,
@@ -47,7 +47,7 @@ export function NewMenuForm() {
         if(!checkRequirements())
             Inertia.post(route('Create_Menu'),{Menu_Name:menuName,Menu_Items:menuItems,
                 Menu_Type:menuType,Menu_Category:menuCategory},{onSuccess:()=>{
-                    handleSetActiveKey('Menus');
+                    return setActiveMenusTabKey('Existing');
                 }});
     },
     handleTypeChange = (value) => {
