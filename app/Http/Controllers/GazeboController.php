@@ -195,8 +195,8 @@ class GazeboController extends Controller {
     }
 
     public function getAvailabilityForDates(Request $request) {
-        $input = $request->only(['date_start','date_end']);
-        $Reservations = Reservation::date($input['date_start'],$input['date_end'])->orderBy('Date', 'asc')->get();
+        $input = $request->only(['date_start','date_end','type']);
+        $Reservations = Reservation::date($input['date_start'],$input['date_end'])->type($input['type'])->orderBy('Date', 'asc')->get();
         return Redirect::back()->with(['availability_for_date_range'=>$Reservations]);
     }
 

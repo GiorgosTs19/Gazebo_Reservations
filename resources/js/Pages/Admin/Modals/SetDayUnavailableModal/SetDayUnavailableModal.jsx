@@ -2,7 +2,6 @@ import {Button, Modal} from "react-bootstrap";
 import {changeDateFormat, getFormattedDate} from "../../../../ExternalJs/Util";
 import {Inertia} from "@inertiajs/inertia";
 import {useContext, useEffect, useState} from "react";
-import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {ActiveReservations} from "./ActiveReservations";
 import {Warnings} from "./Warnings";
@@ -10,7 +9,6 @@ import {Warnings} from "./Warnings";
 export function SetDayUnavailableModal({selectedDate}) {
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const [show, setShow] = useState(false),
-    innerWidth = useContext(InnerWidthContext),
     [allowExistingReservations,setAllowExistingReservations] = useState(false);
     const [reservations,setReservations] = useState([]);
     const dateIsRange = Array.isArray(selectedDate);
@@ -21,7 +19,7 @@ export function SetDayUnavailableModal({selectedDate}) {
         if(show) {
             if(!dateIsRange) {
                 Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(selectedDate,'-',1),
-                    get_reservations:true,Type:reservationType},{
+                    get_reservations:true,type:reservationType},{
                     only:['availability_for_date'],
                     preserveScroll:true,
                     preserveState:true,
@@ -32,7 +30,7 @@ export function SetDayUnavailableModal({selectedDate}) {
                 return;
             }
             Inertia.get(route('Get_Availability_For_Dates'), {date_start: getFormattedDate(selectedDate[0],'-',1),
-                date_end:getFormattedDate(selectedDate[1],'-',1),Type:reservationType},{
+                date_end:getFormattedDate(selectedDate[1],'-',1),type:reservationType},{
                 only:['availability_for_date_range'],
                 preserveScroll:true,
                 preserveState:true,
