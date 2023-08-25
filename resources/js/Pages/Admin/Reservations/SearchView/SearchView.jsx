@@ -87,7 +87,7 @@ export function SearchView() {
 
     const noCriteriaActive = searchCriteria.email === '' && searchCriteria.conf_number === ''
     && searchCriteria.phone_number === '';
-    console.log(noCriteriaActive)
+
     useEffect(()=>{
         if(noCriteriaActive) {
             if(activeReservation !== null)

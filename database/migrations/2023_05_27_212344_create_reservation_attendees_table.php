@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-//        Schema::create('reservation_attendees', function (Blueprint $table) {
-//            $table->uuid('id');
-//            $table->foreignUuid('reservation_id');
-////                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-//            $table->string('Name');
-//            $table->timestamps();
-//        });
+        Schema::create('reservation_attendees', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->foreignUuid('reservation_id');
+//                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('Name');
+            $table->timestamps();
+        });
     }
 
     /**
