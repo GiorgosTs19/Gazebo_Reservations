@@ -61,7 +61,7 @@ export default function AdminPanel(props) {
             case 'Menus' : {
                 if(resolvingConflict[0])
                     setResolvingConflict([false,'']);
-                setActiveMenusTabKey('Existing');
+                // setActiveMenusTabKey('Existing');
                 return MenuContent;
             }
             case 'ResolveConflict' : {
