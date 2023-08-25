@@ -7,7 +7,7 @@ export function MenuInfoModal({menu}) {
     const [show, setShow] = useState(false);
     return (
         <>
-            <Badge bg="info" pill className={'my-auto'} onClick={() => setShow(true)}>
+            <Badge bg="transparent" pill className={'my-auto'} onClick={() => setShow(true)}>
                 <InfoSVG/>
             </Badge>
             <Modal size="sm" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable

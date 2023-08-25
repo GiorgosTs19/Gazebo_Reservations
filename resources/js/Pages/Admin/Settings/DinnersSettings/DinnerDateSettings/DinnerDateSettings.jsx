@@ -1,5 +1,4 @@
-import {Card, Col, Row} from "react-bootstrap";
-
+import {Card} from "react-bootstrap";
 import {CalendarSettings} from "../CalendarSettings";
 import {useContext, useState} from "react";
 import {SelectedDateContext} from "../../../Contexts/SelectedDateContext";
