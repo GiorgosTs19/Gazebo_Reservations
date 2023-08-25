@@ -16,7 +16,7 @@ export function NewMenuForm() {
     innerWidth = useContext(InnerWidthContext),
     [menuType,setMenuType] = useState('Dinner'),
     [menuCategory,setMenuCategory] = useState('Main'),
-    {activeTabKey, setActiveTabKey} = useContext(ActiveTabKeyContext);
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
 
     const handleAddMenuItem = () => {
         setMenuItems(prevItems => [...prevItems,
@@ -47,7 +47,7 @@ export function NewMenuForm() {
         if(!checkRequirements())
             Inertia.post(route('Create_Menu'),{Menu_Name:menuName,Menu_Items:menuItems,
                 Menu_Type:menuType,Menu_Category:menuCategory},{onSuccess:()=>{
-                    setActiveTabKey('Existing');
+                    handleSetActiveKey('Menus');
                 }});
     },
     handleTypeChange = (value) => {

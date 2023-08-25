@@ -1,4 +1,4 @@
-import {Card, Col, Container, Nav, Navbar, Row, Tab, Tabs} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import {MenuAdminPanel} from "./Menu/MenuAdministrationPage";
 import React, {useEffect, useState} from "react";
 import {InnerWidthContext} from "../../Contexts/InnerWidthContext";
@@ -61,6 +61,7 @@ export default function AdminPanel(props) {
             case 'Menus' : {
                 if(resolvingConflict[0])
                     setResolvingConflict([false,'']);
+                setActiveMenusTabKey('Existing');
                 return MenuContent;
             }
             case 'ResolveConflict' : {
