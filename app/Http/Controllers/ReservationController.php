@@ -85,8 +85,8 @@ class ReservationController extends Controller
         $Primary_Menu = new MenuSelection;
         $Primary_Menu->reservation_id = $Reservation->id;
         $Primary_Menu->reservation_room_id = $Primary_Room->id;
-        $Primary_Menu->Main_Dish = $input['primary_menu']['Main'];
-        $Primary_Menu->Dessert = $input['primary_menu']['Dessert'];
+        $Primary_Menu->Main_Dish = $input['primary_menu']['Main'] ?? '';
+        $Primary_Menu->Dessert = $input['primary_menu']['Dessert'] ?? '';
         $Primary_Menu->save();
 
         if($input['more_rooms'] === true && $input['secondary_room'] !== '') {
@@ -98,8 +98,8 @@ class ReservationController extends Controller
             $Secondary_Menu = new MenuSelection;
             $Secondary_Menu->reservation_id = $Reservation->id;
             $Secondary_Menu->reservation_room_id = $Secondary_Room->id;
-            $Secondary_Menu->Main_Dish = $input['secondary_menu']['Main'];
-            $Secondary_Menu->Dessert = $input['secondary_menu']['Dessert'];
+            $Secondary_Menu->Main_Dish = $input['secondary_menu']['Main'] ?? '';
+            $Secondary_Menu->Dessert = $input['secondary_menu']['Dessert'] ?? '';
             $Secondary_Menu->save();
         }
         return Redirect::route('ShowAdminPanel');
