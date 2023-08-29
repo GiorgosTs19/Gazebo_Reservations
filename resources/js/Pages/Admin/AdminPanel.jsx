@@ -22,7 +22,7 @@ import {ReservationsContext} from "../../Contexts/ReservationsContext";
 import {MenuEditModeContext} from "./Contexts/MenuEditModeContext";
 import {ConflictsContext} from "./Contexts/ConflictsContext";
 import {ResolvingConflictContext} from "./Contexts/ResolvingConflictContext";
-import {DinnerReservationLong} from "./Reservations/ReservationViews/DinnerReservationLong";
+import {ReservationLong} from "./Reservations/ReservationViews/ReservationLong/ReservationLong";
 import {ActiveTabKeyContext} from "./Contexts/ActiveTabKeyContext";
 
 export default function AdminPanel(props) {
@@ -64,7 +64,7 @@ export default function AdminPanel(props) {
                 return MenuContent;
             }
             case 'ResolveConflict' : {
-                return <DinnerReservationLong></DinnerReservationLong>;
+                return <ReservationLong></ReservationLong>;
 
             }
         }
@@ -88,7 +88,7 @@ export default function AdminPanel(props) {
                 return Bed_Reservations;
         }
     };
-    // console.log(props)
+
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,

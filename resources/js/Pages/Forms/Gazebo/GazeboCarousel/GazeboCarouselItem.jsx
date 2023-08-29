@@ -34,10 +34,6 @@ export function GazeboCarouselItem({Gazebo,isAvailable}) {
                         {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
                     </Button>
                 </div>
-
-                {/*<div style={{ position: 'relative' }} className={'mt-3'}>*/}
-
-                {/*</div>*/}
             </div>
         </>
     )

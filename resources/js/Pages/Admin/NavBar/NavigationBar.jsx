@@ -10,8 +10,7 @@ import {IconExplanationsModal} from "../Modals/IconExplanationsModal";
 export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
     const {activeTabKey,handleSetActiveKey} = activeTab,
     {activeMenusTabKey,setActiveMenusTabKey} = activeMenusTab,
-    User = useContext(AuthenticatedUserContext),
-    InnerWidth = useContext(InnerWidthContext);
+    User = useContext(AuthenticatedUserContext);
 
     return (
         <Navbar expand="xl" className="bg-body-tertiary rounded-3 border mx-4">
@@ -38,12 +37,11 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
                             <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary my-auto'}
                                 disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Υπάρχοντα"
-                                                                   className={'border-start px-2 ms-1 my-2 my-md-0 secondary'}
-                                                                   onClick={() => setActiveMenusTabKey("Existing")} disabled={activeMenusTabKey === 'Existing'}>Υπάρχοντα</Nav.Link>}
+                                className={'border-start px-2 ms-1 my-2 my-md-0 secondary'}
+                                onClick={() => setActiveMenusTabKey("Existing")} disabled={activeMenusTabKey === 'Existing'}>Υπάρχοντα</Nav.Link>}
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Δημιουργία"
-                                                                   className={'border-end px-2 ms-1 my-2 my-md-0 secondary'}
-                                                                   onClick={() => setActiveMenusTabKey("New")} disabled={activeMenusTabKey === 'New'}>Δημιουργία</Nav.Link>}
-
+                                className={'border-end px-2 ms-1 my-2 my-md-0 secondary'}
+                                onClick={() => setActiveMenusTabKey("New")} disabled={activeMenusTabKey === 'New'}>Δημιουργία</Nav.Link>}
                             <Nav.Link href="#Ρυθμίσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
                         </Nav>
                         <div className={'order-1 order-xl-3 mb-5 mb-md-4'}>

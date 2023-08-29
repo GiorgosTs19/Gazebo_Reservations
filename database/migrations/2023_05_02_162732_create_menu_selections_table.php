@@ -11,12 +11,12 @@ return new class extends Migration {
     public function up(): void  {
         Schema::create('menu_selections', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('reservation_id');
-//                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('reservation_room_id');
-//                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('Main_Dish');
-            $table->foreignUuid('Dessert');
+            $table->foreignUuid('reservation_id')
+                ->constrained('reservations')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('reservation_room_id')
+                ->constrained('reservation_rooms')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('Main_Dish')->default('');
+            $table->foreignUuid('Dessert')->default('');
             $table->timestamps();
         });
     }
@@ -24,7 +24,7 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void    {
+    public function down(): void {
         Schema::dropIfExists('menu_selections');
     }
 };

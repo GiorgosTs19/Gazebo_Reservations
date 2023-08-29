@@ -9,6 +9,16 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
         // Handles the selection of menus, based on the room ( primary, secondary )
         // and the type of menu ( dessert, main dishes ).
     handleSelectMenu = () => {
+        if(bookingDetails.type === 'Bed') {
+            setBookingDetails((prevDetails) => ({
+                ...prevDetails,
+                primary_menu: {
+                    Main : menu.id,
+                    Dessert : '',
+                },
+            }));
+            return ;
+        }
         switch (primary) {
             case true : {
                 // Sets the dessert for the primary room.

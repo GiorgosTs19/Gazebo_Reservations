@@ -7,7 +7,7 @@ import {ViewContext} from "../../../Contexts/ViewContext";
 import {useContext,useEffect} from "react";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
-import {DinnerReservationLong} from "./ReservationViews/DinnerReservationLong";
+import {ReservationLong} from "./ReservationViews/ReservationLong/ReservationLong";
 import {TodaysView} from "./TodaysView/TodaysView";
 import {ReservationsContext} from "../../../Contexts/ReservationsContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
@@ -23,7 +23,7 @@ export function ReservationsPanel() {
     Reservations = useContext(ReservationsContext),
     showReservationLong = () => {
         if(activeReservation !== null)
-            return <DinnerReservationLong></DinnerReservationLong>
+            return <ReservationLong></ReservationLong>
         return  <h4 className={'text-muted m-auto user-select-none'}>Επιλέξτε μία κράτηση για να δείτε λεπτομέρειες.</h4>
     }
     useEffect(() => {

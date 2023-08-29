@@ -10,12 +10,12 @@ export function IconExplanationsModal() {
     const [show, setShow] = useState(false);
     return (
         <>
-            <InfoSVG className={'my-auto'} onClick={() => setShow(true)}/>
+            <InfoSVG className={'my-auto hover-scale-1_1'} onClick={() => setShow(true)}/>
             <Modal size="lg" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
             style={{maxHeight:'80vh'}}>
                 <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-sm">
-                        Οδηγίες Χρήσης
+                        Χρήσιμες Πληροφορίες
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -27,8 +27,8 @@ export function IconExplanationsModal() {
                                 λόγω απενεργοποιημένης ημέρας ή τραπεζιού.
                             </p>
                             <p>
-                                ( Σε μία κράτηση ) Δηλώνει πως αυτή η κράτηση απαιτεί αλλαγές λόγω
-                                απενεργοποιημένης ημέρας ή τραπεζιού. Πατώντας πάνω στην κράτηση, μπορείτε να δείτε
+                                ( Σε μία κράτηση ) Δηλώνει πως αυτή η κράτηση απαιτεί αλλαγές.
+                                Πατώντας πάνω στην κράτηση, μπορείτε να δείτε
                                 το είδος αλλαγής που απαιτείται.
                             </p>
                         </Col>
@@ -37,7 +37,7 @@ export function IconExplanationsModal() {
                         <Col xs={12} lg={2} className={'icon-info d-flex'}>
                             <Badge pill className={'m-auto'} bg={'secondary'}>Κατάσταση</Badge>
                         </Col>
-                        <Col xs={12} lg={10}>Υποδηλώνει την κατάσταση της κράτησης. <span className={'text-success'}> Πράσινο </span>: Επιβεβαιωμένη,
+                        <Col xs={12} lg={10}>Η κατάσταση της κράτησης. <span className={'text-success'}> Πράσινο </span>: Επιβεβαιωμένη,
                             <span className={'text-warning'}> Κίτρινο </span> : Εκκρεμούσα, <span className={'text-danger'}> Κόκκινο </span> : Ακυρωμένη
                         </Col>
                     </Row>
@@ -68,7 +68,7 @@ export function IconExplanationsModal() {
                     <Row className={'border-bottom pb-2 my-3'}>
                         <p><b>-</b> Όσον αφορά την απενεργοποίηση ημερομηνιών, είτε τραπεζιών, μπορεί να γίνει μαζικά
                             ( επιλέγοντας πολλές ημερομηνίες στην κάθε περίπτωση ).</p>
-                        <p><b>-</b> Η ενεργοποίηση αυτών, πρέπει να γίνει μία προς μία ημερομηνία.</p>
+                        <p><b>-</b> Η ενεργοποίηση αυτών, πρέπει να γίνει μία προς μία ημερομηνία / ένα προς ένα τραπέζι.</p>
                     </Row>
                 </Modal.Body>
             </Modal>

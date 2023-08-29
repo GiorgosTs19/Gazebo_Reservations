@@ -1,21 +1,20 @@
 import {Button, Col, Row} from "react-bootstrap";
-import {TransferReservationToAnotherDay} from "../../EditReservations/AnotherDay/TransferReservationToAnotherDay";
-import {useContext, useEffect, useState} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {EditReservationModalTitleContext} from "../../Contexts/EditReservationModalTitleContext";
-import {ChangeReservationTableSameDay} from "../../EditReservations/SameDay/ChangeReservationTableSameDay";
-import {getAvailabilityByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {Inertia} from "@inertiajs/inertia";
+import {TransferReservationToAnotherDay} from "../../EditReservations/AnotherDay/TransferReservationToAnotherDay";
+import {useContext, useEffect, useState} from "react";
+import {ChangeReservationTableSameDay} from "../../EditReservations/SameDay/ChangeReservationTableSameDay";
+import {isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 
-export function ReservationEditingOptions({Content,ModalTitle}) {
+export function ReservationEditingOptions({Content}) {
     const {content,setContent} = Content,
     Reservations = useContext(ReservationsContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     [availableTables, setAvailableTables] = useState([]),
     {modalTitle,setModalTitle} = useContext(EditReservationModalTitleContext),
     isDateDisabled = isDateDisabledByAdmin(activeReservation.Date,Reservations)[0];
-    console.log(activeReservation.Date,isDateDisabled)
     const noAvailableTablesExist = availableTables.every(table=>{return table.isAvailable === false});
     useEffect(()=>{
         if(activeReservation !== null) {
@@ -29,10 +28,12 @@ export function ReservationEditingOptions({Content,ModalTitle}) {
             });
         }
     },[]);
+
     const handleClickTransfer = () => {
         setContent(<TransferReservationToAnotherDay></TransferReservationToAnotherDay>);
         setModalTitle('Μεταφορά της κράτησης σε άλλη μέρα')
     };
+
     const handleClickChangeTable = () => {
         setContent(<ChangeReservationTableSameDay></ChangeReservationTableSameDay>);
         setModalTitle('Αλλαγή τραπεζιού την ίδια μέρα')

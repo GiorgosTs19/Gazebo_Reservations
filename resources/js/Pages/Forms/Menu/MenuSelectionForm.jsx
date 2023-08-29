@@ -9,15 +9,17 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
     {progress, setProgress} = useContext(FormProgressContext),
     checkRequirement = () => {
-        switch (bookingDetails.more_rooms) {
-            case true : {
-                return bookingDetails.primary_menu.Main !== '' && bookingDetails.secondary_menu.Main !== '' &&
-                    bookingDetails.primary_menu.Dessert !== '' && bookingDetails.secondary_menu.Dessert !== '';
+        if(bookingDetails.type === 'Dinner')
+            switch (bookingDetails.more_rooms) {
+                case true : {
+                    return bookingDetails.primary_menu.Main !== '' && bookingDetails.secondary_menu.Main !== '' &&
+                        bookingDetails.primary_menu.Dessert !== '' && bookingDetails.secondary_menu.Dessert !== '';
+                }
+                case false : {
+                    return bookingDetails.primary_menu.Main !== '' && bookingDetails.primary_menu.Dessert !== '';
+                }
             }
-            case false : {
-                return bookingDetails.primary_menu.Main !== '' && bookingDetails.primary_menu.Dessert !== '';
-            }
-        }
+        return bookingDetails.primary_menu.Main !== '';
     },
     handleFinalize = () => {
         setProgress('Finalize');
@@ -28,7 +30,7 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
         }
     },[bookingDetails.primary_menu,bookingDetails.secondary_menu]);
     return (
-        <div className={'px-4 '} style={{maxHeight:'650px',overflowY:'auto'}} ref={ref}>
+        <div className={'px-4 overflow-y-auto'} style={{maxHeight:'650px'}} ref={ref}>
             {/*<Button variant={'outline-dark'} className={'my-2 rounded-4 shadow-sm'} onClick={handleBackToDetails}>Back to Details</Button>*/}
             {/*<p className={'my-1 ' + Theme}>* Number of Portions are adjusted</p>*/}
             {/*<p className={'my-1 ' + Theme}> to the number of people per room.</p>*/}

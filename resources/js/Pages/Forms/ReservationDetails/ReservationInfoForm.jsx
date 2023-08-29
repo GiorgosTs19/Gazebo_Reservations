@@ -31,18 +31,22 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                 <Card.Body className={'py-0'} >
                     <Form className={'form-container p-2 text-center'}>
                         <Row>
-                            <Col xs={12} md={6} className={'order-0 order-md-0'}>
+                            <Col xs={12} md={bookingDetails.type === 'Dinner' ? 6 : 12} className={'order-0 order-md-0'}>
                                 <ContactNameFields requirementsCheck={checkShowRequirements}></ContactNameFields>
                                 <PrimaryContactDetails requirementsCheck={checkShowRequirements}></PrimaryContactDetails>
                                 <AttendeesNamesFields requirementsCheck={checkShowRequirements}></AttendeesNamesFields>
+                                {bookingDetails.type === 'Bed' && <>
+                                    <RoomNumberFields requirementsCheck={checkShowRequirements}></RoomNumberFields>
+                                    <ProceedButton></ProceedButton>
+                                </>}
                             </Col>
-                            <Col className={'d-flex flex-column order-1 order-md-1'} xs={12} md={6}>
+                            {bookingDetails.type === 'Dinner' && <Col className={'d-flex flex-column order-1 order-md-1'} xs={12} md={6}>
                                 <div className={'m-auto'}>
                                     <MultipleRoomsField></MultipleRoomsField>
                                     <RoomNumberFields requirementsCheck={checkShowRequirements}></RoomNumberFields>
                                 </div>
                                 <ProceedButton></ProceedButton>
-                            </Col>
+                            </Col>}
                         </Row>
                     </Form>
                 </Card.Body>

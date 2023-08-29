@@ -40,6 +40,14 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+
     protected $casts = [
     ];
+
+
+    public function scopeEmail($query, $email) {
+        if($email)
+            return $query->where('email',$email);
+        return $query;
+    }
 }
