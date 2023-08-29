@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::table('menu_selections', function (Blueprint $table) {
-            $table->foreignUuid('Main_Dish')->default('');
-            $table->foreignUuid('Dessert')->default('');
+            $table->foreignUuid('Main_Dish')->default('')->change();
+            $table->foreignUuid('Dessert')->default('')->change();
         });
     }
 
