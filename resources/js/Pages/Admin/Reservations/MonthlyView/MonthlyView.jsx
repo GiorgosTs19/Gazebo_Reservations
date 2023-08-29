@@ -133,45 +133,16 @@ export function MonthlyView() {
                   prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}/>
     </>
 
-
-    const getWarningMessage = () => {
-        if (isDateDisabledByA) {
-            if(hasReservations) {
-                switch (existingReservationsAllowed) {
-                    case 1 : {
-                        return <div>
-                                    <h5 className={'text-warning'}>Έχετε απενεργοποιήσει αυτή τη μέρα!</h5>
-                                    <h6  className={'text-warning'}>
-                                        Οι παρακάτω κρατήσεις μπορούν να πραγματοποιηθούν.
-                                    </h6>
-                                </div>
-                    }
-
-                    case 0 : {
-                        return <div>
-                                    <h6  className={'text-warning'}>
-                                        Οι παρακάτω κρατήσεις δεν μπορούν να πραγματοποιηθούν.
-                                        ΠΡΕΠΕΙ να γίνει μεταφορά τους σε άλλη μέρα.
-                                    </h6>
-                                </div>
-                    }
-                }
-            }
-            return <h5 className={'text-warning'}>Έχετε απενεργοποιήσει αυτή τη μέρα!</h5>;
-        }
-    };
-
     return (
         innerWidth > 992
             ?
             <LargeDevicesMonthlyView Calendar={CalendarToShow} selectedDate = {selectedDate}
-                reservationsToShow={reservationsToShow} WarningMessage={getWarningMessage}
-            reservationsFilter={reservationsFilter} setReservationsFilter={setReservationsFilter}>
+                reservationsToShow={reservationsToShow} reservationsFilter={reservationsFilter}
+                setReservationsFilter={setReservationsFilter}>
             </LargeDevicesMonthlyView>
             :
-            <MobileMonthlyView Calendar={CalendarToShow}
-                reservationsToShow={reservationsToShow} WarningMessage={getWarningMessage}
-            selectedDate = {selectedDate}>
+            <MobileMonthlyView Calendar={CalendarToShow} reservationsToShow={reservationsToShow}
+                selectedDate = {selectedDate}>
             </MobileMonthlyView>
     )
 }

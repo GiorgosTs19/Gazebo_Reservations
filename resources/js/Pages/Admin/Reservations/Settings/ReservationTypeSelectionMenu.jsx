@@ -2,12 +2,15 @@ import {Form} from "react-bootstrap";
 import {useContext} from "react";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {ViewContext} from "../../../../Contexts/ViewContext";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
 export function ReservationTypeSelectionMenu({activeTabKey}) {
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
         {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
+        {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         handleOnChange = (value) => {
             setReservationType(value);
+            setActiveReservation(null);
         };
 
     return (

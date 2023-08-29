@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import {useForm } from '@inertiajs/inertia-react';
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import '../../../css/Authentication.css'
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -20,6 +21,7 @@ export default function Login({ status, canResetPassword }) {
         post(route('login'));
         // Inertia.post(route('login'),data);
     };
+    console.log(errors)
     return (
         <Container fluid className={'p-3 vh-100 text-center'}>
             <title title="Log in" />
@@ -31,13 +33,13 @@ export default function Login({ status, canResetPassword }) {
                     <Form onSubmit={submit} className={'m-auto border border-1 rounded-3 p-3 d-flex flex-column'}>
                         <Form.Group className="my-3 mx-auto text-center" controlId="email">
                             <Form.Label className="my-1">Email</Form.Label>
-                            <Form.Control type="email" placeholder="name@example.com" value={data.email}
-                      onChange={(e) => setData('email', e.target.value)} aria-autocomplete={"none"}/>
+                            <Form.Control type="email" placeholder="name@example.com" value={data.email} className={errors.email ? 'input_error' : ''}
+                            onChange={(e) => setData('email', e.target.value)} aria-autocomplete={"none"}/>
                         </Form.Group>
 
                         <Form.Group className="my-3 mx-auto text-center" controlId="password">
                             <Form.Label className="my-1">Κωδικός</Form.Label>
-                            <Form.Control type="password" placeholder="Κωδικός" value={data.password}
+                            <Form.Control type="password" placeholder="Κωδικός" value={data.password} className={errors.password ? 'input_error' : ''}
                           onChange={(e) => setData('password', e.target.value)}/>
                         </Form.Group>
 
@@ -50,6 +52,7 @@ export default function Login({ status, canResetPassword }) {
                             onChange={(e) => setData('remember', e.target.checked)}
                         />
                         {errors.email && <p className={'text-wrap text-danger'}>{errors.email}</p>}
+                        {errors.password && <p className={'text-wrap text-danger'}>{errors.password}</p>}
                         <div className="flex items-center justify-end my-3 mx-auto">
                         {/*    {canResetPassword && (*/}
                         {/*        <Link*/}

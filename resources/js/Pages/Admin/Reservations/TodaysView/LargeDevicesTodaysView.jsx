@@ -27,7 +27,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
             reservationChunks.push(filteredReservations.slice(i, i + 2));
         }
         return reservationChunks.map((chunk, index) => (
-            <div key={index} className="d-flex justify-content-center">
+            <div key={index} className="d-flex justify-content-center hover-scale-0_95">
                 {chunk.map(reservation => (
                     <ReservationShort Reservation={reservation} key={reservation.id} className={'border m-3'} />
                 ))}

@@ -7,7 +7,7 @@ import {GazeboBookingProgressBar} from "../../ProgressBars/GazeboBookingProgress
 import {BookingDetailsContext} from "../../Contexts/BookingDetailsContext";
 import {MenuSelectionForm} from "../Forms/Menu/MenuSelectionForm";
 import {MenuContext} from "../../Contexts/MenuContext";
-import {FinalizeReservation} from "../Forms/FinalizeReservation";
+import {FinalizeReservation} from "../Forms/FinalizeReservation/FinalizeReservation";
 import {GazeboAvailabilityContext} from "../../Contexts/GazeboAvailabilityContext";
 import {GazebosContext} from "../../Contexts/GazebosContext";
 import {InnerWidthContext} from "../../Contexts/InnerWidthContext";

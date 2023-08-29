@@ -30,13 +30,13 @@ export function ReservationShort({Reservation,className}) {
       }
     };
     const status = useGetReservationStatusText(Reservation.Status);
-    const handleChangeReservationStatus = (status) => {
-        Inertia.patch(route('Change_Reservation_Status'),{reservation_id:Reservation.id,status:status},{
-            only:[Reservation.Type === 'Dinner' ? 'Dinner_Reservations' : 'Bed_Reservations']
-        });
-    }
+    // const handleChangeReservationStatus = (status) => {
+    //     Inertia.patch(route('Change_Reservation_Status'),{reservation_id:Reservation.id,status:status},{
+    //         only:[Reservation.Type === 'Dinner' ? 'Dinner_Reservations' : 'Bed_Reservations']
+    //     });
+    // }
     return (
-        <div className={'text-muted p-1 border rounded-2 box_shadow cursor-pointer ' + className +
+        <div className={'text-muted p-1 border rounded-2 box_shadow cursor-pointer hover-scale-0_95 ' + className +
             (activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}
          onClick={()=>setActiveReservation(Reservation)}>
             {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}

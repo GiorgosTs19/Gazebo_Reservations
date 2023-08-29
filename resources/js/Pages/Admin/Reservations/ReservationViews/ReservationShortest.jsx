@@ -14,6 +14,7 @@ export function ReservationShortest({Reservation,className=''}) {
         NumberOfPeople = Reservation?.Attendees.length + 1,
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(Reservation.id);
+
     const getStatusColor = () =>{
         switch (Reservation.Status) {
             case 'Cancelled' : {
@@ -27,16 +28,16 @@ export function ReservationShortest({Reservation,className=''}) {
             }
         }
     };
+
     const statusText = useGetReservationStatusText(Reservation.Status);
+
     return (
         <div className={'text-muted my-2 p-1 rounded-2 ' + (activeReservation?.id !== Reservation.id ? 'reservation-view ' : 'active-reservation ') + className}
-             style={{cursor:'pointer',width:'250px',height:'240px'}} onClick={()=>setActiveReservation(Reservation)}>
-            {/*,pointerEvents:activeReservation?.id === Reservation.id ? 'none' : ''*/}
+             style={{cursor:'pointer',width:'250px',height:'220px'}} onClick={()=>setActiveReservation(Reservation)}>
             <p className={'my-1'}>
                 {isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}
                 Αρ. Κράτησης : {Confirmation_Number}
             </p>
-            {/*<p className={'my-1'}><i>Καταχωρήθηκε στις : {created_at(Reservation.Placed_At)}</i></p>*/}
             <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow user-select-none'}>
                 {statusText}
             </Badge>

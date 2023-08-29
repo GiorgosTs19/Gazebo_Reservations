@@ -15,6 +15,7 @@ export function WeeklyReservationsView() {
 
     // Checks if the currentDate is Today to disable the goToPreviousWeek button.
     const isToday = getFormattedDate(currentDate,'/',2) === getFormattedDate(new Date(),'/',2);
+
     // Checks if the currentDate with 7 days added to it is after the last day set by the admins, to disable the goToNextWeek button.
     const isLastWeek = new Date(currentDate.addDays(7)) > new Date(Settings.Last_Day);
 
@@ -26,6 +27,7 @@ export function WeeklyReservationsView() {
         previousWeek.setDate(currentDate.getDate() - 7);
         setCurrentDate(previousWeek);
     };
+
     // Handles the next goToNextWeek button click.
     const goToNextWeek = () => {
         if(isLastWeek)

@@ -1,7 +1,6 @@
 * {
     box-sizing: border-box;
 }
-/* Reservations */
 
 .reservation-view {
     opacity: 1;
@@ -381,3 +380,24 @@ ul {
 /* Font Size */
 
 /* Font Size */
+
+
+/* Animations */
+.hover-scale-1_03, .hover-scale-1_1,
+.hover-scale-0_8 {
+    transition: transform 0.1s ease-in-out;
+}
+
+.hover-scale-1_03:hover {
+    transform: scale(1.03);
+}
+.hover-scale-1_1:hover {
+    transform: scale(1.1);
+}
+.hover-scale-0_95:hover {
+    transform: scale(0.95);
+}
+.hover-scale-0_8 {
+    transform: scale(0.8);
+}
+/* Animations */

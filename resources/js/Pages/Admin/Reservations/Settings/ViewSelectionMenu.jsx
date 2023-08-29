@@ -28,16 +28,16 @@ export function ViewSelectionMenu() {
         }
     };
 
-    const TodayViewIcon = <TodayViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Today')}
+    const TodayViewIcon = <TodayViewSVG className={'m-auto user-select-none hover-scale-1_1 ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Today')}
         disabled={activeReservationsView === 'Today'}/>,
 
-    WeeklyViewIcon = <WeeklyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Weekly')}
+    WeeklyViewIcon = <WeeklyViewSVG className={'m-auto user-select-none hover-scale-1_1 ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Weekly')}
         disabled={activeReservationsView === 'Weekly'}/>,
 
-    MonthlyViewIcon = <MonthlyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Monthly')}
+    MonthlyViewIcon = <MonthlyViewSVG className={'m-auto user-select-none hover-scale-1_1 ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer')} height={52} width={52} onClick={()=>handleSetActiveView('Monthly')}
         disabled={activeReservationsView === 'Monthly'}/>,
 
-    SearchViewIcon =<SearchViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer')} height={36} width={36} onClick={()=>handleSetActiveView('Search')}
+    SearchViewIcon =<SearchViewSVG className={'m-auto user-select-none hover-scale-1_1 ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer')} height={36} width={36} onClick={()=>handleSetActiveView('Search')}
         disabled={activeReservationsView === 'Search'}/>;
 
 

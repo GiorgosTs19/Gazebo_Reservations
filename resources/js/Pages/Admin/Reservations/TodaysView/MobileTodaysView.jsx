@@ -38,7 +38,7 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
                 reservationChunks.push(filteredReservations.slice(i, i + 2));
             }
             return reservationChunks.map((chunk, index) => (
-                <div key={index} className="d-flex justify-content-center">
+                <div key={index} className="d-flex justify-content-center hover-scale-0_95">
                     {chunk.map(reservation => (
                         <ReservationShortest Reservation={reservation} key={reservation.id} className={'border mx-3'} />
                     ))}
@@ -46,7 +46,7 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
             ))
         }
         return filteredReservations.map((reservation)=> {
-            return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border'}></ReservationShortest>;
+            return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border hover-scale-0_95'}></ReservationShortest>;
         });
     },[reservations_of_current_date,reservationsFilter]);
 

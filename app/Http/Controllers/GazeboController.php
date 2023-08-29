@@ -13,7 +13,6 @@ use App\Models\Gazebo;
 use App\Models\Menu;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -28,26 +27,26 @@ class GazeboController extends Controller {
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {
-        $Gazepo1 = new Gazebo;
-            $Gazepo1->number = 1;
-            $Gazepo1->save();
-        $Gazepo2 = new Gazebo;
-            $Gazepo2->number = 2;
-            $Gazepo2->save();
-        $Gazepo3 = new Gazebo;
-            $Gazepo3->number = 3;
-            $Gazepo3->save();
-        $Gazepo4 = new Gazebo;
-            $Gazepo4->number = 4;
-            $Gazepo4->save();
-        $Gazepo5 = new Gazebo;
-            $Gazepo5->number = 5;
-            $Gazepo5->save();
-        $Gazepo6 = new Gazebo;
-            $Gazepo6->number = 6;
-            $Gazepo6->save();
-    }
+//    public function create() {
+//        $Gazepo1 = new Gazebo;
+//            $Gazepo1->number = 1;
+//            $Gazepo1->save();
+//        $Gazepo2 = new Gazebo;
+//            $Gazepo2->number = 2;
+//            $Gazepo2->save();
+//        $Gazepo3 = new Gazebo;
+//            $Gazepo3->number = 3;
+//            $Gazepo3->save();
+//        $Gazepo4 = new Gazebo;
+//            $Gazepo4->number = 4;
+//            $Gazepo4->save();
+//        $Gazepo5 = new Gazebo;
+//            $Gazepo5->number = 5;
+//            $Gazepo5->save();
+//        $Gazepo6 = new Gazebo;
+//            $Gazepo6->number = 6;
+//            $Gazepo6->save();
+//    }
 
     /**
      * Store a newly created resource in storage.
@@ -219,8 +218,7 @@ class GazeboController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Gazebo $gazebo)
-    {
+    public function destroy(Gazebo $gazebo) {
         //
     }
 }

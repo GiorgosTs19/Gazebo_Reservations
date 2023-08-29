@@ -11,8 +11,7 @@ return new class extends Migration {
     public function up(): void  {
         Schema::create('menu_items', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('menu_id');
-//                ->constrained();
+            $table->foreignUuid('menu_id')->constrained('menus')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('Name');
             $table->boolean('is_lactose_free')->default(false);
             $table->boolean('is_gluten_free')->default(false);

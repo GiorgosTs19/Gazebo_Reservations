@@ -38,39 +38,54 @@ export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix,withTime=fal
  * @param menu_id Requested ID
  * @param Menus_Array Array of all Menus and their items
  * @param isMenuDestructured
+ * @param menuType The type of the menu passed into the function. Bed package or Dinner Menu.
  * @returns {string} the name of the Menu whose ID matches the ID passed into the function.
  */
-export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false) {
-    if(!isMenuDestructured){
-        const Mains = Menus_Array.Dinner.Mains,
-            Desserts = Menus_Array.Dinner.Desserts;
-        const MainFound = Mains.find(menu=>menu.id===menu_id),
-            DessertFound = Desserts.find(menu=>menu.id===menu_id);
-        if(MainFound !== undefined) {
-            if(MainFound.Items.length === 1)
-                return MainFound.Items[0].Name;
-            return MainFound.Name;
+export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menuType='Dinner') {
+    switch (menuType) {
+        case 'Dinner' : {
+            if(!isMenuDestructured) {
+                const Mains = Menus_Array.Dinner.Mains,
+                    Desserts = Menus_Array.Dinner.Desserts;
+                const MainFound = Mains.find(menu=>menu.id===menu_id),
+                    DessertFound = Desserts.find(menu=>menu.id===menu_id);
+                if(MainFound !== undefined) {
+                    if(MainFound.Items.length === 1)
+                        return MainFound.Items[0].Name;
+                    return MainFound.Name;
+                }
+                else if(DessertFound !== undefined) {
+                    if(DessertFound.Items.length === 1)
+                        return DessertFound.Items[0].Name;
+                    return DessertFound.Name;
+                }
+            }
+            else {
+                const Mains = Menus_Array.Mains,
+                    Desserts = Menus_Array.Desserts;
+                const MainFound = Mains.find(menu=>menu.id===menu_id),
+                    DessertFound = Desserts.find(menu=>menu.id===menu_id);
+                if(MainFound !== undefined) {
+                    if(MainFound.Items.length === 1)
+                        return MainFound.Items[0].Name;
+                    return MainFound.Name;
+                }
+                else if(DessertFound !== undefined) {
+                    if(DessertFound.Items.length === 1)
+                        return DessertFound.Items[0].Name;
+                    return DessertFound.Name;
+                }
+            }
+            return 'Menu';
         }
-        else if(DessertFound !== undefined) {
-            if(DessertFound.Items.length === 1)
-                return DessertFound.Items[0].Name;
-            return DessertFound.Name;
-        }
-    }
-    else {
-        const Mains = Menus_Array.Mains,
-            Desserts = Menus_Array.Desserts;
-        const MainFound = Mains.find(menu=>menu.id===menu_id),
-            DessertFound = Desserts.find(menu=>menu.id===menu_id);
-        if(MainFound !== undefined) {
-            if(MainFound.Items.length === 1)
-                return MainFound.Items[0].Name;
-            return MainFound.Name;
-        }
-        else if(DessertFound !== undefined) {
-            if(DessertFound.Items.length === 1)
-                return DessertFound.Items[0].Name;
-            return DessertFound.Name;
+
+        case 'Bed' : {
+            const MenusFound =  Menus_Array.find(menu=>menu.id === menu_id);
+            if(MenusFound !== undefined) {
+                if(MenusFound.Items.length === 1)
+                    return MenusFound.Items[0].Name;
+                return MenusFound.Name;
+            }
         }
     }
     return 'Menu';
@@ -171,7 +186,6 @@ export function created_at(given_date) {
 }
 
 /**
- *
  * @param time1
  * @param time2
  * @param isNextDay
@@ -179,7 +193,7 @@ export function created_at(given_date) {
  * -1 if time1 is earlier than time2,
  * 1 if time1 is later than time2,
  * 0 if time1 is equal to time2,
- */
+ **/
 export function compareTimes(time1, time2, isNextDay = false) {
     const [hours1, minutes1] = time1.split(':');
     const [hours2, minutes2] = time2.split(':');
@@ -217,9 +231,7 @@ export function getTimeDifferenceInMinutes(time1, time2) {
 
 export function isDateDisabledByAdmin (givenDate,Reservations) {
     if(typeof givenDate === 'string') {
-        console.log('Called as string')
         const selectedDate = Reservations.find(date => date.Date === givenDate);
-        console.log(selectedDate)
         if(selectedDate)
             return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
         return [false,true];

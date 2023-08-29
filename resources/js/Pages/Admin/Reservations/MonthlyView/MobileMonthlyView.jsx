@@ -5,7 +5,7 @@ import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 
-export function MobileMonthlyView({Calendar,reservationsToShow,WarningMessage,selectedDate}) {
+export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate}) {
     const [shouldShowCalendar,setShouldShowCalendar] = useState(true),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
 
@@ -28,7 +28,6 @@ export function MobileMonthlyView({Calendar,reservationsToShow,WarningMessage,se
                     <>
                         <LeftArrowSVG className={'my-2 mx-auto'} rotate={90} onClick={handleBackToCalendar}/>
                         <Stack className={'p-3 overflow-y-auto h-90'}>
-                            {WarningMessage()}
                             {reservationsToShow()}
                         </Stack>
                     </>

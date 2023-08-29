@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\BedSetting;
+use App\Models\DinnerSetting;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,6 +27,10 @@ return new class extends Migration {
             $table->tinyText('Finalization_Notes')->nullable();
             $table->timestamps();
         });
+
+        $NewDinnerSettings = new DinnerSetting;
+        $NewDinnerSettings->save();
+
         Schema::create('bed_settings', function (Blueprint $table)
         use ($starting_date, $arrival_time_start, $ending_date){
             $table->id();
@@ -36,6 +42,9 @@ return new class extends Migration {
             $table->tinyText('Finalization_Notes')->nullable();
             $table->timestamps();
         });
+
+        $NewBedSettings = new BedSetting;
+        $NewBedSettings->save();
     }
 
     /**
