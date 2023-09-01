@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void  {
         Schema::create('menu_items', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('menu_id')->constrained('menus')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('Name');
             $table->boolean('is_lactose_free')->default(false);
