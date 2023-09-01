@@ -33,7 +33,7 @@ return new class extends Migration {
 
     public function up(): void  {
         Schema::create('gazebos', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->integer('Number');
             $table->timestamps();
         });

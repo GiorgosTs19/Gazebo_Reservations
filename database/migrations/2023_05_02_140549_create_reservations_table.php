@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void  {
         Schema::create('reservations', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('gazebo_id')
-                ->constrained('gazebos')->cascadeOnDelete()->cascadeOnUpdate();
+                ->constrained('gazebos','id','')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('Type');
             $table->string('First_Name');
             $table->string('Last_Name');

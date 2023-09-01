@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('menus', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('Name');
             $table->string('Category');
             $table->string('Type');
