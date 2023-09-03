@@ -1,4 +1,4 @@
-import {Button, Carousel} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {GazeboLocation} from "./GazeboLocation";
 import {useContext} from "react";
 import {BookingDetailsContext} from "../../../../Contexts/BookingDetailsContext";

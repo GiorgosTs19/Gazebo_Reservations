@@ -176,7 +176,7 @@ ul .list-group-item.active {
 }
 
 .menu-list, .content-card, .border-blue, .grey-border {
-    border-color: #7a7777 !important;
+    border-color: #38c4c4 !important;
 }
 
 .react-calendar__month-view__nights__night--weekend {
@@ -338,7 +338,7 @@ ul .list-group-item.active {
 /*    z-index: 2;*/
 /*}*/
 .bold-info-text {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 13px;
     color: black;
 }

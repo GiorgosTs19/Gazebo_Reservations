@@ -107,7 +107,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
             + (innerWidth > 992 ? ' w-50 ' : ' w-100 ')}
               ref={ref}>
             <GazeboBookingProgressBar></GazeboBookingProgressBar>
-            <Row className={'w-100 d-flex mx-0'}>
+            <Row className={'w-100 d-flex mx-0 '}>
                 <Col ref={typeSelectionRef} className={'my-auto'} xs={12} md={bookingDetails.type === '' ? 12 : (progress !== 'Type' ? 12 : 5)}>
                     <Row className={'m-auto'}>
                         <Col className={'p-2 border-blue border border-start-0 border-top-0 border-bottom-0 d-flex ' + (progress !== 'Type' ? 'opacity-50' : '')}

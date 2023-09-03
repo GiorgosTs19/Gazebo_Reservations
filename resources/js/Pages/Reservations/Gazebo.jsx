@@ -126,21 +126,18 @@ export default function Gazebo(props) {
                                     <IsTouchableContext.Provider value={isTouchDevice()}>
                                         <InnerWidthContext.Provider value={innerWidth}>
                                             <Container fluid className={'p-3 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column video-container'}>
-                                                <video autoPlay loop muted>
-                                                    <source src="Videos/background-video.mp4" type="video/mp4"/>
-                                                </video>
-                                                    {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
-                                                     onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
-                                                    <TypeSelectionForm ref={typeRef}>
-                                                        {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}>
-                                                        </GazeboSelectionForm>}
-                                                        {progress === 'Details' && <ReservationInfoForm ref={detailsRef}>
-                                                        </ReservationInfoForm>}
-                                                        {progress === 'Menu' &&
-                                                            <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
-                                                        {progress === 'Finalize' &&
-                                                            <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
-                                                    </TypeSelectionForm>
+                                                {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
+                                                 onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
+                                                <TypeSelectionForm ref={typeRef}>
+                                                    {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}>
+                                                    </GazeboSelectionForm>}
+                                                    {progress === 'Details' && <ReservationInfoForm ref={detailsRef}>
+                                                    </ReservationInfoForm>}
+                                                    {progress === 'Menu' &&
+                                                        <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
+                                                    {progress === 'Finalize' &&
+                                                        <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
+                                                </TypeSelectionForm>
                                             </Container>
                                         </InnerWidthContext.Provider>
                                     </IsTouchableContext.Provider>
