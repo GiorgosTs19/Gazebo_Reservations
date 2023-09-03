@@ -18,7 +18,7 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
             <h5 className={'user-select-none'}>
                 <Form.Check // prettier-ignore
                     type={'radio'}
-                    label={`Βραδινές Kρατήσεις ( Δείπνο )`}
+                    label={`Βραδινές Κρατήσεις`}
                     name={'ReservationType'}
                     value={'Dinner'}
                     disabled={(activeTabKey === 'Reservations' && activeReservationsView === 'Search' ) || activeTabKey === 'ResolveConflict'}
@@ -29,7 +29,7 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
             <h5 className={'user-select-none'}>
                 <Form.Check
                     type={'radio'}
-                    label={'Πρωινές Kρατήσεις ( Ξαπλώστρες )'}
+                    label={'Πρωινές Κρατήσεις'}
                     name={'ReservationType'}
                     value={'Bed'}
                     disabled={(activeTabKey === 'Reservations' && activeReservationsView === 'Search'  ) || activeTabKey === 'ResolveConflict'}

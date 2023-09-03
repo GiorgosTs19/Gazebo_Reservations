@@ -93,7 +93,7 @@ export default function AdminPanel(props) {
     const ReservationsContent = <ReservationsPanel></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,
-    typeAndViewSelectionPanel = <Row className={'p-0 w-100 d-flex flex-row'}>
+    typeAndViewSelectionPanel = <Row className={'p-0 w-100 d-flex flex-row mx-0'}>
         <Col lg={4} className={'d-flex box_shadow rounded-4 border flex-column my-3 my-lg-0 ' + (isMobile ? ' border-bottom ' :
             ' border-end px-3')}>
             <ReservationTypeSelectionMenu activeTabKey={activeTabKey}></ReservationTypeSelectionMenu>
@@ -144,17 +144,17 @@ export default function AdminPanel(props) {
                                                                 </NavigationBar>
                                                                 <div className={'h-90 px-xs-5  vw-100 position-absolute overflow-auto'}>
                                                                     <Card className={"px-2 px-lg-2 px-xxl-4 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
-                                                                            {innerWidth > 992 &&
-                                                                                <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
-                                                                                    {typeAndViewSelectionPanel}
-                                                                                </Card.Header>}
-                                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-2 px-xl-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
-                                                                                <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
-                                                                                    <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
-                                                                                        {renderContent()}
-                                                                                    </ShouldShowUnsavedChangesModalContext.Provider>
-                                                                                </PendingUnsavedChangesContext.Provider>
-                                                                            </Card.Body>
+                                                                        {innerWidth > 992 &&
+                                                                        <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
+                                                                            {typeAndViewSelectionPanel}
+                                                                        </Card.Header>}
+                                                                        <Card.Body className={'px-xs-1 px-lg-2 px-xl-2 rounded-4 border-0  mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                                            <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
+                                                                                <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
+                                                                                    {renderContent()}
+                                                                                </ShouldShowUnsavedChangesModalContext.Provider>
+                                                                            </PendingUnsavedChangesContext.Provider>
+                                                                        </Card.Body>
                                                                     </Card>
                                                                 </div>
                                                             </MenuEditModeContext.Provider>

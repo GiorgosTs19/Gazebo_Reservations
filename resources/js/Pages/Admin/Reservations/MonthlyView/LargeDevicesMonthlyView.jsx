@@ -5,7 +5,7 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 
 export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
     reservationsFilter,setReservationsFilter, selectedDate}) {
-    const reservations = reservationsToShow(),
+    const [reservations, reservationsCount] = reservationsToShow(),
         {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
     return (
         <Row className={'text-center h-100'}>
@@ -13,9 +13,10 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
                 {Calendar}
             </Col>
             <Col xl={activeReservation == null ? 8 : 7} className={'d-flex flex-column h-100 pb-0'}>
-                <FiltersBar direction={'horizontal'} reservationsFilter={reservationsFilter}
-                    disabled={selectedDate === ''}
-                     setReservationsFilter={setReservationsFilter} className={'mx-auto mt-3 mb-3'}></FiltersBar>
+                {reservationsCount > 0 && <FiltersBar direction={'horizontal'} reservationsFilter={reservationsFilter}
+                             disabled={selectedDate === ''}
+                             setReservationsFilter={setReservationsFilter}
+                             className={'mx-auto my-3 border-secondary-subtle border rounded-4 p-2'}/>}
                 {/*{WarningMessage()}*/}
                 <Stack className={'px-0 overflow-y-auto monthly-reservation-stack'} >
                     {reservations}

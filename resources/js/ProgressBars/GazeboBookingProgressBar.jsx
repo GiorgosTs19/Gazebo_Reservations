@@ -58,25 +58,25 @@ export function GazeboBookingProgressBar() {
         }
     };
     return (
-        <div className={'mt-3 mx-auto bg-transparent d-flex'}>
+        <div className={'my-3 mx-auto bg-transparent d-flex'}>
             <Breadcrumb className={'mx-auto'}>
-                    <Breadcrumb.Item onClick={()=>setProgress('Type')} active={progress === 'Type'} className={'navigation-item info-text'}>
-                        {progress === 'Type' ? 'Date Selection' : 'Date'}
+                    <Breadcrumb.Item onClick={()=>setProgress('Type')} active={progress === 'Type'} className={'navigation-item bold-info-text'}>
+                        {bookingDetails.type === '' ? 'Type Selection' : (bookingDetails.number_of_people === 0 ? 'Guest Count Selection' : (progress === 'Type' ? 'Date Selection' : 'Date'))}
                     </Breadcrumb.Item>
                 {checkRequirements('Table') &&
-                    <Breadcrumb.Item onClick={()=>setProgress('Table')} active={progress === 'Table'} className={'navigation-item info-text'}>
+                    <Breadcrumb.Item onClick={()=>setProgress('Table')} active={progress === 'Table'} className={'navigation-item bold-info-text'}>
                         {progress === 'Table' ? 'Gazebo Selection' : 'Gazebo'}
                     </Breadcrumb.Item>}
                 {checkRequirements('Details') &&
-                    <Breadcrumb.Item onClick={()=>setProgress('Details')} active={progress === 'Details'} className={'navigation-item info-text'}>
+                    <Breadcrumb.Item onClick={()=>setProgress('Details')} active={progress === 'Details'} className={'navigation-item bold-info-text'}>
                         {progress === 'Details' ? 'Reservation Details' : 'Details'}
                     </Breadcrumb.Item>}
                 {checkRequirements('Menu') &&
-                    <Breadcrumb.Item onClick={()=>setProgress('Menu')} active={progress === 'Menu'} className={'navigation-item info-text'}>
+                    <Breadcrumb.Item onClick={()=>setProgress('Menu')} active={progress === 'Menu'} className={'navigation-item bold-info-text'}>
                         {progress === 'Menu' ? 'Menu Selection' : (bookingDetails.more_rooms ? 'Menus' : 'Menu')}
                     </Breadcrumb.Item>}
                 {checkRequirements('Finalize') &&
-                    <Breadcrumb.Item onClick={()=>setProgress('Finalize')} active={progress === 'Finalize'} className={'navigation-item info-text'}>
+                    <Breadcrumb.Item onClick={()=>setProgress('Finalize')} active={progress === 'Finalize'} className={'navigation-item bold-info-text'}>
                         Finalize
                     </Breadcrumb.Item>}
             </Breadcrumb>

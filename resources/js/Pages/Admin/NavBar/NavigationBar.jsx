@@ -1,4 +1,4 @@
-import {Button, Container, Nav, Navbar, OverlayTrigger, Popover, Tab, Tabs} from "react-bootstrap";
+import {Button, Container, Nav, Navbar, NavDropdown, OverlayTrigger, Popover, Tab, Tabs} from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import React, {useContext} from "react";
 import {AuthenticatedUserContext} from "../Contexts/AuthenticatedUserContext";
@@ -30,36 +30,50 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
                             Μενού
                         </Offcanvas.Title>
                     </Offcanvas.Header>
-                    <Offcanvas.Body className={'pe-0 ps-4 ps-xxl-0 ms-xxl-2 d-flex flex-column flex-xl-row'}>
-                        <Navbar.Text className={'fw-bold order-1 order-xl-2 ms-xl-auto text-center w-fit-content'}>
+                    <Offcanvas.Body className={'px-3 ps-xxl-0 ms-xxl-2 d-flex flex-column flex-xxl-row'}>
+                        <Navbar.Text className={'fw-bold order-1 order-xxl-2 ms-xxl-auto text-center w-fit-content'}>
                             Συνδεδεμένος / η ώς : {User.first_name + ' '+ User.last_name}
                         </Navbar.Text>
                         <UsefulInfoModal className={'order-3 order-xxl-1 my-3 mx-xxl-2'}></UsefulInfoModal>
                         {/*Second In large Screen, 3rd in mobiles and tablets*/}
-                        <Nav className="user-select-none w-50 order-2 order-xl-1">
+                        <Nav className="user-select-none w-50 order-2 order-xxl-1">
                             <Nav.Link href="#Κρατήσεις" className={'primary my-auto hover-scale-1_03'} onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
-                            <AdminToNewReservationFormModal/>
-                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary my-auto hover-scale-1_03'}
-                                disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
+                            <NavDropdown title="Μενού" id="navbarMenusScrollingDropdown" className={'my-auto'}>
+                                <NavDropdown.Item>
+                                    <Nav.Link href="#Μενού-Υπάρχοντα"
+                                              className={'px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
+                                              onClick={() => {
+                                                  handleSetActiveKey('Menus');
+                                                  setActiveMenusTabKey("Existing");
+                                              }} disabled={activeMenusTabKey === 'Existing' && activeTabKey === 'Menus'}>Υπάρχοντα</Nav.Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Nav.Link href="#Μενού-Δημιουργία"
+                                      className={'px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
+                                      onClick={() => {
+                                          handleSetActiveKey('Menus');
+                                          setActiveMenusTabKey("New");
+                                      }} disabled={activeMenusTabKey === 'New'  && activeTabKey === 'Menus'}>Δημιουργία</Nav.Link>
+                                </NavDropdown.Item>
 
-                            {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Υπάρχοντα"
-                                className={'border-start px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
-                                onClick={() => setActiveMenusTabKey("Existing")} disabled={activeMenusTabKey === 'Existing'}>Υπάρχοντα</Nav.Link>}
+                                <NavDropdown.Item>
+                                {editingMenu !== null && <>
+                                    <NavDropdown.Divider />
+                                    <Nav.Link href={`#Επεξεργασία-${editingMenu.Name}`} className={`text-center hover-scale-1_03 px-2 ms-1 my-2 my-md-auto important ${activeTabKey === 'Menus' ? ' secondary' : 'primary'}`}
+                                              onClick={() => {setActiveMenusTabKey("Edit"); handleSetActiveKey('Menus',true);}} disabled={activeMenusTabKey === 'Edit' && activeTabKey ==='Menus'}
+                                    >{`Επεξεργασία`}</Nav.Link>
+                                </>}
+                                </NavDropdown.Item>
+                            </NavDropdown>
 
-                            {editingMenu !== null && <Nav.Link href={`#Επεξεργασία-${editingMenu.Name}`} className={`text-center hover-scale-1_03 px-2 ms-1 my-2 my-md-auto important ${activeTabKey === 'Menus' ? ' secondary' : 'primary'}`}
-                                                               onClick={() => {setActiveMenusTabKey("Edit"); handleSetActiveKey('Menus',true);}} disabled={activeMenusTabKey === 'Edit' && activeTabKey ==='Menus'}
-                            >{`Επεξεργασία`}</Nav.Link>}
-
-                            {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Δημιουργία"
-                                className={'border-end px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
-                                onClick={() => setActiveMenusTabKey("New")} disabled={activeMenusTabKey === 'New'}>Δημιουργία</Nav.Link>}
                             <Nav.Link href="#Ρυθμίσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
+                            <AdminToNewReservationFormModal/>
                         </Nav>
-                        {/* Second In large Screens,*/}
-                        <div className={'order-1 order-xl-3 mb-5 mb-md-4 hover-scale-1_03'}>
+                        {/* Second In large Screens */}
+                        <div className={'order-1 order-xxl-3 mb-5 mb-md-4 hover-scale-1_03'}>
                             {children}
                         </div>
-                        <Button variant={"outline-secondary"} className={'mt-auto mt-lg-0 my-xl-auto ms-xl-3 order-3 mx-auto mx-xl-0'} onClick={()=>Inertia.post(route('logout'))}>
+                        <Button variant={"outline-secondary"} className={'mt-auto mt-lg-0 my-xxl-auto ms-xxl-3 order-3 mx-auto mx-xxl-0'} onClick={()=>Inertia.post(route('logout'))}>
                             Αποσύνδεση
                         </Button>
                     </Offcanvas.Body>

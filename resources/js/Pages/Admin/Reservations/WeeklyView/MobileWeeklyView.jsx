@@ -14,7 +14,7 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             if(reservations_of_current_date.length === 0)
                 return [<h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>,0];
 
-            const reservationsToRender = innerWidth > 900 ? 2 : 1;
+            const reservationsToRender = innerWidth > 700 ? 2 : 1;
 
             const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
                 reservations_of_current_date.filter((reservation)=>{
@@ -68,17 +68,12 @@ export function MobileWeeklyView({currentDate, filter, children}) {
                     {children}
                 </div>
                 <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
-                            reservationsFilter={reservationsFilter} className={'mx-auto'}>
+                            reservationsFilter={reservationsFilter} className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
                 </FiltersBar>
             </div>
-            <Row>
-                <Col lg={12} className={'p-0'}>
-                        <p><span className={'disabled-day'}>Ημέρα </span>: Απενεργοποιημένη Μέρα</p>
-                    <Accordion className="week-days p-0 mx-3 overflow-auto" gap={2}>
-                        {renderWeekDays()}
-                    </Accordion>
-                </Col>
-            </Row>
+            <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
+                {renderWeekDays()}
+            </Accordion>
         </div>
     )
 }

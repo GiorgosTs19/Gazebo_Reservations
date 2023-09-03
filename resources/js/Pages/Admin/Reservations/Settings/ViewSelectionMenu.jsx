@@ -1,14 +1,11 @@
-import {Button, Form, ListGroup, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
+import {ListGroup} from "react-bootstrap";
 import {useContext} from "react";
 import {ViewContext} from "../../../../Contexts/ViewContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
-import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {TodayViewSVG} from "../../../../SVGS/TodayViewSVG";
 import {WeeklyViewSVG} from "../../../../SVGS/WeeklyViewSVG";
 import {MonthlyViewSVG} from "../../../../SVGS/MonthlyViewSVG";
 import {SearchViewSVG} from "../../../../SVGS/SearchViewSVG";
-import {getFormattedDate} from "../../../../ExternalJs/Util";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 
 export function ViewSelectionMenu() {

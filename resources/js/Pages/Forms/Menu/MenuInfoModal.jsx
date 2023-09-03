@@ -12,12 +12,12 @@ export function MenuInfoModal({menu}) {
             </Badge>
             <Modal size="sm" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
             style={{maxHeight:'80vh'}}>
-                <Modal.Header closeButton className={'bg'}>
+                <Modal.Header closeButton className={''}>
                     <Modal.Title id="example-modal-sizes-title-sm">
                         {menu.Name}
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className={'bg'}>
+                <Modal.Body className={''}>
                     <h6 className={'pb-3 info-text-lg'}>The {menu.Name} menu contains</h6>
                     <ListGroup as="ol" numbered variant={'flush'}>
                     {menu.Items.map((item)=>{

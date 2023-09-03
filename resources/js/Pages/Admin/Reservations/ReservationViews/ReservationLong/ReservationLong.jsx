@@ -36,7 +36,7 @@ export function ReservationLong() {
     };
 
     return (
-        <div className={`text-center box_shadow rounded-3 border my-4 p-3 mx-auto h-fit-content ${resolvingConflict[0] ? ' ' : 'w-100 my-xl-auto'} ` + (resolvingConflict[0] ? 'reservation-long-view-conflicted' : '')}>
+        <div className={`text-center box_shadow rounded-3 border p-3 m-auto h-fit-content ${resolvingConflict[0] ? ' ' : 'w-100 my-xl-auto'} ` + (resolvingConflict[0] ? 'reservation-long-view-conflicted' : '')}>
             {(InnerWidth < 992 || resolvingConflict[0]) &&
                 <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
             <ReservationDetails activeReservation={activeReservation} Attendees={Attendees} handleActiveReservation={setActiveReservation}>

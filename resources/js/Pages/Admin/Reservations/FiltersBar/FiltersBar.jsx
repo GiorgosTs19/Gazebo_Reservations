@@ -6,7 +6,7 @@ export function FiltersBar({reservationsFilter,setReservationsFilter,direction='
             setReservationsFilter(filter);
     }
     return (
-            <Stack direction={direction} className={'d-flex flex-wrap filters-bar-stack ' + className} gap={3}>
+            <Stack direction={direction} className={'d-flex flex-wrap filters-bar-stack ' + className} gap={innerWidth < 500 ? 2 : 3}>
                 <Badge pill bg={"dark"}
                        className={'cursor-pointer user-select-none hover-scale-0_95 '
                            + ((reservationsFilter === 'All' || disabled)? ' opacity-25' : '')}

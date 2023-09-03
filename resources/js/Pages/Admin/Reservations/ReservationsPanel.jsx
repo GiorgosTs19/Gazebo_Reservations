@@ -57,7 +57,7 @@ export function ReservationsPanel() {
             </Col>
             {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 1200)) &&
                 <Col sm={12} md={8} lg={5}
-            className={'d-flex text-center overflow-y-auto reservation-long-view py-3'} as={'div'}>
+            className={'d-flex text-center overflow-y-auto reservation-long-view py-lg-4'} as={'div'}>
                 {showReservationLong()}
             </Col>}
         </Row>
