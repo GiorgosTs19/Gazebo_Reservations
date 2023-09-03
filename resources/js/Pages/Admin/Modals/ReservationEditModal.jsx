@@ -15,11 +15,12 @@ export function ReservationEditModal({Reservation,Status, className, isReservati
     const [modalTitle,setModalTitle] = useState('Επεξεργασία Κράτησης');
     const handleBackToOptions = () => {setContent('Options');setModalTitle('Επεξεργασία Κράτησης')};
     const handleHide = () => {setContent('Options');setShowEditModal(false);}
+    const isEditButtonDisabled = !isReservationInConflict ? (Status === 'Pending' || Status === 'Cancelled') : false;
     return (
         <>
-            <Button variant={'outline-dark'}
-                     className={'mx-auto px-2 py-2 rounded-3 ' + className} onClick={handleShow}
-                     disabled={!isReservationInConflict ? (Status === 'Pending' || Status === 'Cancelled') : false}>
+            <Button variant={'secondary'}
+                     className={`mx-auto px-2 py-2 rounded-3 ${!isEditButtonDisabled ? 'hover-scale-1_03' : ''} ` + className} onClick={handleShow}
+                     disabled={isEditButtonDisabled}>
                 Επεξεργασία
             </Button>
 
@@ -39,6 +40,7 @@ export function ReservationEditModal({Reservation,Status, className, isReservati
                                                                ModalTitle={{modalTitle,setModalTitle}}>
                                     </ReservationEditingOptions>
                                 }
+
                                 {content !== 'Options' &&
                                     content
                                 }

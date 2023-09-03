@@ -32,11 +32,11 @@ export function ReservationShortest({Reservation,className=''}) {
     const statusText = useGetReservationStatusText(Reservation.Status);
 
     return (
-        <div className={'text-muted my-2 p-1 rounded-2 ' + (activeReservation?.id !== Reservation.id ? 'reservation-view ' : 'active-reservation ') + className}
-             style={{cursor:'pointer',width:'250px',height:'220px'}} onClick={()=>setActiveReservation(Reservation)}>
+        <div className={`text-muted py-1 px-3 rounded-2 w-auto ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')} ` + className}
+             style={{cursor:'pointer'}} onClick={()=>setActiveReservation(Reservation)}>
             <p className={'my-1'}>
                 {isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}
-                Αρ. Κράτησης : {Confirmation_Number}
+                <b>{Confirmation_Number}</b>
             </p>
             <Badge pill bg={getStatusColor().split('-')[1]} className={'my-2 box_shadow user-select-none'}>
                 {statusText}
@@ -52,7 +52,7 @@ export function ReservationShortest({Reservation,className=''}) {
                         })}
                     </p>
                     <p className={'my-2 user-select-none'}><i>Άτομα : </i>{Reservation.Attendees.length + 1}</p>
-                    <p className={'my-2 user-select-none'}><i>Τραπέζι : </i>{getTableAA(Reservation?.Gazebo,Tables)}</p>
+                    <p className={'my-2 user-select-none'}><i>Gazebo : </i>{getTableAA(Reservation?.Gazebo,Tables)}</p>
                 </Col>
             </Row>
         </div>

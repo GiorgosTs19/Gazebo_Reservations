@@ -21,9 +21,9 @@ export function ViewSelectionMenu() {
     }
     const getReservationViewText = () => {
         switch (activeReservationsView) {
-            case 'Today' : return `Σημερινές Κρατήσεις ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
-            case 'Weekly' : return `Κρατήσεις ανά εβδομάδα ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
-            case 'Monthly' : return `Κρατήσεις ανά μήνα ${reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}`;
+            case 'Today' : return `Σημερινές ${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις`;
+            case 'Weekly' : return `${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις ανά εβδομάδα`;
+            case 'Monthly' : return `${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις ανά μήνα`;
             case 'Search' : return 'Αναζήτηση Κρατήσεων'
         }
     };

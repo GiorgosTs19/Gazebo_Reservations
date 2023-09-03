@@ -39,8 +39,8 @@ export function ConflictsContainer({conflicts}) {
             key={'bottom'}
             placement={'bottom'}
             overlay={popOver}>
-            <section className={'me-xl-4'}>
-                <Button className={'bg-transparent border-0 text-dark pe-0 '}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/></Button>
+            <section className={'me-xl-1'}>
+                <Button className={'bg-transparent border-0 text-dark px-1 '}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/></Button>
                 {(date_conflicts_diff > 0  || table_conflicts_diff > 0) && <Badge pill bg={'primary'} text={'dark'} className={'p-1 mx-1'}>{` `}</Badge>}
             </section>
         </OverlayTrigger>

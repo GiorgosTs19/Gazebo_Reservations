@@ -17,14 +17,18 @@ import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
 import {Container} from "react-bootstrap";
 import gsap from "gsap";
 import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext";
+import {ErrorsContext} from "../Admin/Contexts/ErrorsContext";
+import {AlertMessage} from "../../Alerts/AlertMessage";
 
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
+    selectedDate = props.SelectedDate, selectedType = props.SelectedType,
+        selectedPeople = props.SelectedPeople,
     [bookingDetails, setBookingDetails] = useState(
         {
-            date:'',
+            date:selectedDate ?? '',
             table:'',
-            number_of_people:0,
+            number_of_people:selectedPeople ?? 0,
             more_rooms:false,
             first_name:'',
             last_name:'',
@@ -36,8 +40,9 @@ export default function Gazebo(props) {
             primary_menu:{Main:'',Dessert:''},
             secondary_menu:{Main:'',Dessert:''},
             notes:'',
-            type:'',
+            type: selectedType ?? '',
         }),
+    [errors,setErrors] = useState(null),
     [innerWidth, setInnerWidth] = useState(window.innerWidth),
     DinnerSettings = props.Settings.Dinner,
     BedSettings = props.Settings.Bed,
@@ -57,7 +62,7 @@ export default function Gazebo(props) {
                     return 0;
                 if(innerWidth < 1000) {
                     if (window.innerWidth > window.innerHeight)
-                        return '20%';
+                        return '10%';
                 }
                 return '8%';
             }
@@ -112,42 +117,48 @@ export default function Gazebo(props) {
     },[progress]);
 
     return (
-        <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
-            <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
-                <FormProgressContext.Provider value={{progress,setProgress}}>
-                    <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
-                        <GazeboAvailabilityContext.Provider value={(bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning)}>
-                            <GazebosContext.Provider value={Gazebos}>
-                                <IsTouchableContext.Provider value={isTouchDevice()}>
-                                    <InnerWidthContext.Provider value={innerWidth}>
-                                        <Container fluid className={'px-1 pb-1 pt-0 text-center mx-auto mt-0 vh-100 bg'}>
-                                            {progress !== 'Type' && <div  className={'mx-auto sticky-top pt-2'} style={{height:getHeight('Nav')}}>
-                                                <div style={{width: (innerWidth > 1000 ? 'fit-content' : '95%')}}
-                                                     className={'mx-auto d-flex'}>
-                                                    <GazeboBookingProgressBar></GazeboBookingProgressBar>
-                                                </div>
-                                            </div>}
-                                            <div className={'px-2 py-3 my-1 d-flex flex-column scrollable-y'}
-                                                 ref={ContainerRef} style={{overflowY:shouldShowScroll(),overflowX:'hidden'}}>
-                                                <TypeSelectionForm ref={typeRef}>
-                                                    {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}>
-                                                    </GazeboSelectionForm>}
-                                                    {progress === 'Details' && <ReservationInfoForm ref={detailsRef}>
-                                                    </ReservationInfoForm>}
-                                                    {progress === 'Menu' &&
-                                                        <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
-                                                    {progress === 'Finalize' &&
-                                                        <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
-                                                </TypeSelectionForm>
-                                            </div>
-                                        </Container>
-                                    </InnerWidthContext.Provider>
-                                </IsTouchableContext.Provider>
-                            </GazebosContext.Provider>
-                        </GazeboAvailabilityContext.Provider>
-                    </MenuContext.Provider>
-                </FormProgressContext.Provider>
-            </BookingDetailsContext.Provider>
-        </DatabaseSettingsContext.Provider>
+        <ErrorsContext.Provider value={{errors,setErrors}}>
+            <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
+                <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
+                    <FormProgressContext.Provider value={{progress,setProgress}}>
+                        <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
+                            <GazeboAvailabilityContext.Provider value={(bookingDetails.type === 'Dinner' ? Availability.Dinner : Availability.Morning)}>
+                                <GazebosContext.Provider value={Gazebos}>
+                                    <IsTouchableContext.Provider value={isTouchDevice()}>
+                                        <InnerWidthContext.Provider value={innerWidth}>
+                                            <Container fluid className={'p-3 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column'}>
+                                                {/*<div className={'px-2 py-3 my-1 d-flex flex-column scrollable-y overflow-x-hidden overflow-y-auto my-auto'}*/}
+                                                {/*     ref={ContainerRef}>*/}
+                                                    {/* style={{overflowY:shouldShowScroll()}}*/}
+                                                    {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
+                                                     onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
+                                                    <TypeSelectionForm ref={typeRef}>
+                                                        {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}>
+                                                        </GazeboSelectionForm>}
+                                                        {progress === 'Details' && <ReservationInfoForm ref={detailsRef}>
+                                                        </ReservationInfoForm>}
+                                                        {progress === 'Menu' &&
+                                                            <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
+                                                        {progress === 'Finalize' &&
+                                                            <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
+                                                    </TypeSelectionForm>
+                                                {/*</div>*/}
+                                            </Container>
+                                        </InnerWidthContext.Provider>
+                                    </IsTouchableContext.Provider>
+                                </GazebosContext.Provider>
+                            </GazeboAvailabilityContext.Provider>
+                        </MenuContext.Provider>
+                    </FormProgressContext.Provider>
+                </BookingDetailsContext.Provider>
+            </DatabaseSettingsContext.Provider>
+        </ErrorsContext.Provider>
     )
 }
+
+{/*{progress !== 'Type' && <div  className={'mx-auto sticky-top pt-2'} style={{height:getHeight('Nav')}}>*/}
+{/*    <div style={{width: (innerWidth > 1000 ? 'fit-content' : '95%')}}*/}
+{/*         className={'mx-auto d-flex'}>*/}
+{/*        <GazeboBookingProgressBar></GazeboBookingProgressBar>*/}
+{/*    </div>*/}
+{/*</div>}*/}

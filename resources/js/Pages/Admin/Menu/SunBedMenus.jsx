@@ -1,7 +1,7 @@
 import {Accordion} from "react-bootstrap";
 import {Menu} from "./Menu";
 
-export function SeaBedMenus({BedMenus}) {
+export function SunBedMenus({BedMenus}) {
     return (
         <div>
             <Accordion>

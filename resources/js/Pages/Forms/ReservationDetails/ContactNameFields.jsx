@@ -2,7 +2,7 @@ import {Form, InputGroup} from "react-bootstrap";
 import {useContext, useEffect} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 
-export function ContactNameFields({requirementsCheck}) {
+export function ContactNameFields() {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     handleLNChange = (e)=> {
         setBookingDetails({...bookingDetails,last_name:e.target.value});
@@ -14,19 +14,15 @@ export function ContactNameFields({requirementsCheck}) {
 
     return (
         <>
-            {(bookingDetails.number_of_people!==0 && requirementsCheck())  &&
-                <>
-                    <p className={'text-secondary'}>Please fill in the Booking's Contact details.</p>
-                    <InputGroup className="mb-3" size={"sm"}>
-                        <Form.Control type="text" placeholder="Last Name" size={"sm"} className={'mb-2 text-center'}
-                                      value={bookingDetails.last_name}
-                                      onChange={handleLNChange}/>
-                        <Form.Control type="text" placeholder="First Name" size={"sm"} className={'mb-2 text-center'}
-                                      value={bookingDetails.first_name}
-                                      onChange={handleFNChange}/>
-                    </InputGroup>
-                </>
-            }
+            <p className={'info-text-lg'}>Reservation's Contact</p>
+            <InputGroup className="mb-3" size={"sm"}>
+                <Form.Control type="text" placeholder="Last Name" size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'}
+                              value={bookingDetails.last_name}
+                              onChange={handleLNChange}/>
+                <Form.Control type="text" placeholder="First Name" size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'}
+                              value={bookingDetails.first_name}
+                              onChange={handleFNChange}/>
+            </InputGroup>
         </>
     )
 }

@@ -9,6 +9,7 @@ export function SearchFilters({SearchCriteria,inputRefs}) {
             <OptionsSVG className={'mx-auto my-3'}></OptionsSVG>
             <Stack className={'mx-auto w-90'} >
                 <div className="mb-3">
+                    <h6>Είδος Κράτησης</h6>
                     <Form.Check
                         inline
                         label="Όλες"
@@ -22,7 +23,7 @@ export function SearchFilters({SearchCriteria,inputRefs}) {
                     />
                     <Form.Check
                         inline
-                        label="Dinner"
+                        label="Βραδινές"
                         name="ReservationType"
                         type={'radio'}
                         id={`ReservationType-2`}
@@ -33,7 +34,7 @@ export function SearchFilters({SearchCriteria,inputRefs}) {
                     />
                     <Form.Check
                         inline
-                        label="Bed"
+                        label="Πρωινές"
                         name="ReservationType"
                         type={'radio'}
                         value={'Bed'}

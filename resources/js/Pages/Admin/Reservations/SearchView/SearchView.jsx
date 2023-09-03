@@ -1,5 +1,5 @@
 import {Badge, Col, Row, Stack} from "react-bootstrap";
-import {useContext, useEffect, useReducer, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useReducer, useRef, useState} from "react";
 import {Inertia} from "@inertiajs/inertia";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import gsap from "gsap";
@@ -121,34 +121,36 @@ export function SearchView() {
         return reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
                 {chunk.map(reservation => (
-                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-4 my-5'} />
+                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-4 mb-3 mb-lg-5'} />
                 ))}
             </div>
         ))
     };
 
-    const getCriteriaLabels = () => {
+    const getCriteriaLabels = useCallback(()=>{
         let criteria = [];
         if(searchCriteria.email !== '')
-            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.email}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.email}`}</Badge>];
         if(searchCriteria.conf_number !== '')
-            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.conf_number}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.conf_number}`}</Badge>];
         if(searchCriteria.phone_number !== '')
-            criteria = [...criteria,<Badge bg="light" text="dark" className={'mx-auto'}>{`${searchCriteria.phone_number}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.phone_number}`}</Badge>];
+        if(searchCriteria.type !== 'All')
+            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.type === 'Dinner' ? 'Βραδινές' : 'Πρωινές'}`}</Badge>];
 
-        return <Stack direction={'horizontal'}>
+        return <Stack direction={'horizontal'} className={'mt-1 mb-2 mt-lg-2 mb-lg-4 mx-auto'}>
             {criteria.map(badge => badge)}
         </Stack>
-    };
+    },[searchCriteria]);
+
     return (
-        <Row className={'h-100 px-2 pt-2 px-lg-0 pt-lg-0'}>
-            <Col className={'box_shadow text-center d-flex flex-column mt-1  my-lg-auto rounded-4 border border-2 h-fit-content'} xs={12} md={6}
+        <Row className={'h-100 px-2 py-2 px-lg-0 pt-lg-0 overflow-y-auto'}>
+            <Col className={'box_shadow text-center d-flex flex-column mt-1 my-lg-auto rounded-4 border border-2 h-fit-content'} xs={12} md={6}
                  lg={3}>
-                {/*<h5 className={'my-3'}>Αναζήτηση με</h5>*/}
                 <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}>
                 </SearchFilters>
             </Col>
-            <Col className={'d-flex flex-column text-center mt-4 mt-xl-0 ' +
+            <Col className={'d-flex flex-column text-center mt-4 mt-md-0 ' +
                 (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')} s={12} md={6} lg={9}>
                 {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
                     {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}

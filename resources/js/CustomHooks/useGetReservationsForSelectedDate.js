@@ -1,6 +1,6 @@
 import {Inertia} from "@inertiajs/inertia";
 import {getFormattedDate} from "../ExternalJs/Util";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 
 export function useGetReservationsForSelectedDate (selectedDate) {

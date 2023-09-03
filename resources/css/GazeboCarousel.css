@@ -15,7 +15,7 @@
     background-image: linear-gradient(to bottom, #c1dceb 0%, #0078a8 50%, #c1dceb 100%);
     transform-origin: bottom;
     transform: skewY(-12deg);
-    animation: wave 6s linear infinite;
+    animation: wave 4s linear infinite;
 }
 
 .wave::after {
@@ -64,4 +64,8 @@
     width: 4px;
     height: 100%;
     background-color: #a06b38; /* Lighter brown color for the planks */
+}
+
+.carousel-control-next, .carousel-control-prev {
+    width: 10% !important;
 }

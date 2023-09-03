@@ -27,7 +27,7 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate}) 
                 {!shouldShowCalendar &&
                     <>
                         <LeftArrowSVG className={'my-2 mx-auto'} rotate={90} onClick={handleBackToCalendar}/>
-                        <Stack className={'p-3 overflow-y-auto h-90'}>
+                        <Stack className={'p-3 overflow-y-auto ' + (innerWidth > 992 ? 'mh-600px' : 'h-90')}>
                             {reservationsToShow()}
                         </Stack>
                     </>

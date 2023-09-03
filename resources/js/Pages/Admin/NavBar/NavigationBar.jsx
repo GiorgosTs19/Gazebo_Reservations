@@ -5,19 +5,21 @@ import {AuthenticatedUserContext} from "../Contexts/AuthenticatedUserContext";
 import {Inertia} from "@inertiajs/inertia";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ConflictsContainer} from "./Conflicts/ConflictsContainer";
-import {IconExplanationsModal} from "../Modals/IconExplanationsModal";
+import {UsefulInfoModal} from "../Modals/UsefulInfoModal";
+import {MenuEditModeContext} from "../Contexts/MenuEditModeContext";
+import {AdminToNewReservationFormModal} from "../Modals/AdminToNewReservationFormModal";
 
 export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
     const {activeTabKey,handleSetActiveKey} = activeTab,
     {activeMenusTabKey,setActiveMenusTabKey} = activeMenusTab,
-    User = useContext(AuthenticatedUserContext);
+    User = useContext(AuthenticatedUserContext),
+    {editingMenu,setEditingMenu} = useContext(MenuEditModeContext);
 
     return (
-        <Navbar expand="xl" className="bg-body-tertiary rounded-3 border mx-4">
+        <Navbar expand="xxl" className="bg-body-tertiary rounded-3 border mx-4">
             <Container fluid className={'mx-lg-3'}>
                 <Navbar.Brand href="#home" className={'user-select-none'}>Sentido Port Royal</Navbar.Brand>
                 <ConflictsContainer conflicts={conflicts}></ConflictsContainer>
-                <IconExplanationsModal></IconExplanationsModal>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Offcanvas
                     id={`Navbar-expand`}
@@ -28,23 +30,33 @@ export function NavigationBar({activeTab,activeMenusTab,children, conflicts}) {
                             Μενού
                         </Offcanvas.Title>
                     </Offcanvas.Header>
-                    <Offcanvas.Body className={'pe-0 ps-4 d-flex flex-column flex-xl-row'}>
-                        <Navbar.Text className={'fw-bold order-1 order-xl-2 ms-xl-auto text-center'}>
+                    <Offcanvas.Body className={'pe-0 ps-4 ps-xxl-0 ms-xxl-2 d-flex flex-column flex-xl-row'}>
+                        <Navbar.Text className={'fw-bold order-1 order-xl-2 ms-xl-auto text-center w-fit-content'}>
                             Συνδεδεμένος / η ώς : {User.first_name + ' '+ User.last_name}
                         </Navbar.Text>
+                        <UsefulInfoModal className={'order-3 order-xxl-1 my-3 mx-xxl-2'}></UsefulInfoModal>
+                        {/*Second In large Screen, 3rd in mobiles and tablets*/}
                         <Nav className="user-select-none w-50 order-2 order-xl-1">
-                            <Nav.Link href="#Κρατήσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
-                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary my-auto'}
+                            <Nav.Link href="#Κρατήσεις" className={'primary my-auto hover-scale-1_03'} onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>
+                            <AdminToNewReservationFormModal/>
+                            <Nav.Link href="#Μενού" onClick={()=>handleSetActiveKey("Menus")} className={'primary my-auto hover-scale-1_03'}
                                 disabled={activeTabKey === 'Menus'}>Μενού</Nav.Link>
+
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Υπάρχοντα"
-                                className={'border-start px-2 ms-1 my-2 my-md-0 secondary'}
+                                className={'border-start px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
                                 onClick={() => setActiveMenusTabKey("Existing")} disabled={activeMenusTabKey === 'Existing'}>Υπάρχοντα</Nav.Link>}
+
+                            {editingMenu !== null && <Nav.Link href={`#Επεξεργασία-${editingMenu.Name}`} className={`text-center hover-scale-1_03 px-2 ms-1 my-2 my-md-auto important ${activeTabKey === 'Menus' ? ' secondary' : 'primary'}`}
+                                                               onClick={() => {setActiveMenusTabKey("Edit"); handleSetActiveKey('Menus',true);}} disabled={activeMenusTabKey === 'Edit' && activeTabKey ==='Menus'}
+                            >{`Επεξεργασία`}</Nav.Link>}
+
                             {activeTabKey === 'Menus' && <Nav.Link href="#Μενού-Δημιουργία"
-                                className={'border-end px-2 ms-1 my-2 my-md-0 secondary'}
+                                className={'border-end px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}
                                 onClick={() => setActiveMenusTabKey("New")} disabled={activeMenusTabKey === 'New'}>Δημιουργία</Nav.Link>}
                             <Nav.Link href="#Ρυθμίσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
                         </Nav>
-                        <div className={'order-1 order-xl-3 mb-5 mb-md-4'}>
+                        {/* Second In large Screens,*/}
+                        <div className={'order-1 order-xl-3 mb-5 mb-md-4 hover-scale-1_03'}>
                             {children}
                         </div>
                         <Button variant={"outline-secondary"} className={'mt-auto mt-lg-0 my-xl-auto ms-xl-3 order-3 mx-auto mx-xl-0'} onClick={()=>Inertia.post(route('logout'))}>

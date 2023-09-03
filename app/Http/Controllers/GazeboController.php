@@ -25,30 +25,6 @@ class GazeboController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-//    public function create() {
-//        $Gazepo1 = new Gazebo;
-//            $Gazepo1->number = 1;
-//            $Gazepo1->save();
-//        $Gazepo2 = new Gazebo;
-//            $Gazepo2->number = 2;
-//            $Gazepo2->save();
-//        $Gazepo3 = new Gazebo;
-//            $Gazepo3->number = 3;
-//            $Gazepo3->save();
-//        $Gazepo4 = new Gazebo;
-//            $Gazepo4->number = 4;
-//            $Gazepo4->save();
-//        $Gazepo5 = new Gazebo;
-//            $Gazepo5->number = 5;
-//            $Gazepo5->save();
-//        $Gazepo6 = new Gazebo;
-//            $Gazepo6->number = 6;
-//            $Gazepo6->save();
-//    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public static function checkAvailability($Gazebos,$type,$Disabled_Days,$Disabled_Tables): array {
@@ -147,8 +123,16 @@ class GazeboController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show() {
-        date_default_timezone_set("Europe/Athens");
+    public function show(Request $request) {
+        $selectedDate = '';
+        $selectedType = '';
+        $selectedPeople = 0;
+        if($request->exists('selectedDate'))
+            $selectedDate = $request->only(['selectedDate'])['selectedDate'];
+        if($request->exists('selectedDate'))
+            $selectedType = $request->only(['selectedType'])['selectedType'];
+        if($request->exists('selectedPeople'))
+            $selectedPeople = $request->only(['selectedPeople'])['selectedPeople'];
         $Disabled_Days = DisabledDay::where('Date', '>=', date("Y-m-d"))->get();
         $Gazebos = GazeboResource::collection(Gazebo::all());
         $Bed_Menus = MenuResource::collection(Menu::where('Type','Bed')->get());
@@ -161,7 +145,7 @@ class GazeboController extends Controller {
         $Bed_Settings = BedSetting::first();
         return Inertia::render('Reservations/Gazebo',
             ['Gazebos'=>$Gazebos,'Menu'=>['Morning'=>$Bed_Menus,'Dinner'=>$Dinner_Menus],'Availability'=>$Availability,'Settings'=>['Dinner'=>$Dinner_Settings,
-                'Bed'=>$Bed_Settings]]);
+                'Bed'=>$Bed_Settings],'SelectedDate'=>$selectedDate, 'SelectedType' => $selectedType, 'SelectedPeople' => $selectedPeople]);
     }
 
     /**

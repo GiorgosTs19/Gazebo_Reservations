@@ -6,26 +6,24 @@ export function FiltersBar({reservationsFilter,setReservationsFilter,direction='
             setReservationsFilter(filter);
     }
     return (
-            <Stack direction={direction} className={'d-flex flex-wrap filters-bar-stack ' + className} >
+            <Stack direction={direction} className={'d-flex flex-wrap filters-bar-stack ' + className} gap={3}>
                 <Badge pill bg={"dark"}
-                       className={'cursor-pointer user-select-none hover-scale-0_95 ' + (direction === 'vertical' ? 'my-2 ' : ' mx-1 mx-lg-2' )
+                       className={'cursor-pointer user-select-none hover-scale-0_95 '
                            + ((reservationsFilter === 'All' || disabled)? ' opacity-25' : '')}
                        onClick={()=>handleClick('All')} >
                     Όλες
                 </Badge>
-                <Badge pill bg={"success"} className={'cursor-pointer user-select-none hover-scale-0_95 ' + (direction === 'vertical' ? 'my-2 ' : 'mx-1  mx-lg-2' )
+                <Badge pill bg={"success"} className={'cursor-pointer user-select-none hover-scale-0_95 '
                     + ((reservationsFilter === 'Confirmed' || disabled)? ' opacity-25' : '')}
                        onClick={()=>handleClick('Confirmed')}>
                     Επιβεβαιωμένες
                 </Badge>
-                <Badge pill bg={"warning"} className={'cursor-pointer user-select-none hover-scale-0_95 ' + (direction === 'vertical' ? 'my-2 '
-                        : 'mx-1 mx-lg-2 my-2 my-xxl-0' )
+                <Badge pill bg={"warning"} className={'cursor-pointer user-select-none hover-scale-0_95 '
                     + ((reservationsFilter === 'Pending' || disabled)? ' opacity-25' : '')}
                       onClick={()=>handleClick('Pending')}>
                     Εκκρεμούσες
                 </Badge>
-                <Badge pill bg={"danger"} className={'cursor-pointer user-select-none hover-scale-0_95 ' + (direction === 'vertical' ? 'my-2 '
-                        : 'mx-1  mx-lg-2 my-2 my-xxl-0' )
+                <Badge pill bg={"danger"} className={'cursor-pointer user-select-none hover-scale-0_95 '
                     + ((reservationsFilter === 'Cancelled' || disabled)? ' opacity-25' : '')}
                        onClick={()=>handleClick('Cancelled')}>
                     Ακυρωμένες

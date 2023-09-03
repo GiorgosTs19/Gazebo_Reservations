@@ -22,7 +22,7 @@ export function ReservationDateRangeSettings() {
         dispatchSetting({type:'Change_Last_Date',value : newTime})
     };
     return (
-        <Card className={'border-top- box_shadow mt-1 mt-lg-3 w-100 h-1000'} style={{width:'fit-content'}}>
+        <Card className={'border-top- box_shadow mt-1 mt-lg-3 w-100 h-95'} style={{width:'fit-content'}}>
             <Card.Header className={'bg-transparent'}>
                 <p className={'text-muted'}>Εύρος ημερομηνιών που είναι διαθέσιμες για κρατήσεις</p>
                 <p className={'text-muted'}>Οι πελάτες θα μπορούν να κάνουν κρατήσεις μέσα σε αυτό το εύρος ημερομηνιών.</p>

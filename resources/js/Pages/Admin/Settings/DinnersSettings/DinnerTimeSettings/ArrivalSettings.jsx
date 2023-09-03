@@ -28,7 +28,7 @@ export function ArrivalSettings() {
 
 
     return (
-        <Card className={'border-top box_shadow mx-auto my-3 my-xxl-0 w-100 h-fit-content'} >
+        <Card className={'border-top box_shadow mx-auto my-3 my-xxl-auto w-100 h-fit-content'} >
             <Card.Header className={'d-flex bg-transparent'}>
                 <Stack direction={'horizontal'} className={'mx-auto'}>
                     <h6>Συγκεκριμένη Ώρα</h6>

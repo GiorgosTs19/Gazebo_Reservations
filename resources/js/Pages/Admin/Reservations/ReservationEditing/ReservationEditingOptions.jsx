@@ -36,7 +36,7 @@ export function ReservationEditingOptions({Content}) {
 
     const handleClickChangeTable = () => {
         setContent(<ChangeReservationTableSameDay></ChangeReservationTableSameDay>);
-        setModalTitle('Αλλαγή τραπεζιού την ίδια μέρα')
+        setModalTitle('Αλλαγή Gazebo την ίδια μέρα')
     };
 
     return (
@@ -45,25 +45,23 @@ export function ReservationEditingOptions({Content}) {
             <Row className={'my-4'}>
                 <Col className={'d-flex flex-column my-3 my-lg-0'} lg={isDateDisabled ? 6 :4}>
                     <p className={'info-text-lg my-auto'}>
-                        Θα γίνει προσπάθεια ανάθεσης του ίδιου τραπεζιού αυτόματα από το σύστημα.
-                        Στην περίπτωση που το τραπέζι δεν είναι διαθέσιμο θα πρέπει να γίνει εκ νέου επιλογή τραπεζιού,
-                        βάσει της διαθεσιμότητας της ημέρας.
+                        Θα γίνει προσπάθεια ανάθεσης του ίδιου Gazebo αυτόματα από το σύστημα.
                     </p>
-                    <Button variant={'outline-dark'} className={'mt-3 mx-auto'} onClick={handleClickTransfer}>Μεταφορά σε άλλη μέρα</Button>
+                    <Button variant={'secondary'} className={'mt-3 mx-auto'} onClick={handleClickTransfer}>Αλλαγή Ημερομηνίας</Button>
                 </Col>
                 {!isDateDisabled && <Col className={'d-flex flex-column my-3 my-lg-0'} lg={4}>
-                    <p className={'info-text-lg my-auto'}>Εκ νέου επιλογή τραπεζιού,
+                    <p className={'info-text-lg my-auto'}>Εκ νέου επιλογή Gazebo,
                         με βάση την διαθεσιμότητα της ημέρας για την οποία έγινε η κράτηση.</p>
                     {noAvailableTablesExist &&
                         <p className={'text-danger fw-bold'}>Δεν υπάρχουν διαθέσιμα τραπέζια την ίδια μέρα.</p>}
-                    <Button variant={'outline-dark'} className={'mt-3 ' + (noAvailableTablesExist ? 'opacity-25' : '')}
+                    <Button variant={'secondary'} className={'mt-3 mx-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
                             onClick={handleClickChangeTable} disabled={noAvailableTablesExist || isDateDisabled}>
-                        Αλλαγή τραπεζιού
+                        Αλλαγή Gazebo
                     </Button>
                 </Col>}
                 <Col className={'d-flex flex-column my-3 my-lg-0'} lg={isDateDisabled ? 6 :4}>
                     <p className={'info-text-lg my-auto'}>Αλλαγή των επιλεγμένων Μενού της κράτησης.</p>
-                    <Button variant={'outline-dark'} className={'mt-3 mx-auto'} disabled>Προσωρινά μη Διαθέσιμο</Button>
+                    <Button variant={'secondary'} className={'mt-3 mx-auto'} disabled>Προσωρινά μη Διαθέσιμο</Button>
                 </Col>
             </Row>
         </>

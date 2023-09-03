@@ -1,9 +1,9 @@
 import {Image, ListGroup} from "react-bootstrap";
 
-export function MenuItem({item,inModal = false}) {
+export function MenuItem({item,inModal = false, className = ''}) {
     const hasAllergens = item.is_gluten_free || item.is_lactose_free || item.is_wheat_free || item.is_vegan || item.is_vegetarian;
     return (
-        <ListGroup.Item as="li"  key={item.id} className={'border-start-0 border-end-0 border-top-0'}>
+        <ListGroup.Item as="li"  key={item.id} className={`border-start-0 border-end-0 border-top-0 ${className}`}>
             {item.Name}
             {inModal && hasAllergens ?
                 <p>
