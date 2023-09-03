@@ -36,7 +36,7 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
             {innerWidth > 1300 ? <LargeDevicesMenus bookingDetails={bookingDetails}></LargeDevicesMenus> :
             <MobileMenus bookingDetails={bookingDetails}></MobileMenus>}
             {checkRequirement() &&
-                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 box_shadow border-0 mb-3 reservation-button text-dark'}>Finalize Reservation</Button>
+                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 box_shadow border-0 mb-3 reservation-button text-dark position-relative'}>Finalize Reservation</Button>
             }
         </div>
     )

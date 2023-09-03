@@ -3,7 +3,6 @@ import 'react-calendar/dist/Calendar.css';
 import {ReservationInfoForm} from "../Forms/ReservationDetails/ReservationInfoForm";
 import {GazeboSelectionForm} from "../Forms/Gazebo/GazeboSelectionForm";
 import {FormProgressContext} from "../../Contexts/FormProgressContext";
-import {GazeboBookingProgressBar} from "../../ProgressBars/GazeboBookingProgressBar";
 import {BookingDetailsContext} from "../../Contexts/BookingDetailsContext";
 import {MenuSelectionForm} from "../Forms/Menu/MenuSelectionForm";
 import {MenuContext} from "../../Contexts/MenuContext";
@@ -23,7 +22,7 @@ import {AlertMessage} from "../../Alerts/AlertMessage";
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
     selectedDate = props.SelectedDate, selectedType = props.SelectedType,
-        selectedPeople = props.SelectedPeople,
+        selectedPeople = parseInt(props.SelectedPeople),
     [bookingDetails, setBookingDetails] = useState(
         {
             date:selectedDate ?? '',
@@ -115,7 +114,7 @@ export default function Gazebo(props) {
             }
         }
     },[progress]);
-
+    console.log(bookingDetails)
     return (
         <ErrorsContext.Provider value={{errors,setErrors}}>
             <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
@@ -126,10 +125,10 @@ export default function Gazebo(props) {
                                 <GazebosContext.Provider value={Gazebos}>
                                     <IsTouchableContext.Provider value={isTouchDevice()}>
                                         <InnerWidthContext.Provider value={innerWidth}>
-                                            <Container fluid className={'p-3 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column'}>
-                                                {/*<div className={'px-2 py-3 my-1 d-flex flex-column scrollable-y overflow-x-hidden overflow-y-auto my-auto'}*/}
-                                                {/*     ref={ContainerRef}>*/}
-                                                    {/* style={{overflowY:shouldShowScroll()}}*/}
+                                            <Container fluid className={'p-3 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column video-container'}>
+                                                <video autoPlay loop muted>
+                                                    <source src="Videos/background-video.mp4" type="video/mp4"/>
+                                                </video>
                                                     {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
                                                      onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
                                                     <TypeSelectionForm ref={typeRef}>
@@ -142,7 +141,6 @@ export default function Gazebo(props) {
                                                         {progress === 'Finalize' &&
                                                             <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
                                                     </TypeSelectionForm>
-                                                {/*</div>*/}
                                             </Container>
                                         </InnerWidthContext.Provider>
                                     </IsTouchableContext.Provider>

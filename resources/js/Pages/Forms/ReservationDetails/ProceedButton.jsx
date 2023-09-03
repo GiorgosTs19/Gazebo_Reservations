@@ -13,6 +13,9 @@ export function ProceedButton() {
         setProgress('Menu');
     },
     checkAttendeesRequirements = (length) => {
+        if(bookingDetails.number_of_people === 1)
+            return true;
+
         const containsNoEmptyStrings = bookingDetails.attendees.every(function(element) {
             return element !== "";
         });
@@ -22,7 +25,7 @@ export function ProceedButton() {
     },
     checkProceedRequirements = () => {
         // Checks the requirements for proceeding to the Menu Selection Tab
-        switch (bookingDetails.number_of_people) {
+        switch (parseInt(bookingDetails.number_of_people)) {
             case 1:
                 return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
                     && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== '');
@@ -45,6 +48,7 @@ export function ProceedButton() {
                 }
         }
     };
+
     useEffect(()=>{
         window.addEventListener('keypress',ev => {
             if(ev.key === 'Enter') {

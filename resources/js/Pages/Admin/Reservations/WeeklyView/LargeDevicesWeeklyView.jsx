@@ -63,40 +63,21 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
     }
 
     return (
-        <div className={'text-center p-0 h-90 position-relative'} >
+        <div className={'text-center p-0 h-100 position-relative d-flex flex-column'}>
             <div className="navigation my-2 d-flex flex-row">
                 <Button onClick={handlePrevWeek} variant={"secondary"} size={'sm'} className={'m-2 rounded-3 ' + (!isToday ? 'hover-scale-1_03' : '')} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
                 <h6 className={'m-auto user-select-none'}>Κρατήσεις Εβδομάδας : {totalWeekReservations}</h6>
                 <Button onClick={handleNextWeek} variant={"secondary"} size={'sm'} className={'m-2 rounded-3 ' + (!isLastWeek ? 'hover-scale-1_03' : '')} disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
             </div>
-            <Row className={'h-100'}>
-                <Col lg={showFilters ? 2 : 1} className={'border border-1 rounded-3 d-flex flex-column justify-content-between box_shadow h-100'}>
-                    {showFilters ? <>
-                        <>
-                            <p className={'border-bottom user-select-none'}>
-                                <b>Κατάσταση</b>
-                            </p>
-                            <FiltersBar setReservationsFilter={setReservationsFilter}
-                                        reservationsFilter={reservationsFilter}>
-                            </FiltersBar>
-                        </>
-                        <h6 onClick={()=>setShowFilters(false)} className={'cursor-pointer user-select-none hover-scale-1_03'}>
-                           Απόκρυψη
-                        </h6>
-                    </> :
-                    <div className={'m-auto'}>
-                        <ExpandSVG onClick={()=>setShowFilters(true)} className={'hover-scale-1_1'}></ExpandSVG>
-                    </div>}
-                </Col>
-                <Col lg={showFilters ? 10 : 11} className={'p-0 h-100'}>
-                    <ListGroup horizontal={direction === 'horizontal'} gap={2}
-                               className="week-days px-3 mx-3 overflow-y-auto h-100">
-                        {!largeWeekDay[0] ? weekDays : <LargeWeekDayDisplay reservations={largeWeekDay[1]} dateToDisplay={largeWeekDay[0]}
-                        reservationsFilter={reservationsFilter} largeWeekDayHandling = {{largeWeekDay,setLargeWeekDay}}>
-                        </LargeWeekDayDisplay>}
-                    </ListGroup>
-                </Col>
-            </Row>
+            <FiltersBar setReservationsFilter={setReservationsFilter}
+                        reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto my-2 border-secondary-subtle border rounded-4 p-2'}>
+            </FiltersBar>
+            <ListGroup horizontal={direction === 'horizontal'} gap={2}
+                       className="week-days px-3 mx-3 overflow-y-auto h-100">
+                {!largeWeekDay[0] ? weekDays : <LargeWeekDayDisplay reservations={largeWeekDay[1]} dateToDisplay={largeWeekDay[0]}
+                reservationsFilter={reservationsFilter} largeWeekDayHandling = {{largeWeekDay,setLargeWeekDay}}>
+                </LargeWeekDayDisplay>}
+            </ListGroup>
         </div>
     )
 }

@@ -26,12 +26,12 @@ export function MultipleRoomsField() {
     };
 
     const checkShowRequirements = ()=>{
-        return bookingDetails.email.length>0 && bookingDetails.phone_number.length>0 && checkAttendees(bookingDetails);
+        return bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.number_of_people > 1 && checkAttendees(bookingDetails);
     };
     return (
         checkShowRequirements() &&
         <div className={'text-center my-2'}>
-            <p className={'mx-auto my-1 info-text-lg'}>
+            <p className={'mx-auto my-1 bold-info-text'}>
                 Multiple Rooms
             </p>
             <div className="mb-3">

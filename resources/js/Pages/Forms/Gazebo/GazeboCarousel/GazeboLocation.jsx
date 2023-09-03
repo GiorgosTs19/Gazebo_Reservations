@@ -20,7 +20,8 @@ export function GazeboLocation({index, className, width,gap=4}) {
             <Stack direction="horizontal" gap={gap} className={'mx-auto text-center'}
             style={{width:'fit-content'}}>
                 {Gazebos.map((gazepo,number)=>{
-                    return <Image src={'Images/Icons/gazebo_icon.png'} key={number} height={innerWidth > 992 ? 48 : 24} width={innerWidth > 992 ? 48 : 24} className={`mt-4 mx-0 ${gazepo.ascending_number !== index ? 'opacity-25' :''}`}></Image>
+                    return <Image src={'Images/Icons/gazebo_icon.png'} key={number} height={innerWidth > 992 ? 48 : 24} width={innerWidth > 992 ? 48 : 24}
+                  className={`mt-4 mx-0 ${gazepo.ascending_number !== index ? 'opacity-50' :''}`}></Image>
                 })}
             </Stack>
             {/*<div className="horizontal_bridge rounded-1 mx-auto">*/}

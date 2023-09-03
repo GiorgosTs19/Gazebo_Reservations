@@ -87,11 +87,11 @@ export function MonthlyView() {
     // Renders the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
         if(selectedDate === '')
-            return <h4 className={'text-muted my-auto user-select-none'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>;
+            return [<h4 className={'text-muted my-auto user-select-none'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>,0];
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
 
         if(reservations_of_current_date.length === 0)
-            return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>;
+            return [<h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>, reservations_of_current_date.length];
 
         const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
             reservations_of_current_date.filter((reservation)=>{
@@ -99,19 +99,19 @@ export function MonthlyView() {
             });
 
         if(filteredReservations.length === 0)
-            return <h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>
+            return [<h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>, reservations_of_current_date.length]
 
         const reservationChunks = [];
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
             reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
         }
-        return reservationChunks.map((chunk, index) => (
+        return [reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
                 {chunk.map(reservation => (
                     <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-2 my-4'} />
                 ))}
             </div>
-        ))
+        )),reservations_of_current_date.length]
     },[selectedDate,reservationsFilter,reservationsToRender,Reservations]);
 
     const reservations_of_current_date = selectedDate ?  getReservationsByDate(selectedDate,Reservations) : [];
@@ -142,7 +142,8 @@ export function MonthlyView() {
             </LargeDevicesMonthlyView>
             :
             <MobileMonthlyView Calendar={CalendarToShow} reservationsToShow={reservationsToShow}
-                selectedDate = {selectedDate}>
+                selectedDate = {selectedDate} reservationsFilter={reservationsFilter}
+                setReservationsFilter={setReservationsFilter}>
             </MobileMonthlyView>
     )
 }

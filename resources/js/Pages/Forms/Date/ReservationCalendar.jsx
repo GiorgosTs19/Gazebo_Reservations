@@ -1,10 +1,10 @@
 import Calendar from "react-calendar";
 import {
-    getAvailabilityByDate, getAvailabilityPercentage,
+    getAvailabilityByDate,
     getFormattedDate,
     isDateDisabledByAdminForReservations
 } from "../../../ExternalJs/Util";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext,  useRef, useState} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {GazeboAvailabilityContext} from "../../../Contexts/GazeboAvailabilityContext";
 import {DatabaseSettingsContext} from "../../Admin/Contexts/DatabaseSettingsContext";
@@ -87,7 +87,7 @@ export function ReservationCalendar() {
     }
     return (
         <Calendar onChange={handleDateChange} value={selectedDate} tileDisabled={({ date }) => isDateDisabled(date)}
-                  className={'mx-auto my-4 rounded-5 '} tileContent={({ activeStartDate , date, view }) =>
+                  className={'mx-auto my-4 rounded-5 calendar'} tileContent={({ activeStartDate , date, view }) =>
             view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
                   prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}
                   onActiveStartDateChange={({ action, activeStartDate, value, view }) => setActiveMonth(activeStartDate.getMonth())}

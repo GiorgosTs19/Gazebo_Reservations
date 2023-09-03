@@ -4,10 +4,12 @@ import {useEffect} from "react";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
+import {FiltersBar} from "../FiltersBar/FiltersBar";
 
-export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate}) {
+export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate, reservationsFilter,setReservationsFilter}) {
     const [shouldShowCalendar,setShouldShowCalendar] = useState(true),
-    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
+    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    [reservations, reservationsCount] = reservationsToShow();
 
     useEffect(()=>{
         if(selectedDate !== '')
@@ -18,8 +20,7 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate}) 
         setActiveReservation(null);
     };
     return (
-        <Row className={'text-center h-100'}>
-             <Col className={'px-1 d-flex flex-column ' + (shouldShowCalendar ? 'py-1' : 'py-0')}>
+        <div className={`text-center h-100 d-flex flex-column ${shouldShowCalendar ? 'py-1' : 'py-0'}`}>
                 {shouldShowCalendar && <>
                     {Calendar}
                 </>
@@ -27,12 +28,15 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate}) 
                 {!shouldShowCalendar &&
                     <>
                         <LeftArrowSVG className={'my-2 mx-auto'} rotate={90} onClick={handleBackToCalendar}/>
-                        <Stack className={'p-3 overflow-y-auto ' + (innerWidth > 992 ? 'mh-600px' : 'h-90')}>
-                            {reservationsToShow()}
+                        {reservationsCount > 0 && <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
+                                                              reservationsFilter={reservationsFilter}
+                                                              className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
+                        </FiltersBar>}
+                        <Stack className={'p-3 overflow-y-auto ' + (innerWidth > 992 ? ' mh-600px' : ' h-75')}>
+                            {reservations}
                         </Stack>
                     </>
                 }
-            </Col>
-        </Row>
+        </div>
     )
 }

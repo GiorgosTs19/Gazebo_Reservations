@@ -14,7 +14,7 @@ export function ContactNameFields() {
 
     return (
         <>
-            <p className={'info-text-lg'}>Reservation's Contact</p>
+            <p className={'bold-info-text'}>Reservation's Contact</p>
             <InputGroup className="mb-3" size={"sm"}>
                 <Form.Control type="text" placeholder="Last Name" size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'}
                               value={bookingDetails.last_name}

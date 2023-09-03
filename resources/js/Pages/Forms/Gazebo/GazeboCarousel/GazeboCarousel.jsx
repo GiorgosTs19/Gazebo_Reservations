@@ -17,19 +17,20 @@ export function GazeboCarousel({Gazebos}) {
     const gazebosToShow = Gazebos.map((gazebo)=>{
         const isAvailable = getTableAvailabilityBoolean(gazebo.id,getAvailabilityByDate(bookingDetails.date,Availability));
         return (<Carousel.Item key={gazebo.id}>
-            {
-                !isAvailable &&
-                <Carousel.Caption className={'z-3 m-auto'}>
-                    <h1 className={'display-5 my-auto text-center'}>Unavailable</h1>
-                </Carousel.Caption>
-            }
-            <GazeboCarouselItem Gazebo={gazebo} isAvailable={isAvailable}></GazeboCarouselItem>
+            <GazeboCarouselItem Gazebo={gazebo} isAvailable={isAvailable}>
+                {
+                    !isAvailable &&
+                    <Carousel.Caption className={'z-3 m-auto position-relative start-0'}>
+                        <h1 className={'display-5 my-auto text-center'}>Unavailable</h1>
+                    </Carousel.Caption>
+                }
+            </GazeboCarouselItem>
         </Carousel.Item>)
     });
     return (
         <GazebosContext.Provider value={Gazebos}>
             <Carousel activeIndex={index} onSelect={handleSelect}
-            className={'mx-auto'}
+            className={'mx-auto py-4'}
             variant={'dark'}
             controls
             interval={null}>

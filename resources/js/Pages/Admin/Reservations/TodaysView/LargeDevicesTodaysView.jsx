@@ -10,12 +10,13 @@ import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservation
 
 export function LargeDevicesTodaysView({reservations_of_current_date,filter,children}) {
     const {reservationsFilter,setReservationsFilter} = filter,
-    [showFilters,setShowFilters] = useState(false),
     {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
+
+    const reservationsExist = reservations_of_current_date.length > 0;
 
     // Generates the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
-        if(reservations_of_current_date.length === 0)
+        if(!reservationsExist)
             return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
 
         const filteredReservations = reservationsFilter === 'All' ?  reservations_of_current_date :
@@ -38,18 +39,19 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
                 ))}
             </div>
         ))
-    },[reservations_of_current_date,reservationsFilter])
+    },[reservations_of_current_date,reservationsFilter]);
+
     return (
         <div className={'pe-0 pb-3 h-100 m-auto pt-4 d-flex flex-column'}>
-                {children}
-            <FiltersBar setReservationsFilter={setReservationsFilter}
-                        reservationsFilter={reservationsFilter} direction={'horizontal'}
-                        className={'mx-auto my-2'}>
-            </FiltersBar>
-                <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
-                <Stack className={'px-3 text-center d-flex overflow-y-auto h-75'} >
-                    {reservationsToShow()}
-                </Stack>
+            {children}
+            {reservationsExist && <FiltersBar setReservationsFilter={setReservationsFilter}
+             reservationsFilter={reservationsFilter} direction={'horizontal'}
+             className={'mx-auto my-2 border-secondary-subtle border rounded-4 p-2'}>
+            </FiltersBar>}
+            <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+            <Stack className={'px-3 text-center d-flex overflow-y-auto h-75'} >
+                {reservationsToShow()}
+            </Stack>
         </div>
     )
 }
