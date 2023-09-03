@@ -188,7 +188,7 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
                             Διαθέσιμα Τραπέζια για {changeDateFormat(date, '-', '-')}
                         </Card.Header>
                         <Card.Body className={'d-flex flex-column'}>
-                            <ListGroup variant="flush" style={{height: '255px'}} ref={TablesListRef} className={'overflow-y-auto'}>
+                            <ListGroup variant="flush" style={{height: '220px'}} ref={TablesListRef} className={'overflow-y-auto'}>
                                 {getAvailableTablesTextWarning()}
                                 {getTablesList()}
                             </ListGroup>

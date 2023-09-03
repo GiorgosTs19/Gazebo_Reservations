@@ -13,7 +13,7 @@ export function MobileSettings({children}) {
     };
 
     return (
-        <Carousel variant={'dark'} className={'px-2 text-center h-100'} slide={false} activeIndex={index}
+        <Carousel variant={'dark'} className={'px-2 text-center h-100 admin-carousel'} slide={false} activeIndex={index}
                   onSelect={handleSelect} interval={null}>
             <Carousel.Item className={'h-85'}>
                 {children[2]}

@@ -57,8 +57,8 @@ export function ProceedButton() {
     return (
         <>
             {
-                checkProceedRequirements() && <Button variant={'outline-dark'} onClick={handleNextClick}
-                  className={'rounded-5 shadow-sm mx-auto px-2 py-1 reservation-button '} style={{width:'fit-content'}}>
+                checkProceedRequirements() && <Button variant={'outline-light'} onClick={handleNextClick}
+                  className={'box_shadow border-0 mx-auto mt-3 px-2 py-1 reservation-button text-dark'} style={{width:'fit-content'}}>
                     To Menu Selection
                 </Button>
             }

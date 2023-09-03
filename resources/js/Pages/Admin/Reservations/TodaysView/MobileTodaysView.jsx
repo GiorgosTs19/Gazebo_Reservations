@@ -5,6 +5,7 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 
 export function MobileTodaysView({reservations_of_current_date,filter,children}) {
     const [shouldShowStack, setShouldShowStack] = useState(true),
@@ -18,6 +19,9 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
     useEffect(()=>{
         if(activeReservation !== null)
             setShouldShowStack(false);
+        else {
+            setShouldShowStack(true)
+        }
     },[activeReservation]);
 
     const reservationsToShow = useCallback(()=> {
@@ -32,7 +36,7 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
         if(filteredReservations.length === 0)
             return <h5 className={'my-auto text-wrap'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια.</h5>
 
-        if(innerWidth > 800) {
+        if(innerWidth > 700) {
             const reservationChunks = [];
             for (let i = 0; i < filteredReservations.length; i += 2) {
                 reservationChunks.push(filteredReservations.slice(i, i + 2));
@@ -40,33 +44,38 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
             return reservationChunks.map((chunk, index) => (
                 <div key={index} className="d-flex justify-content-center hover-scale-0_95">
                     {chunk.map(reservation => (
-                        <ReservationShortest Reservation={reservation} key={reservation.id} className={'border mx-3'} />
+                        <ReservationShortest Reservation={reservation} key={reservation.id} className={'border mx-3 my-3'} />
                     ))}
                 </div>
             ))
         }
         return filteredReservations.map((reservation)=> {
-            return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border hover-scale-0_95'}></ReservationShortest>;
+            return <ReservationShortest Reservation={reservation} key={reservation.id} className={'border hover-scale-0_95 my-3'}></ReservationShortest>;
         });
-    },[reservations_of_current_date,reservationsFilter]);
+    },[reservations_of_current_date,reservationsFilter, shouldShowStack, innerWidth]);
 
     return (
         <>
-            <Row className={'h-100'}>
-                <Col md={shouldShowStack ? 3 :12} lg={3} className={'d-flex flex-column ' + (innerWidth > 700 ? 'h-100 ' : ' h-10 sticky-top bg-white')}>
+            {shouldShowStack && <Row className={'h-100'}>
+                <Col sm={innerWidth > 575 ? 12 : 3}
+                     className={'d-flex flex-column px-0 h-10 sticky-top bg-white'}>
                     {children}
-                    <FiltersBar setReservationsFilter={setReservationsFilter} disabled={reservations_of_current_date.length === 0}
-                                reservationsFilter={reservationsFilter} direction={innerWidth <500 ? 'horizontal' : 'vertical'} className={'my-auto my-md-5 my-lg-auto mx-auto'}></FiltersBar>
+                    {reservations_of_current_date.length > 0 &&
+                        <FiltersBar setReservationsFilter={setReservationsFilter}
+                                    disabled={reservations_of_current_date.length === 0}
+                                    reservationsFilter={reservationsFilter}
+                                    direction={'horizontal'}
+                                    className={'my-auto my-md-5 my-lg-auto mx-auto'}></FiltersBar>}
                 </Col>
-                    {shouldShowStack ?
-                        <Col md={9} lg={9} className={'d-flex flex-column h-100'}>
-                            <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto h-75'}>
-                                {reservationsToShow()}
-                            </Stack>
-                        </Col>
-                        : null }
+                {shouldShowStack ?
+                    <Col sm={innerWidth > 575 ? 12 : 9} className={'d-flex flex-column h-85'}>
+                        <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto '}>
+                            {reservationsToShow()}
+                        </Stack>
+                    </Col>
+                    : null}
 
-            </Row>
+            </Row>}
         </>
     )
 }

@@ -41,40 +41,25 @@ export function ReservationsPanel() {
     useEffect(()=>{
         setActiveReservation(null);
     },[reservationType]);
+
     const today = new Date(),
         today_reservations = getReservationsByDate(today,Reservations);
 
     return (
-        <Row className={'m-auto h-100 overflow-x-hidden w-100'}>
+        <Row className={'m-auto h-100 overflow-hidden w-100'}>
             <Col sm={12} md={activeReservation !== null ? 4 : 12} lg={(activeReservation !== null || activeReservationsView === 'Weekly' || (activeReservationsView === 'Today' && today_reservations.length > 0)) ? 7 :12}
                  className={(innerWidth < 500 ? (activeReservation === null ? 'h-100 ' : 'h-10 sticky-top bg-white ') : 'h-100 ') + (!isMobile && activeReservation !== null && ' border-end')}
-                 hidden={activeReservation !== null && isMobile && (activeReservationsView === 'Monthly' || activeReservationsView === 'Weekly' || activeReservationsView === 'Search')}>
+                 hidden={activeReservation !== null && isMobile}>
                 {activeReservationsView === 'Today' && <TodaysView></TodaysView>}
                 {activeReservationsView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
                 {activeReservationsView === 'Monthly' && <MonthlyView></MonthlyView>}
                 {activeReservationsView === 'Search' && (isMobile ? activeReservation === null : true) && <SearchView></SearchView>}
             </Col>
             {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 1200)) &&
-                <Col md={8} lg={5}
-            className={'d-flex text-center overflow-y-auto reservation-long-view'} as={'div'}>
+                <Col sm={12} md={8} lg={5}
+            className={'d-flex text-center overflow-y-auto reservation-long-view py-3'} as={'div'}>
                 {showReservationLong()}
             </Col>}
         </Row>
     )
 }
-
-{/*<Card className={"px-2 mx-sm-auto mx-lg-0 mx-3 border-0 pb-2 overflow-y-auto h-100 "} >*/}
-{/*<Card.Header className={'text-center border-0 bg-transparent'}>*/}
-{/*        <Row className={'p-0'}>*/}
-{/*            <Col lg={3} className={'d-flex box_shadow rounded-4 border ' + (isMobile ? 'border-bottom px-3 py-3 my-4' :*/}
-{/*                ' border-end px-3 ')}>*/}
-{/*                <ReservationTypeSelectionMenu></ReservationTypeSelectionMenu>*/}
-{/*            </Col>*/}
-{/*            <Col lg={9}>*/}
-{/*                <ViewSelectionMenu></ViewSelectionMenu>*/}
-{/*            </Col>*/}
-{/*        </Row>*/}
-{/*</Card.Header>*/}
-{/*<Card.Body className={'box_shadow px-4 rounded-4 border border-gray-400 mt-3 ' + (innerWidth > 500 ? 'h-75' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>*/}
-{/*</Card.Body>*/}
-{/*</Card>*/}

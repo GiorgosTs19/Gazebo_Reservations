@@ -16,14 +16,13 @@ export const GazeboSelectionForm = forwardRef(function GazeboSelectionForm({...p
     };
 
     return (
-        <div ref={ref} className={'m-auto w-fit-content'}>
-            {/*+ (isAvailable ? " gazepo-type-img-sm " : '') onClick={handleSelect}*/}
+        <div ref={ref} className={'m-auto'}>
             <GazeboCarousel Gazebos={Gazebos}></GazeboCarousel>
             {/*<Image className={"d-block mx-auto shadow-lg gazepo-img my-4 rounded-5 img-fluid " + (innerWidth > 992 ? ' w-25' : 'w-75')}*/}
             {/*       src={'Images/'+ (bookingDetails.type === 'Dinner' ? 'GazeboAtNight.jpg' : 'GazeboAtDay.jpg')} alt=""/>*/}
-            {progress === 'Table' && <Button variant={'outline-dark'} className={'my-2 mx-1 rounded-5 shadow-sm reservation-button'}
+            {progress === 'Table' && <Button variant={'outline-light'} className={'my-2 mx-1 border-0 rounded-3 box_shadow reservation-button text-dark'}
                                              hidden={!bookingDetails.table} onClick={handleNextClick}>
-                Continue with Table {getTableAA(bookingDetails.table, Gazebos)}
+                Continue with Gazebo {getTableAA(bookingDetails.table, Gazebos)}
             </Button>}
         </div>
     )

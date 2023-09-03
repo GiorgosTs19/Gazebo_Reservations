@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {Inertia} from "@inertiajs/inertia";
-import {Button, Card, Col, FloatingLabel, Form, InputGroup, Row, Stack} from "react-bootstrap";
+import {Button, Card, Col, Form, Row, Stack} from "react-bootstrap";
 import {MenuEditModeContext} from "../../Contexts/MenuEditModeContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {isEqual} from "lodash";
@@ -26,7 +26,7 @@ export function EditingMenuForm({menu}) {
     const checkFormChanges = () => {
         const formHasChanges =
             menuName !== originalMenu?.Name || !isEqual(menuItems, originalMenu?.Items) ||
-            menuType !== originalMenu.Type || menuCategory !== originalMenu.Category;
+            menuType !== originalMenu?.Type || menuCategory !== originalMenu?.Category;
         setHasChanges(formHasChanges);
     };
 
@@ -42,7 +42,6 @@ export function EditingMenuForm({menu}) {
     useEffect(() => {
         checkFormChanges();
     }, [menuName, menuItems, menuCategory, menuType]);
-
 
     const checkRequirements = () => {
             if(menuName === '')

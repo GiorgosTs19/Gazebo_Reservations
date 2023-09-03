@@ -89,7 +89,7 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
 
     return (
         <ListGroup.Item eventKey={index} key={menu.id} as={'li'}
-        className={"d-flex justify-content-between align-items-start border-top-0 border-end-0 border-start-0 bg-transparent " +
+        className={`d-flex justify-content-between align-items-start border-0 bg-transparent ` +
         (isSelected() && !dessert ? 'active' : '')}
         onClick={handleSelectMenu} disabled={onlyOne}>
             <div className="ms-2 me-auto">

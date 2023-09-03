@@ -4,6 +4,8 @@ import {RoomMenuSelection} from "./RoomMenuSelection";
 import {Button, Col, Row} from "react-bootstrap";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import { forwardRef } from 'react';
+import {LargeDevicesMenus} from "./LargeDevicesMenus";
+import {MobileMenus} from "./MobileMenus";
 
 export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props},ref) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
@@ -30,21 +32,11 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
         }
     },[bookingDetails.primary_menu,bookingDetails.secondary_menu]);
     return (
-        <div className={'px-4 overflow-y-auto'} style={{maxHeight:'650px'}} ref={ref}>
-            {/*<Button variant={'outline-dark'} className={'my-2 rounded-4 shadow-sm'} onClick={handleBackToDetails}>Back to Details</Button>*/}
-            {/*<p className={'my-1 ' + Theme}>* Number of Portions are adjusted</p>*/}
-            {/*<p className={'my-1 ' + Theme}> to the number of people per room.</p>*/}
-            <Row>
-               <Col>
-                   <RoomMenuSelection Room={bookingDetails.primary_room} primary></RoomMenuSelection>
-               </Col>
-                {bookingDetails.secondary_room !== '' && <Col>
-                    <RoomMenuSelection Room={bookingDetails.secondary_room}></RoomMenuSelection>
-               </Col>}
-            </Row>
-
+        <div className={'px-4 overflow-y-auto mh-600px'} ref={ref}>
+            {innerWidth > 1300 ? <LargeDevicesMenus bookingDetails={bookingDetails}></LargeDevicesMenus> :
+            <MobileMenus bookingDetails={bookingDetails}></MobileMenus>}
             {checkRequirement() &&
-                <Button variant={'outline-dark'} onClick={handleFinalize} className={'rounded-4 shadow-sm reservation-button'}>Finalize Reservation</Button>
+                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 box_shadow border-0 mb-3 reservation-button text-dark'}>Finalize Reservation</Button>
             }
         </div>
     )

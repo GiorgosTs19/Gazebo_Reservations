@@ -35,16 +35,16 @@ export function DinnerTimeSettings({children}) {
     },[settings.Arrival_Start,settings.Arrival_End,localSettings.Strict_Arrival_Time]);
     return (
         // settings-header-border
-        <div className={'user-select-none text-center overflow-x-hidden'}>
+        <div className={'user-select-none text-center overflow-x-hidden h-100 d-flex flex-column'}>
             {children}
-            <Row className={'mb-2'}>
-                <Col xl={6}>
+            {/*<Row className={'mb-2'}>*/}
+            {/*    <Col xl={6}>*/}
                     <ArrivalSettings></ArrivalSettings>
-                </Col>
-                <Col className={'mt-4 mt-xl-0 d-flex'}>
+                {/*</Col>*/}
+                {/*<Col className={'mt-4 mt-xl-0 d-flex'}>*/}
                     <ArrivalMessageSettings></ArrivalMessageSettings>
-                </Col>
-            </Row>
+                {/*</Col>*/}
+            {/*</Row>*/}
         </div>
     )
 }

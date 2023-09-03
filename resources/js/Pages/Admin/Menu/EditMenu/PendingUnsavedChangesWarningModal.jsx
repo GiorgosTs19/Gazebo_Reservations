@@ -5,7 +5,7 @@ export function PendingUnsavedChangesWarningModal({shouldShowModal,handleCloseMo
         <Modal show={shouldShowModal} onHide={handleCloseModal} backdrop="static"
                keyboard={false}>
             <Modal.Header>
-                <Modal.Title>Μη αποθηκευμένες αλλαγές στις ρυθμίσεις Seaside Dinner</Modal.Title>
+                <Modal.Title>Μη αποθηκευμένες αλλαγές στις ρυθμίσεις των Βραδινών Κρατήσεων</Modal.Title>
             </Modal.Header>
             <Modal.Body>Έχετε κάνει αλλαγές στις ρυθμίσεις και δεν τις έχετε αποθηκεύσει.</Modal.Body>
             <Modal.Body>Είστε σίγουροι ότι θέλετε να συνεχίσετε χωρίς να αποθηκεύσετε τις αλλαγές που κάνατε;</Modal.Body>

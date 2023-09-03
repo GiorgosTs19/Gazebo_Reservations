@@ -94,7 +94,7 @@ export function MenuItemsList({menuItemsState,checkRequirements,menu,action}) {
                 {menuItems.map((item, index) => (
                     <ListGroup.Item key={index} className={'border-end-0 border-start-0 border-top-0'}>
                         <Row>
-                            <Col lg={3} md={6}>
+                            <Col xl={6} md={6} xxl={3}>
                                 <Stack>
                                     <span className={'mx-2 fw-bold fst-italic'}>Χωρίς</span>
                                     <Stack direction={'horizontal'} className={'mx-auto mx-md-auto mx-lg-auto'}>
@@ -114,7 +114,7 @@ export function MenuItemsList({menuItemsState,checkRequirements,menu,action}) {
                                     </Stack>
                                 </Stack>
                             </Col>
-                            <Col lg={3} md={6} className={'mt-3 mt-md-0'}>
+                            <Col xl={6} md={6} xxl={3} className={'mt-3 mt-md-0'}>
                                 <Stack>
                                     <span className={'mx-2 fw-bold fst-italic'}>Ιδανικό για</span>
                                     <Stack direction={'horizontal'} className={'mx-auto mx-md-auto mx-lg-auto'}>
@@ -129,14 +129,14 @@ export function MenuItemsList({menuItemsState,checkRequirements,menu,action}) {
                                     </Stack>
                                 </Stack>
                             </Col>
-                            <Col lg={6}>
+                            <Col lg={12} xxl={6}>
                                 <Stack direction={'horizontal'}>
                                     <InputGroup size="sm" className="mb-3" key={index} >
-                                        <div className="input-container mx-auto">
+                                        <div className="input-container mx-0 w-100">
                                             <input className="input-field mx-auto text-center" type="text" value={menuItems[index].Name} placeholder={item.Name}
                                                    onChange={(e) => handleMenuItemChange(e, index,'Name')}
                                                    required />
-                                            <label htmlFor="input-field" className="input-label">{getLabel(index,item)}</label>
+                                            <label htmlFor="input-field" className="input-label">{`Προϊόν ${index+1}`}</label>
                                             <span className="input-highlight"></span>
                                         </div>
                                         <Form.Control.Feedback type="invalid">Το πεδίο είναι υποχρεωτικό.</Form.Control.Feedback>

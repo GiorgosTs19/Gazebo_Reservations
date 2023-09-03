@@ -5,13 +5,16 @@ import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {LargeDevicesTodaysView} from "./LargeDevicesTodaysView";
 import {MobileTodaysView} from "./MobileTodaysView";
 import {Badge} from "react-bootstrap";
+import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservationFormModal";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 
 export function TodaysView() {
     const today = new Date(),
     Reservations = useContext(ReservationsContext),
     innerWidth = useContext(InnerWidthContext);
     const reservations_of_current_date = getReservationsByDate(today,Reservations),
-        [reservationsFilter,setReservationsFilter] = useState('All');
+    [reservationsFilter,setReservationsFilter] = useState('All'),
+        {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
 
 
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Reservations),
@@ -46,6 +49,7 @@ export function TodaysView() {
                        <h5 className={'my-2'}>{formatDateInGreek(today)}</h5>
                        {isDateDisabled &&  <Badge bg="danger" className={'mx-auto my-3'}>Απενεργοποιημένη</Badge>}
                        {isDateDisabled && hasReservations && getWarningMessage()}
+                       <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
                    </MobileTodaysView>
                }
            </div>

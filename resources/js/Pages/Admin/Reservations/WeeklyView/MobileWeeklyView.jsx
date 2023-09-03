@@ -4,7 +4,7 @@ import {useContext, useCallback} from "react";
 import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
-import {ReservationShort} from "../ReservationViews/ReservationShort";
+import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 
 export function MobileWeeklyView({currentDate, filter, children}) {
     const Reservations = useContext(ReservationsContext),
@@ -31,9 +31,9 @@ export function MobileWeeklyView({currentDate, filter, children}) {
                 reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
             }
             return [reservationChunks.map((chunk, index) => {
-                return <ListGroup.Item key={index+1} className={'p-1 d-flex border-0 hover-scale-0_95'}>
+                return <ListGroup.Item key={index+1} className={'p-1 d-flex border-0 mx-auto'}>
                     {chunk.map(reservation => (
-                        <ReservationShort Reservation={reservation} key={reservation.id} className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />
+                        <ReservationShortest Reservation={reservation} key={reservation.id} className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />
                     ))}
                 </ListGroup.Item>;
             }

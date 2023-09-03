@@ -74,7 +74,7 @@ export function MonthlyView() {
     };
 
     // Will always try to show as many reservations per line, to save space.
-    const reservationsToRender = (activeReservation !== null) ? 1 : (innerWidth > 1500 ? 3 : (innerWidth > 800 ? 2 : 1));
+    const reservationsToRender = (activeReservation !== null) ? 1 : (innerWidth > 1600 ? 3 : (innerWidth > 1400 ? (2) : (innerWidth > 1150 ? 3 : (innerWidth > 900 ? 2 : 1))));
     // Returns whether the toNextMonth button should be disabled ( True when viewing the last month,
     // based on the reservation date boundaries set by the administrators )
 
@@ -134,7 +134,7 @@ export function MonthlyView() {
     </>
 
     return (
-        innerWidth > 992
+        innerWidth > 1400
             ?
             <LargeDevicesMonthlyView Calendar={CalendarToShow} selectedDate = {selectedDate}
                 reservationsToShow={reservationsToShow} reservationsFilter={reservationsFilter}

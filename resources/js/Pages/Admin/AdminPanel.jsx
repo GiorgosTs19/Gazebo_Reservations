@@ -76,7 +76,8 @@ export default function AdminPanel(props) {
                 return;
             }
         if(k === 'Menus')
-            setActiveMenusTabKey('Existing');
+            if(!bypass)
+                setActiveMenusTabKey('Existing');
         setActiveTabKey(k);
     }
 
@@ -101,11 +102,11 @@ export default function AdminPanel(props) {
             <div className={'box_shadow px-2 px-lg-0 px-xl-4 rounded-4 py-2 border my-auto mx-auto mx-md-0 ms-lg-5'}>
                 {activeTabKey === 'Reservations' && <ViewSelectionMenu></ViewSelectionMenu>}
                 {activeTabKey === 'Menus' && activeMenusTabKey !== 'Edit' &&
-                    <h4 className={'my-3'}>Διαχείριση Menu {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
+                    <h4 className={'my-3'}>Διαχείριση {reservationType === 'Dinner' ? 'Βραδινών' : 'Πρωινών'} Menu </h4>}
                 {activeTabKey === 'Settings' &&
-                    <h4 className={'my-3'}>Ρυθμίσεις {reservationType === 'Dinner' ? 'Seaside Dinner' : 'Sea Bed'}</h4>}
+                    <h4 className={'my-3'}>Ρυθμίσεις {reservationType === 'Dinner' ? 'Βραδινών' : 'Πρωινών'} Κρατήσεων</h4>}
                 {activeMenusTabKey === 'Edit' && activeTabKey === 'Menus' &&
-                    <h4 className={'my-3'}>Επεξεργασία {editingMenu.Name}</h4>}
+                    <h4 className={'my-3'}>Επεξεργασία {editingMenu?.Name}</h4>}
             </div>
         </Col>
     </Row>;
@@ -136,27 +137,27 @@ export default function AdminPanel(props) {
                                                 <ResolvingConflictContext.Provider value={{resolvingConflict,setResolvingConflict}}>
                                                     <ActiveTabKeyContext.Provider value={{activeTabKey,handleSetActiveKey}}>
                                                         <ConflictsContext.Provider value={Conflicts}>
-                                                            <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
-                                                                           conflicts={props.Conflicts}>
-                                                                {innerWidth < 992 && typeAndViewSelectionPanel}
-                                                            </NavigationBar>
-                                                                <div className={'h-90 px-xs-5  vw-100 position-absolute '  + (innerWidth<992 ? 'overflow-auto' : 'overflow-auto')}>
-                                                                    <Card className={"px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
-                                                                        <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
+                                                            <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
+                                                                <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
+                                                                               conflicts={props.Conflicts}>
+                                                                    {innerWidth < 992 && typeAndViewSelectionPanel}
+                                                                </NavigationBar>
+                                                                <div className={'h-90 px-xs-5  vw-100 position-absolute overflow-auto'}>
+                                                                    <Card className={"px-2 px-lg-2 px-xxl-4 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
                                                                             {innerWidth > 992 &&
                                                                                 <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
                                                                                     {typeAndViewSelectionPanel}
                                                                                 </Card.Header>}
-                                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                                            <Card.Body className={'box_shadow px-xs-1 px-lg-2 px-xl-4 rounded-4 border border-gray-400 mt-3 overflow-x-hidden pt-1 pb-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
                                                                                 <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                                                                     <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
                                                                                         {renderContent()}
                                                                                     </ShouldShowUnsavedChangesModalContext.Provider>
                                                                                 </PendingUnsavedChangesContext.Provider>
                                                                             </Card.Body>
-                                                                        </MenuEditModeContext.Provider>
                                                                     </Card>
                                                                 </div>
+                                                            </MenuEditModeContext.Provider>
                                                         </ConflictsContext.Provider>
                                                     </ActiveTabKeyContext.Provider>
                                                 </ResolvingConflictContext.Provider>
