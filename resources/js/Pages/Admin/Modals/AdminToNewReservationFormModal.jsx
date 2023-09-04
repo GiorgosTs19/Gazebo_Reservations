@@ -16,7 +16,7 @@ export function AdminToNewReservationFormModal({returnButton = false, reservatio
         <>
             {returnButton ? <Button variant={'outline-secondary'} className={'mx-auto my-4'}
                 onClick={handleShow}>
-                Νέα Κράτηση</Button> :<Nav.Link className={'primary my-auto hover-scale-1_03'} onClick={handleShow}>Νέα Κράτηση</Nav.Link>}
+                Νέα Κράτηση</Button> :<Nav.Link className={'secondary my-auto hover-scale-1_03'} onClick={handleShow}>Νέα Κράτηση</Nav.Link>}
             <Modal show={showModal} className={'text-center'} centered>
                 <Modal.Header>
                     <Modal.Title id="example-modal-sizes-title-lg">

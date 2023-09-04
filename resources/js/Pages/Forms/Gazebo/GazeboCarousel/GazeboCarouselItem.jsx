@@ -16,8 +16,9 @@ export function GazeboCarouselItem({Gazebo,isAvailable, children}) {
             {isAvailable ? <>
                 <GazeboLocation index={Gazebo.ascending_number}></GazeboLocation>
                 <Button variant="outline-dark"  onClick={handleSelect}
-                        disabled={!isAvailable || bookingDetails.table === Gazebo.id} className={'border-0 rounded-3 box_shadow mt-3 py-2 px-4 reservation-button mx-auto w-auto'}>
-                    {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
+                disabled={!isAvailable || bookingDetails.table === Gazebo.id}
+                className={'border-0 rounded-3 box_shadow mt-3 py-2 px-4 reservation-button mx-auto w-auto'}>
+                {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
                 </Button>
             </> : children}
         </div>

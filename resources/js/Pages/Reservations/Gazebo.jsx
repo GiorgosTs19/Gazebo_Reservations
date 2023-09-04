@@ -11,18 +11,18 @@ import {GazeboAvailabilityContext} from "../../Contexts/GazeboAvailabilityContex
 import {GazebosContext} from "../../Contexts/GazebosContext";
 import {InnerWidthContext} from "../../Contexts/InnerWidthContext";
 import {TypeSelectionForm} from "../Forms/ReservationTypeSelection/TypeSelectionForm";
-import '../../../css/Reservations.css'
-import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
-import {Container} from "react-bootstrap";
-import gsap from "gsap";
 import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext";
 import {ErrorsContext} from "../Admin/Contexts/ErrorsContext";
+import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
+import '../../../css/Reservations.css'
+import {Container} from "react-bootstrap";
+import gsap from "gsap";
 import {AlertMessage} from "../../Alerts/AlertMessage";
 
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
     selectedDate = props.SelectedDate, selectedType = props.SelectedType,
-        selectedPeople = parseInt(props.SelectedPeople),
+    selectedPeople = parseInt(props.SelectedPeople),
     [bookingDetails, setBookingDetails] = useState(
         {
             date:selectedDate ?? '',
@@ -54,28 +54,6 @@ export default function Gazebo(props) {
     detailsRef = useRef(null),
     menuRef = useRef(null),
     finalizeRef = useRef(null),
-    getHeight = (content) => {
-        switch (content) {
-            case 'Nav' : {
-                if(bookingDetails.type === '')
-                    return 0;
-                if(innerWidth < 1000) {
-                    if (window.innerWidth > window.innerHeight)
-                        return '10%';
-                }
-                return '8%';
-            }
-            case 'Con' : {
-                if(bookingDetails.type === '')
-                    return '100%';
-                if(innerWidth < 1000) {
-                    if(window.innerWidth > window.innerHeight)
-                        return '80vh';
-                }
-                return '90%';
-            }
-        }
-    },
     isTouchDevice = () => {
         return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     };
@@ -114,7 +92,7 @@ export default function Gazebo(props) {
             }
         }
     },[progress]);
-    console.log(bookingDetails)
+
     return (
         <ErrorsContext.Provider value={{errors,setErrors}}>
             <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
