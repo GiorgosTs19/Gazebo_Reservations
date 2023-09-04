@@ -253,8 +253,11 @@ abbr[title] {
     cursor: pointer;
 }
 /* Cursor */
-.nav-link.primary {
+.nav-link.primary, .dropdown-toggle.nav-link {
     font-weight: 550;
+}
+.dropdown-menu {
+    padding: 9px;
 }
 .important {
     color: red!important;

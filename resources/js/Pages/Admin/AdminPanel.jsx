@@ -140,7 +140,6 @@ export default function AdminPanel(props) {
                                                             <MenuEditModeContext.Provider value={{editingMenu,setEditingMenu}}>
                                                                 <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}
                                                                                conflicts={props.Conflicts}>
-                                                                    {innerWidth < 992 && typeAndViewSelectionPanel}
                                                                 </NavigationBar>
                                                                 <div className={'h-90 px-xs-5  vw-100 position-absolute overflow-auto'}>
                                                                     <Card className={"px-2 px-lg-2 px-xxl-4 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
