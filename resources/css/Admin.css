@@ -271,13 +271,16 @@ abbr[title] {
         height: calc(100vh - 50px);
     }
     .search-view-reservations {
-        height: 65% !important;
+        height: 75% !important;
     }
     .filters-bar-stack {
         font-size: 13px;
     }
     .navbar-brand {
         font-size: 17px;
+    }
+    .search-filters {
+        height:fit-content ;
     }
 }
 

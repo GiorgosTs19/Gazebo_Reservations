@@ -70,7 +70,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
                 <Button onClick={handleNextWeek} variant={"secondary"} size={'sm'} className={'m-2 rounded-3 ' + (!isLastWeek ? 'hover-scale-1_03' : '')} disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
             </div>
             <FiltersBar setReservationsFilter={setReservationsFilter}
-                        reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto my-2 border-secondary-subtle border rounded-4 p-2'}>
+                        reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto my-2'}>
             </FiltersBar>
             <ListGroup horizontal={direction === 'horizontal'} gap={2}
                        className="week-days px-3 mx-3 overflow-y-auto h-100">

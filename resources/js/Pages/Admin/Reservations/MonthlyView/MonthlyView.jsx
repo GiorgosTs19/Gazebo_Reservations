@@ -91,7 +91,7 @@ export function MonthlyView() {
         const reservations_of_current_date = getReservationsByDate(selectedDate,Reservations);
 
         if(reservations_of_current_date.length === 0)
-            return [<h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε.</h4>, reservations_of_current_date.length];
+            return [<h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση την ημέρα που επιλέξατε</h4>, reservations_of_current_date.length];
 
         const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
             reservations_of_current_date.filter((reservation)=>{
@@ -99,7 +99,7 @@ export function MonthlyView() {
             });
 
         if(filteredReservations.length === 0)
-            return [<h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια.</h4>, reservations_of_current_date.length]
+            return [<h4 className={'my-auto user-select-none'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια</h4>, reservations_of_current_date.length]
 
         const reservationChunks = [];
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {

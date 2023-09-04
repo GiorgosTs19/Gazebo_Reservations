@@ -1,13 +1,24 @@
 import {OptionsSVG} from "../../../../SVGS/OptionsSVG";
 import {Button, FloatingLabel, Form, Stack} from "react-bootstrap";
+import {useState} from "react";
+import {CloseSVG} from "../../../../SVGS/CloseSVG";
+import {ChevronUpSVG} from "../../../../SVGS/ChevronUpSVG";
+import {ChevronDownSVG} from "../../../../SVGS/ChevronDownSVG";
 
 export function SearchFilters({SearchCriteria,inputRefs}) {
     const {confNumberInputRef,emailInputRef,phoneInputRef} = inputRefs,
-        {searchCriteria,dispatchSearchCriteria, noCriteriaActive} = SearchCriteria;
+        {searchCriteria,dispatchSearchCriteria, noCriteriaActive} = SearchCriteria,
+    [showFilters, setShowFilters] = useState(true);
     return (
-        <>
-            <OptionsSVG className={'mx-auto my-3'}></OptionsSVG>
-            <Stack className={'mx-auto w-90'} >
+        <div className={'box_shadow text-center my-1 my-md-auto rounded-4 border border-2 px-2'}>
+            <div className={'d-flex'}>
+                <OptionsSVG className={'mx-auto my-3'}></OptionsSVG>
+                {showFilters ? <ChevronUpSVG height={30} width={30} className={'border-0 text-dark align-self-end my-auto pe-1'}
+                               onClick={() => setShowFilters(false)}/> : <ChevronDownSVG height={30} width={30} className={'border-0 text-dark align-self-end my-auto pe-1'}
+                                                                                       onClick={() => setShowFilters(true)}/>}
+            </div>
+
+            <Stack className={'mx-auto w-90 h-fit-content'} hidden={!showFilters}>
                 <div className="mb-3">
                     <h6>Είδος Κράτησης</h6>
                     <Form.Check
@@ -74,6 +85,7 @@ export function SearchFilters({SearchCriteria,inputRefs}) {
                     Καθαρισμός φίλτρων
                 </Button>
             </Stack>
-        </>
+            <p className={'info-text'} hidden={!showFilters}>Εμφανίζονται μόνο κρατήσεις, με ημερομηνία κράτησης αργότερη της σημερινής.</p>
+        </div>
     )
 }

@@ -37,8 +37,6 @@ export function NavigationBar({activeTab,activeMenusTab, conflicts}) {
                         <UsefulInfoModal className={'order-3 order-xxl-1 my-3 mx-xxl-2'}></UsefulInfoModal>
                         {/*Second In large Screen, 3rd in mobiles and tablets*/}
                         <Nav className="user-select-none w-50 order-2 order-xxl-1">
-                            {/*<Nav.Link href="#Κρατήσεις" className={'primary my-auto hover-scale-1_03'}*/}
-                            {/*onClick={()=>handleSetActiveKey("Reservations")} disabled={activeTabKey === 'Reservations'}>Κρατήσεις</Nav.Link>*/}
                             <NavBarReservations activeTab={activeTab}/>
                             <NavDropdown title="Μενού" id="navbarMenusScrollingDropdown" className={'my-auto'}>
                                 <NavDropdown.Item href="#Μενού-Υπάρχοντα" className={'px-2 ms-1 my-2 my-md-auto secondary hover-scale-1_03'}

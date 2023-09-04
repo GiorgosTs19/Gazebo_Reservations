@@ -145,13 +145,13 @@ export function SearchView() {
 
     return (
         <Row className={'h-100 px-2 py-2 px-lg-0 pt-lg-0 overflow-y-auto'}>
-            <Col className={'box_shadow text-center d-flex flex-column mt-1 my-lg-auto rounded-4 border border-2 h-fit-content'} xs={12} md={6}
-                 lg={3}>
+            <Col className={'search-filters d-flex flex-column'} xs={12} md={6} lg={4} xl={3}>
                 <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}>
                 </SearchFilters>
             </Col>
             <Col className={'d-flex flex-column text-center mt-4 mt-md-0 ' +
-                (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')} s={12} md={6} lg={9}>
+                (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')}
+                 sm={12} md={6} lg={8} xl={9}>
                 {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
                     {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
                 </h5>}
