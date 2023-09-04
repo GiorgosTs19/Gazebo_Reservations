@@ -39,7 +39,7 @@ export function TodaysView() {
 
     return (
        <>
-           <div className={'text-center h-100'}>
+           {/*<div className={'text-center h-100'}>*/}
                {innerWidth > 992 ?
                    <LargeDevicesTodaysView reservations_of_current_date={reservations_of_current_date} filter={{reservationsFilter,setReservationsFilter}}>
                        <h5>{formatDateInGreek(today)} {isDateDisabled && <Badge bg="danger" className={'ms-3'}>Απενεργοποιημένη</Badge>}</h5>
@@ -52,7 +52,7 @@ export function TodaysView() {
                        <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
                    </MobileTodaysView>
                }
-           </div>
+           {/*</div>*/}
        </>
     )
 }

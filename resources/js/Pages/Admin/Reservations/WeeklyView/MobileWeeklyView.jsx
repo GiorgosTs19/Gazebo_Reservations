@@ -62,15 +62,15 @@ export function MobileWeeklyView({currentDate, filter, children}) {
     },[currentDate,reservationsFilter,Reservations]);
 
     return (
-        <div className={'text-center p-0 overflow-y-auto overflow-x-hidden h-100 d-flex flex-column'}>
-            <div className={'d-flex flex-column sticky-top bg-white'}>
-                <div className="navigation my-2 d-flex">
+        <div className={'text-center p-0 overflow-y-auto overflow-x-hidden h-100 d-flex flex-column sticky-top bg-white'}>
+            {/*<div className={'d-flex flex-column sticky-top bg-white'}>*/}
+                <div className="navigation my-2 d-flex mx-auto">
                     {children}
                 </div>
                 <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
-                            reservationsFilter={reservationsFilter} className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
+                            reservationsFilter={reservationsFilter} className={'mx-auto my-3'}>
                 </FiltersBar>
-            </div>
+            {/*</div>*/}
             <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
                 {renderWeekDays()}
             </Accordion>

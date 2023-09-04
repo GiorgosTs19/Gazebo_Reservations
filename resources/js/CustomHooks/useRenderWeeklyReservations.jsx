@@ -8,7 +8,7 @@ export function useRenderWeeklyReservations(day, Reservations, reservationsFilte
     const lastReservationsIndexToShow = innerWidth < 1400 ? 1 : ( innerWidth > 1600 ? 3 : 2);
     const reservations_of_current_date = getReservationsByDate(day,Reservations);
     if(reservations_of_current_date.length === 0)
-        return [<h4 className={'text-muted m-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση.</h4>,0,reservations_of_current_date.length];
+        return [<h4 className={'text-muted m-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση</h4>,0,reservations_of_current_date.length];
 
     const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
         reservations_of_current_date.filter((reservation) => {

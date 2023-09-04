@@ -54,28 +54,17 @@ export function MobileTodaysView({reservations_of_current_date,filter,children})
         });
     },[reservations_of_current_date,reservationsFilter, shouldShowStack, innerWidth]);
 
-    return (
-        <>
-            {shouldShowStack && <Row className={'h-100'}>
-                <Col sm={innerWidth > 575 ? 12 : 3}
-                     className={'d-flex flex-column px-0 h-10 sticky-top bg-white'}>
-                    {children}
-                    {reservations_of_current_date.length > 0 &&
-                        <FiltersBar setReservationsFilter={setReservationsFilter}
-                                    disabled={reservations_of_current_date.length === 0}
-                                    reservationsFilter={reservationsFilter}
-                                    direction={'horizontal'}
-                                    className={'my-auto my-md-5 my-lg-auto mx-auto'}></FiltersBar>}
-                </Col>
-                {shouldShowStack ?
-                    <Col sm={innerWidth > 575 ? 12 : 9} className={'d-flex flex-column h-85'}>
-                        <Stack className={'py-3 px-md-1 px-lg-3 text-center mx-auto overflow-y-auto '}>
-                            {reservationsToShow()}
-                        </Stack>
-                    </Col>
-                    : null}
-
-            </Row>}
-        </>
+    return ( shouldShowStack && <div className={'h-100 d-flex flex-column text-center'}>
+            {children}
+            {reservations_of_current_date.length > 0 &&
+                <FiltersBar setReservationsFilter={setReservationsFilter}
+                            disabled={reservations_of_current_date.length === 0}
+                            reservationsFilter={reservationsFilter}
+                            direction={'horizontal'}
+                            className={'m-auto'}></FiltersBar>}
+            <Stack className={'my-3 px-4 text-center mx-auto overflow-y-auto '}>
+                {reservationsToShow()}
+            </Stack>
+        </div>
     )
 }

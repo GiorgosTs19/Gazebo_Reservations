@@ -17,7 +17,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
     // Generates the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
         if(!reservationsExist)
-            return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
+            return <h4 className={'text-muted my-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση για σήμερα</h4>;
 
         const filteredReservations = reservationsFilter === 'All' ?  reservations_of_current_date :
             reservations_of_current_date.filter((reservation)=>{
@@ -25,7 +25,7 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
             });
 
         if(filteredReservations.length === 0)
-            return <h5 className={'my-auto text-wrap user-select-none'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια.</h5>
+            return <h5 className={'my-auto text-wrap user-select-none'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια</h5>
         const reservationsToRender = innerWidth < 1605 ? 1 : 2;
         // Will always try to show 2 reservations per line, to save space.
         const reservationChunks = [];
@@ -42,11 +42,11 @@ export function LargeDevicesTodaysView({reservations_of_current_date,filter,chil
     },[reservations_of_current_date,reservationsFilter]);
 
     return (
-        <div className={'pe-0 pb-3 h-100 m-auto pt-4 d-flex flex-column'}>
+        <div className={'pe-0 pb-3 h-100 m-auto pt-4 d-flex flex-column text-center'}>
             {children}
             {reservationsExist && <FiltersBar setReservationsFilter={setReservationsFilter}
              reservationsFilter={reservationsFilter} direction={'horizontal'}
-             className={'mx-auto my-2 border-secondary-subtle border rounded-4 p-2'}>
+             className={'mx-auto my-2'}>
             </FiltersBar>}
             <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
             <Stack className={'px-3 text-center d-flex overflow-y-auto h-75'} >

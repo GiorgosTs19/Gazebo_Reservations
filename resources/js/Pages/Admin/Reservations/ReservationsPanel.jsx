@@ -24,7 +24,7 @@ export function ReservationsPanel() {
     showReservationLong = () => {
         if(activeReservation !== null)
             return <ReservationLong></ReservationLong>
-        return  <h4 className={'text-muted m-auto user-select-none'}>Επιλέξτε μία κράτηση για να δείτε λεπτομέρειες.</h4>
+        return  <h4 className={'text-muted m-auto user-select-none'}>Επιλέξτε μία κράτηση για να δείτε λεπτομέρειες</h4>
     }
     useEffect(() => {
         const handleResize = () => {
@@ -55,7 +55,7 @@ export function ReservationsPanel() {
                 {activeReservationsView === 'Monthly' && <MonthlyView></MonthlyView>}
                 {activeReservationsView === 'Search' && (isMobile ? activeReservation === null : true) && <SearchView></SearchView>}
             </Col>
-            {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 1200)) &&
+            {(activeReservation !== null || ((activeReservationsView === 'Weekly'  || (activeReservationsView === 'Today' && today_reservations.length > 0)) && innerWidth > 992)) &&
                 <Col sm={12} md={8} lg={5}
             className={'d-flex text-center overflow-y-auto reservation-long-view py-lg-4'} as={'div'}>
                 {showReservationLong()}

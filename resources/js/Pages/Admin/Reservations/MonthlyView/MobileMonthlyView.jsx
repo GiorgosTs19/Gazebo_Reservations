@@ -27,10 +27,10 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate, r
                 }
                 {!shouldShowCalendar &&
                     <>
-                        <LeftArrowSVG className={'my-2 mx-auto'} rotate={90} onClick={handleBackToCalendar}/>
+                        <LeftArrowSVG className={'my-2 mx-auto hover-scale-1_1'} width={innerWidth > 992 ? 64 : 32} height={innerWidth > 992 ? 64 : 32}
+                        rotate={90} onClick={handleBackToCalendar}/>
                         {reservationsCount > 0 && <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
-                                                              reservationsFilter={reservationsFilter}
-                                                              className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
+                        reservationsFilter={reservationsFilter} className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
                         </FiltersBar>}
                         <Stack className={'p-3 overflow-y-auto ' + (innerWidth > 992 ? ' mh-600px' : ' h-75')}>
                             {reservations}

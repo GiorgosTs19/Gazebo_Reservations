@@ -7,7 +7,7 @@ export default function useGetReservationStatusText(status) {
             return 'Επιβεβαιωμένη';
         }
         default : {
-            return 'Εκκρεμούσα';
+            return 'Εκκρεμής';
         }
     }
 };
