@@ -46,6 +46,7 @@ export default function AdminPanel(props) {
         // it also stores the previous ActiveTabKey to return to after the actions are done.
     [resolvingConflict,setResolvingConflict] = useState([false,'']),
     Conflicts = props.Conflicts;
+
     const renderContent = () => {
         switch (activeTabKey) {
             case 'Settings' : {
@@ -65,10 +66,10 @@ export default function AdminPanel(props) {
             }
             case 'ResolveConflict' : {
                 return <ReservationLong></ReservationLong>;
-
             }
         }
     };
+
     const handleSetActiveKey = (k,bypass=false) => {
         if(!bypass)
             if(activeTabKey === 'Settings' && (pendingUnsavedChanges.Dinner || pendingUnsavedChanges.Bed)) {

@@ -1,7 +1,3 @@
-import {TodayViewSVG} from "../../../SVGS/TodayViewSVG";
-import {WeeklyViewSVG} from "../../../SVGS/WeeklyViewSVG";
-import {MonthlyViewSVG} from "../../../SVGS/MonthlyViewSVG";
-import {SearchViewSVG} from "../../../SVGS/SearchViewSVG";
 import {NavDropdown} from "react-bootstrap";
 import {useContext} from "react";
 import {ViewContext} from "../../../Contexts/ViewContext";
@@ -9,35 +5,36 @@ import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 
 export function NavBarReservations({activeTab}) {
     const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
-        {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-        {activeTabKey,handleSetActiveKey} = activeTab,
-        handleSetActiveView = (view) => {
-        if(activeTabKey !== 'Reservations')
-            handleSetActiveView('Reservations');
+    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    {activeTabKey,handleSetActiveKey} = activeTab,
+    handleSetActiveView = (view) => {
+        if(activeTabKey !== 'Reservations'){
+            handleSetActiveKey('Reservations');
+        }
         setActiveReservationsView(view);
         setActiveReservation(null);
-        };
+    };
 
     return (
         <NavDropdown title="Κρατήσεις" id="navbarReservationsScrollingDropdown" className={'my-auto'}>
-            <NavDropdown.Item href="#Σημερινές-Κρατήσεις" className={' secondarym-auto user-select-none ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer hover-scale-1_03')}
-                onClick={()=>handleSetActiveView('Today')}
-                disabled={activeReservationsView === 'Today'}>
+            <NavDropdown.Item href="#Σημερινές-Κρατήσεις" onClick={()=>handleSetActiveView('Today')}
+                className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer hover-scale-1_03')}
+                disabled={activeReservationsView === 'Today' && activeTabKey === 'Reservations'}>
                 Σημερινές
             </NavDropdown.Item>
-            <NavDropdown.Item href="#Εβδομαδιαίες-Κρατήσεις" className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer hover-scale-1_03')}
-                onClick={()=>handleSetActiveView('Weekly')}
-                disabled={activeReservationsView === 'Weekly'}>
+            <NavDropdown.Item href="#Εβδομαδιαίες-Κρατήσεις" onClick={()=>handleSetActiveView('Weekly')}
+                className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer hover-scale-1_03')}
+                disabled={activeReservationsView === 'Weekly'  && activeTabKey === 'Reservations'}>
                 Εβδομαδιαίες
             </NavDropdown.Item>
-            <NavDropdown.Item href="#Μηνιαίες-Κρατήσεις" className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_03')}
-                onClick={()=>handleSetActiveView('Monthly')}
-                disabled={activeReservationsView === 'Monthly'}>
+            <NavDropdown.Item href="#Μηνιαίες-Κρατήσεις" onClick={()=>handleSetActiveView('Monthly')}
+                className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_03')}
+                disabled={activeReservationsView === 'Monthly'  && activeTabKey === 'Reservations'}>
                 Μηνιαίες
             </NavDropdown.Item>
-            <NavDropdown.Item href="#Αναζήτηση-Κρατήσεων" className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_03')}
-                onClick={()=>handleSetActiveView('Search')}
-                disabled={activeReservationsView === 'Search'}>
+            <NavDropdown.Item href="#Αναζήτηση-Κρατήσεων" onClick={()=>handleSetActiveView('Search')}
+                className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_03')}
+                disabled={activeReservationsView === 'Search'  && activeTabKey === 'Reservations'}>
                 Αναζήτηση
             </NavDropdown.Item>
         </NavDropdown>
