@@ -1,10 +1,18 @@
 import {Badge, Col, Image, ListGroup, Modal, Row, Stack} from "react-bootstrap";
-import {useState} from "react";
+import {Inertia} from "@inertiajs/inertia";
+import {useEffect, useState} from "react";
 import {MenuItem} from "../../Admin/Menu/MenuItem";
 import {InfoSVG} from "../../../SVGS/InfoSVG";
 
 export function MenuInfoModal({menu}) {
     const [show, setShow] = useState(false);
+    const [menuItems,setMenuItems] = useState([]);
+    useEffect(()=>{
+        if(show)
+            Inertia.get(route('Menu_Items'), {menu_id:menu.id}, {onSuccess:(res)=>setMenuItems(res.props.Menu_Items),
+                preserveState:true, preserveScroll:true, only:['Menu_Items']});
+    },[show]);
+
     return (
         <>
             <Badge bg="transparent" pill className={'my-auto'} onClick={() => setShow(true)}>
@@ -20,7 +28,7 @@ export function MenuInfoModal({menu}) {
                 <Modal.Body className={''}>
                     <h6 className={'pb-3 info-text-lg'}>The {menu.Name} menu contains</h6>
                     <ListGroup as="ol" numbered variant={'flush'}>
-                    {menu.Items.map((item)=>{
+                    {menuItems.map((item)=>{
                         return <MenuItem item={item} key={item.id} className={'bg-transparent border-dark'} inModal></MenuItem>
                     })}
                     </ListGroup>

@@ -19,9 +19,8 @@ export default function Login({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
         post(route('login'));
-        // Inertia.post(route('login'),data);
     };
-    console.log(errors)
+
     return (
         <Container fluid className={'p-3 vh-100 text-center'}>
             <title title="Log in" />

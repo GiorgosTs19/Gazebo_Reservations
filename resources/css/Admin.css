@@ -16,17 +16,13 @@
 .reservation-long-view {
     height: 100%;
 }
-
-.monthly-reservation-stack {
-    /*height: 250px;*/
-}
 /* Reservations */
 
 
-/* .tab-pane {*/
-/*    height: 90vh;*/
-/*    position: relative;*/
-/*}*/
+ .tab-pane {
+    height: 100%;
+    position: relative;
+}
 /* Shadow utility classes */
 
 .box_shadow {
@@ -107,7 +103,7 @@
 /* Input fields */
 
 /* Text */
-.info-text, .info-text-lg {
+.info-text, .info-text-lg, .info-text-xl {
     opacity: 70%;
 }
 .info-text {
@@ -115,6 +111,10 @@
 }
 .info-text-lg {
     font-size : 15px;
+}
+.info-text-xl {
+    font-size : 20px;
+    font-style: italic;
 }
 
 /* Text */
@@ -191,7 +191,7 @@ abbr[title] {
 .admin-carousel.carousel-inner {
     height: 100%;
 }
-.admin-carousel.carousel-control-prev, .admin-carousel.carousel-control-next {
+.admin-carousel .carousel-control-prev, .admin-carousel .carousel-control-next {
     display: none;
 }
 /* Settings */
@@ -203,6 +203,21 @@ abbr[title] {
 }
 .w-90 {
     width: 90%;
+}
+.mw-200px {
+    max-width: 200px;
+}
+.mw-250px {
+    max-width: 250px;
+}
+.mw-300px {
+    max-width: 300px;
+}
+.mw-350px {
+    max-width: 350px;
+}
+.mw-550px {
+    max-width: 550px;
 }
 /* Width */
 
@@ -334,9 +349,6 @@ abbr[title] {
     .search-view-reservations {
         height: 100% !important;
     }
-    .reservation-long-view-conflicted {
-        width: 50%;
-    }
 }
 @media (min-width: 1400px) {
     .filters-bar-stack {
@@ -373,7 +385,7 @@ abbr[title] {
 }
 
 .tab-content, .tab-pane {
-    max-height: 35vh;
+    max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -413,7 +425,7 @@ ul {
 /* ScrollBar */
 /* WebKit (Safari, Chrome, Opera) */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 2px;
 }
 
 ::-webkit-scrollbar-track {

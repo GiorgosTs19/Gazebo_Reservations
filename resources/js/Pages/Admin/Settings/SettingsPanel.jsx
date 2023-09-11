@@ -1,11 +1,9 @@
 import {useContext} from "react";
 import {DinnerSettings} from "./DinnersSettings/DinnerSettings";
-import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
 export function SettingsPanel({dinnerSettings}) {
-    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
-    innerWidth = useContext(InnerWidthContext);
+    const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const renderContent = () => {
         switch (reservationType) {
             case 'Dinner' : {

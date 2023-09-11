@@ -16,14 +16,14 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use JetBrains\PhpStorm\ArrayShape;
 
-class ReservationController extends Controller
-{
+class ReservationController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function getReservation(Request $request): \Illuminate\Http\RedirectResponse {
+        $reservation_id = $request->only(['reservation_id'])['reservation_id'];
+
+        return Redirect::back()->with(['activeReservation'=>$reservation_id]);
     }
 
     public function generateConfirmationNumber() {
@@ -79,13 +79,13 @@ class ReservationController extends Controller
      * Changes the status of the Reservation from Pending to either Confirmed or Cancelled.
      */
     public function changeReservationStatus(Request $request): \Illuminate\Http\RedirectResponse {
-        $input = $request->only(['reservation_id','status']);
+        $input = $request->only(['reservation_id','status', 'date_start', 'date_end']);
         $Reservation = Reservation::find($input['reservation_id']);
         if($Reservation) {
             $Reservation->Status = $input['status'];
             $Reservation->save();
         }
-        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
+        return $this->getAction($input, $Reservation);
     }
 
     /**
@@ -128,28 +128,39 @@ class ReservationController extends Controller
             $Secondary_Menu->save();
         }
     }
+
+    protected function getAction($input, $Reservation) {
+        if(is_null($input['date_start']) && is_null($input['date_end']))
+            return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
+        if(is_null($input['date_end']))
+            return redirect()->action([GazeboController::class, 'getReservationsForDate'],
+                ['date'=>$input['date_start'], 'type'=>$Reservation->Type, 'activeReservation'=>$Reservation->id]);
+        return redirect()->action([GazeboController::class, 'getReservationsForDates'],
+            ['date_start'=>$input['date_start'], 'date_end'=>$input['date_end'], 'type'=>$Reservation->Type,
+                'activeReservation'=>$Reservation->id]);
+    }
     /**
      * Show the form for editing the specified resource.
      */
     public function changeReservationDate(Request $request): \Illuminate\Http\RedirectResponse {
-        $input = $request->only(['Reservation_id','Date','Table_id']);
+        $input = $request->only(['Reservation_id','Date','Table_id', 'date_start', 'date_end']);
         $Reservation = Reservation::find($input['Reservation_id']);
         if($Reservation->Date !== $input['Date'])
             $Reservation->Date =$input['Date'];
         if($Reservation->gazebo_id !== $input['Table_id'])
             $Reservation->gazebo_id = $input['Table_id'];
         $Reservation->save();
-        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
+        return $this->getAction($input, $Reservation);
     }
 
 
     public function changeReservationTable(Request $request): \Illuminate\Http\RedirectResponse {
-        $input = $request->only(['Reservation_id','Table_id']);
+        $input = $request->only(['Reservation_id','Table_id', 'date_start', 'date_end']);
         $Reservation = Reservation::find($input['Reservation_id']);
         if($Reservation->gazebo_id !== $input['Table_id'])
             $Reservation->gazebo_id = $input['Table_id'];
         $Reservation->save();
-        return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
+        return $this->getAction($input, $Reservation);
     }
 
     /**

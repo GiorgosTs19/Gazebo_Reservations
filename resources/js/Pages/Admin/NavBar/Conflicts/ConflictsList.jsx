@@ -1,30 +1,24 @@
-import {changeDateFormat} from "../../../../ExternalJs/Util";
 import {Badge, Button, Col, Row} from "react-bootstrap";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 import useGetStatusColor from "../../../../CustomHooks/useGetStatusColor";
 import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
+import {Inertia} from "@inertiajs/inertia";
 
-export function ConflictsList({reservations,type}) {
+export function ConflictsList({reservations}) {
     const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
-        ContextReservations = useContext(ReservationsContext),
-        {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
-        {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
 
     const handleFindReservation = (reservation) => {
-        const reservationFound = ContextReservations.filter(item => {
-            return item.Date === reservation.Date;
-        })[0].Reservations.filter(item => {
-            return item.id === reservation.id;
-        })[0];
-        if(reservationFound) {
+        Inertia.get(route('Get_Reservation'),{reservation_id:reservation.id}, {onSuccess:res=>{
+            const reservationFound = res.props.activeReservation;
             setResolvingConflict([true, activeTabKey]);
             handleSetActiveKey('ResolveConflict');
             setActiveReservation(reservationFound);
-        }
+        }, only:['activeReservation'], preserveState:true, preserveScroll:true});
     }
 
     const reservationsList = reservations.length > 0 ? reservations.map(reservation => {
@@ -34,7 +28,6 @@ export function ConflictsList({reservations,type}) {
                     <Col className={'d-flex flex-column'}>
                         <p className={'fw-bold mb-1'}>{reservation.Confirmation_Number}</p>
                         <Badge pill bg={useGetStatusColor(reservation.Status)} className={'mx-auto mb-2'}>{useGetReservationStatusText(reservation.Status)}</Badge>
-                        {/*<p className={'fw-bold'}>{changeDateFormat(reservation.Date,'-')}</p>*/}
                     </Col>
                     <Col className={'d-flex'}>
                         <Button className={'m-auto p-1'} variant={'outline-secondary'} onClick={()=>handleFindReservation(reservation)}>Εμφάνιση</Button>

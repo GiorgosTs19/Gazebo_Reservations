@@ -14,9 +14,10 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
         };
 
     return (
-        <Form className="m-auto pt-2">
-            <h5 className={'user-select-none'}>
+        <Form className="m-auto pt-2 d-flex w-100">
+            <h5 className={'user-select-none w-50'}>
                 <Form.Check // prettier-ignore
+                    inline
                     type={'radio'}
                     label={`Βραδινές Κρατήσεις`}
                     name={'ReservationType'}
@@ -26,8 +27,9 @@ export function ReservationTypeSelectionMenu({activeTabKey}) {
                     onChange={()=>handleOnChange('Dinner')}
                 />
             </h5>
-            <h5 className={'user-select-none'}>
+            <h5 className={'user-select-none w-50'}>
                 <Form.Check
+                    inline
                     type={'radio'}
                     label={'Πρωινές Κρατήσεις'}
                     name={'ReservationType'}

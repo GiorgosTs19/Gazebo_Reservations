@@ -9,20 +9,28 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
             case false : {
                 switch (reservations.length) {
                     case 1 : {
-                        return <b>ΠΡΕΠΕΙ να γίνει μεταφορά της σε άλλη μέρα έπειτα από συνεννόηση με τον πελάτη.</b>
+                        return <>
+                            <p className={'info-text'}>ΠΡΕΠΕΙ να γίνει αλλαγή ημερομηνίας στην κράτηση</p>
+                            <p className={'info-text'}>Η κράτηση θα εμφανιστεί στο καμπανάκι ( ώς υπενθύμιση ),
+                                στο πάνω αριστερό μέρος της οθόνης σας, για να πραγματοποιηθεί η αλλαγή που χρειάζεται.</p>
+                        </>
                     }
                     default : {
-                        return <b>ΠΡΕΠΕΙ να γίνει μεταφορά τους σε άλλη μέρα έπειτα από συνεννόηση με τους πελάτες.</b>
+                        return <>
+                            <p className={'info-text'}>ΠΡΕΠΕΙ να γίνει αλλαγή ημερομηνίας στις κρατήσεις</p>
+                            <p className={'info-text'}>Οι κρατήσεις θα εμφανιστούν στο καμπανάκι ( ώς υπενθύμιση ),
+                                στο πάνω αριστερό μέρος της οθόνης σας, για να πραγματοποιηθούν οι αλλαγές που χρειάζεται.</p>
+                        </>
                     }
                 }
             }
             case true : {
                 switch (reservations.length) {
                     case 1 : {
-                        return <b>Η υπάρχουσα κράτηση θα πραγματοποιηθεί κανονικά.</b>
+                        return <p className={'info-text'}>Η κράτηση θα πραγματοποιηθεί κανονικά</p>
                     }
                     default : {
-                        return <b>Οι υπάρχουσες κρατήσεις θα πραγματοποιηθούν κανονικά.</b>
+                        return <p className={'info-text'}>Οι κρατήσεις θα πραγματοποιηθούν κανονικά</p>
                     }
                 }
             }
@@ -30,8 +38,9 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
     };
 
     const dateRangeWarningMessage = dateIsRange && show && (reservations.length > 0 ?
-        <h6 className={'my-4'}>Υπάρχουν {reservations.length} κρατήσεις από τις {changeDateFormat(getFormattedDate(selectedDate[0],'-',1),'-')} μέχρι τις {changeDateFormat(getFormattedDate(selectedDate[1],'-',1),'-')}</h6> :
-        <h6 className={'my-4'}>Δεν υπάρχει καμία κράτηση από τις {getFormattedDate(selectedDate[0],'-',1)} μέχρι τις {getFormattedDate(selectedDate[1],'-',1)}</h6>)
+        <h6 className={'my-4'}>{`${reservations.length === 1 ? 'Υπάρχει' : 'Υπάρχουν'} ${reservations.length} ${reservations.length === 1 ? 'κράτηση' : 'κρατήσεις'} από τις ${changeDateFormat(getFormattedDate(selectedDate[0]),'-')}
+            μέχρι τις ${changeDateFormat(getFormattedDate(selectedDate[1]),'-')}`}</h6> :
+        '')
     const handleChangeAllowExistingReservations = value => {
         setAllowExistingReservations(value);
     }
@@ -40,7 +49,7 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
             <section className={'fw-bold'}>
                 Είστε σίγουροι πως θέλετε να απενεργοποιήσετε {!dateIsRange ? `την ${formatted_date}` : `τις ημέρες από ${formatted_date[0]} έως ${formatted_date[1]}`};
             </section>
-            <section className={(reservations.length > 0 ? 'border-bottom pb-3 ' : '')}>
+            <section className={'my-3 info-text-lg ' + (reservations.length > 0 ? 'border-bottom pb-3 ' : '')}>
                 Δεν θα μπορούν να καταχωρηθούν {reservations.length > 0 ? 'άλλες' : ''} {!dateIsRange ?
                 'κρατήσεις για αυτήν την μέρα, μέχρι να την ξανά ενεργοποιήσετε.' :
                 'κρατήσεις για αυτές τις μέρες, μέχρι να τις ξανά ενεργοποιήσετε.'}

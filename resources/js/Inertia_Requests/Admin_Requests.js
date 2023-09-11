@@ -1,11 +1,48 @@
 import {Inertia} from "@inertiajs/inertia";
+import {getFormattedDate} from "../ExternalJs/Util";
+export const getParameter = (activeRange) => {
+    if(!activeRange)
+        return '';
+    if(Array.isArray(activeRange))
+        return 'availability_for_date_range';
+    return 'availability_for_date';
+}
 
-export const handleChangeReservationStatus = (status, {activeReservation,setActiveReservation}) => {
-    Inertia.patch(route('Change_Reservation_Status'),{reservation_id:activeReservation.id,status:status},{
+export const handleSetReservations = (res, activeRange, setReservations) => {
+    if(!activeRange)
+        return;
+    if(Array.isArray(activeRange))
+        return setReservations(res.props.availability_for_date_range);
+    return setReservations(res.props.availability_for_date);
+}
+
+export const getDate = (num, activeRange) => {
+    switch (num) {
+        case 0 : {
+            if(!activeRange)
+                return '';
+            if(Array.isArray(activeRange))
+                return getFormattedDate(activeRange[0]);
+            return typeof activeRange === 'object' ? getFormattedDate(activeRange) : activeRange;
+        }
+        case 1 : {
+            if(!activeRange)
+                return '';
+            if(Array.isArray(activeRange))
+                return getFormattedDate(activeRange[1]);
+            return '';
+        }
+    }
+}
+
+export const handleChangeReservationStatus = (status, {activeReservation,setActiveReservation}, activeRange, setReservations) => {
+    Inertia.patch(route('Change_Reservation_Status'),{date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)
+        ,reservation_id:activeReservation.id,status:status},{
         onSuccess:(res)=> {
             setActiveReservation(res.props.activeReservation);
+            handleSetReservations(res,activeRange, setReservations);
         },
-        only:activeReservation.Type === 'Dinner' ? ['Dinner_Reservations','activeReservation'] : ['Bed_Reservations','activeReservation']
+        only:[getParameter(activeRange), 'activeReservation']
     });
 }
 

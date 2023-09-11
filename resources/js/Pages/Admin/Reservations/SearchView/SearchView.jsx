@@ -5,13 +5,18 @@ import {ReservationShort} from "../ReservationViews/ReservationShort";
 import gsap from "gsap";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {SearchFilters} from "./SearchFilters";
+import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
+import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
 export function SearchView() {
     const [searchResult,setSearchResult] = useState(null);
     const emailInputRef = useRef(null),
     phoneInputRef = useRef(null),
     confNumberInputRef = useRef(null),
-    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
+    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    [showFilters, setShowFilters] = useState(true),
+    InnerWidth = useContext(InnerWidthContext);
 
     const animateInputFocus = (inputRef) => {
         const inputRefs = [emailInputRef, phoneInputRef, confNumberInputRef];
@@ -107,13 +112,13 @@ export function SearchView() {
     // Generates the reservations to show for the selected date.
     const reservationsToShow = ()=> {
         if(!searchResult)
-            return <h5 className={'my-0 my-sm-auto text-wrap'}>Εισάγετε κάποιο κριτήριο για να κάνετε αναζήτηση.</h5>
+            return <h5 className={'my-0 my-sm-auto text-wrap info-text-xl'}>Εισάγετε κάποιο κριτήριο για να κάνετε αναζήτηση</h5>
 
         if(searchResult.length === 0)
-            return <h5 className={'my-auto text-wrap'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης.</h5>
+            return <h5 className={'my-auto text-wrap info-text-xl'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης</h5>
 
         // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = innerWidth > 1500 ? (activeReservation === null ? 3 : 2) : (innerWidth > 1000 ? 2 : 1);
+        const reservationsToRender = InnerWidth > 1500 ? (activeReservation === null ? 2 : 1) : (InnerWidth > 1350 ? (activeReservation === null ? 2 : 1) : 1);
         const reservationChunks = [];
         for (let i = 0; i < searchResult.length; i += reservationsToRender) {
             reservationChunks.push(searchResult.slice(i, i + reservationsToRender));
@@ -130,36 +135,58 @@ export function SearchView() {
     const getCriteriaLabels = useCallback(()=>{
         let criteria = [];
         if(searchCriteria.email !== '')
-            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.email}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" key={0} className={'mx-2'}>{`${searchCriteria.email}`}</Badge>];
         if(searchCriteria.conf_number !== '')
-            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.conf_number}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" key={1} className={'mx-2'}>{`# ${searchCriteria.conf_number}`}</Badge>];
         if(searchCriteria.phone_number !== '')
-            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.phone_number}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" key={2} className={'mx-2'}>{`${searchCriteria.phone_number}`}</Badge>];
         if(searchCriteria.type !== 'All')
-            criteria = [...criteria,<Badge bg="dark" text="light" className={'mx-2'}>{`${searchCriteria.type === 'Dinner' ? 'Βραδινές' : 'Πρωινές'}`}</Badge>];
+            criteria = [...criteria,<Badge bg="dark" text="light" key={3} className={'mx-2'}>{`${searchCriteria.type === 'Dinner' ? 'Βραδινές' : 'Πρωινές'}`}</Badge>];
 
         return <Stack direction={'horizontal'} className={'mt-1 mb-2 mt-lg-2 mb-lg-4 mx-auto'}>
             {criteria.map(badge => badge)}
         </Stack>
     },[searchCriteria]);
 
+    const reservationsStack = <Col className={'d-flex flex-column text-center mt-4 mt-md-0 ' +
+        (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')}
+        md={showFilters ? 8 : 10} lg={showFilters ? 9 : 10} xl={activeReservation !== null ? 4 : (showFilters ? 10 : 11)}>
+        {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
+            {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
+        </h5>}
+        {getCriteriaLabels()}
+        {<Stack className={'p-3 text-center d-flex overflow-y-auto h-90 my-auto'}>
+            {reservationsToShow()}
+        </Stack>}
+    </Col>;
+
+    const renderContent = () => {
+        if(InnerWidth > 1200) {
+            return <>
+                {reservationsStack}
+                {activeReservation !==null && <Col className={'d-flex h-100 overflow-y-auto px-1'} >
+                    <ReservationLong/>
+                </Col>}
+            </>
+        }
+
+        return <>
+            {activeReservation === null ? reservationsStack : <Col className={'d-flex h-100 overflow-y-auto p-3 my-5 my-md-0'} >
+                <ReservationLong/>
+            </Col>}
+        </>
+    }
+
     return (
-        <Row className={'h-100 px-2 py-2 px-lg-0 pt-lg-0 overflow-y-auto'}>
-            <Col className={'search-filters d-flex flex-column'} xs={12} md={6} lg={4} xl={3}>
-                <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}>
+        <Row className={'h-100 px-2 py-0 px-lg-0 pt-lg-0 overflow-y-auto'}>
+            <Col className={`search-filters d-flex flex-column bg-white py-3 ${innerWidth < 992 ? 'sticky-top' : ''} ${InnerWidth < 768 ? 'h-fit-content' : 'h-100'}`} md={showFilters ? 4 : 2} lg={showFilters ? 3 : 2} xl={showFilters ? 2 : 1}>
+                <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
+                filtersVisibility={{showFilters, setShowFilters}}>
                 </SearchFilters>
             </Col>
-            <Col className={'d-flex flex-column text-center mt-4 mt-md-0 ' +
-                (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')}
-                 sm={12} md={6} lg={8} xl={9}>
-                {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
-                    {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
-                </h5>}
-                {getCriteriaLabels()}
-                {<Stack className={'p-3 text-center d-flex overflow-y-auto h-90 my-auto'}>
-                    {reservationsToShow()}
-                </Stack>}
-            </Col>
+            <ActiveRangeContext.Provider value={[null,()=>{}]}>
+                {renderContent()}
+            </ActiveRangeContext.Provider>
         </Row>
     )
 }

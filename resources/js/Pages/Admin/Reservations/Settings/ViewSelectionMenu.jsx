@@ -1,4 +1,4 @@
-import {ListGroup} from "react-bootstrap";
+import {ListGroup, Stack} from "react-bootstrap";
 import {useContext} from "react";
 import {ViewContext} from "../../../../Contexts/ViewContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
@@ -11,43 +11,33 @@ import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationType
 export function ViewSelectionMenu() {
     const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     handleSetActiveView = (view) =>{
         setActiveReservationsView(view);
         setActiveReservation(null);
     }
-    const getReservationViewText = () => {
-        switch (activeReservationsView) {
-            case 'Today' : return `Σημερινές ${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις`;
-            case 'Weekly' : return `${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις ανά εβδομάδα`;
-            case 'Monthly' : return `${reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις ανά μήνα`;
-            case 'Search' : return 'Αναζήτηση Κρατήσεων'
-        }
-    };
 
-    const TodayViewIcon = <TodayViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Today' ? '' : 'cursor-pointer hover-scale-1_1')} height={52} width={52} onClick={()=>handleSetActiveView('Today')}
-        disabled={activeReservationsView === 'Today'}/>,
+    const TodayViewIcon = <h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Today' ? 'opacity-25' : ''}`
+    + (activeReservationsView === 'Today' ? '' : 'cursor-pointer hover-scale-1_1')}
+    onClick={()=>handleSetActiveView('Today')}>Σημερινές</h6>,
 
-    WeeklyViewIcon = <WeeklyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer hover-scale-1_1')} height={52} width={52} onClick={()=>handleSetActiveView('Weekly')}
-        disabled={activeReservationsView === 'Weekly'}/>,
+    WeeklyViewIcon = <h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Weekly' ? 'opacity-25' : ''}`
+    + (activeReservationsView === 'Weekly' ? '' : 'cursor-pointer hover-scale-1_1')}
+    onClick={()=>handleSetActiveView('Weekly')}>Εβδομαδιαίες</h6>,
 
-    MonthlyViewIcon = <MonthlyViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_1')} height={52} width={52} onClick={()=>handleSetActiveView('Monthly')}
-        disabled={activeReservationsView === 'Monthly'}/>,
+    MonthlyViewIcon = <h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Monthly' ? 'opacity-25' : ''}`
+    + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_1')}
+    onClick={()=>handleSetActiveView('Monthly')}>Μηνιαίες</h6>,
 
-    SearchViewIcon =<SearchViewSVG className={'m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_1')} height={36} width={36} onClick={()=>handleSetActiveView('Search')}
-        disabled={activeReservationsView === 'Search'}/>;
-
-
+    SearchViewIcon =<h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Search' ? 'opacity-25' : ''} ` +
+    (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_1')}
+    onClick={()=>handleSetActiveView('Search')}>Αναζήτηση</h6>;
 
     return (
-        <>
-            <h5 className={'user-select-none mb-2 px-2 px-md-0'}>{getReservationViewText()}</h5>
-            <ListGroup horizontal className={'p-0 my-auto'}>
-                {TodayViewIcon}
-                {WeeklyViewIcon}
-                {MonthlyViewIcon}
-                {SearchViewIcon}
-            </ListGroup>
-        </>
+        <Stack direction={"horizontal"} className={'p-0 my-auto'} >
+            {TodayViewIcon}
+            {WeeklyViewIcon}
+            {MonthlyViewIcon}
+            {SearchViewIcon}
+        </Stack>
     )
 }

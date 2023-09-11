@@ -4,7 +4,7 @@
  * @param selection Selection 1: Year (prefix) Month (prefix) Day, Selection 2: Day (prefix) Month (prefix) Year
  * @returns a string based on the selection ( date format ) and the prefix given.
  */
-export function getFormattedDate(date, prefix, selection) {
+export function getFormattedDate(date, prefix='-', selection=1) {
     switch (selection) {
         case 1:{
             const year = date.getFullYear();
@@ -17,7 +17,6 @@ export function getFormattedDate(date, prefix, selection) {
         case 3:
             return date?.getDate() + prefix + (date?.getMonth()+1);
     }
-
 }
 
 /**
@@ -49,6 +48,8 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menu
                     Desserts = Menus_Array.Dinner.Desserts;
                 const MainFound = Mains.find(menu=>menu.id===menu_id),
                     DessertFound = Desserts.find(menu=>menu.id===menu_id);
+                if(MainFound === undefined && DessertFound === undefined)
+                    return 'Menu';
                 if(MainFound !== undefined) {
                     if(MainFound.Items.length === 1)
                         return MainFound.Items[0].Name;
@@ -65,6 +66,8 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menu
                     Desserts = Menus_Array.Desserts;
                 const MainFound = Mains.find(menu=>menu.id===menu_id),
                     DessertFound = Desserts.find(menu=>menu.id===menu_id);
+                if(MainFound === undefined && DessertFound === undefined)
+                    return 'Menu';
                 if(MainFound !== undefined) {
                     if(MainFound.Items.length === 1)
                         return MainFound.Items[0].Name;
@@ -109,31 +112,38 @@ export function getTableAA (id,Gazebos_Array) {
  */
 export function getAvailabilityByDate(date,AvailabilityArray) {
     if (typeof date === 'string') {
-        return AvailabilityArray.find(
-            item=>item.Date === date)?.Available;
+        return AvailabilityArray.find(item => item.Date === date)?.Available;
     }
     else if (typeof date === 'object') {
-        return AvailabilityArray.find(
-            item=>item.Date === getFormattedDate(date,'-',1))?.Available;
+        return AvailabilityArray.find(item => item.Date === getFormattedDate(date, '-', 1))?.Available;
     }
 }
 
 export function getReservationsByDate(date,ReservationsArray) {
     if (typeof date === 'string') {
-        const reservations =  ReservationsArray.find(
-            item=>item.Date === date)?.Reservations;
+        const reservations =  ReservationsArray.find(item=>item.Date === date)?.Reservations;
             return reservations ?? [];
     }
     else if (typeof date === 'object') {
-        const reservations = ReservationsArray.find(
-            item=>item.Date === getFormattedDate(date,'-',1))?.Reservations;
+        const reservations = ReservationsArray.find(item=>item.Date === getFormattedDate(date,'-',1))?.Reservations;
             return reservations ?? [];
+    }
+}
 
+export function extractReservationsForDate(date, ReservationsArray) {
+    if (typeof date === 'string') {
+        return ReservationsArray.filter(item=>item.Date === date);
+    }
+    else if (typeof date === 'object') {
+        return ReservationsArray.filter(item=>item.Date === getFormattedDate(date,'-',1));
     }
 }
 
 export function getTableAvailabilityBoolean(gazepo_id, current_date_availability) {
-        return current_date_availability.find(obj => obj.hasOwnProperty(gazepo_id))[gazepo_id];
+    const tableFound = current_date_availability.find(obj => obj.id === gazepo_id);
+    if(!tableFound)
+        return false;
+    return tableFound.isAvailable;
 }
 
 export function formatDateInGreek(dateString) {
@@ -172,7 +182,7 @@ export function formatDateInGreek(dateString) {
     return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
 }
 
-export function created_at(given_date) {
+export function getDateTime(given_date) {
     const date = new Date(given_date);
 
     const day = date.getDate().toString().padStart(2, '0');
@@ -180,9 +190,9 @@ export function created_at(given_date) {
     const year = date.getFullYear().toString();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    // const seconds = date.getSeconds().toString().padStart(2, '0');
 
-    return `${day}-${month}-${year}, ${hours}:${minutes}:${seconds}`;
+    return `${day}-${month}-${year}, ${hours}:${minutes}`;
 }
 
 /**
@@ -229,47 +239,49 @@ export function getTimeDifferenceInMinutes(time1, time2) {
     return Math.floor(timeDiff / (1000 * 60));
 }
 
-export function isDateDisabledByAdmin (givenDate,Reservations) {
+export function isDateDisabledByAdmin (givenDate,Disabled_Days_Array) {
     if(typeof givenDate === 'string') {
-        const selectedDate = Reservations.find(date => date.Date === givenDate);
-        if(selectedDate)
-            return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        const itemFound = Disabled_Days_Array.find(item => item.Date === givenDate);
+        if(itemFound)
+            return [true,itemFound.Allow_Existing_Reservations];
         return [false,true];
     }
     if(typeof givenDate === 'object') {
         const newDate = getFormattedDate(givenDate,'-',1);
-        const selectedDate = Reservations.find(date => date.Date === newDate);
-        if(selectedDate)
-            return [selectedDate.Disabled,selectedDate.Existing_Reservations_Allowed];
+        const itemFound = Disabled_Days_Array.find(item => item.Date === newDate);
+        if(itemFound)
+            return [true,itemFound.Allow_Existing_Reservations];
         return [false,true];
     }
 }
 
-export function isDateDisabledByAdminForReservations (date,Reservations) {
-    if(typeof date === 'string'){
-        const selectedDate = Reservations.find(date => date.Date === date);
-        if(selectedDate)
-            return selectedDate.Disabled;
-        return true;
-    }
-    if(typeof date === 'object') {
-        const newDate = getFormattedDate(date,'-',1);
-        const selectedDate = Reservations.find(date => date.Date === newDate);
-            if(selectedDate)
-                return selectedDate.Disabled;
-        return true;
-    }
-}
+export function getFirstAndLastDateOfMonth(month, lastAllowedDate=null) {
+    const today = new Date();
+    const year = today.getFullYear();
 
-export function getAvailabilityPercentage (Availability_Array) {
-    const totalTables = Availability_Array.length;
-    let availableTables = 0;
-    for (let index in Availability_Array) {
-        if(Availability_Array[index].isAvailable === true)
-            availableTables++;
+    if (month === today.getMonth() + 1) {
+        // If the provided month is the current month, use today as the start date
+        // Calculate the last day of the current month
+        const lastDate = lastAllowedDate && (lastAllowedDate.getMonth() + 1 === month) ? lastAllowedDate : new Date(year, month, 0);
+
+        return [today, lastDate];
+    } else {
+        // If the provided month is not the current month, use the first and last day of that month
+        const firstDate = new Date(year, month - 1, 1);
+        const lastDate = lastAllowedDate && (lastAllowedDate.getMonth() +1 === month) ? lastAllowedDate : new Date(year, month, 0);
+
+        return [firstDate, lastDate];
     }
-    return [availableTables,totalTables,availableTables/totalTables]
 }
+// export function getAvailabilityPercentage (Availability_Array) {
+//     const totalTables = Availability_Array.length;
+//     let availableTables = 0;
+//     for (let index in Availability_Array) {
+//         if(Availability_Array[index].isAvailable === true)
+//             availableTables++;
+//     }
+//     return [availableTables,totalTables,availableTables/totalTables];
+// }
 
 Date.prototype.addDays = function(days) {
     const date = new Date(this.valueOf());

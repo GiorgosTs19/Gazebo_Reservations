@@ -9,18 +9,19 @@ import {GazebosContext} from "../../../Contexts/GazebosContext";
 
 export const GazeboSelectionForm = forwardRef(function GazeboSelectionForm({...props},ref) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
-    {progress, setProgress} = useContext(FormProgressContext),
     Gazebos = useContext(GazebosContext),
+    {progress, setProgress} = useContext(FormProgressContext),
+
     handleNextClick = ()=>{
         setProgress('Details');
     };
 
     return (
-        <div ref={ref} className={'m-auto'}>
-            <GazeboCarousel Gazebos={Gazebos}></GazeboCarousel>
+        <div ref={ref} className={'m-auto d-flex flex-column text-light'}>
+            <GazeboCarousel/>
             {/*<Image className={"d-block mx-auto shadow-lg gazepo-img my-4 rounded-5 img-fluid " + (innerWidth > 992 ? ' w-25' : 'w-75')}*/}
             {/*       src={'Images/'+ (bookingDetails.type === 'Dinner' ? 'GazeboAtNight.jpg' : 'GazeboAtDay.jpg')} alt=""/>*/}
-            {progress === 'Table' && <Button variant={'outline-light'} className={'my-2 mx-1 border-0 rounded-3 box_shadow reservation-button text-dark'}
+            {progress === 'Table' && <Button variant={'outline-light'} className={'my-2 mx-auto border-0 rounded-3 box_shadow reservation-button text-dark'}
                                              hidden={!bookingDetails.table} onClick={handleNextClick}>
                 Continue with Gazebo {getTableAA(bookingDetails.table, Gazebos)}
             </Button>}

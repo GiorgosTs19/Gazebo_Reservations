@@ -11,13 +11,15 @@ class MenuResource extends JsonResource {
      *
      * @return array<string, mixed>
      */
+
     public function toArray(Request $request): array {
+        $user = $request->user();
         return [
             'id'=>$this->id,
             'Name'=>$this->Name,
             'Type'=>$this->Type,
             'Category'=>$this->Category,
-            'Items'=>MenuItemResource::collection($this->Items()),
+            'Items'=>$user ? MenuItemResource::collection($this->Items()) : [],
         ];
     }
 }

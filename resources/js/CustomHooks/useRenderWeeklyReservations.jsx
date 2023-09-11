@@ -1,4 +1,4 @@
-import {getReservationsByDate} from "../ExternalJs/Util";
+import {extractReservationsForDate, getReservationsByDate} from "../ExternalJs/Util";
 import useFilteredReservationsCountText from "./useFilteredReservationsCountText";
 import {ListGroup} from "react-bootstrap";
 import {ReservationShortest} from "../Pages/Admin/Reservations/ReservationViews/ReservationShortest";
@@ -6,9 +6,10 @@ import {MaximizeSVG} from "../SVGS/MaximizeSVG";
 
 export function useRenderWeeklyReservations(day, Reservations, reservationsFilter,setLargeWeekDay) {
     const lastReservationsIndexToShow = innerWidth < 1400 ? 1 : ( innerWidth > 1600 ? 3 : 2);
-    const reservations_of_current_date = getReservationsByDate(day,Reservations);
+    const reservations_of_current_date = extractReservationsForDate(day,Reservations);
+
     if(reservations_of_current_date.length === 0)
-        return [<h4 className={'text-muted m-auto user-select-none'}>Δεν υπάρχει κάποια κράτηση</h4>,0,reservations_of_current_date.length];
+        return [<h4 className={'text-muted m-auto user-select-none info-text-xl'}>Δεν υπάρχει κάποια κράτηση</h4>,0,reservations_of_current_date.length];
 
     const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
         reservations_of_current_date.filter((reservation) => {
@@ -16,11 +17,11 @@ export function useRenderWeeklyReservations(day, Reservations, reservationsFilte
         });
 
     if(filteredReservations.length === 0)
-        return [<h4 className={'text-muted m-auto user-select-none'}>{useFilteredReservationsCountText(reservationsFilter,0)}</h4>,0,reservations_of_current_date.length];
+        return [<h4 className={'text-muted m-auto user-select-none info-text-xl'}>{useFilteredReservationsCountText(reservationsFilter,0)}</h4>,0,reservations_of_current_date.length];
 
     const mappedReservations = filteredReservations.map((reservation,index)=>{
         if(index < lastReservationsIndexToShow)
-            return <ListGroup.Item key={reservation.id+index} className={'py-0 px-0 d-flex box_shadow border border-1 rounded-2 mx-2 mb-3 hover-scale-0_95'}>
+            return <ListGroup.Item key={reservation.id+index} className={'py-0 px-0 d-flex box_shadow border border-1 rounded-2 mx-2 mb-3'}>
                 <ReservationShortest Reservation={reservation} key={index+reservation.id}></ReservationShortest>
             </ListGroup.Item>;
         if(index === lastReservationsIndexToShow)

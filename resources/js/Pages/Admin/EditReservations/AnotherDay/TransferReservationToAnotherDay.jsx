@@ -1,18 +1,21 @@
-import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {ChangeReservationDateCalendar} from "./ChangeReservationDateCalendar";
 import {useEffect, useRef, useState,useContext} from "react";
-import {changeDateFormat, getFormattedDate, getTableAA,} from "../../../../ExternalJs/Util";
+import {changeDateFormat, getTableAA,} from "../../../../ExternalJs/Util";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {ChevronDownSVG} from "../../../../SVGS/ChevronDownSVG";
+import {ChevronUpSVG} from "../../../../SVGS/ChevronUpSVG";
+import {getDate, getParameter, handleSetReservations} from "../../../../Inertia_Requests/Admin_Requests";
+import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {Inertia} from "@inertiajs/inertia";
-import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
-import {ShowEditReservationModalContext} from "../../Contexts/ShowEditReservationModalContext";
-import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
-import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
 import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
+import {ViewContext} from "../../../../Contexts/ViewContext";
+import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 
-export function TransferReservationToAnotherDay({willResolveConflict = false}) {
+
+export function TransferReservationToAnotherDay() {
     const [selectedDateAvailability,setSelectedDateAvailability] = useState(null),
     Gazebos = useContext(GazebosContext),
     {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
@@ -23,9 +26,10 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
     const date = selectedDateAvailability ? selectedDateAvailability[0] : null;
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
-    const {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext),
-    {content,setContent} = useContext(EditModalContentContext);
-    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
+    [showCalendar, setShowCalendar] = useState(true),
+    [activeRange, setReservations] = useContext(ActiveRangeContext),
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     // Handles the selection of a table from the list, as well as the scrolling to the appropriate height
     // of the list, to match the currently selected table
@@ -64,6 +68,8 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
     // It will also check if the same table as the reservation's is available for the selected date, and if yes select it again.
     // If none of the above, simply set the selected table to empty so the user can select another one.
     useEffect(()=> {
+        if(selectedDateAvailability)
+            setShowCalendar(false);
         if(AvailableTables.length === 1) {
             return handleSelectTable(AvailableTables[0],selectedDateAvailability[1].indexOf(AvailableTables[0]));
         }
@@ -98,11 +104,11 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
 
     const getAvailableTablesTextWarning = () => {
         if(AvailableTables.length === 1)
-            return <p className={'text-info sticky-top bg-white'}>Το μοναδικό διαθέσιμο τραπέζι επιλέχθηκε αυτόματα.</p>;
+            return <p className={'text-info sticky-top bg-white'}>Το μοναδικό διαθέσιμο Gazebo επιλέχθηκε αυτόματα.</p>;
         if(sameTableIsAvailable !== '') {
             if(sameTableIsAvailable)
-                return <p className={'text-info sticky-top bg-white'}>Το ίδιο τραπέζι είναι διαθέσιμο και επιλέχθηκε αυτόματα.</p>;
-            return <p className={'text-danger'}>Το ίδιο τραπέζι δεν είναι διαθέσιμο, επιλέξτε κάποιο άλλο.</p>;
+                return <p className={'text-info sticky-top bg-white'}>Το ίδιο Gazebo είναι διαθέσιμο και επιλέχθηκε αυτόματα.</p>;
+            return <p className={'text-danger'}>Το ίδιο Gazebo δεν είναι διαθέσιμο, επιλέξτε κάποιο άλλο.</p>;
         }
     }
     // Renders the list with the tables of the current date. If showOnlyAvailableTables is set to true,
@@ -121,7 +127,7 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
                        className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                         <Row>
                             <Col>
-                                Τραπέζι {getTableAA(table.id,Gazebos)}
+                                Gazebo {getTableAA(table.id,Gazebos)}
                             </Col>
                             <Col>
                                 {getTableAvailabilityText(table)}
@@ -135,7 +141,7 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
                    className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                         <Row>
                             <Col>
-                                Τραπέζι {getTableAA(table.id,Gazebos)}
+                                Gazebo {getTableAA(table.id,Gazebos)}
                             </Col>
                             <Col>
                                 {getTableAvailabilityText(table)}
@@ -146,17 +152,34 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
     }
     // Checks if there are any reserved tables on the selected date.
     const unavailableTablesExist = selectedDateAvailability ?  selectedDateAvailability[1].some(table=>{return table.isAvailable === false}) : false;
+    const handleFetchReservations = () => {
+        if(resolvingConflict[1] !== 'Reservations')
+            return;
+        switch (activeReservationsView) {
+            case 'Today' : {
+                break;
+            }
+            case 'Weekly' : {
+                break;
+            }
+            case 'Monthly' : {
+                break;
+            }
+        }
+    }
 
     const handleSaveChanges = () => {
         Inertia.patch(route('Change_Reservation_Date'),{Reservation_id:activeReservation.id,Date:selectedDateAvailability[0],
-        Table_id:selectedTable},{preserveScroll:true,only:[activeReservation.Type === 'Dinner' ?'Dinner_Reservations' : 'Bed_Reservations',
-                'activeReservation',isReservationInConflict ? 'Conflicts' : ''], onSuccess:(res)=> {
-                setContent('Options');
-                resolvingConflict[0] && setResolvingConflict(false);
-                resolvingConflict[0] && handleSetActiveKey(resolvingConflict[1]);
-                setShowEditModal(false);
-                setActiveReservation(res.props.activeReservation);
-            }});
+        Table_id:selectedTable, date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)},
+            {preserveScroll:true,only:[getParameter(activeRange), 'activeReservation',conflictType === 'Date' ? 'Disabled_Dates_Reservations' : 'Disabled_Table_Reservations'],
+            onSuccess:(res)=> {
+                // console.log('res', res)
+                if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
+                    setResolvingConflict([false, '']);
+                if(activeReservationsView !== 'Today')
+                    setActiveReservation(res.props.activeReservation);
+                handleSetReservations(res, activeRange, setReservations);
+        }});
     };
 
     return (
@@ -165,25 +188,33 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
                 <p>Τρέχουσες Πληροφορίες Κράτησης</p>
                 <p className={'border-bottom pb-3'}>
                     <span><b>Ημερομηνία :</b> <i>{changeDateFormat(activeReservation.Date,'-','-')}</i>, </span>
-                    <span><b>Τραπέζι :</b> <i>{getTableAA(activeReservation.Gazebo,Gazebos)}</i></span>
+                    <span><b>Gazebo :</b> <i>{getTableAA(activeReservation.Gazebo,Gazebos)}</i></span>
                 </p>
                 <div className={'d-flex'}>
                     {selectedDateAvailability && unavailableTablesExist && <Stack direction={'horizontal'} className={'mx-auto'}>
-                        <h6>Εμφάνιση μόνο των διαθέσιμων τραπέζιών</h6>
+                        <h6>Εμφάνιση μόνο των διαθέσιμων Gazebo</h6>
                         <Form.Switch className={'mx-1 mb-1'} checked={showOnlyAvailableTables}
                                      onChange={handleShowOnlyAvailableTablesChange}></Form.Switch>
                     </Stack>}
                 </div>
             </Row>
-            <Row className={'my-4 h-100'}>
-                <Col className={'h-100'}>
+            <div className={'my-1 h-100 text-center'}>
+                {/*<Col className={'h-100'}>*/}
                     {!selectedDateAvailability && <h6 className={'text-info mb-4'}>Επιλέξτε νέα ημέρα κράτησης</h6>}
-                    <ChangeReservationDateCalendar SelectedDateAvailability={{selectedDateAvailability,setSelectedDateAvailability}} className={'h-100'}>
+                    {showCalendar ? <>
+                        <ChevronUpSVG onClick={()=>setShowCalendar(false)}/>
+                        <ChangeReservationDateCalendar
+                            SelectedDateAvailability={{selectedDateAvailability, setSelectedDateAvailability}}
+                            className={'h-100'}>
 
-                    </ChangeReservationDateCalendar>
-                </Col>
-                {selectedDateAvailability && <Col className={'my-5 my-lg-0'}>
-                    <Card className={'h-100'}>
+                        </ChangeReservationDateCalendar>
+                    </>: <>
+                        <span className={'fw-bold'}>Ημερολόγιο</span>
+                        <ChevronDownSVG onClick={()=>setShowCalendar(true)}/>
+                    </>}
+                {/*</Col>*/}
+                {selectedDateAvailability &&
+                    <Card className={'h-100 my-5 my-lg-3'}>
                         <Card.Header className={'bg-transparent'}>
                             Διαθέσιμα Τραπέζια για {changeDateFormat(date, '-', '-')}
                         </Card.Header>
@@ -193,9 +224,8 @@ export function TransferReservationToAnotherDay({willResolveConflict = false}) {
                                 {getTablesList()}
                             </ListGroup>
                         </Card.Body>
-                    </Card>
-                </Col>}
-            </Row>
+                    </Card>}
+            </div>
             {selectedTable !== '' && <Button variant={'outline-success'} className={'my-2'} style={{width: 'fit-content'}}
             onClick={handleSaveChanges}>Επιβεβαίωση
                 Αλλαγής</Button>}

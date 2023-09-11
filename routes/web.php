@@ -45,6 +45,8 @@ Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::cla
 //Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
 Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
 Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
+Route::get('/Reserve/Availability',[\App\Http\Controllers\GazeboController::class,'checkRangeAvailability'])
+    ->name('Get_Availability_For_Range');
 Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
@@ -63,7 +65,8 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
     });
 
     Route::prefix('/Date')->group(function () {
-        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
+        Route::get('/Availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
+        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDate'])->name('Get_Reservations_For_Date');
     });
 
     Route::prefix('/Reservations')->group(function () {
@@ -74,12 +77,10 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
             name('Change_Reservation_Table');
             Route::get('/Search',[\App\Http\Controllers\ReservationController::class,'Search'])->name('Search_Reservations');
         });
+        Route::get('/Active',[\App\Http\Controllers\ReservationController::class,'getReservation'])->name('Get_Reservation');
 
         Route::prefix('/Status')->group(function () {
-            Route::patch('/Confirm', [\App\Http\Controllers\ReservationController::class, 'changeReservationStatus'])->
-            name('Change_Reservation_Status');
-//            Route::patch('/Cancel', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
-//            name('Cancel_Reservation');
+            Route::patch('/Change', [\App\Http\Controllers\ReservationController::class, 'changeReservationStatus'])->name('Change_Reservation_Status');
         });
     });
 
@@ -87,12 +88,13 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         Route::post('/Create', [\App\Http\Controllers\MenuController::class, 'create'])->name('Create_Menu');
         Route::delete('/Delete', [\App\Http\Controllers\MenuController::class, 'destroy'])->name('Delete_Menu');
         Route::patch('/Edit', [\App\Http\Controllers\MenuController::class, 'edit'])->name('Edit_Menu');
+        Route::get('/Items', [\App\Http\Controllers\MenuController::class,'Items'])->name('Menu_Items');
     });
 
     Route::prefix('/Date_Range')->group(function() {
 
-       Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDates'])
-           ->name('Get_Availability_For_Dates');
+       Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDates'])
+           ->name('Get_Reservations_For_Dates');
 
         Route::prefix('/Disable')->group(function () {
             Route::post('/Days', [\App\Http\Controllers\DisabledDayController::class, 'Disable_Days'])->name('Disable_Days');

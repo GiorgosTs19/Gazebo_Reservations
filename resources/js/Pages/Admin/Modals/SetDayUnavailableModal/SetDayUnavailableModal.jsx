@@ -18,8 +18,8 @@ export function SetDayUnavailableModal({selectedDate}) {
     useEffect(()=>{
         if(show) {
             if(!dateIsRange) {
-                Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(selectedDate,'-',1),
-                    get_reservations:true,type:reservationType},{
+                Inertia.get(route('Get_Reservations_For_Date'), {date: getFormattedDate(selectedDate,'-',1),
+                    get_reservations:true,type:reservationType, exceptCancelled:true},{
                     only:['availability_for_date'],
                     preserveScroll:true,
                     preserveState:true,
@@ -29,8 +29,8 @@ export function SetDayUnavailableModal({selectedDate}) {
                 });
                 return;
             }
-            Inertia.get(route('Get_Availability_For_Dates'), {date_start: getFormattedDate(selectedDate[0],'-',1),
-                date_end:getFormattedDate(selectedDate[1],'-',1),type:reservationType},{
+            Inertia.get(route('Get_Reservations_For_Dates'), {date_start: getFormattedDate(selectedDate[0]),
+                date_end:getFormattedDate(selectedDate[1]),type:reservationType, exceptCancelled:true},{
                 only:['availability_for_date_range'],
                 preserveScroll:true,
                 preserveState:true,
@@ -45,12 +45,12 @@ export function SetDayUnavailableModal({selectedDate}) {
         if(!dateIsRange){
             const date_to_disable = getFormattedDate(selectedDate,'-',1);
             return Inertia.post(route('Disable_Day'),{Date:date_to_disable,Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},
-                {preserveScroll:true,preserveState:true, only:['Dinner_Reservations','Conflicts'],onSuccess:()=>setShow(false)});
+                {preserveScroll:true,preserveState:true, only:['Dinner_Reservations','Disabled_Dates_Reservations','Disabled_Days'],onSuccess:()=>setShow(false)});
         }
         const dates_to_disable = [getFormattedDate(selectedDate[0],'-',1),getFormattedDate(selectedDate[1],'-',1)];
         return Inertia.post(route('Disable_Days'),{Date_Start:dates_to_disable[0],Date_End:dates_to_disable[1],
             Allow_Existing_Reservations:allowExistingReservations,Type:reservationType},{preserveScroll:true,preserveState:true,
-            only:['Dinner_Reservations','Conflicts'],onSuccess:()=>setShow(false)});
+            only:['Dinner_Reservations','Disabled_Dates_Reservations','Disabled_Days'],onSuccess:()=>setShow(false)});
     };
 
     const formatted_date = show && (!dateIsRange ? getFormattedDate(selectedDate, '-', 2) :
@@ -93,16 +93,3 @@ export function SetDayUnavailableModal({selectedDate}) {
         </>
     );
 }
-
-// const getReservationCountMessage = () => {
-//     if(reservations.length>0) {
-//         switch (reservations.length) {
-//             case 1 : {
-//                 return <p className={'my-2 fw-bold'}>Έχει καταχωρηθεί ήδη 1 κράτηση για αυτήν την μέρα.</p>
-//             }
-//             default : {
-//                 return <p className={'my-2 fw-bold'}>Έχουν καταχωρηθεί ήδη {reservations.length} κρατήσεις για αυτήν την μέρα.</p>
-//             }
-//         }
-//     }
-// }

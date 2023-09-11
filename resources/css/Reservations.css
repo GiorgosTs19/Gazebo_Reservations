@@ -176,7 +176,7 @@ ul .list-group-item.active {
 }
 
 .menu-list, .content-card, .border-blue, .grey-border {
-    border-color: #38c4c4 !important;
+    border-color: #eaefef !important;
 }
 
 .react-calendar__month-view__nights__night--weekend {
@@ -195,7 +195,7 @@ ul .list-group-item.active {
 }
 
 .react-calendar {
-    background-color: rgba(255, 255, 255, 0.42) !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0 1px 5px 5px rgba(163, 169, 169, 0.6);
     padding: 10px 7px;
 }
@@ -205,7 +205,7 @@ ul .list-group-item.active {
     background-color: rgba(212, 215, 214, 0.62) !important;
 }
 .react-calendar__tile.disabled {
-    background-color: rgba(255, 255, 255, 0.42) !important;
+    background-color: transparent !important;
 }
 .react-calendar__month-view__days__day--weekend {
     color: black !important;
@@ -221,7 +221,8 @@ ul .list-group-item.active {
 }
 
 .content-card {
-    box-shadow: 0 4px 6px rgba(51, 153, 204, 0.5), 0 2px 4px rgba(51, 153, 204, 0.3);
+    box-shadow: 0 4px 6px rgba(193, 205, 211, 0.5), 0 2px 4px rgba(245, 246, 246, 0.3);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .box_shadow {
@@ -270,7 +271,17 @@ ul .list-group-item.active {
 .info-text-lg {
     font-size : 17px;
 }
-
+.progress-text {
+    opacity: 85%;
+    font-weight: 600;
+    font-style: oblique;
+}
+.progress-text {
+    font-size : 13px;
+}
+.progress-text-lg {
+    font-size : 16px;
+}
 /* Text */
 
 /* Nav Tabs */
@@ -352,4 +363,80 @@ video {
     /*filter: brightness(1) contrast(1); !* Adjust the values as needed *!*/
     object-fit: cover; /* Adjust how the video is scaled to cover the container */
     z-index: 0;
+}
+/* Loading Bar Animation */
+@keyframes loadbar {
+    0%,to { left: 0;  right: 80% }
+    25%,75% { left: 0; right: 0 }
+    50% { left: 80%; right: 0 }
+}
+.gg-loadbar,
+.gg-loadbar::before {
+    display: block;
+    box-sizing: border-box;
+    height: 4px
+}
+.gg-loadbar {
+    position: relative;
+    transform: scale(300%);
+    width: 25px
+}
+.gg-loadbar::before {
+    content: "";
+    position: absolute;
+    border-radius: 4px;
+    background: currentColor;
+    animation: loadbar 2s cubic-bezier(0,0,.58,1) infinite
+}
+@keyframes spinneralt {
+    0% { transform: rotate(0deg) }
+    to { transform: rotate(359deg) }
+}
+.gg-spinner-alt {
+    transform: scale(100%)
+}
+.gg-spinner-alt,
+.gg-spinner-alt::before {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 40px;
+}
+.gg-spinner-alt::before {
+    content: "";
+    position: relative;
+    border-radius: 100px;
+    animation: spinneralt 1s cubic-bezier(.6,0,.4,1) infinite;
+    border: 3px solid transparent;
+    border-top-color: currentColor
+}
+/*.{*/
+/*    !*color: white!important;*!*/
+/*}*/
+.img-container {
+    /* Set the background image */
+    background-image: url('Images/bg_image.jpg');
+
+    /* Make the background image cover the entire viewport */
+    background-size: cover;
+
+    /* Center the background image */
+    background-position: center;
+
+    /* Ensure the background image doesn't repeat */
+    background-repeat: no-repeat;
+
+    /* Specify a background color in case the image doesn't load or cover the entire screen */
+    background-color: #f0f0f0;
+
+    /* Set a fixed background attachment, or you can use 'scroll' for a scrolling background */
+    background-attachment: fixed;
+}
+.react-calendar__tile--now {
+    background-color: transparent;
+}
+
+.content-card .btn {
+    background-color: rgba(255, 255, 255, 0.75) !important;
 }

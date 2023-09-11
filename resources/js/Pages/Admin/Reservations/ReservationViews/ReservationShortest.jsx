@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {Badge, Button, Col, Row, Stack} from "react-bootstrap";
-import {created_at, getTableAA} from "../../../../ExternalJs/Util";
+import {getDateTime, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import useGetReservationStatusText from "../../../../CustomHooks/useGetReservationStatusText";
 import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
@@ -32,7 +32,7 @@ export function ReservationShortest({Reservation,className=''}) {
     const statusText = useGetReservationStatusText(Reservation.Status);
 
     return (
-        <div className={`text-muted py-1 px-3 rounded-2 w-auto ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')} ` + className}
+        <div className={`text-muted py-1 px-3 rounded-2 w-auto hover-scale-0_95 ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')} ` + className}
              style={{cursor:'pointer'}} onClick={()=>setActiveReservation(Reservation)}>
             <p className={'my-1'}>
                 {isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}

@@ -1,15 +1,9 @@
-import {useContext, useEffect, useRef, useState} from "react";
-import {
-    getAvailabilityByDate,
-    getAvailabilityPercentage,
-    getFormattedDate,
-    isDateDisabledByAdmin
-} from "../../../../ExternalJs/Util";
+import {useContext, useRef, useState} from "react";
+import {getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import Calendar from "react-calendar";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
-import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 
 export function ChangeReservationDateCalendar({SelectedDateAvailability,className}) {
     const {selectedDateAvailability,setSelectedDateAvailability} = SelectedDateAvailability;
@@ -19,29 +13,21 @@ export function ChangeReservationDateCalendar({SelectedDateAvailability,classNam
         yesterday = new Date(today),
         tomorrow = new Date(today),
         Last_Day = new Date('2023-11-10'),
-        Reservations = useContext(ReservationsContext),
-        Gazebos = useContext(GazebosContext),
         CalendarRef = useRef(null),
-        disabledDueToAvailability = (date) =>{
-            const current_date_availability = getAvailabilityByDate(date,Reservations);
-            // return Array.isArray(current_date_availability) && current_date_availability.length === 0;
-            return false;
-        };
+        Disabled_Days = useContext(DisabledDaysContext);
 
         yesterday.setDate(tomorrow.getDate() - 1)
         tomorrow.setDate(tomorrow.getDate() + 1)
         const isDateDisabled = (date) => {
                 if(date <= yesterday)
                     return true;
-                const isDisabledDueToAvailability = disabledDueToAvailability(date);
-                const isDisabledByAdmin = isDateDisabledByAdmin(date,Reservations)[0];
+                const isDisabledByAdmin = isDateDisabledByAdmin(date,Disabled_Days)[0];
                 return (today.getHours()<23 ? date < today : date<tomorrow)
-                    || date >= Last_Day
-                    || isDisabledDueToAvailability || isDisabledByAdmin;
+                    || date >= Last_Day || isDisabledByAdmin;
             },
 
         handleDateChange = (date)=> {
-            Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(date,'-',1), type:reservationType},{
+            Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(date,'-',1), type:reservationType, exceptCancelled:true},{
                 only:['availability_for_date'],
                 preserveScroll:true,
                 preserveState:true,
@@ -82,14 +68,14 @@ export function ChangeReservationDateCalendar({SelectedDateAvailability,classNam
     };
 
     const getTileClassName = (date) => {
-        const dateAvailability = getAvailabilityByDate(date,Reservations);
-        if(dateAvailability) {
-            const dateIsNotAvailable = dateAvailability.every((table)=>{
-                return table.isAvailable === false;
-            });
-            if(dateIsNotAvailable)
-                return 'disabled-day_transfer'
-        }
+        // const dateAvailability = getAvailabilityByDate(date,Reservations);
+        // if(dateAvailability) {
+        //     const dateIsNotAvailable = dateAvailability.every((table)=>{
+        //         return table.isAvailable === false;
+        //     });
+        //     if(dateIsNotAvailable)
+        //         return 'disabled-day_transfer'
+        // }
         return '';
     }
 
