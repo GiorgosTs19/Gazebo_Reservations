@@ -411,12 +411,10 @@ video {
     border: 3px solid transparent;
     border-top-color: currentColor
 }
-/*.{*/
-/*    !*color: white!important;*!*/
-/*}*/
+
 .img-container {
     /* Set the background image */
-    background-image: url("public/Images/bg_image.jpg");
+    background-image: url("Images/bg_image.jpg");
 
     /* Make the background image cover the entire viewport */
     background-size: cover;
