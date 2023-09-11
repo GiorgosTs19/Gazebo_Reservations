@@ -19,15 +19,9 @@ use Inertia\Inertia;
 
 class AdminController extends Controller {
     public function showAdminPanel(Request $request): \Inertia\Response {
-        // Retrieve all the days that were disabled by the admins, regardless of type
-        $Disabled_Days = DisabledDay::afterToday()->order()->get();
-
-        // Retrieve all the disabled tables ( only the date and their ids ) after today.
-        $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
 
         return Inertia::render('Admin/AdminPanel',['Menus' => fn () => $this->getMenus(),
-            'Disabled_Days' => ['Dinner' => $Disabled_Days->filter(function ($item) {return $item->Type == 'Dinner';}),
-            'Bed' => $Disabled_Days->filter(function ($item) {return $item->Type == 'Bed';})],
+            'Disabled_Days' => $this->getDisabledDays(),
             'Gazebos' => fn () => $this->getGazebos(),
             'Dinner_Settings' => fn () => $this->getDinnerSettings(),
             'Bed_Settings' => fn () => $this->getBedSettings(),
@@ -37,9 +31,18 @@ class AdminController extends Controller {
             'availability_for_date_range' => Inertia::lazy(fn ()=>$this->getAvailabilityForDateRange($request)),
             'reservations_of_table' => Inertia::lazy(fn () => $this->getTableReservations($request)),
             'disabled_days_for_table' => Inertia::lazy(fn () => $this->getTableDisabledDays($request)),
-            'Disabled_Dates_Reservations' => fn () => $this->getDateConflicts($Disabled_Days),
-            'Disabled_Table_Reservations' => fn () => $this->getTableConflicts($Disabled_Tables)]);
+            'Disabled_Dates_Reservations' => fn () => $this->getDateConflicts(),
+            'Disabled_Table_Reservations' => fn () => $this->getTableConflicts()]);
     }
+
+    private function getDisabledDays () {
+        // Retrieve all the days that were disabled by the admins, regardless of type
+        $Disabled_Days = DisabledDay::afterToday()->order()->get();
+        $DinnerDisabledDays = $Disabled_Days->filter(function ($item) {return $item->Type == 'Dinner';});
+        $BedDisabledDays = $Disabled_Days->filter(function ($item) {return $item->Type == 'Bed';});
+        return ['Dinner' => $DinnerDisabledDays,
+            'Bed' => $BedDisabledDays];
+}
     protected function getGazebos(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection {
         return GazeboResource::collection(Gazebo::all());
     }
@@ -73,9 +76,8 @@ class AdminController extends Controller {
 
     protected function getAvailabilityForDate($request) {
         // True when a request for a specific date's availability is fired.
-        if($request->session()->exists('availability_for_date')){
-            $reservations = $request->session()->get('availability_for_date');
-            return $reservations;
+        if($request->session()->exists('availability_for_date')) {
+            return $request->session()->get('availability_for_date');
         }
         return ReservationResource::collection(Reservation::date(date('y-m-d'))->type('Dinner')->get());
     }
@@ -100,7 +102,9 @@ class AdminController extends Controller {
         if($request->session()->exists('Disabled_Days_For_Table'))
             return $request->session()->get('Disabled_Days_For_Table');
     }
-    protected function getTableConflicts($Disabled_Tables): array {
+    protected function getTableConflicts() {
+        // Retrieve all the disabled tables ( only the date and their ids ) after today.
+        $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
         $Conflicts = [];
         foreach ($Disabled_Tables as $disabled_Table) {
             $Reservations_Found = Reservation::date($disabled_Table->Date)->table($disabled_Table->gazebo_id)
@@ -109,7 +113,8 @@ class AdminController extends Controller {
         }
         return $Conflicts;
     }
-    protected function getDateConflicts($Disabled_Days): array {
+    protected function getDateConflicts() {
+        $Disabled_Days = DisabledDay::afterToday()->order()->get();
         $Conflicts = [];
         foreach ($Disabled_Days as $disabled_Day) {
             if(!!$disabled_Day->Allow_Existing_Reservations)
