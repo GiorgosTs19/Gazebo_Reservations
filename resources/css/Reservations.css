@@ -416,7 +416,7 @@ video {
 /*}*/
 .img-container {
     /* Set the background image */
-    background-image: url(Images/Icons/bg_image.jpg);
+    background-image: url("public/Images/bg_image.jpg");
 
     /* Make the background image cover the entire viewport */
     background-size: cover;
