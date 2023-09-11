@@ -77,6 +77,20 @@ class MenuController extends Controller {
             $inputItems = $input['Menu_Items'];
             $existingItems = $Menu->Items()->toArray();
 
+            // Check if the Menu Name has changed and update it if so.
+            $name_has_changed = $Menu->Name !== $input['Menu_Name'];
+            // Check if the Menu Type has changed and update it if so.
+            $type_has_changed = $Menu->Type !== $input['Menu_Type'];
+
+            if($name_has_changed)
+                $Menu->Name = $input['Menu_Name'];
+
+            if($type_has_changed)
+                $Menu->Type = $input['Menu_Type'];
+
+            if($name_has_changed || $type_has_changed)
+                $Menu->save();
+
             // Step 1: Comparing and identifying deleted items
             $itemsToBeDeleted = array_udiff($existingItems, $inputItems, function($existingItem, $inputItem) {
                 if (!isset($inputItem['id'])) {
@@ -102,7 +116,7 @@ class MenuController extends Controller {
             // Add the menu_id key to all the entries of the newItems array, so the
             // new items can be mass-created
             foreach ($newItems as $newItem) {
-                $newMenuItem = MenuItem::create([
+                MenuItem::create([
                     'Name' => $newItem['Name'],
                     'menu_id' => $menuId,
                     'is_gluten_free' => $newItem['is_gluten_free'],
@@ -110,7 +124,6 @@ class MenuController extends Controller {
                     'is_wheat_free' => $newItem['is_wheat_free'],
                     'is_vegan' => $newItem['is_vegan'],
                     'is_vegetarian' => $newItem['is_vegetarian'],
-
                 ]);
             }
             // Remove the new items from the $inputItems array

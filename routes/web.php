@@ -60,7 +60,6 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         });
     });
 
-
     Route::prefix('/Table')->group(function () {
         Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForTable'])->name('Get_Reservations_For_Table');
     });

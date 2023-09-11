@@ -17,5 +17,5 @@ export function useGetReservationsForRange(activeRange, reservationType, depende
                 }, preserveScroll:true, preserveState:true, only:['availability_for_date_range']});
     },[...dependencies]);
 
-    return [requestProgress, reservations, setReservations];
+    return [requestProgress, reservations ?? [], setReservations];
 }

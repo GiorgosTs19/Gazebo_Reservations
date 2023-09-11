@@ -20,7 +20,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
         return  <h4 className={'text-muted m-auto user-select-none info-text-xl'}>Επιλέξτε μία κράτηση για να δείτε λεπτομέρειες</h4>
     };
 
-    const reservationsExist = reservations_of_current_date.length > 0;
+    const reservationsExist = reservations_of_current_date?.length > 0;
 
     // Generates the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
