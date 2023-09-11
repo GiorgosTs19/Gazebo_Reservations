@@ -72,7 +72,6 @@ class AdminController extends Controller {
         // True when a request for a specific date's availability is fired.
         if($request->session()->exists('availability_for_date'))
             return $request->session()->get('availability_for_date');
-        return ReservationResource::collection(Reservation::date(date("Y-m-d"))->type('Dinner')->get());
     }
     protected function getAvailabilityForDateRange($request) {
         // True when a request for a specific date range availability is fired.

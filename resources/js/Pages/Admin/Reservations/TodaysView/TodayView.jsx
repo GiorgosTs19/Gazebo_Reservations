@@ -15,14 +15,15 @@ export function TodayView() {
     innerWidth = useContext(InnerWidthContext);
     const [reservationsFilter,setReservationsFilter] = useState('All'),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
-    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(today, reservationType),
-    Disabled_Days = useContext(DisabledDaysContext);
+    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(today, reservationType, [reservationType]);
+    console.log(reservations)
+    const Disabled_Days = useContext(DisabledDaysContext);
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days),
-        hasReservations = reservations.length > 0;
+        hasReservations = reservations?.length > 0;
     const onlyCancelledReservationsExist = () => {
-        if(reservations.length === 0)
+        if(reservations?.length === 0)
             return false;
-        const activeReservations = reservations.filter(reservation=>reservation.Status !== 'Cancelled');
+        const activeReservations = reservations?.filter(reservation=>reservation.Status !== 'Cancelled');
         return activeReservations.length !== 0;
     }
     const getWarningMessage = () => {

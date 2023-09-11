@@ -62,7 +62,7 @@ export function EditingMenuForm({menu}) {
         if(!checkRequirements())
             Inertia.patch(route('Edit_Menu'),{Menu_ID:menu.id,Menu_Name:menuName,Menu_Items:menuItems,
                 Menu_Type:menuType,Menu_Category:menuCategory},
-                {preserveState:true,preserveScroll:true,onSuccess:
+                {preserveState:true,preserveScroll:true,only:['Menus'],onSuccess:
                     ()=>{
                         setActiveMenusTabKey('Existing');
                         setEditingMenu(null);

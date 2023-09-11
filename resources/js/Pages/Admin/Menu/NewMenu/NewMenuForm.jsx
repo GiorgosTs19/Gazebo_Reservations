@@ -6,7 +6,6 @@ import {MenuTypeSelectionRadios} from "../Components/MenuTypeSelectionRadios";
 import {MenuCategorySelectionRadios} from "../Components/MenuCategorySelectionRadios";
 import {MenuNameField} from "../Components/MenuNameField";
 import {MenuItemsList} from "../Components/MenuItemsList";
-import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {AddSVG} from "../../../../SVGS/AddSVG";
 
 export function NewMenuForm({MenuTabKeys}) {
