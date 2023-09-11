@@ -60,29 +60,29 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
 
 
         Route::prefix('/Dinner')->group(function () {
-            Route::post('/Save', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
+            Route::post('/Store', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
         });
     });
 
-    Route::prefix('/Table')->group(function () {
+    Route::prefix('/Gazebo')->group(function () {
         Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForTable'])->name('Get_Reservations_For_Table');
     });
 
-    Route::prefix('/Date')->group(function () {
+    Route::prefix('/Day')->group(function () {
         Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDate'])->name('Get_Reservations_For_Date');
     });
 
-    Route::prefix('/Reservations')->group(function () {
-        Route::prefix('/Edit')->group(function () {
-            Route::patch('/Date', [\App\Http\Controllers\ReservationController::class, 'changeReservationDate'])->
+    Route::prefix('/Reservation')->group(function () {
+        Route::prefix('/Manage')->group(function () {
+            Route::patch('/OccurDate', [\App\Http\Controllers\ReservationController::class, 'changeReservationDate'])->
             name('Change_Reservation_Date');
-            Route::patch('/Table', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
+            Route::patch('/Gazebo', [\App\Http\Controllers\ReservationController::class, 'changeReservationTable'])->
             name('Change_Reservation_Table');
             Route::get('/Search',[\App\Http\Controllers\ReservationController::class,'Search'])->name('Search_Reservations');
         });
-        Route::get('/Active',[\App\Http\Controllers\ReservationController::class,'getReservation'])->name('Get_Reservation');
+        Route::get('/ActiveReservation',[\App\Http\Controllers\ReservationController::class,'getReservation'])->name('Get_Reservation');
 
-        Route::prefix('/Status')->group(function () {
+        Route::prefix('/CurrentStatus')->group(function () {
             Route::patch('/Change', [\App\Http\Controllers\ReservationController::class, 'changeReservationStatus'])->name('Change_Reservation_Status');
         });
     });
