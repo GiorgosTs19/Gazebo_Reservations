@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -21,15 +22,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function version(Request $request): string|null
     {
-        $manifest = public_path('build/manifest.json');
-        $hash = null;
-        if (file_exists($manifest)) {
-            $hash =  md5_file($manifest);
-        } else {
-            $hash = env('GIT_COMMIT_HASH','');
+        if (App::environment('production')) {
+            $manifest = public_path('build/manifest.json');
+            Inertia::version(function () use ($manifest) {
+                if (file_exists($manifest))
+                    return md5_file($manifest);
+                return null;
+            });
         }
-        Inertia::version($hash);
-        return $hash;
+        return parent::version($request);
     }
 
     /**
