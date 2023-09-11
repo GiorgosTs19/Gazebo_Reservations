@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -20,6 +21,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function version(Request $request): string|null
     {
+        $manifest = public_path('build/manifest.json');
+        $hash = null;
+        if (file_exists($manifest)) {
+            $hash =  md5_file($manifest);
+        }
+        Inertia::version($hash);
+//        Inertia::version($version);
         return parent::version($request);
     }
 
