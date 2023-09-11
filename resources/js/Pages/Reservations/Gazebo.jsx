@@ -98,7 +98,6 @@ export default function Gazebo(props) {
                                 <IsTouchableContext.Provider value={isTouchDevice()}>
                                     <InnerWidthContext.Provider value={innerWidth}>
                                         <Container fluid className={'p-3 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column img-container'}>
-                                            {/*<Image src={'Images/bg_background.jpg'}/>*/}
                                             <DisabledDaysContext.Provider value={getDisabledDays()}>
                                                 {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
                                                                          onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}

@@ -55,12 +55,11 @@ export default function Register() {
                         <Form.Group className="my-3 mx-auto text-center" controlId="password_confirmation">
                             <Form.Label className="my-1">Επαλήθευση Κωδικού</Form.Label>
                             <Form.Control type="password" placeholder="Επαλήθευση Κωδικού" value={data.password_confirmation}
-                                          onChange={(e) => setData('password_confirmation', e.target.value)}/>
+                          onChange={(e) => setData('password_confirmation', e.target.value)}/>
                         </Form.Group>
-
+                        {errors.password && <p className={'text-wrap text-danger m-auto'}>{errors.password}</p>}
                         {errors.email && <p className={'text-wrap text-danger m-auto'}>{errors.email}</p>}
                         <div className="flex items-center justify-end my-3 mx-auto">
-
                             <Button className="ml-4" disabled={processing} type={'submit'} >
                                 Δημιουργία Λογαριασμού
                             </Button>
