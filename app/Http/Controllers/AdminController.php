@@ -21,7 +21,7 @@ class AdminController extends Controller {
     public function showAdminPanel(Request $request): \Inertia\Response {
 
         return Inertia::render('Admin/AdminPanel',['Menus' => fn () => $this->getMenus(),
-            'Disabled_Days' => $this->getDisabledDays (),
+            'Disabled_Days' => $this->getDisabledDays(),
             'Gazebos' => fn () => $this->getGazebos(),
             'Dinner_Settings' => fn () => $this->getDinnerSettings(),
             'Bed_Settings' => fn () => $this->getBedSettings(),
