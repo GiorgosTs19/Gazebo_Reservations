@@ -25,9 +25,10 @@ class HandleInertiaRequests extends Middleware
         $hash = null;
         if (file_exists($manifest)) {
             $hash =  md5_file($manifest);
+        } else {
+            $hash = env('GIT_COMMIT_HASH','');
         }
         Inertia::version($hash);
-//        Inertia::version($version);
         return $hash;
     }
 
