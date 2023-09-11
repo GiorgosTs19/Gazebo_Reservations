@@ -13,7 +13,7 @@ export function MobileTodayView({reservations_of_current_date,filter,children}) 
         {reservationsFilter,setReservationsFilter} = filter,
         innerWidth = useContext(InnerWidthContext);
     const shouldShowStack = activeReservation === null;
-
+    // console.log(1)
     const reservationsToShow = useCallback(()=> {
         if(reservations_of_current_date.length === 0)
             return <h4 className={'text-muted my-auto info-text-lg'}>Δεν υπάρχει κάποια κράτηση για σήμερα.</h4>;
