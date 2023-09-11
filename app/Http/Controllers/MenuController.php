@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MenuItemResource;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MenuController extends Controller {
     /**
@@ -58,9 +60,10 @@ class MenuController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Menu $menu)
+    public function Items(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $menu_id = $request->only(['menu_id'])['menu_id'];
+        return redirect()->back()->with(['Menu_Items'=>MenuItemResource::collection(MenuItem::where('menu_id',$menu_id)->get())]);
     }
 
     /**
@@ -176,6 +179,3 @@ class MenuController extends Controller {
     }
 }
 
-function isAssociativeArray($array) {
-    return array_keys($array) !== range(0, count($array) - 1);
-}

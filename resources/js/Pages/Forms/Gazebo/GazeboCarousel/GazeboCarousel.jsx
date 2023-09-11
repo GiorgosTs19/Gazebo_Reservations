@@ -3,19 +3,21 @@ import {GazeboCarouselItem} from "./GazeboCarouselItem";
 import {useState} from "react";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {useContext} from "react";
-import {GazeboAvailabilityContext} from "../../../../Contexts/GazeboAvailabilityContext";
-import {getAvailabilityByDate, getTableAvailabilityBoolean} from "../../../../ExternalJs/Util";
+import {getTableAvailabilityBoolean} from "../../../../ExternalJs/Util";
 import {BookingDetailsContext} from "../../../../Contexts/BookingDetailsContext";
+import {useGetAvailabilityForDate} from "../../../../CustomHooks/useGetAvailabilityForDate";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 
-export function GazeboCarousel({Gazebos}) {
+export function GazeboCarousel() {
     const [index, setIndex] = useState(0),
     {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
-    Availability = useContext(GazeboAvailabilityContext);
+    Gazebos = useContext(GazebosContext);
     const handleSelect = (selectedIndex) => {
         setIndex(selectedIndex);
     };
+    const [requestProgress, availability, setAvailability] = useGetAvailabilityForDate(bookingDetails.date, bookingDetails.type);
     const gazebosToShow = Gazebos.map((gazebo)=>{
-        const isAvailable = getTableAvailabilityBoolean(gazebo.id,getAvailabilityByDate(bookingDetails.date,Availability));
+        const isAvailable = getTableAvailabilityBoolean(gazebo.id,availability);
         return (<Carousel.Item key={gazebo.id}>
             <GazeboCarouselItem Gazebo={gazebo} isAvailable={isAvailable}>
                 {
@@ -27,15 +29,17 @@ export function GazeboCarousel({Gazebos}) {
             </GazeboCarouselItem>
         </Carousel.Item>)
     });
+
     return (
         <GazebosContext.Provider value={Gazebos}>
-            <Carousel activeIndex={index} onSelect={handleSelect}
-            className={'mx-auto py-4'}
-            variant={'dark'}
-            controls
-            interval={null}>
+            {requestProgress === 'Pending' ? <SpinnerSVG/> :
+                <Carousel activeIndex={index} onSelect={handleSelect}
+                   className={'mx-auto py-4 text-dark'}
+                   variant={'dark'}
+                   controls
+                   interval={null}>
                 {gazebosToShow}
-            </Carousel>
+            </Carousel>}
         </GazebosContext.Provider>
     )
 }

@@ -69,7 +69,8 @@ class Reservation extends Model {
         if(!$date_end)
             return $query->whereDate('Date',$date_start);
 
-        return $query->whereBetween('Date',[$date_start,$date_end]);
+        return $query->where('Date', '>=', $date_start)
+            ->where('Date', '<=', $date_end);
     }
     public function scopeTable($query,$table_id) {
         if($table_id)
@@ -79,6 +80,13 @@ class Reservation extends Model {
     }
     public function scopeOrder($query,$direction = 'asc') {
         return $query->orderBy('Date',$direction);
+    }
+    public function scopeStatus($query,$status, $not_in = false) {
+        if(!$status)
+            return $query;
+        if($not_in)
+            return $query->whereNot('Status',$status);
+        return $query->where('Status',$status);
     }
     public function scopeType($query,$type) {
         if($type === 'All')

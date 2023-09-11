@@ -1,16 +1,22 @@
-import {getFormattedDate, getReservationsByDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
-import {Accordion, Badge, Col, ListGroup, Row} from "react-bootstrap";
-import {useContext, useCallback} from "react";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
+import {
+    extractReservationsForDate,
+    getFormattedDate,
+    isDateDisabledByAdmin
+} from "../../../../ExternalJs/Util";
+import {Accordion, ListGroup} from "react-bootstrap";
+import {useCallback,useContext} from "react";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 
-export function MobileWeeklyView({currentDate, filter, children}) {
-    const Reservations = useContext(ReservationsContext),
-        {reservationsFilter, setReservationsFilter} = filter,
+export function MobileWeeklyView({currentDate, filter, children, Reservations}) {
+    const {reservationsFilter, setReservationsFilter} = filter,
+        [propsReservations, setPropsReservations] = Reservations,
+        {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
         reservationsToShow = (day)=>{
-            const reservations_of_current_date = getReservationsByDate(day,Reservations);
+            const reservations_of_current_date = extractReservationsForDate(day,propsReservations);
             if(reservations_of_current_date.length === 0)
                 return [<h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>,0];
 
@@ -33,8 +39,9 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             return [reservationChunks.map((chunk, index) => {
                 return <ListGroup.Item key={index+1} className={'p-1 d-flex border-0 mx-auto'}>
                     {chunk.map(reservation => (
-                        <ReservationShortest Reservation={reservation} key={reservation.id} className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />
-                    ))}
+                        <ReservationShortest Reservation={reservation} key={reservation.id}
+                        className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />))
+                    }
                 </ListGroup.Item>;
             }
             ),filteredReservations.length]
@@ -47,33 +54,33 @@ export function MobileWeeklyView({currentDate, filter, children}) {
             const today = new Date();
             const yesterday = new Date(today).setDate(today.getDate()-1);
             day.setDate(currentDate.getDate() +index);
-            const [reservations,reservationsCount] = reservationsToShow(day);
+            const [Reservations,reservationsCount] = reservationsToShow(day);
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
-            const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,Reservations);
+            const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,propsReservations);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
                 <Accordion.Header><span className={' me-1 ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
                 <Accordion.Body>
                     <ListGroup horizontal={false} gap={5} className={'py-1'}>
-                        {reservations}
+                        {Reservations}
                     </ListGroup>
                 </Accordion.Body>
             </Accordion.Item>;
         })
-    },[currentDate,reservationsFilter,Reservations]);
+    },[currentDate,reservationsFilter,propsReservations]);
 
     return (
         <div className={'text-center p-0 overflow-y-auto overflow-x-hidden h-100 d-flex flex-column sticky-top bg-white'}>
-            {/*<div className={'d-flex flex-column sticky-top bg-white'}>*/}
+            {activeReservation === null ? <>
                 <div className="navigation my-2 d-flex mx-auto">
                     {children}
                 </div>
                 <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
                             reservationsFilter={reservationsFilter} className={'mx-auto my-3'}>
                 </FiltersBar>
-            {/*</div>*/}
-            <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
-                {renderWeekDays()}
-            </Accordion>
+                <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
+                    {renderWeekDays()}
+                </Accordion>
+            </> : <ReservationLong setReservations={setPropsReservations}></ReservationLong>}
         </div>
     )
 }

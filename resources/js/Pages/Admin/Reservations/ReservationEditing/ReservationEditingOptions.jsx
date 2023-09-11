@@ -1,20 +1,22 @@
-import {Button, Col, Row} from "react-bootstrap";
+import {Button, Stack} from "react-bootstrap";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {EditReservationModalTitleContext} from "../../Contexts/EditReservationModalTitleContext";
-import {ReservationsContext} from "../../../../Contexts/ReservationsContext";
 import {Inertia} from "@inertiajs/inertia";
 import {TransferReservationToAnotherDay} from "../../EditReservations/AnotherDay/TransferReservationToAnotherDay";
 import {useContext, useEffect, useState} from "react";
 import {ChangeReservationTableSameDay} from "../../EditReservations/SameDay/ChangeReservationTableSameDay";
 import {isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
+import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
+import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
+import {CancelReservation} from "../../EditReservations/CancelReservation/CancelReservation";
 
-export function ReservationEditingOptions({Content}) {
-    const {content,setContent} = Content,
-    Reservations = useContext(ReservationsContext),
+export function ReservationEditingOptions({conflictType = null}) {
+    const {content,setContent} = useContext(EditModalContentContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     [availableTables, setAvailableTables] = useState([]),
     {modalTitle,setModalTitle} = useContext(EditReservationModalTitleContext),
-    isDateDisabled = isDateDisabledByAdmin(activeReservation.Date,Reservations)[0];
+    Disabled_Days = useContext(DisabledDaysContext),
+    [isDateDisabled, reservationsAllowed]= isDateDisabledByAdmin(activeReservation.Date,Disabled_Days);
     const noAvailableTablesExist = availableTables.every(table=>{return table.isAvailable === false});
     useEffect(()=>{
         if(activeReservation !== null) {
@@ -30,40 +32,47 @@ export function ReservationEditingOptions({Content}) {
     },[]);
 
     const handleClickTransfer = () => {
-        setContent(<TransferReservationToAnotherDay></TransferReservationToAnotherDay>);
-        setModalTitle('Μεταφορά της κράτησης σε άλλη μέρα')
+        setContent(<TransferReservationToAnotherDay/>);
+        setModalTitle('Αλλαγή ημερομηνίας της κράτησης')
     };
 
     const handleClickChangeTable = () => {
-        setContent(<ChangeReservationTableSameDay></ChangeReservationTableSameDay>);
+        setContent(<ChangeReservationTableSameDay/>);
         setModalTitle('Αλλαγή Gazebo την ίδια μέρα')
+    };
+
+    const handleClickCancelReservation = () => {
+        setContent(<CancelReservation/>);
+        setModalTitle('');
     };
 
     return (
         <>
-            <h5 className={'text-danger'}>Οποιαδήποτε αλλαγή πρέπει πάντα να γίνεται έπειτα απο συνεννόηση με τον πελάτη.</h5>
-            <Row className={'my-4'}>
-                <Col className={'d-flex flex-column my-3 my-lg-0'} lg={isDateDisabled ? 6 :4}>
+            <Stack className={'my-4 '} gap={5}>
+                <section>
                     <p className={'info-text-lg my-auto'}>
                         Θα γίνει προσπάθεια ανάθεσης του ίδιου Gazebo αυτόματα από το σύστημα.
                     </p>
                     <Button variant={'secondary'} className={'mt-3 mx-auto'} onClick={handleClickTransfer}>Αλλαγή Ημερομηνίας</Button>
-                </Col>
-                {!isDateDisabled && <Col className={'d-flex flex-column my-3 my-lg-0'} lg={4}>
-                    <p className={'info-text-lg my-auto'}>Εκ νέου επιλογή Gazebo,
-                        με βάση την διαθεσιμότητα της ημέρας για την οποία έγινε η κράτηση.</p>
+                </section>
+                {((conflictType === 'Table' || conflictType === null) && !isDateDisabled ) && <section>
+                    <p className={'info-text-lg my-auto'}>Αλλαγή Gazebo για την ίδια μέρα</p>
                     {noAvailableTablesExist &&
-                        <p className={'text-danger fw-bold'}>Δεν υπάρχουν διαθέσιμα τραπέζια την ίδια μέρα.</p>}
+                        <p className={'text-danger fw-bold info-text-lg'}>Δεν υπάρχουν διαθέσιμα τραπέζια την ίδια μέρα.</p>}
                     <Button variant={'secondary'} className={'mt-3 mx-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
                             onClick={handleClickChangeTable} disabled={noAvailableTablesExist || isDateDisabled}>
                         Αλλαγή Gazebo
                     </Button>
-                </Col>}
-                <Col className={'d-flex flex-column my-3 my-lg-0'} lg={isDateDisabled ? 6 :4}>
-                    <p className={'info-text-lg my-auto'}>Αλλαγή των επιλεγμένων Μενού της κράτησης.</p>
+                </section>}
+                <section>
+                    <p className={'info-text-lg my-auto'}>Αλλαγή των  Μενού της κράτησης</p>
                     <Button variant={'secondary'} className={'mt-3 mx-auto'} disabled>Προσωρινά μη Διαθέσιμο</Button>
-                </Col>
-            </Row>
+                </section>
+                <section>
+                    <p className={'info-text-lg my-auto'}>Ακύρωση της κράτησης</p>
+                    <Button variant={'outline-danger'} onClick={handleClickCancelReservation} className={'mt-3 mx-auto'} >Ακύρωση</Button>
+                </section>
+            </Stack>
         </>
     )
 }

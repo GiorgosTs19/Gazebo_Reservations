@@ -6,7 +6,7 @@ export function DateNotes() {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     {progress, setProgress} = useContext(FormProgressContext);
     return (
-        bookingDetails.type === 'Dinner' && <div className={'text-center mx-auto my-4 bg-transparent '} style={{width:'fit-content'}}
+        bookingDetails.type === 'Dinner' && <div className={'text-center mx-auto my-4 bg-transparent text-dark'} style={{width:'fit-content'}}
                                                  id={'date_notes'}>
                 <h6 className={'reservation-note'}>* Next Day dinner reservations cannot be made after 23:00 on the previous
                     day.</h6>

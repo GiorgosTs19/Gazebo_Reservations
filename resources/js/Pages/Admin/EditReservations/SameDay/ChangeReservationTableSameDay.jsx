@@ -1,14 +1,14 @@
-import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {changeDateFormat, getTableAA} from "../../../../ExternalJs/Util";
 import {useContext,useState,useRef,useEffect} from "react";
+import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {getDate, getParameter, handleSetReservations} from "../../../../Inertia_Requests/Admin_Requests";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {Inertia} from "@inertiajs/inertia";
-import {ShowEditReservationModalContext} from "../../Contexts/ShowEditReservationModalContext";
-import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
-import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
+import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
+import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
 export function ChangeReservationTableSameDay() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
@@ -16,10 +16,9 @@ export function ChangeReservationTableSameDay() {
         {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
-    const {showEditModal,setShowEditModal} = useContext(ShowEditReservationModalContext),
-        {content,setContent} = useContext(EditModalContentContext);
     const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
-    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
+    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id),
+    [activeRange, setReservations] = useContext(ActiveRangeContext);
     const handleSelectTable = (table,index) => {
         if(table.isAvailable && table.id !== activeReservation.Gazebo)
             setSelectedTable(table.id);
@@ -56,10 +55,6 @@ export function ChangeReservationTableSameDay() {
 
     const unavailableTablesExist = tables.some(table=>{return table.isAvailable === false});
 
-    // const sameTable = tables.find(table =>{
-    //     return table.id === activeReservation.Gazebo;
-    // });
-
     const getTableAvailabilityText = (table) => {
         if(selectedTable === table.id)
             return <span>Επιλεγμένο</span>;
@@ -70,12 +65,14 @@ export function ChangeReservationTableSameDay() {
         else
             return <span className={'text-danger'}>Μη διαθέσιμο</span>;
     };
+
     const getTableOpacity = (table) => {
         if(table.id === activeReservation.Gazebo)
             return 'opacity-50';
         if(!table.isAvailable)
             return 'opacity-25';
     };
+
     const getTablesList = () => {
         if(showOnlyAvailableTables)
             return tables.filter(table=>{
@@ -86,7 +83,7 @@ export function ChangeReservationTableSameDay() {
                                        className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                     <Row>
                         <Col>
-                            Τραπέζι {getTableAA(table.id,Gazebos)}
+                            Gazebo {getTableAA(table.id,Gazebos)}
                         </Col>
                         <Col>
                             {getTableAvailabilityText(table)}
@@ -101,7 +98,7 @@ export function ChangeReservationTableSameDay() {
                className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                 <Row>
                     <Col>
-                        Τραπέζι {getTableAA(table.id,Gazebos)}
+                        Gazebo {getTableAA(table.id,Gazebos)}
                     </Col>
                     <Col>
                         {getTableAvailabilityText(table)}
@@ -110,25 +107,27 @@ export function ChangeReservationTableSameDay() {
             </ListGroup.Item>;
         })
     }
+
     const handleSaveChanges = () => {
         Inertia.patch(route('Change_Reservation_Table'),{Reservation_id:activeReservation.id,
-            Table_id:selectedTable},{preserveScroll:true,only: [activeReservation.Type === 'Dinner' ?'Dinner_Reservations' : 'Bed_Reservations',
-                'activeReservation', isReservationInConflict ? 'Conflicts' : '']
+            Table_id:selectedTable, date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)},
+            {preserveScroll:true,only: [getParameter(activeRange),
+                'activeReservation', isReservationInConflict ? 'Disabled_Table_Reservations' : '']
             ,onSuccess:(res)=> {
-                setContent('Options');
-                setShowEditModal(false);
-                resolvingConflict[0] && setResolvingConflict(false);
-                resolvingConflict[0] && handleSetActiveKey(resolvingConflict[1]);
+                if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
+                    setResolvingConflict([false, '']);
                 setActiveReservation(res.props.activeReservation);
+                handleSetReservations(res, activeRange, setReservations)
             }});
     };
+
     return (
-        <Row className={'p-2'}>
+        <Row className={'p-2 '}>
             <Col className={'h-100'}>
                 <div className={'d-flex mb-4'}>
                     {unavailableTablesExist && <Stack direction={'horizontal'} className={'mx-auto'}>
                         <h6 onClick={handleShowOnlyAvailableTablesChange} style={{cursor:'pointer'}}>
-                            Εμφάνιση μόνο των διαθέσιμων τραπέζιών
+                            Εμφάνιση μόνο των διαθέσιμων Gazebo
                         </h6>
                         <Form.Switch className={'mx-1 mb-1'} checked={showOnlyAvailableTables}
                                      onChange={handleShowOnlyAvailableTablesChange}></Form.Switch>

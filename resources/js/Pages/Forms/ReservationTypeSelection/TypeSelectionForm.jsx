@@ -111,7 +111,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                 <Col ref={typeSelectionRef} className={'my-auto'} xs={12} md={bookingDetails.type === '' ? 12 : (progress !== 'Type' ? 12 : 5)}>
                     <Row className={'m-auto'}>
                         <Col className={'p-2 border-blue border border-start-0 border-top-0 border-bottom-0 d-flex ' + (progress !== 'Type' ? 'opacity-50' : '')}
-                             style={{backgroundColor:bookingDetails.type ==='Dinner' ? '#4f9eb2' : '',borderRadius:'15px 0 0 15px',userSelect:'none',cursor:'pointer'}}
+                             style={{backgroundColor:bookingDetails.type ==='Dinner' ? 'rgba(79,158,178,0.7)' : '',borderRadius:'15px 0 0 15px',userSelect:'none',cursor:'pointer'}}
                              onClick={()=>handleImageClick('Dinner')}>
                             <Image src={'Images/Icons/moon.png'} width={'20px'} height={'20px'} className={'ms-2 my-auto'} id={'moon-img'}></Image>
                             <h6 className={'m-auto'} style={{cursor:progress === 'Type' ? "pointer" : 'none'}}>
@@ -119,7 +119,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                             </h6>
                         </Col>
                         <Col className={'p-2 d-flex me-0 me-lg-3 ' + (progress !== 'Type' ? 'opacity-50' : '')}
-                             style={{backgroundColor:bookingDetails.type ==='Bed'?'#e8f806':''
+                             style={{backgroundColor:bookingDetails.type ==='Bed'?'rgba(217,232,112,0.7)':''
                             ,borderRadius:'0 15px 15px 0',userSelect:'none',cursor:'pointer'}} onClick={()=>handleImageClick('Bed')}>
                             <h6 className={'m-auto'} style={{cursor:progress === 'Type' ? "pointer" : 'none'}}>
                                 Sun Bed
@@ -128,22 +128,22 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                         </Col>
                     </Row>
                 </Col>
-                {bookingDetails.type !== '' && progress === 'Type' && <Col ref={numberOfPeopleSelectionRef} xs={12} md={bookingDetails.number_of_people !== 0 ? 3 : 7}
+                {bookingDetails.type !== '' && progress === 'Type' && <Col ref={numberOfPeopleSelectionRef} md={7} xxl={bookingDetails.number_of_people !== 0 ? 3 : 7}
                       className={'my-auto border-blue border border-end-0  mt-4 mt-md-0 py-2 ' + (innerWidth > 768 ? 'border-bottom-0 border-top-0' : 'border-start-0 ') +
                           (bookingDetails.number_of_people === 0 ? ' border-bottom-0' : '')}>
                     <div className={`m-auto px-4 text-center`} style={{ userSelect: 'none'}}>
-                        <span>Guest Count</span>
+                        <span className={'fw-bold fst-italic'}>Guest Count</span>
                         <NumberOfPeople></NumberOfPeople>
                     </div>
                 </Col>}
                 {bookingDetails.number_of_people !== 0 && progress === 'Type'  && <Col ref={dateSelectionRef}
                       className={'text-center border-blue d-flex my-auto border-end-0 border-top-0 border-bottom-0 py-2 ' + (!showCalendar ? 'border' : '') +
                           (innerWidth < 768 ? 'border-start-0' : '')}
-                      xs={12} md={4}>
+                      xxl={4}>
                     <div className={'p-2 mx-auto w-100 ' + (bookingDetails.number_of_people === 0 ? 'opacity-25' : '')}>
-                        <div className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 w-100 position-relative'}
+                        <div className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 w-100 position-relative '}
                              style={{
-                                 backgroundColor: showCalendar ? 'rgba(122,217,245,0.47)' : '',
+                                 backgroundColor: 'rgba(253,249,249,0.75)',
                                  userSelect: 'none'
                              }}>
                             <span>Date</span>
@@ -164,7 +164,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                     Book on {changeDateFormat(bookingDetails?.date,'-','/')}
                 </Button>}
             </div>}
-            <DateNotes></DateNotes>
+            {/*<DateNotes></DateNotes>*/}
             {progress === 'Type' && !showCalendar && <Button variant={'outline-light'} hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
                 className={'my-2 box_shadow reservation-button text-dark'}
                 onClick={handleNextClick}

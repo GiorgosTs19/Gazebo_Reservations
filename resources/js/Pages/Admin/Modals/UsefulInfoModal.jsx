@@ -1,16 +1,11 @@
-import {Badge, Col, Modal, Nav, Row, Stack} from "react-bootstrap";
+import {Badge, Col, Modal, Nav, Row} from "react-bootstrap";
 import {useState} from "react";
-import {InfoSVG} from "../../../SVGS/InfoSVG";
 import {BellSVG} from "../../../SVGS/BellSVG";
-import {TodayViewSVG} from "../../../SVGS/TodayViewSVG";
-import {WeeklyViewSVG} from "../../../SVGS/WeeklyViewSVG";
-import {MonthlyViewSVG} from "../../../SVGS/MonthlyViewSVG";
 
 export function UsefulInfoModal({className}) {
     const [show, setShow] = useState(false);
     return (
         <>
-            {/*<InfoSVG className={'my-auto hover-scale-1_1'} onClick={() => setShow(true)}/>*/}
             <Nav.Link className={`my-1 my-xxl-auto primary hover-scale-1_03 ${className}`} onClick={() => setShow(true)}>Χρήσιμες Πληροφορίες</Nav.Link>
             <Modal size="lg" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
             style={{maxHeight:'80vh'}}>
@@ -20,6 +15,10 @@ export function UsefulInfoModal({className}) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <Row className={'border-bottom pb-2 my-3'}>
+                        <Col xs={12} lg={2} className={'icon-info disabled-day'}>Ημερομηνία</Col>
+                        <Col xs={12} lg={10} className={'info-text-lg'}>Μία ημερομηνία με γραμμή, υποδηλώνει πως η ημερομηνία αυτή είναι απενεργοποιημένη.</Col>
+                    </Row>
                     <Row className={'border-bottom py-1 my-3'}>
                         <Col xs={12} lg={2} className={'icon-info d-flex'}><BellSVG className={'m-auto'}/></Col>
                         <Col xs={12} lg={10}>
@@ -53,22 +52,6 @@ export function UsefulInfoModal({className}) {
                             </p>
                         </Col>
                     </Row>
-                    <Row className={'border-bottom pb-2 my-3'}>
-                        <Col xs={12} lg={2} className={'icon-info disabled-day'}>Ημερομηνία</Col>
-                        <Col xs={12} lg={10} className={'info-text-lg'}>Μία ημερομηνία με γραμμή, υποδηλώνει πως η ημερομηνία αυτή είναι απενεργοποιημένη.</Col>
-                    </Row>
-                    <Row className={'border-bottom pb-2 my-3'}>
-                        <Col xs={12} lg={2} className={'icon-info'}><TodayViewSVG/></Col>
-                        <Col xs={12} lg={10} className={'info-text-lg'}>Εμφανίζει τις κρατήσεις για την τρέχουσα ημέρα.</Col>
-                    </Row>
-                    <Row className={'border-bottom pb-2 my-3'}>
-                        <Col xs={12} lg={2} className={'icon-info'}><WeeklyViewSVG/></Col>
-                        <Col xs={12} lg={10} className={'info-text-lg'}>Εμφανίζει τις κρατήσεις ανά εβδομάδα, ξεκινώντας από την τρέχουσα ημέρα.</Col>
-                    </Row>
-                    <Row className={'border-bottom pb-2 my-3'}>
-                        <Col xs={12} lg={2} className={'icon-info'}><MonthlyViewSVG/></Col>
-                        <Col xs={12} lg={10} className={'info-text-lg'}>Εμφανίζει τις κρατήσεις ανά μήνα, ξεκινώντας από τον τρέχων μήνα.</Col>
-                    </Row>
                     <h6 className={'my-3'}>Αλλαγές Κρατήσεων</h6>
                     <Row className={'border-bottom pb-2 my-3'}>
                         <p className={'info-text-lg'}><b>-</b> Αλλαγές στις κρατήσεις, επιτρέπονται μόνο εφόσον προηγηθεί η επιβεβαίωση με τον πελάτη. </p>
@@ -77,7 +60,7 @@ export function UsefulInfoModal({className}) {
                     </Row>
                     <h6 className={'my-3'}>Ρυθμίσεις</h6>
                     <p><b>Οι ρυθμίσεις για το κάθε είδος κρατήσεων, είναι ξεχωριστές.</b></p>
-                    <Row className={'border-bottom pb-2 my-3'}>
+                    <Row className={'pb-2 my-3'}>
                         <p className={'info-text-lg'}><b>-</b> Όσον αφορά την απενεργοποίηση ημερομηνιών, είτε τραπεζιών, μπορεί να γίνει μαζικά
                             ( επιλέγοντας πολλές ημερομηνίες στην κάθε περίπτωση ).</p>
                         <p className={'info-text-lg'}><b>-</b> Η ενεργοποίηση αυτών, πρέπει να γίνει μία προς μία ημερομηνία / ένα προς ένα τραπέζι.</p>

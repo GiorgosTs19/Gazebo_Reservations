@@ -5,13 +5,13 @@ import {Inertia} from "@inertiajs/inertia";
 import {useContext} from "react";
 import {ActiveReservationTypeContext} from "../../../../Contexts/ActiveReservationTypeContext";
 
-export function SelectedDateAvailabilitySettings({isDateDisabled,selectedDate}) {
+export function DateAvailabilitySettings({isDateDisabled,selectedDate}) {
     const dateIsRange = Array.isArray(selectedDate);
     const {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
     const handleSetDayAvailable = () => {
         const date_to_enable = !dateIsRange && getFormattedDate(selectedDate,'-',1);
         Inertia.delete(route('Enable_Day'),{headers: {'X-Date': date_to_enable,'X-Type':reservationType},preserveScroll:true,preserveState:true,
-            only:['Dinner_Reservations','Conflicts']});
+            only:['Disabled_Dates_Reservations','Disabled_Days']});
     };
     return (
         <div className={'my-auto'}>
@@ -22,7 +22,7 @@ export function SelectedDateAvailabilitySettings({isDateDisabled,selectedDate}) 
                 <Button variant={'outline-success'} className={'p-2 my-2'}
                         disabled={!isDateDisabled}
                         onClick={handleSetDayAvailable}>
-                    Ορισμός ως Διαθέσιμη
+                    Ενεργοποίηση
                 </Button>}
         </div>
     )

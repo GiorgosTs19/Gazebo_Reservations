@@ -14,8 +14,8 @@ export function BedPackage() {
                     <div className={'p-2 border rounded-4 my-2 menu-list'}>
                         {/*Show this message only if a menu is not selected for each room.*/}
                         {(bookingDetails.primary_menu.Main === '') &&
-                            <p className={'text-info'}>Please select a menu</p>}
-                        {/*<h5>Available Menus</h5>*/}
+                            <p className={'text-light'}>Please select a menu</p>}
+                        {/*Available Menus<*/}
                         <ListGroup as="ul">
                             {
                                 Menus?.map((menu,index) => {

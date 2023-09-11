@@ -18,14 +18,36 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminController extends Controller {
-    public function showAdminPanel(Request $request) {
-        date_default_timezone_set("Europe/Athens");
-
-        // Retrieve the settings of the Dinner and Sea Bed reservations
-        $Dinner_Settings = new DinnerSettingsResource(DinnerSetting::first());
-        $Bed_Settings = new BedSettingsResource(BedSetting::first());
-
+    public function showAdminPanel(Request $request): \Inertia\Response {
         $Active_Key = $request->only(['ActiveTab']);
+
+        // Retrieve all tables
+        $Gazebos = Gazebo::all();
+
+        // Retrieve all the days that were disabled by the admins, regardless of type
+        $Disabled_Days = DisabledDay::afterToday()->order()->get();
+
+        // Retrieve all the disabled tables ( only the date and their ids ) after today.
+        $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
+
+        return Inertia::render('Admin/AdminPanel',['Menus' => fn () => $this->getMenus(),
+            'Disabled_Days' => ['Dinner' => $Disabled_Days->filter(function ($item) {return $item->Type == 'Dinner';}),
+            'Bed' => $Disabled_Days->filter(function ($item) {return $item->Type == 'Bed';})],
+            'Gazebos' => GazeboResource::collection($Gazebos),
+            'Dinner_Settings' => fn () => $this->getDinnerSettings(), 'Bed_Settings' => fn () => $this->getBedSettings(), 'ActiveTab' => $Active_Key ?: 'Reservations',
+            'activeReservation' => Inertia::lazy( fn () =>$this->getActiveReservation($request)), 'availability_for_date' => fn () => $this->getAvailabilityForDate($request),
+            'search_result' => Inertia::lazy(fn ()=>$this->getSearchResult($request)), 'availability_for_date_range' => Inertia::lazy(fn ()=>$this->getAvailabilityForDateRange($request)),
+            'reservations_of_table' => Inertia::lazy(fn () => $this->getTableReservations($request)), 'disabled_days_for_table' => Inertia::lazy(fn () => $this->getTableDisabledDays($request)),
+            'Disabled_Dates_Reservations' => fn () => $this->getDateConflicts($Disabled_Days), 'Disabled_Table_Reservations' => fn () => $this->getTableConflicts($Disabled_Tables)]);
+    }
+
+    protected function getDinnerSettings() {
+        return new DinnerSettingsResource(DinnerSetting::first());
+    }
+    protected function getBedSettings() {
+        return new BedSettingsResource(BedSetting::first());
+    }
+    protected function getMenus() {
         // Retrieve all the menus, regardless of type
         $Dinner_Menus_DB = Menu::where('Type','Dinner')->get();
         // Filter out dinner and sea bed menus respectively.
@@ -37,66 +59,58 @@ class AdminController extends Controller {
             }))];
         $Bed_Menus = MenuResource::collection(Menu::where('Type','Bed')->get());
 
-        $Menus = ['Dinner'=>$Dinner_Menus,'Bed'=>$Bed_Menus];
+        return ['Dinner'=>$Dinner_Menus,'Bed'=>$Bed_Menus];
+    }
 
-        // Retrieve all tables
-        $Gazebos = Gazebo::all();
-
-
-        // Retrieve all the days that were disabled by the admins, regardless of type
-        $Disabled_Days = DisabledDay::afterToday()->order()->get();
-
-        // Retrieve all the disabled tables ( only the date and their ids ) after today.
-        $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
-
-        // Retrieve all Dinner reservations that fall within the range specified by the admins
-        [$Dinner_Reservations, $Dinner_Date_Conflicts, $Dinner_Table_Conflicts] = GazeboController::getAdminReservations('Dinner',$Disabled_Days->filter(function ($item) {return  $item->Type == 'Dinner';}),
-            $Dinner_Settings,$Disabled_Tables->filter(function ($item) {return  $item->Type == 'Dinner';}));
-        // Also checks for any conflicts with disabled days that do not allow reservations, having reservations,
-        // or disabled tables having reservations
-        $Reservations_Of_Disabled_Dates = $Dinner_Date_Conflicts;
-        $Reservations_Of_Disabled_Tables = $Dinner_Table_Conflicts;
-        // Retrieve all Sea Bed reservations that fall within the range specified by the admins
-        [$Bed_Reservations, $Bed_Date_Conflicts, $Bed_Table_Conflicts] = GazeboController::getAdminReservations('Bed',$Disabled_Days->filter(function ($item) {return  $item->Type == 'Bed';}),
-            $Bed_Settings, $Disabled_Tables->filter(function ($item) {return  $item->Type == 'Bed';}));
-        // After checking on the Bed reservations, it will merge those arrays together to return all the conflicts no matter the type.
-        // In case an array of two is empty it will return just the non-empty, if both are it'll return an empty array.
-        $Reservations_Of_Disabled_Dates = [...$Reservations_Of_Disabled_Dates, ...$Bed_Date_Conflicts];
-        $Reservations_Of_Disabled_Tables = [...$Reservations_Of_Disabled_Tables, ...$Bed_Table_Conflicts];
-
+    protected function getActiveReservation($request): ?ReservationResource {
         // True when a request that requires the activeReservation of that time to be returned is fired.
         if($request->session()->exists('activeReservation'))
-            $activeReservation = new ReservationResource(Reservation::find($request->session()->get('activeReservation')));
+           return new ReservationResource(Reservation::find($request->session()->get('activeReservation')));
+        return null;
+    }
+    protected function getAvailabilityForDate($request) {
         // True when a request for a specific date's availability is fired.
         if($request->session()->exists('availability_for_date'))
-            $availability_for_date = $request->session()->get('availability_for_date');
-        // True when a search request is fired.
-        if($request->session()->exists('search_result'))
-            $search_result = $request->session()->get('search_result');
+            return $request->session()->get('availability_for_date');
+        return ReservationResource::collection(Reservation::date(date("Y-m-d"))->type('Dinner')->get());
+    }
+    protected function getAvailabilityForDateRange($request) {
         // True when a request for a specific date range availability is fired.
         if($request->session()->exists('availability_for_date_range'))
-            $availability_for_date_range = $request->session()->get('availability_for_date_range');
+            return $request->session()->get('availability_for_date_range');
+        return null;
+    }
+    protected function getSearchResult($request) {
+        // True when a search request is fired.
+        if($request->session()->exists('search_result'))
+            return $request->session()->get('search_result');
+    }
+    protected function getTableReservations($request) {
         // True when a request for a specific table's reservations is fired.
         if($request->session()->exists('reservations_of_table'))
-            $reservations_of_table = $request->session()->get('reservations_of_table');
+            return $request->session()->get('reservations_of_table');
+    }
+    protected function getTableDisabledDays($request) {
         if($request->session()->exists('Disabled_Days_For_Table'))
-            $disabled_days_for_table = $request->session()->get('Disabled_Days_For_Table');
-
-        return Inertia::render('Admin/AdminPanel',['Menus'=>$Menus,'Dinner_Reservations'=> fn () =>$Dinner_Reservations,
-            'Bed_Reservations'=> fn () => $Bed_Reservations,'Gazebos'=>GazeboResource::collection($Gazebos),
-            'Dinner_Settings' => fn () => $Dinner_Settings,'Bed_Settings'=> fn () =>$Bed_Settings,'ActiveTab'=>$Active_Key ?: 'Reservations',
-            'activeReservation'=>Inertia::lazy(fn()=>$activeReservation),'availability_for_date'=>Inertia::lazy(fn()=>$availability_for_date),
-            'search_result'=>Inertia::lazy(fn()=>$search_result),'availability_for_date_range'=>Inertia::lazy(fn()=>$availability_for_date_range),
-            'reservations_of_table'=>Inertia::lazy(fn()=>$reservations_of_table),'disabled_days_for_table'=>Inertia::lazy(fn()=>$disabled_days_for_table),
-            'Conflicts'=> ['Disabled_Dates_Reservations'=>$Reservations_Of_Disabled_Dates,'Disabled_Table_Reservations'=>$Reservations_Of_Disabled_Tables]]);
+            return $request->session()->get('Disabled_Days_For_Table');
+    }
+    protected function getTableConflicts($Disabled_Tables): array {
+        $Conflicts = [];
+        foreach ($Disabled_Tables as $disabled_Table) {
+            $Reservations_Found = Reservation::date($disabled_Table->Date)->table($disabled_Table->gazebo_id)
+                ->status('Cancelled', true)->get();
+            $Conflicts = [...$Conflicts,...$Reservations_Found];
+        }
+        return $Conflicts;
+    }
+    protected function getDateConflicts($Disabled_Days): array {
+        $Conflicts = [];
+        foreach ($Disabled_Days as $disabled_Day) {
+            if(!!$disabled_Day->Allow_Existing_Reservations)
+                continue;
+            $Reservations_Found = Reservation::date($disabled_Day->Date)->status('Cancelled', true)->get();
+            $Conflicts = [...$Conflicts,...$Reservations_Found];
+        }
+        return $Conflicts;
     }
 }
-
-// Initialize variables, when specific requests are made in the admin panel, they are returned to this function,
-// and are sent to its response conditionally based on the if's below
-//        $activeReservation = null;
-//        $availability_for_date = [];
-//        $availability_for_date_range = [];
-//        $search_result = [];
-//        $reservations_of_table = [];
-//        $disabled_days_for_table = [];

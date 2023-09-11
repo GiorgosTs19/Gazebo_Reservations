@@ -6,13 +6,20 @@ import {MobileWeeklyView} from "./MobileWeeklyView";
 import {Button} from "react-bootstrap";
 import {getFormattedDate} from "../../../../ExternalJs/Util";
 import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
+import {useGetReservationsForRange} from "../../../../CustomHooks/useGetReservationsForRange";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
 export function WeeklyReservationsView() {
     const [currentDate, setCurrentDate] = useState(new Date()),
     innerWidth = useContext(InnerWidthContext),
     [reservationsFilter,setReservationsFilter] = useState('All'),
-    Settings = useContext(DatabaseSettingsContext).settings;
-
+    Settings = useContext(DatabaseSettingsContext).settings,
+    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
+    const oneWeekLater = new Date(currentDate);
+    oneWeekLater.setDate(currentDate.getDate() + 7);
+    const activeRange = [new Date(currentDate.getTime()),oneWeekLater],
+    [requestProgress, reservations, setReservations] = useGetReservationsForRange(activeRange,reservationType,[currentDate, reservationType]);
     // Checks if the currentDate is Today to disable the goToPreviousWeek button.
     const isToday = getFormattedDate(currentDate,'/',2) === getFormattedDate(new Date(),'/',2);
 
@@ -38,18 +45,22 @@ export function WeeklyReservationsView() {
     };
 
     return (
-        <>
+        <ActiveRangeContext.Provider value={[activeRange, setReservations]}>
             {innerWidth > 1200
                 ?
                 <LargeDevicesWeeklyView currentDate={currentDate} navigateWeeks={{goToPreviousWeek, goToNextWeek}}
-                    filter={{reservationsFilter,setReservationsFilter}} isToday={isToday} isLastWeek={isLastWeek}>
+                                        filter={{reservationsFilter, setReservationsFilter}} isToday={isToday}
+                                        isLastWeek={isLastWeek}
+                                        propsReservations={reservations}>
                 </LargeDevicesWeeklyView>
                 :
-                <MobileWeeklyView currentDate={currentDate} filter={{reservationsFilter,setReservationsFilter}}>
-                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
-                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'} disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
-                </MobileWeeklyView>
-            }
-        </>
+                <MobileWeeklyView currentDate={currentDate} filter={{reservationsFilter, setReservationsFilter}}
+                                  Reservations={[reservations, setReservations]}>
+                    <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}
+                            disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
+                    <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}
+                            disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
+                </MobileWeeklyView>}
+        </ActiveRangeContext.Provider>
     );
 }

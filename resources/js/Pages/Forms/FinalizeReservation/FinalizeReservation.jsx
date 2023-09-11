@@ -52,8 +52,8 @@ export const  FinalizeReservation = forwardRef(function FinalizeReservation({...
                                 </Card.Text>
                             </section>
                             <section className={'d-flex mx-auto my-3'}>
-                                <div className="image-container">
-                                    <Image src="Images/Icons/gazebo_icon.png" alt="Your Image" width={50} height={50}/>
+                                <div className="image-container bg-transparent">
+                                    <Image src="Images/Icons/gazebo_icon.png" alt="" width={50} height={50}/>
                                     <span className="overlay-number">{getTableAA(bookingDetails.table,Gazebos)}</span>
                                 </div>
                             </section>

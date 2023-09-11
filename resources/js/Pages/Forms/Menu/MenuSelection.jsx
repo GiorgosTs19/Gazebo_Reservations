@@ -88,14 +88,12 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
     },[bookingDetails.type]);
 
     return (
-        <ListGroup.Item eventKey={index} key={menu.id} as={'li'}
-        className={`d-flex justify-content-between align-items-start border-0 bg-transparent ` +
-        (isSelected() && !dessert ? 'active' : '')}
-        onClick={handleSelectMenu} disabled={onlyOne}>
-            <div className="ms-2 me-auto">
-                <div className={"fw-bold "}>{menu.Items.length === 1 ? menu.Items[0].Name : menu.Name} {isSelected()}</div>
-            </div>
-            {menu.Items.length > 1 && <MenuInfoModal menu={menu}></MenuInfoModal>}
+        <ListGroup.Item eventKey={index} key={menu.id} as={'li'} onClick={handleSelectMenu} className={`d-flex justify-content-between align-items-start border-0 bg-transparent ` + (isSelected() && !dessert ? 'active' : '')}
+        disabled={onlyOne}>
+            {/*<div className="ms-2 me-auto w-100" */}
+                <div className={"fw-bold w-100"} >{menu.Name} {isSelected()}</div>
+            {/*</div>*/}
+            {<MenuInfoModal menu={menu}></MenuInfoModal>}
         </ListGroup.Item>
     )
 }
