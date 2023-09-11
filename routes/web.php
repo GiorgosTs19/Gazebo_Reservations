@@ -45,9 +45,13 @@ Route::post('/Reservation/New',[\App\Http\Controllers\ReservationController::cla
 //Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
 Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'create']);
 Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
+
+
 Route::get('/Reserve/Availability',[\App\Http\Controllers\GazeboController::class,'checkRangeAvailability'])
     ->name('Get_Availability_For_Range');
 Route::get('/Availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
+
+
 Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
@@ -91,7 +95,6 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
     });
 
     Route::prefix('/Date_Range')->group(function() {
-
        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDates'])
            ->name('Get_Reservations_For_Dates');
 

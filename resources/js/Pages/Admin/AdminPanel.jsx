@@ -31,13 +31,12 @@ export default function AdminPanel(props) {
     const Menus = props.Menus,
     [innerWidth, setInnerWidth] = useState(window.innerWidth),
     Gazebos = props.Gazebos, Dinner_Settings = props.Dinner_Settings, Bed_Settings = props.Bed_Settings,
-    ActiveTab = props.ActiveTab,
     [activeReservationsView,setActiveReservationsView] = useState('Today'),
     [reservationType,setReservationType] = useState('Dinner'),
     [editingMenu,setEditingMenu] = useState(null),
     [activeReservation,setActiveReservation] = useState(null);
     const User = props.auth.user;
-    const [activeTabKey, setActiveTabKey] = useState(ActiveTab),
+    const [activeTabKey, setActiveTabKey] = useState('Reservations'),
     [activeMenusTabKey, setActiveMenusTabKey] = useState('Existing');
     const [pendingUnsavedChanges, setPendingUnsavedChanges] = useState({Dinner:false,Bed:false}),
     [showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal] = useState({Show:false,Key:''}),
@@ -46,7 +45,7 @@ export default function AdminPanel(props) {
         // it also stores the previous ActiveTabKey to return to after the actions are done.
     [resolvingConflict,setResolvingConflict] = useState([false,'']),
     Conflicts = [props.Disabled_Dates_Reservations,props.Disabled_Table_Reservations];
-
+    console.log(props)
     const renderContent = () => {
         switch (activeTabKey) {
             case 'Settings' : {

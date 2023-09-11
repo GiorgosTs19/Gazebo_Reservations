@@ -3,7 +3,7 @@ import {Inertia} from "@inertiajs/inertia";
 import {getFormattedDate} from "../ExternalJs/Util";
 
 export function useGetReservationsForRange(activeRange, reservationType, dependencies=[]) {
-    const [requestProgress,setRequestProgress] = useState(''),
+    const [requestProgress,setRequestProgress] = useState('Pending'),
     [reservations,setReservations] = useState([]);
 
     useEffect(()=>{

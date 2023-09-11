@@ -1,4 +1,4 @@
-import {extractReservationsForDate, getReservationsByDate} from "../ExternalJs/Util";
+import {extractReservationsForDate, getFormattedDate, getReservationsByDate} from "../ExternalJs/Util";
 import useFilteredReservationsCountText from "./useFilteredReservationsCountText";
 import {ListGroup} from "react-bootstrap";
 import {ReservationShortest} from "../Pages/Admin/Reservations/ReservationViews/ReservationShortest";
@@ -25,7 +25,8 @@ export function useRenderWeeklyReservations(day, Reservations, reservationsFilte
                 <ReservationShortest Reservation={reservation} key={index+reservation.id}></ReservationShortest>
             </ListGroup.Item>;
         if(index === lastReservationsIndexToShow)
-            return <div className={'flex-column m-auto cursor-pointer hover-scale-1_03'} onClick={()=>setLargeWeekDay([day,filteredReservations])} key={reservation.id}>
+            return <div className={'flex-column m-auto cursor-pointer hover-scale-1_03'} onClick={()=>setLargeWeekDay({date:day,
+                reservations:filteredReservations})} key={reservation.id}>
                 <MaximizeSVG rotate={'0deg'} className={'my-3'} ></MaximizeSVG>
                 <h5 className={''}>... Περισσότερες Κρατήσεις</h5>
             </div>

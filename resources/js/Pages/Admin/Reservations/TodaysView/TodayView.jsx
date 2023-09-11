@@ -16,16 +16,20 @@ export function TodayView() {
     const [reservationsFilter,setReservationsFilter] = useState('All'),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
     const [requestProgress, reservations, setReservations] = useGetReservationsForDate(today, reservationType, [reservationType]);
+    // console.log(requestProgress,reservations)
     console.log(reservations)
     const Disabled_Days = useContext(DisabledDaysContext);
+    // console.log(1)
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days),
         hasReservations = reservations?.length > 0;
+
     const onlyCancelledReservationsExist = () => {
         if(reservations?.length === 0)
             return false;
         const activeReservations = reservations?.filter(reservation=>reservation.Status !== 'Cancelled');
         return activeReservations.length !== 0;
     }
+
     const getWarningMessage = () => {
         if(!onlyCancelledReservationsExist())
             return ;
@@ -48,11 +52,13 @@ export function TodayView() {
     return (
        <ActiveRangeContext.Provider value={[getFormattedDate(today,'-',1), setReservations]}>
            {innerWidth > 992 ?
-               <LargeDevicesTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}>
+               <LargeDevicesTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
+               requestProgress={requestProgress}>
                    <h5>{formatDateInGreek(today)} {isDateDisabled && <Badge bg="danger" className={'ms-3'}>Απενεργοποιημένη</Badge>}</h5>
                    {isDateDisabled && hasReservations && getWarningMessage()}
                </LargeDevicesTodayView>
-               : <MobileTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}>
+               : <MobileTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
+                requestProgress={requestProgress}>
                    <h5 className={'my-2'}>{formatDateInGreek(today)}</h5>
                    {isDateDisabled &&  <Badge bg="danger" className={'mx-auto my-3'}>Απενεργοποιημένη</Badge>}
                    {isDateDisabled && hasReservations && getWarningMessage()}
