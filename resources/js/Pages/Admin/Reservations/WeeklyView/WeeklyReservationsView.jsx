@@ -49,13 +49,13 @@ export function WeeklyReservationsView() {
             {innerWidth > 1200
                 ?
                 <LargeDevicesWeeklyView currentDate={currentDate} navigateWeeks={{goToPreviousWeek, goToNextWeek}}
-                                        filter={{reservationsFilter, setReservationsFilter}} isToday={isToday}
-                                        isLastWeek={isLastWeek}
-                                        propsReservations={reservations}>
+                filter={{reservationsFilter, setReservationsFilter}} isToday={isToday}
+                isLastWeek={isLastWeek} requestProgress={requestProgress}
+                propsReservations={reservations}>
                 </LargeDevicesWeeklyView>
                 :
                 <MobileWeeklyView currentDate={currentDate} filter={{reservationsFilter, setReservationsFilter}}
-                                  Reservations={[reservations, setReservations]}>
+                                  Reservations={[reservations, setReservations]} requestProgress={requestProgress}>
                     <Button onClick={goToPreviousWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}
                             disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
                     <Button onClick={goToNextWeek} variant={"outline-dark"} size={'sm'} className={'m-2 rounded-3'}

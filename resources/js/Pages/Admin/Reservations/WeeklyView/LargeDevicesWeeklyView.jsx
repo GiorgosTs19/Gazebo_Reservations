@@ -8,14 +8,16 @@ import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationType
 import {useRenderWeeklyReservations} from "../../../../CustomHooks/useRenderWeeklyReservations";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 
-export function LargeDevicesWeeklyView({currentDate, direction, filter, navigateWeeks, isToday, isLastWeek, propsReservations}) {
+export function LargeDevicesWeeklyView({currentDate, direction, filter, navigateWeeks,
+    isToday, isLastWeek, propsReservations, requestProgress}) {
     const oneWeekLater = new Date(currentDate);
     oneWeekLater.setDate(currentDate.getDate() + 7);
     const {reservationsFilter, setReservationsFilter} = filter,
-    [largeWeekDay,setLargeWeekDay] = useState([null,[]]),
+    [largeWeekDay,setLargeWeekDay] = useState({date:null, reservations: []
+}),
     {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
     Disabled_Days = useContext(DisabledDaysContext),
@@ -53,8 +55,17 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
 
     // When swapping Reservation Types, from dinner to bed reservations or vice versa, if there's a day viewing in "full-screen", clear it.
     useEffect(()=>{
-        if(largeWeekDay[0] !== null) {setLargeWeekDay([null,[]])}
+        if(largeWeekDay.date !== null)
+            setLargeWeekDay(prev=> {
+            return {...prev, date: null}
+        })
     },[reservationType]);
+    useEffect(()=>{
+        if(largeWeekDay.date !== null)
+            setLargeWeekDay((prev)=> {
+                return {...prev, reservations: propsReservations}
+            })
+    },[propsReservations]);
 
     // Get the days of the active week and the total number of reservations for that week.
     const [weekDays,totalWeekReservations] = generateWeekDays();
@@ -62,11 +73,11 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
     const {goToPreviousWeek, goToNextWeek} = navigateWeeks;
     const handlePrevWeek = () => {
         goToPreviousWeek();
-        setLargeWeekDay([null,[]]);
+        setLargeWeekDay({date: null,reservations: []});
     }
     const handleNextWeek = () => {
         goToNextWeek();
-        setLargeWeekDay([null,[]]);
+        setLargeWeekDay({date: null,reservations: []});
     }
 
     return (
@@ -83,7 +94,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
                 </FiltersBar>
                 <ListGroup horizontal={direction === 'horizontal'} gap={2}
                            className="week-days px-3 mx-3 overflow-y-auto h-100">
-                    {!largeWeekDay[0] ? weekDays : <LargeWeekDayDisplay reservations={largeWeekDay[1]} dateToDisplay={largeWeekDay[0]}
+                    {!largeWeekDay.date ? (requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : weekDays) : <LargeWeekDayDisplay reservations={largeWeekDay.reservations} dateToDisplay={largeWeekDay.date}
                     reservationsFilter={reservationsFilter} largeWeekDayHandling = {{largeWeekDay,setLargeWeekDay}}>
                     </LargeWeekDayDisplay>}
                 </ListGroup>

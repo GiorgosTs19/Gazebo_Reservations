@@ -7,8 +7,9 @@ import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 
-export function MobileTodayView({reservations_of_current_date,filter,children}) {
+export function MobileTodayView({reservations_of_current_date,filter,children, requestProgress}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         {reservationsFilter,setReservationsFilter} = filter,
         innerWidth = useContext(InnerWidthContext);
@@ -54,7 +55,7 @@ export function MobileTodayView({reservations_of_current_date,filter,children}) 
                                 direction={'horizontal'}
                                 className={'m-auto'}></FiltersBar>}
                 <Stack className={'my-3 px-4 text-center mx-auto overflow-y-auto '}>
-                    {reservationsToShow()}
+                    {requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : reservationsToShow()}
                 </Stack>
             </> : <ReservationLong></ReservationLong>}
         </div>

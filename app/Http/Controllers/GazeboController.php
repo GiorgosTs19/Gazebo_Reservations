@@ -114,7 +114,8 @@ class GazeboController extends Controller {
             ->when($request->exists('exceptCancelled'), function ($query) use ($input) {
             return $query->status('Cancelled', $input['exceptCancelled']);
         })->get());
-        return Redirect::back()->with(['availability_for_date'=> $Reservations, 'activeReservation'=>$request->exists('activeReservation') ? $input['activeReservation'] : '']);
+        return Redirect::back()->with(['availability_for_date' => $Reservations,
+            'activeReservation'=>$request->exists('activeReservation') ? $input['activeReservation'] : '']);
     }
 
     /**

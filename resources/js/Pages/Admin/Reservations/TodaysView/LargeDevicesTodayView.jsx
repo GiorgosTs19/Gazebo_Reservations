@@ -9,8 +9,9 @@ import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationType
 import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservationFormModal";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 
-export function LargeDevicesTodayView({reservations_of_current_date,filter,children}) {
+export function LargeDevicesTodayView({reservations_of_current_date,filter,children, requestProgress}) {
     const {reservationsFilter,setReservationsFilter} = filter,
     {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
@@ -59,7 +60,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
                 </FiltersBar>}
                 <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
                 <Stack className={'px-3 text-center d-flex overflow-y-auto h-75'} >
-                    {reservationsToShow()}
+                    {requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : reservationsToShow()}
                 </Stack>
             </Col>
             {reservationsExist && activeReservation !== null &&  <Col className={'h-100 d-flex flex-column overflow-y-auto text-center'} lg={5}>

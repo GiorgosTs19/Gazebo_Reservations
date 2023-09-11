@@ -6,17 +6,18 @@ import {useState} from "react";
 export function useGetReservationsForDate(date, reservationType, dependencies=[]) {
     const [requestProgress,setRequestProgress] = useState('Pending'),
     [reservations,setReservations] = useState([]);
-
+    // console.log(...dependencies)
     useEffect(()=>{
-        Inertia.get(route('Get_Reservations_For_Date'),{date:getFormattedDate(date,'-',1), type:reservationType},
+        // console.log('called');
+        Inertia.get(route('Get_Reservations_For_Date'),{date:getFormattedDate(date), type:reservationType},
             {onStart:()=>setRequestProgress('Pending'),
                 only:['availability_for_date'],
                 onFinish:()=>setRequestProgress('Finished'),
                 onSuccess:res=> {
-                    // console.log('res', res.props);
+                    console.log('res', res.props);
                     setReservations(res.props.availability_for_date);
                 }, preserveScroll:true, preserveState:true});
-    },[...dependencies]);
+    },dependencies);
 
     return [requestProgress, reservations ?? [], setReservations];
 }
