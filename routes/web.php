@@ -47,6 +47,7 @@ Route::get('/Gazebos/Generate',[\App\Http\Controllers\GazeboController::class,'c
 Route::get('/Initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
 Route::get('/Reserve/Availability',[\App\Http\Controllers\GazeboController::class,'checkRangeAvailability'])
     ->name('Get_Availability_For_Range');
+Route::get('/Availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
 Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
@@ -65,7 +66,6 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
     });
 
     Route::prefix('/Date')->group(function () {
-        Route::get('/Availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
         Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDate'])->name('Get_Reservations_For_Date');
     });
 
