@@ -202,7 +202,7 @@ ul .list-group-item.active {
 .react-calendar__tile--active {
     color:black;
     border-radius: 10px;
-    background-color: rgba(212, 215, 214, 0.62) !important;
+    background-color: rgba(125, 129, 127, 0.8) !important;
 }
 .react-calendar__tile.disabled {
     background-color: transparent !important;
