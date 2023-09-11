@@ -28,7 +28,7 @@ class HandleInertiaRequests extends Middleware
         }
         Inertia::version($hash);
 //        Inertia::version($version);
-        return parent::version($request);
+        return $hash;
     }
 
     /**
