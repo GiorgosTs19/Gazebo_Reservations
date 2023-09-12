@@ -90,7 +90,7 @@ class AdminController extends Controller {
         if($request->session()->exists('availability_for_date')) {
             return $request->session()->get('availability_for_date');
         }
-        return ReservationResource::collection(Reservation::date(date('y-m-d'))->type('Dinner')->get());
+        return [];
     }
 
     protected function retrieveAvailabilityForDateRange($request) {
