@@ -19,23 +19,23 @@ use Inertia\Inertia;
 
 class AdminController extends Controller {
     public function showAdminPanel(Request $request): \Inertia\Response {
-
-        return Inertia::render('Admin/AdminPanel',['Menus' => fn () => $this->getMenus(),
-            'Disabled_Days' => $this->getDisabledDays(),
-            'Gazebos' => fn () => $this->getGazebos(),
-            'Dinner_Settings' => fn () => $this->getDinnerSettings(),
-            'Bed_Settings' => fn () => $this->getBedSettings(),
-            'activeReservation' => Inertia::lazy( fn () =>$this->getActiveReservation($request)),
-            'availability_for_date' => fn () => $this->getAvailabilityForDate($request),
-            'search_result' => Inertia::lazy(fn ()=>$this->getSearchResult($request)),
-            'availability_for_date_range' => Inertia::lazy(fn ()=>$this->getAvailabilityForDateRange($request)),
-            'reservations_of_table' => Inertia::lazy(fn () => $this->getTableReservations($request)),
-            'disabled_days_for_table' => Inertia::lazy(fn () => $this->getTableDisabledDays($request)),
-            'Disabled_Dates_Reservations' => fn () => $this->getDateConflicts(),
-            'Disabled_Table_Reservations' => fn () => $this->getTableConflicts()]);
+        return Inertia::render('Admin/AdminPanel',['Menus' => fn () => $this->retrieveMenus(),
+            'Disabled_Days' => $this->retrieveDisabledDays(),
+            'Gazebos' => fn () => $this->retrieveGazebos(),
+            'Dinner_Settings' => fn () => $this->retrieveDinnerSettings(),
+            'Bed_Settings' => fn () => $this->retrieveBedSettings(),
+            'activeReservation' => Inertia::lazy( fn () =>$this->retrieveActiveReservation($request)),
+            'availability_for_date' => fn () => $this->retrieveAvailabilityForDate($request),
+            'current_day_reservations' => fn () => $this->retrieveCurrentDayReservations($request),
+            'search_result' => Inertia::lazy(fn ()=>$this->retrieveSearchResult($request)),
+            'availability_for_date_range' => Inertia::lazy(fn ()=>$this->retrieveAvailabilityForDateRange($request)),
+            'reservations_of_table' => Inertia::lazy(fn () => $this->retrieveTableReservations($request)),
+            'disabled_days_for_table' => Inertia::lazy(fn () => $this->retrieveTableDisabledDays($request)),
+            'Disabled_Dates_Reservations' => fn () => $this->retrieveDateConflicts(),
+            'Disabled_Table_Reservations' => fn () => $this->retrieveTableConflicts()]);
     }
 
-    private function getDisabledDays () {
+    private function retrieveDisabledDays () {
         // Retrieve all the days that were disabled by the admins, regardless of type
         $Disabled_Days = DisabledDay::afterToday()->order()->get();
         $DinnerDisabledDays = $Disabled_Days->filter(function ($item) {return $item->Type == 'Dinner';});
@@ -43,16 +43,19 @@ class AdminController extends Controller {
         return ['Dinner' => $DinnerDisabledDays,
             'Bed' => $BedDisabledDays];
 }
-    protected function getGazebos(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection {
+    protected function retrieveGazebos(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection {
         return GazeboResource::collection(Gazebo::all());
     }
-    protected function getDinnerSettings(): DinnerSettingsResource {
+
+    protected function retrieveDinnerSettings(): DinnerSettingsResource {
         return new DinnerSettingsResource(DinnerSetting::first());
     }
-    protected function getBedSettings(): BedSettingsResource {
+
+    protected function retrieveBedSettings(): BedSettingsResource {
         return new BedSettingsResource(BedSetting::first());
     }
-    protected function getMenus() {
+
+    protected function retrieveMenus() {
         // Retrieve all the menus, regardless of type
         $Dinner_Menus_DB = Menu::where('Type','Dinner')->get();
         // Filter out dinner and sea bed menus respectively.
@@ -67,14 +70,22 @@ class AdminController extends Controller {
         return ['Dinner'=>$Dinner_Menus,'Bed'=>$Bed_Menus];
     }
 
-    protected function getActiveReservation($request): ?ReservationResource {
+    protected function retrieveActiveReservation($request): ?ReservationResource {
         // True when a request that requires the activeReservation of that time to be returned is fired.
         if($request->session()->exists('activeReservation'))
            return new ReservationResource(Reservation::find($request->session()->get('activeReservation')));
         return null;
     }
 
-    protected function getAvailabilityForDate($request) {
+    protected function retrieveCurrentDayReservations($request) {
+        // True when a request that requires the activeReservation of that time to be returned is fired.
+        if($request->session()->exists('current_day_reservations'))
+           return $request->session()->get('current_day_reservations');
+        $type = $request->exists('type') ? $request->only('type')['type'] : 'Dinner';
+        return ReservationResource::collection(Reservation::date(date('y-m-d'))->type($type)->get());
+    }
+
+    protected function retrieveAvailabilityForDate($request) {
         // True when a request for a specific date's availability is fired.
         if($request->session()->exists('availability_for_date')) {
             return $request->session()->get('availability_for_date');
@@ -82,27 +93,35 @@ class AdminController extends Controller {
         return ReservationResource::collection(Reservation::date(date('y-m-d'))->type('Dinner')->get());
     }
 
-    protected function getAvailabilityForDateRange($request) {
+    protected function retrieveAvailabilityForDateRange($request) {
         // True when a request for a specific date range availability is fired.
         if($request->session()->exists('availability_for_date_range'))
             return $request->session()->get('availability_for_date_range');
         return null;
     }
-    protected function getSearchResult($request) {
+
+    protected function retrieveSearchResult($request) {
         // True when a search request is fired.
         if($request->session()->exists('search_result'))
             return $request->session()->get('search_result');
+        return [];
     }
-    protected function getTableReservations($request) {
+
+    protected function retrieveTableReservations($request) {
         // True when a request for a specific table's reservations is fired.
         if($request->session()->exists('reservations_of_table'))
             return $request->session()->get('reservations_of_table');
+        return [];
     }
-    protected function getTableDisabledDays($request) {
+
+    protected function retrieveTableDisabledDays($request) {
         if($request->session()->exists('Disabled_Days_For_Table'))
             return $request->session()->get('Disabled_Days_For_Table');
+        return [];
     }
-    protected function getTableConflicts() {
+
+    protected function retrieveTableConflicts(): array
+    {
         // Retrieve all the disabled tables ( only the date and their ids ) after today.
         $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
         $Conflicts = [];
@@ -113,7 +132,9 @@ class AdminController extends Controller {
         }
         return $Conflicts;
     }
-    protected function getDateConflicts() {
+
+    protected function retrieveDateConflicts(): array
+    {
         $Disabled_Days = DisabledDay::afterToday()->order()->get();
         $Conflicts = [];
         foreach ($Disabled_Days as $disabled_Day) {
