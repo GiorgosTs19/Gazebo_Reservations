@@ -24,15 +24,15 @@ class AdminController extends Controller {
             'Gazebos' => fn () => $this->retrieveGazebos(),
             'Dinner_Settings' => fn () => $this->retrieveDinnerSettings(),
             'Bed_Settings' => fn () => $this->retrieveBedSettings(),
-            'activeReservation' => Inertia::lazy( fn () =>$this->retrieveActiveReservation($request)),
-            'availability_for_date' => fn () => $this->retrieveAvailabilityForDate($request),
             'current_day_reservations' => fn () => $this->retrieveCurrentDayReservations($request),
+            'Disabled_Dates_Reservations' => fn () => $this->retrieveDateConflicts(),
+            'Disabled_Table_Reservations' => fn () => $this->retrieveTableConflicts(),
+            'activeReservation' => Inertia::lazy( fn () =>$this->retrieveActiveReservation($request)),
+            'availability_for_date' => Inertia::lazy(fn () => $this->retrieveAvailabilityForDate($request)),
             'search_result' => Inertia::lazy(fn ()=>$this->retrieveSearchResult($request)),
             'availability_for_date_range' => Inertia::lazy(fn ()=>$this->retrieveAvailabilityForDateRange($request)),
             'reservations_of_table' => Inertia::lazy(fn () => $this->retrieveTableReservations($request)),
-            'disabled_days_for_table' => Inertia::lazy(fn () => $this->retrieveTableDisabledDays($request)),
-            'Disabled_Dates_Reservations' => fn () => $this->retrieveDateConflicts(),
-            'Disabled_Table_Reservations' => fn () => $this->retrieveTableConflicts()]);
+            'disabled_days_for_table' => Inertia::lazy(fn () => $this->retrieveTableDisabledDays($request))]);
     }
 
     private function retrieveDisabledDays () {

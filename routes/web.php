@@ -52,7 +52,7 @@ Route::get('/book/availability',[\App\Http\Controllers\GazeboController::class,'
 Route::get('/availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
 
 
-Route::middleware('auth')->prefix('/Admin')->group(function () {
+Route::middleware('auth')->prefix('/Administrator')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
 
