@@ -6,11 +6,11 @@ export function RoomNumberFields({singleGuest = false}) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     handlePRNChange = (e)=>{
         // Handles the Booking's Primary Room Number field change.
-        setBookingDetails({...bookingDetails,primary_room:e.target.value});
+        setBookingDetails(prev=>{return{...prev,primary_room:e.target.value}});
     },
     handleSRNChange = (e)=>{
         // Handles the Booking's Secondary Room Number field change.
-        setBookingDetails({...bookingDetails,secondary_room:e.target.value});
+        setBookingDetails(prev=>{return{...prev,secondary_room:e.target.value}});
     };
     const checkShowRequirements = ()=>{
         return bookingDetails.email.length>0 && bookingDetails.phone_number.length>0 && checkAttendees(bookingDetails);

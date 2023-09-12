@@ -438,3 +438,17 @@ video {
 .content-card .btn {
     background-color: rgba(255, 255, 255, 0.75) !important;
 }
+
+/* WebKit (Safari, Chrome, Opera) */
+::-webkit-scrollbar {
+    width: 1px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent; /* Change the background color here */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; /* Change the thumb color here */
+    border-radius: 6px;
+}

@@ -20,18 +20,19 @@ export function ReservationLong({setReservations = ()=>{}}) {
     {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
     const Tables = useContext(GazebosContext),
     {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
-    Name = activeReservation?.Name.First + ' ' + activeReservation?.Name.Last,
-    ContactDetails = activeReservation?.Contact,
-    Rooms = activeReservation?.Rooms,
-    Attendees = activeReservation?.Attendees,
+    name = activeReservation?.Name.First + ' ' + activeReservation?.Name.Last,
+    contactDetails = activeReservation?.Contact,
+    rooms = activeReservation?.Rooms,
+    attendees = activeReservation?.Attendees,
+    attendeesExist = attendees.length > 0,
     Gazebo = getTableAA(activeReservation?.Gazebo,Tables),
-    Menus = activeReservation?.Menus,
-    Notes = activeReservation?.Notes,
-    Type = activeReservation.Type,
-    MenuCatalog = useContext(MenuContext),
-    Placed_At = activeReservation.Placed_At,
-    Updated_At = activeReservation.Updated_At,
-    hasChanges = Placed_At !== Updated_At,
+    menus = activeReservation?.Menus,
+    notes = activeReservation?.Notes,
+    type = activeReservation.Type,
+    menuCatalog = useContext(MenuContext),
+    placedAt = activeReservation.Placed_At,
+    updatedAt = activeReservation.Updated_At,
+    hasChanges = placedAt !== updatedAt,
     reservationIsCancelled = activeReservation.Status === 'Cancelled',
     {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     [editing, setEditing] = useState(false),
@@ -53,35 +54,35 @@ export function ReservationLong({setReservations = ()=>{}}) {
     const reservationTab = <>
         {(innerWidth < 992 || innerWidth > 992 && activeReservationsView === 'Search' || isInResolveConflictTab) &&
             <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
-        <ReservationDetails activeReservation={activeReservation} Attendees={Attendees} handleActiveReservation={setActiveReservation}
-        editReservation={{editing, setEditing}}>
+        <ReservationDetails activeReservation={activeReservation} Attendees={attendees} handleActiveReservation={setActiveReservation}
+        editReservation={{editing, setEditing}} isConflicted={isConflicted} conflictMessage={conflictMessage}>
         </ReservationDetails>
-        <Row className={'mt-4 mt-lg-1 '}>
-            <Col sm={12} md={6} className={innerWidth > 992 ? 'border-end border-dark' : ''}>
-                <section className={'my-2'}>
+        <Row className={'mt-2 mt-lg-1 '}>
+            <Col sm={12} md={6} className={'d-flex flex-column ' + (innerWidth > 992 ? 'border-end border-dark' : '')}>
+                <section className={`mx-auto ${attendeesExist ? 'my-2' : 'my-auto'}`}>
                     <h5 className={'user-select-none '}>Στοιχεία Επικοινωνίας</h5>
-                    <p className={'info-text-lg mx-auto my-2'}>{Name}</p>
-                    <p className={'info-text-lg mx-auto my-2'}>{ContactDetails?.Email}</p>
-                    <p className={'info-text-lg mx-auto my-2'}>{ContactDetails?.Phone}</p>
-                    <a className={'m-auto w-fit-content btn'} href={'mailto:' + ContactDetails.Email}><MailSVG height={32} width={32}/></a>
+                    <p className={'info-text-lg mx-auto my-2'}>{name}</p>
+                    <p className={'info-text-lg mx-auto my-2'}>{contactDetails?.Email}</p>
+                    <p className={'info-text-lg mx-auto my-2'}>{contactDetails?.Phone}</p>
+                    <a className={'m-auto w-fit-content btn'} href={'mailto:' + contactDetails.Email}><MailSVG height={32} width={32}/></a>
                 </section>
-                <div className={'p-2 my-3'}>
+                {attendeesExist && <div className={'p-2 my-3'}>
                     <h5 className={'user-select-none'}>Συνοδοί</h5>
                     <p className={'user-select-none'}>
-                        {Attendees.length === 0 ? <b className={'h5'}>-</b> :
-                            Attendees?.map((attendee,index)=>{
-                                return <span className={'info-text-lg'} key={index}>{index>0 && ', '}{attendee.Name}</span>
-                            })}
+                        {attendees?.map((attendee, index) => {
+                            return <span className={'info-text-lg'}
+                                         key={index}>{index > 0 && ', '}{attendee.Name}</span>
+                        })}
                     </p>
-                </div>
+                </div>}
             </Col>
             <Col sm={12} md={6} className={'d-flex flex-column'}>
             <Row>
                 <Col>
                     <div className={'p-2 my-auto user-select-none'}>
-                        <h5>{Rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
-                        <p>
-                            {Rooms?.map((room,index)=>{
+                        <h5>{rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
+                        <p className={'mb-1'}>
+                            {rooms?.map((room,index)=>{
                                 return <span key={index} className={'user-select-none'}>{index>0 && ', '}{room.Room_Number}</span>
                             })}
                         </p>
@@ -90,20 +91,20 @@ export function ReservationLong({setReservations = ()=>{}}) {
                 <Col>
                     <div className={'p-2 user-select-none'}>
                         <h5>Gazebo</h5>
-                        <p>{Gazebo}</p>
+                        <p className={'mb-1'}>{Gazebo}</p>
                     </div>
                 </Col>
             </Row>
             <div className={'p-2 my-auto'}>
                 <h5 className={'user-select-none'}>Menu</h5>
-                <SelectedMenus Menus={Menus} Type={Type} MenuCatalog={Type === 'Dinner' ? MenuCatalog.Dinner : MenuCatalog.Bed}/>
+                <SelectedMenus Menus={menus} Type={type} MenuCatalog={type === 'Dinner' ? menuCatalog.Dinner : menuCatalog.Bed}/>
             </div>
             </Col>
-            {Notes !== null && <div className={'p-2 my-2 user-select-none text-center mx-auto w-100'}>
+            {notes !== null && <div className={'p-2 my-2 user-select-none text-center mx-auto w-100'}>
                 <h5>Σημειώσεις</h5>
-                <p>{Notes}</p>
+                <p>{notes}</p>
             </div>}
-            {hasChanges &&<p className={'p-1 my-1 user-select-none info-text'}><i>{`${reservationIsCancelled ? 'Ακυρώθηκε' : 'Τελευταία αλλαγή'} : ${getDateTime(Updated_At)}`}</i></p>}
+            {hasChanges &&<p className={'p-1 my-1 user-select-none info-text'}><i>{`${reservationIsCancelled ? 'Ακυρώθηκε' : 'Τελευταία αλλαγή'} : ${getDateTime(updatedAt)}`}</i></p>}
         </Row>
     </>
 
@@ -113,8 +114,7 @@ export function ReservationLong({setReservations = ()=>{}}) {
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-3 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
                 onClick={()=>setEditing(!editing)}>{!editing ? 'Επεξεργασία' : 'Κράτηση'}</Button>}
             <div className={`text-center box_shadow rounded-3 border p-3 m-auto h-fit-content ${isInResolveConflictTab ? ' mw-550px' : 'w-100 my-xl-auto '}`}>
-                {!editing ? reservationTab :  <ReservationEditModal Reservation={activeReservation} Status={activeReservation.Status}
-                   setReservations={setReservations}></ReservationEditModal>}
+                {!editing ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}></ReservationEditModal>}
             </div>
         </div>
     )

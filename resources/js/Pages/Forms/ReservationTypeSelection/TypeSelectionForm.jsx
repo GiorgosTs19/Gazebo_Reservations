@@ -17,7 +17,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
     {progress, setProgress} = useContext(FormProgressContext),
     handleImageClick = (value) => {
         if(progress === 'Type') {
-            setBookingDetails({...bookingDetails,type:value,more_rooms:false});
+            setBookingDetails(prev=>{return{...prev,type:value,more_rooms:false}});
             switch (value) {
                 case 'Bed' : {
                     gsap.fromTo('#sun-img', 2, {rotation:0, transformOrigin:"50% 50%"},{rotation:180, transformOrigin:"50% 50%"});
@@ -66,21 +66,21 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
     },[showCalendar]);
 
     useUpdateEffect(()=>{
-        setBookingDetails({...bookingDetails,number_of_people:0,date:'',more_rooms:false,table:'',
-            primary_menu:{Main:'',Dessert:''}, secondary_menu:{Main:'',Dessert:''}});
+        setBookingDetails(prev=>{return{...prev,number_of_people:0,date:'',more_rooms:false,table:'',
+            primary_menu:{Main:'',Dessert:''}, secondary_menu:{Main:'',Dessert:''}}});
         setShowCalendar(false);
         setProgress('Type');
     },[bookingDetails.type]);
 
     useEffect(()=>{
         if(bookingDetails.table !== '')
-            setBookingDetails({...bookingDetails,table:''});
+            setBookingDetails(prev=>{return {...prev,table:''}});
     },[bookingDetails.date]);
 
     useEffect(()=>{
         if(progress !== 'Type' && progress !=='Table'){
             setProgress('Details');
-            setBookingDetails({...bookingDetails,more_rooms:false,primary_room:'',secondary_room:''});
+            setBookingDetails(prev=>{return {...prev,more_rooms:false,primary_room:'',secondary_room:''}});
         }
     },[bookingDetails.number_of_people]);
 
@@ -175,52 +175,3 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
         </div>
     );
 });
-
-{/*<Col lg={4} className={'h-100'}>*/}
-{/*    <div className={'h-100 d-flex'}>*/}
-{/*        <Image src={'Images/Icons/calendar.png'} className={'m-auto'}></Image>*/}
-{/*    </div>*/}
-{/*</Col>*/}
-{/*<Col md={6} sm={12} className={'d-flex p-3 p-lg-5 ' + (innerWidth > 768 ? 'border-end' : 'border-bottom')}>*/}
-{/*    <Stack>*/}
-{/*        <div className={'p-3 p-lg-5 bg-night mt-4 rounded-4'}>*/}
-{/*            <Card.Img className={"d-block w-75 mx-auto shadow-sm gazepo-type-img rounded-5 img-fluid"}*/}
-{/*                src="Images/GazeboAtNight.jpg" alt=""*/}
-{/*                onClick={()=>handleImageClick('Dinner')} style={{cursor:"pointer"}}>*/}
-{/*            </Card.Img>*/}
-{/*        </div>*/}
-{/*        {*/}
-{/*            isTouchable ?*/}
-{/*                <Button size={'sm'} onClick={()=>handleImageClick('Dinner')}*/}
-{/*                        variant={'outline-secondary'} style={{width:'fit-content'}}*/}
-{/*                        className={'mx-auto rounded-5 shadow-sm px-4 reservation-button mt-3'}>*/}
-{/*                    Book Seaside Dinner*/}
-{/*                </Button>*/}
-{/*                :*/}
-{/*                <h4>Book Seaside Dinner</h4>*/}
-{/*        }*/}
-{/*    </Stack>*/}
-{/*</Col>*/}
-{/*<Col md={6} sm={12} className={'d-flex p-3 p-lg-5'}>*/}
-{/*    <Stack >*/}
-{/*        <div className={'p-3 p-lg-5 bg-day mt-4 rounded-4'}>*/}
-{/*            <Card.Img className={"d-block w-75 mx-auto shadow-sm gazepo-type-img rounded-5 img-fluid"}*/}
-{/*                src="Images/GazeboAtNight.jpg" alt=""*/}
-{/*                onClick={()=>handleImageClick('Bed')} style={{cursor:"pointer"}}>*/}
-{/*            </Card.Img>*/}
-{/*        </div>*/}
-{/*        {*/}
-{/*            isTouchable ?*/}
-{/*                <Button size={'sm'} onClick={()=>handleImageClick('Bed')}*/}
-{/*                        variant={'outline-secondary'} style={{width:'fit-content'}}*/}
-{/*                        className={'mx-auto rounded-5 shadow-sm px-4 mt-3'}>*/}
-{/*                    Book a Sea Bed*/}
-{/*                </Button>*/}
-{/*                :*/}
-{/*                <h4>Book a Sea Bed</h4>*/}
-{/*        }*/}
-{/*    </Stack>*/}
-{/*</Col>*/}
-{/*//     </Row>*/}
-{/*// </div>*/}
-{/*// )*/}

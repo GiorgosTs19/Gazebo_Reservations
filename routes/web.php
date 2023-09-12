@@ -35,22 +35,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', [\App\Http\Controllers\GazeboController::class,
-    'show']);
-
-Route::get('/book', [\App\Http\Controllers\GazeboController::class,
-    'show'])->name('Show.Gazebo.Reservation.Form');
-
-Route::post('/reservation/new',[\App\Http\Controllers\ReservationController::class,'create'])->name('Create_Reservation');
 //Route::get('/Review/{confirmation_number}',[\App\Http\Controllers\ReviewController::class,'show']);
 Route::get('/gazebos/generate',[\App\Http\Controllers\GazeboController::class,'create']);
 Route::get('/initialize', [\App\Http\Controllers\SettingsController::class, 'initializeSettings'])->name('Initialize_Settings');
 
 
-Route::get('/book/availability',[\App\Http\Controllers\GazeboController::class,'checkRangeAvailability'])
-    ->name('Get_Availability_For_Range');
-Route::get('/availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
+Route::get('/', [\App\Http\Controllers\GazeboController::class, 'show']);
+Route::prefix('/book')->group(function () {
+    Route::get('/', [\App\Http\Controllers\GazeboController::class, 'show'])->name('Show.Gazebo.Reservation.Form');
+    Route::post('/new',[\App\Http\Controllers\ReservationController::class,'create'])->name('Create_Reservation');
+    Route::get('/rangeAvailability',[\App\Http\Controllers\GazeboController::class,'checkRangeAvailability'])->name('Get_Availability_For_Range');
+    Route::get('/availability',[\App\Http\Controllers\GazeboController::class,'getAvailabilityForDate'])->name('Get_Availability_For_Date');
 
+    Route::prefix('/menus')->group(function () {
+        Route::get('/items', [\App\Http\Controllers\MenuController::class,'Items'])->name('Menu_Items');
+    });
+});
 
 Route::middleware('auth')->prefix('/Administrator')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
@@ -93,7 +93,6 @@ Route::middleware('auth')->prefix('/Administrator')->group(function () {
         Route::post('/store', [\App\Http\Controllers\MenuController::class, 'create'])->name('Create_Menu');
         Route::delete('/delete', [\App\Http\Controllers\MenuController::class, 'destroy'])->name('Delete_Menu');
         Route::patch('/edit', [\App\Http\Controllers\MenuController::class, 'edit'])->name('Edit_Menu');
-        Route::get('/items', [\App\Http\Controllers\MenuController::class,'Items'])->name('Menu_Items');
     });
 
     Route::prefix('/dateRange')->group(function() {

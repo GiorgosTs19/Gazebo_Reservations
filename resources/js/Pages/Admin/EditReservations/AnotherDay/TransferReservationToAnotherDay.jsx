@@ -15,7 +15,7 @@ import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 
 
-export function TransferReservationToAnotherDay() {
+export function TransferReservationToAnotherDay({edit}) {
     const [selectedDateAvailability,setSelectedDateAvailability] = useState(null),
     Gazebos = useContext(GazebosContext),
     {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
@@ -29,7 +29,8 @@ export function TransferReservationToAnotherDay() {
     const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     [showCalendar, setShowCalendar] = useState(true),
     [activeRange, setReservations] = useContext(ActiveRangeContext),
-    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext),
+    {editing, setEditing} = edit;
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     // Handles the selection of a table from the list, as well as the scrolling to the appropriate height
     // of the list, to match the currently selected table
@@ -174,6 +175,7 @@ export function TransferReservationToAnotherDay() {
             {preserveScroll:true,only:[getParameter(activeRange), 'activeReservation',conflictType === 'Date' ? 'Disabled_Dates_Reservations' : 'Disabled_Table_Reservations'],
             onSuccess:(res)=> {
                 // console.log('res', res)
+                setEditing(false);
                 if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                     setResolvingConflict([false, '']);
                 if(activeReservationsView !== 'Today')

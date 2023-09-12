@@ -19,7 +19,7 @@ class MenuResource extends JsonResource {
             'Name'=>$this->Name,
             'Type'=>$this->Type,
             'Category'=>$this->Category,
-            'Items'=>$user ? MenuItemResource::collection($this->Items()) : [],
+            'Items'=>$user ? MenuItemResource::collection($this->Items()): [],
         ];
     }
 }

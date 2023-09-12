@@ -8,7 +8,7 @@ export function AttendeesNamesFields() {
         // Handles the Booking's bookingDetails.attendees first name fields change.
         const updatedAttendees = bookingDetails.attendees;
         updatedAttendees[index] = e.target.value;
-        setBookingDetails({...bookingDetails,attendees:updatedAttendees});
+        setBookingDetails(prev=>{return {...prev,attendees:updatedAttendees}});
     }
     const checkShowRequirements = ()=>{
         return bookingDetails.email.length > 0 && bookingDetails.phone_number.length>0 && bookingDetails.number_of_people > 1;

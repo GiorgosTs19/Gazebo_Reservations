@@ -10,7 +10,7 @@ import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
 import {CancelReservation} from "../../EditReservations/CancelReservation/CancelReservation";
 
-export function ReservationEditingOptions({conflictType = null}) {
+export function ReservationEditingOptions({conflictType = null, edit}) {
     const {content,setContent} = useContext(EditModalContentContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     [availableTables, setAvailableTables] = useState([]),
@@ -32,17 +32,17 @@ export function ReservationEditingOptions({conflictType = null}) {
     },[]);
 
     const handleClickTransfer = () => {
-        setContent(<TransferReservationToAnotherDay/>);
+        setContent(<TransferReservationToAnotherDay edit={edit}/>);
         setModalTitle('Αλλαγή ημερομηνίας της κράτησης')
     };
 
     const handleClickChangeTable = () => {
-        setContent(<ChangeReservationTableSameDay/>);
+        setContent(<ChangeReservationTableSameDay edit={edit}/>);
         setModalTitle('Αλλαγή Gazebo την ίδια μέρα')
     };
 
     const handleClickCancelReservation = () => {
-        setContent(<CancelReservation/>);
+        setContent(<CancelReservation edit={edit}/>);
         setModalTitle('');
     };
 
@@ -51,7 +51,7 @@ export function ReservationEditingOptions({conflictType = null}) {
             <Stack className={'my-4 '} gap={5}>
                 <section>
                     <p className={'info-text-lg my-auto'}>
-                        Θα γίνει προσπάθεια ανάθεσης του ίδιου Gazebo αυτόματα από το σύστημα.
+                        Θα γίνει προσπάθεια ανάθεσης του ίδιου Gazebo αυτόματα
                     </p>
                     <Button variant={'secondary'} className={'mt-3 mx-auto'} onClick={handleClickTransfer}>Αλλαγή Ημερομηνίας</Button>
                 </section>

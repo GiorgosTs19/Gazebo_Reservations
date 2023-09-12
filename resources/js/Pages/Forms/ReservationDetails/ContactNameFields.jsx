@@ -5,11 +5,15 @@ import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 export function ContactNameFields() {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     handleLNChange = (e)=> {
-        setBookingDetails({...bookingDetails,last_name:e.target.value});
+        setBookingDetails(prev=> {
+            return {...prev, last_name: e.target.value}
+        });
     },
     handleFNChange = (e)=>{
         // Handles the Booking's First Name field change.
-        setBookingDetails({...bookingDetails,first_name:e.target.value});
+        setBookingDetails(prev=> {
+            return {...prev, first_name: e.target.value}
+        });
     };
 
     return (

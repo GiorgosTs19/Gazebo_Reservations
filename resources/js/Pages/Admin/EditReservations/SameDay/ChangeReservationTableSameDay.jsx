@@ -10,13 +10,14 @@ import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext"
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
-export function ChangeReservationTableSameDay() {
+export function ChangeReservationTableSameDay({edit}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         Gazebos = useContext(GazebosContext),
         {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
-    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext),
+    {editing, setEditing} = edit;
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id),
     [activeRange, setReservations] = useContext(ActiveRangeContext);
     const handleSelectTable = (table,index) => {
@@ -114,6 +115,7 @@ export function ChangeReservationTableSameDay() {
             {preserveScroll:true,only: [getParameter(activeRange),
                 'activeReservation', isReservationInConflict ? 'Disabled_Table_Reservations' : '']
             ,onSuccess:(res)=> {
+                setEditing(false);
                 if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                     setResolvingConflict([false, '']);
                 setActiveReservation(res.props.activeReservation);
