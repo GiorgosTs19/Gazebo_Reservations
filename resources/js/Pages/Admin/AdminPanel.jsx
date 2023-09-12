@@ -85,7 +85,7 @@ export default function AdminPanel(props) {
         setActiveTabKey(k);
     }
 
-    const ReservationsContent = <ReservationsPanel todayReservations={props.availability_for_date}></ReservationsPanel>,
+    const ReservationsContent = <ReservationsPanel todayReservations={props.current_day_reservations}></ReservationsPanel>,
         MenuContent = <MenuAdminPanel Menus={Menus} activeKey={{activeMenusTabKey,setActiveMenusTabKey}}></MenuAdminPanel>,
         SettingsContent = <SettingsPanel bedSettings={Bed_Settings} dinnerSettings={Dinner_Settings}></SettingsPanel>,
     typeAndViewSelectionPanel = <Row className={'p-0 w-100 d-flex flex-row mx-0 border-bottom'}>

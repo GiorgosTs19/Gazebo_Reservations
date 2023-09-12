@@ -10,12 +10,12 @@ import {useGetReservationsForDate} from "../../../../CustomHooks/useGetReservati
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
-export function TodayView() {
+export function TodayView({todayReservations}) {
     const today = new Date(),
     innerWidth = useContext(InnerWidthContext);
     const [reservationsFilter,setReservationsFilter] = useState('All'),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
-    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(reservationType, [reservationType]);
+    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(todayReservations, reservationType, [reservationType]);
     const Disabled_Days = useContext(DisabledDaysContext);
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days),
         hasReservations = reservations?.length > 0;

@@ -11,7 +11,7 @@ import {TodayView} from "./TodaysView/TodayView";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 import {SearchView} from "./SearchView/SearchView";
 
-export function ReservationsPanel() {
+export function ReservationsPanel({todayReservations}) {
     const innerWidth = useContext(InnerWidthContext),
     {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
     [isMobile,setIsMobile] = useState(innerWidth < 992),
@@ -37,7 +37,7 @@ export function ReservationsPanel() {
 
     return (
         <>
-            {activeReservationsView === 'Today' && <TodayView></TodayView>}
+            {activeReservationsView === 'Today' && <TodayView todayReservations={todayReservations}></TodayView>}
             {activeReservationsView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
             {activeReservationsView === 'Monthly' && <MonthlyView></MonthlyView>}
             {activeReservationsView === 'Search' && <SearchView></SearchView>}

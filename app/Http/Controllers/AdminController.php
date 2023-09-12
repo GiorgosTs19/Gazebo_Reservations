@@ -27,7 +27,7 @@ class AdminController extends Controller {
             'current_day_reservations' => fn () => $this->retrieveCurrentDayReservations($request),
             'Disabled_Dates_Reservations' => fn () => $this->retrieveDateConflicts(),
             'Disabled_Table_Reservations' => fn () => $this->retrieveTableConflicts(),
-            'activeReservation' => Inertia::lazy( fn () =>$this->retrieveActiveReservation($request)),
+            'activeReservation' => Inertia::lazy(fn () =>$this->retrieveActiveReservation($request)),
             'availability_for_date' => Inertia::lazy(fn () => $this->retrieveAvailabilityForDate($request)),
             'search_result' => Inertia::lazy(fn ()=>$this->retrieveSearchResult($request)),
             'availability_for_date_range' => Inertia::lazy(fn ()=>$this->retrieveAvailabilityForDateRange($request)),
@@ -81,6 +81,7 @@ class AdminController extends Controller {
         // True when a request that requires the activeReservation of that time to be returned is fired.
         if($request->session()->exists('current_day_reservations'))
            return $request->session()->get('current_day_reservations');
+
         $type = $request->exists('type') ? $request->only('type')['type'] : 'Dinner';
         return ReservationResource::collection(Reservation::date(date('y-m-d'))->type($type)->get());
     }
@@ -90,7 +91,6 @@ class AdminController extends Controller {
         if($request->session()->exists('availability_for_date')) {
             return $request->session()->get('availability_for_date');
         }
-        return [];
     }
 
     protected function retrieveAvailabilityForDateRange($request) {
