@@ -62,14 +62,17 @@ class GazeboController extends Controller {
             'Disabled_Days'=>$Disabled_Days,
             'Menu_Items'=>Inertia::lazy(fn () => $this->getMenuItems($request))]);
     }
+
     protected function getSessionAvailabilityForRange(Request $request) {
         if($request->session()->exists('availability_for_date_range'))
             return $request->session()->get('availability_for_date_range');
     }
+
     protected function getSessionAvailabilityForDate(Request $request) {
         if($request->session()->exists('availability_for_date'))
             return $request->session()->get('availability_for_date');
     }
+
     protected function getMenuItems($request) {
         if($request->session()->exists('Menu_Items'))
             return $request->session()->get('Menu_Items');
@@ -116,6 +119,11 @@ class GazeboController extends Controller {
         })->get());
         return Redirect::back()->with(['availability_for_date' => $Reservations,
             'activeReservation'=>$request->exists('activeReservation') ? $input['activeReservation'] : '']);
+    }
+
+    protected function getCurrenDayReservations(Request $request) {
+        $type = $request->only('type')['type'];
+        return Redirect::back()->with(['current_day_reservations'=>ReservationResource::collection(Reservation::date(date('y-m-d'))->type($type)->get())]);
     }
 
     /**

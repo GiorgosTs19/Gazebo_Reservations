@@ -15,11 +15,8 @@ export function TodayView() {
     innerWidth = useContext(InnerWidthContext);
     const [reservationsFilter,setReservationsFilter] = useState('All'),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
-    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(today, reservationType, [reservationType]);
-    // console.log(requestProgress,reservations)
-    console.log(reservations)
+    const [requestProgress, reservations, setReservations] = useGetReservationsForDate(reservationType, [reservationType]);
     const Disabled_Days = useContext(DisabledDaysContext);
-    // console.log(1)
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days),
         hasReservations = reservations?.length > 0;
 

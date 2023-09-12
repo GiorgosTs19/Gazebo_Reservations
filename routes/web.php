@@ -57,11 +57,13 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         'showAdminPanel'])->name('ShowAdminPanel');
 
     Route::prefix('/Settings')->group(function () {
-
-
         Route::prefix('/Dinner')->group(function () {
             Route::post('/Store', [\App\Http\Controllers\SettingsController::class, 'saveDinnerSettings'])->name('Save_Dinner_Settings');
         });
+    });
+
+    Route::prefix('/CurrentDay')->group(function () {
+        Route::get('/Reservations',[\App\Http\Controllers\GazeboController::class,'getCurrenDayReservations'])->name('Get_Reservations_Current_Day');
     });
 
     Route::prefix('/Gazebo')->group(function () {
