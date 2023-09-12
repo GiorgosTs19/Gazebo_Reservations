@@ -113,7 +113,7 @@ export function ReservationLong({setReservations = ()=>{}}) {
             {(activeReservation.Status === 'Pending' ? isConflicted : activeReservation.Status !== 'Cancelled') &&
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-3 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
                 onClick={()=>setEditing(!editing)}>{!editing ? 'Επεξεργασία' : 'Κράτηση'}</Button>}
-            <div className={`text-center box_shadow rounded-3 border p-3 m-auto h-fit-content ${isInResolveConflictTab ? ' mw-550px' : 'w-100 my-xl-auto '}`}>
+            <div className={`text-center box_shadow rounded-3 border ${editing ? 'px-1 py-3' : 'p-3'} m-auto h-fit-content ${isInResolveConflictTab ? ' mw-550px' : 'w-100 my-xl-auto '}`}>
                 {!editing ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}></ReservationEditModal>}
             </div>
         </div>
