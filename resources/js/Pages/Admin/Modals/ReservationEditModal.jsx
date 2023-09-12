@@ -20,7 +20,7 @@ export function ReservationEditModal({conflictType, edit}) {
                                 {modalTitle}
                             </Card.Title>
                         </Card.Header>}
-                        <Card.Body className={'h-100'}>
+                        <Card.Body className={`h-100 px-1`}>
                             {content !== 'Options' && <LeftArrowSVG onClick={handleBackToOptions} className={'mx-auto mb-3 cursor-pointer'}/>}
                             {content === 'Options' &&
                                 <ReservationEditingOptions conflictType={conflictType} edit={edit}>

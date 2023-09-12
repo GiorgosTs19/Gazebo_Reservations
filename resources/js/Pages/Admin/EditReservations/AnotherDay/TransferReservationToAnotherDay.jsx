@@ -208,7 +208,6 @@ export function TransferReservationToAnotherDay({edit}) {
                         <ChangeReservationDateCalendar
                             SelectedDateAvailability={{selectedDateAvailability, setSelectedDateAvailability}}
                             className={'h-100'}>
-
                         </ChangeReservationDateCalendar>
                     </>: <>
                         <span className={'fw-bold'}>Ημερολόγιο</span>

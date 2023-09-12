@@ -12,7 +12,7 @@ export function MobileActiveReservationOffCanvas() {
             <Offcanvas.Header className={'py-0'}>
                 <Offcanvas.Title>{reservationIsNotNull ? activeReservation.Confimation_Number : ''}</Offcanvas.Title>
             </Offcanvas.Header>
-            <Offcanvas.Body className={'d-flex'}>
+            <Offcanvas.Body className={'d-flex px-2'}>
                 {reservationIsNotNull && <ReservationLong/>}
             </Offcanvas.Body>
         </Offcanvas>
