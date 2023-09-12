@@ -15,7 +15,7 @@ export function useGetReservationsForSelectedDate (selectedDate) {
                 preserveScroll:true,
                 preserveState:true,
                 onSuccess:(res)=>{
-                    console.log('Response From Single Date',res.props)
+                    // console.log('Response From Single Date',res.props)
                     reservationsToReturn = res.props.availability_for_date ;
                 }
             });
@@ -27,7 +27,7 @@ export function useGetReservationsForSelectedDate (selectedDate) {
                     preserveScroll:true,
                     preserveState:true,
                     onSuccess:(res)=>{
-                        console.log('Response From Range',res.props)
+                        // console.log('Response From Range',res.props)
                         reservationsToReturn = res.props.availability_for_date_range;
                     }
                 });

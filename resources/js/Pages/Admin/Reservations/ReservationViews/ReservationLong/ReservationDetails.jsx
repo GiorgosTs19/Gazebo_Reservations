@@ -8,19 +8,18 @@ import {handleChangeReservationStatus} from "../../../../../Inertia_Requests/Adm
 import {useContext} from "react";
 import {ActiveRangeContext} from "../../../Contexts/ActiveRangeContext";
 
-export function ReservationDetails({activeReservation, Attendees, handleActiveReservation}) {
+export function ReservationDetails({activeReservation, Attendees, handleActiveReservation,isConflicted, conflictMessage}) {
     const Placed_At = activeReservation.Placed_At,
     Confirmation_Number = activeReservation?.Confirmation_Number,
     Date = changeDateFormat(activeReservation.Date, '-', '-',true);
     const status = useGetReservationStatusText(activeReservation.Status);
-    const [isConflicted,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     const showActions = activeReservation.Status === 'Pending' && !isConflicted,
     [activeRange, setReservations] = useContext(ActiveRangeContext),
     reservationIsCancelled = activeReservation.Status === 'Cancelled';
     return (
         <Row className={'my-3 mb-lg-1 mt-xxl-2'}>
             <h4 className={'border-bottom pb-2 mb-2'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
-            <Col xs={12} md={6} lg={12} xxl={6} className={'d-flex flex-column my-3 my-lg-0'}>
+            <Col xs={12} md={6} lg={12} xxl={6} className={'d-flex flex-column mt-3 mb-1 my-lg-0'}>
                 <Badge pill bg={useGetStatusColor(activeReservation.Status)} className={`${showActions ? 'my-2 mx-auto' : 'm-auto'} 1 py-2 px-3 box_shadow user-select-none`}>
                     <h5 className={'m-0'}>{status}</h5>
                 </Badge>
@@ -42,11 +41,10 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
                     </section>}
                 {reservationIsCancelled && <p className={'p-1 my-1 user-select-none info-text'}><i>Το Gazebo, δεν είναι πλέον δεσμευμένο</i></p>}
             </Col>
-            <Col xs={12} md={6} lg={12} xxl={6} className={'my-3 my-xxl-0 d-flex'}>
+            <Col xs={12} md={6} lg={12} xxl={6} className={'my-1 my-xxl-0 d-flex'}>
                 <section className={'w-fit-content m-auto p-2 w-100'}>
                     <p className={'p-1 my-1 user-select-none'}><i><b>{activeReservation.Type === 'Dinner' ? 'Δείπνο' : 'Ξαπλώστρες'}</b> στις {Date} </i>
                         για <b>{Attendees.length + 1}</b> {Attendees.length === 0 ? 'άτομο' : 'άτομα'}</p>
-                    {/*<p className={'p-1 my-1 user-select-none'}></p>*/}
                     <p className={'p-1 my-1 user-select-none info-text'}><i>Καταχωρήθηκε : {getDateTime(Placed_At)}</i></p>
                 </section>
             </Col>

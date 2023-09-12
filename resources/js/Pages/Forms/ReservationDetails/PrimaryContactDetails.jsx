@@ -6,11 +6,11 @@ export function PrimaryContactDetails() {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
         handleEChange = (e)=>{
             // Handles the Booking's Email field change.
-            setBookingDetails({...bookingDetails,email:e.target.value});
+            setBookingDetails(prev=>{return {...prev,email:e.target.value}});
         },
         handlePNChange = (e)=>{
             // Handles the Booking's Phone Number field change.
-            setBookingDetails({...bookingDetails,phone_number:e.target.value});
+            setBookingDetails(prev=>{return {...prev,phone_number:e.target.value}});
         };
     const checkShowRequirements = ()=>{
         return bookingDetails.first_name.length>0 && bookingDetails.last_name.length>0;

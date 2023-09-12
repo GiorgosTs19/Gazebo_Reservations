@@ -10,6 +10,7 @@ import useFilteredReservationsCountText from "../../../../CustomHooks/useFiltere
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
+import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 
 export function MobileWeeklyView({currentDate, filter, children, Reservations}) {
     const {reservationsFilter, setReservationsFilter} = filter,
@@ -80,7 +81,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
                 <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
                     {renderWeekDays()}
                 </Accordion>
-            </> : <ReservationLong setReservations={setPropsReservations}></ReservationLong>}
+            </> : <MobileActiveReservationOffCanvas/>}
         </div>
     )
 }

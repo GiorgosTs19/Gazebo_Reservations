@@ -90,9 +90,7 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
     return (
         <ListGroup.Item eventKey={index} key={menu.id} as={'li'} onClick={handleSelectMenu} className={`d-flex justify-content-between align-items-start border-0 bg-transparent ` + (isSelected() && !dessert ? 'active' : '')}
         disabled={onlyOne}>
-            {/*<div className="ms-2 me-auto w-100" */}
-                <div className={"fw-bold w-100"} >{menu.Name} {isSelected()}</div>
-            {/*</div>*/}
+            <div className={"fw-bold"} >{menu.Name} {isSelected()}</div>
             {<MenuInfoModal menu={menu}></MenuInfoModal>}
         </ListGroup.Item>
     )

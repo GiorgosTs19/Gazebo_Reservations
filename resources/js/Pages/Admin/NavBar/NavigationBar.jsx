@@ -9,8 +9,6 @@ import {MenuEditModeContext} from "../Contexts/MenuEditModeContext";
 import {AdminToNewReservationFormModal} from "../Modals/AdminToNewReservationFormModal";
 import {ReservationTypeSelectionMenu} from "../Reservations/Settings/ReservationTypeSelectionMenu";
 import {NavBarReservations} from "./NavBarReservations";
-import {ViewContext} from "../../../Contexts/ViewContext";
-import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 
 export function NavigationBar({activeTab,activeMenusTab}) {
     const {activeTabKey,handleSetActiveKey} = activeTab,
@@ -25,7 +23,7 @@ export function NavigationBar({activeTab,activeMenusTab}) {
                 <ConflictsContainer></ConflictsContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Offcanvas id={`Navbar-expand`} placement="start"
-                    aria-labelledby={`offcanvasNavbarLabel-expand`}>
+                    aria-labelledby={`offcanvasNavbarLabel-expand`} className={''} style={{borderRadius:'0 15px 15px 0'}}>
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title id={`offcanvasNavbarLabel-expand`} className={'user-select-none'}>
                             Μενού

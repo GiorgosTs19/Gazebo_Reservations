@@ -6,8 +6,7 @@ import {EditModalContentContext} from "../Contexts/EditModalContentContext";
 import {LeftArrowSVG} from "../../../SVGS/LeftArrowSVG";
 import useCheckConflict from "../../../CustomHooks/useCheckConflict";
 
-export function ReservationEditModal({Reservation}) {
-    const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(Reservation.id);
+export function ReservationEditModal({conflictType, edit}) {
     const [content,setContent] = useState('Options');
     const [modalTitle,setModalTitle] = useState('Επεξεργασία Κράτησης');
     const handleBackToOptions = () => {setContent('Options');setModalTitle('Επεξεργασία Κράτησης')};
@@ -24,7 +23,7 @@ export function ReservationEditModal({Reservation}) {
                         <Card.Body className={'h-100'}>
                             {content !== 'Options' && <LeftArrowSVG onClick={handleBackToOptions} className={'mx-auto mb-3 cursor-pointer'}/>}
                             {content === 'Options' &&
-                                <ReservationEditingOptions conflictType={conflictType}>
+                                <ReservationEditingOptions conflictType={conflictType} edit={edit}>
                                 </ReservationEditingOptions>
                             }
                             {content !== 'Options' &&

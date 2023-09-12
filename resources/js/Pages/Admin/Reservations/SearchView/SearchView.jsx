@@ -8,6 +8,7 @@ import {SearchFilters} from "./SearchFilters";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
+import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 
 export function SearchView() {
     const [searchResult,setSearchResult] = useState(null);
@@ -112,13 +113,13 @@ export function SearchView() {
     // Generates the reservations to show for the selected date.
     const reservationsToShow = ()=> {
         if(!searchResult)
-            return <h5 className={'my-0 my-sm-auto text-wrap info-text-xl'}>Εισάγετε κάποιο κριτήριο για να κάνετε αναζήτηση</h5>
+            return <h5 className={'m-auto text-wrap info-text-xl'}>Εισάγετε κάποιο κριτήριο για να κάνετε αναζήτηση</h5>
 
         if(searchResult.length === 0)
-            return <h5 className={'my-auto text-wrap info-text-xl'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης</h5>
+            return <h5 className={'m-auto text-wrap info-text-xl'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης</h5>
 
         // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = InnerWidth > 1500 ? (activeReservation === null ? 2 : 1) : (InnerWidth > 1350 ? (activeReservation === null ? 2 : 1) : 1);
+        const reservationsToRender = InnerWidth > 992 ? (activeReservation === null ? 2 : 1) : 1;
         const reservationChunks = [];
         for (let i = 0; i < searchResult.length; i += reservationsToRender) {
             reservationChunks.push(searchResult.slice(i, i + reservationsToRender));
@@ -148,10 +149,8 @@ export function SearchView() {
         </Stack>
     },[searchCriteria]);
 
-    const reservationsStack = <Col className={'d-flex flex-column text-center mt-4 mt-md-0 ' +
-        (Array.isArray(searchResult) && searchResult.length > 0 ? ' search-view-reservations' : '')}
-        md={showFilters ? 8 : 10} lg={showFilters ? 9 : 10} xl={activeReservation !== null ? 4 : (showFilters ? 10 : 11)}>
-        {Array.isArray(searchResult) && searchResult.length > 0 && <h5>
+    const reservationsStack = <Col xl={activeReservation === null ? 9 : 5} className={'d-flex flex-column h-100 overflow-y-auto'}>
+        {Array.isArray(searchResult) && searchResult.length > 0 && <h5 className={'m-auto'}>
             {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
         </h5>}
         {getCriteriaLabels()}
@@ -161,8 +160,14 @@ export function SearchView() {
     </Col>;
 
     const renderContent = () => {
-        if(InnerWidth > 1200) {
+        if(InnerWidth >= 1200) {
             return <>
+                <Col className={`search-filters d-flex flex-column bg-white py-3 ${innerWidth < 992 ? 'sticky-top' : ''} ${InnerWidth < 768 ? 'h-fit-content' : 'h-100'}`}
+                     xl={3}>
+                    <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
+                                   filtersVisibility={{showFilters, setShowFilters}}>
+                    </SearchFilters>
+                </Col>
                 {reservationsStack}
                 {activeReservation !==null && <Col className={'d-flex h-100 overflow-y-auto px-1'} >
                     <ReservationLong/>
@@ -171,19 +176,15 @@ export function SearchView() {
         }
 
         return <>
-            {activeReservation === null ? reservationsStack : <Col className={'d-flex h-100 overflow-y-auto p-3 my-5 my-md-0'} >
-                <ReservationLong/>
-            </Col>}
+            <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
+                           filtersVisibility={{showFilters, setShowFilters}}/>
+            {reservationsStack}
+            <MobileActiveReservationOffCanvas/>
         </>
     }
 
     return (
         <Row className={'h-100 px-2 py-0 px-lg-0 pt-lg-0 overflow-y-auto'}>
-            <Col className={`search-filters d-flex flex-column bg-white py-3 ${innerWidth < 992 ? 'sticky-top' : ''} ${InnerWidth < 768 ? 'h-fit-content' : 'h-100'}`} md={showFilters ? 4 : 2} lg={showFilters ? 3 : 2} xl={showFilters ? 2 : 1}>
-                <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
-                filtersVisibility={{showFilters, setShowFilters}}>
-                </SearchFilters>
-            </Col>
             <ActiveRangeContext.Provider value={[null,()=>{}]}>
                 {renderContent()}
             </ActiveRangeContext.Provider>

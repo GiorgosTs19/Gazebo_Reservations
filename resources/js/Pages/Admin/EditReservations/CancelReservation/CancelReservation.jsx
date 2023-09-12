@@ -4,18 +4,19 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {handleChangeReservationStatus} from "../../../../Inertia_Requests/Admin_Requests";
 
-export function CancelReservation() {
+export function CancelReservation({edit}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+        {editing, setEditing} = edit,
         [input, setInput] = useState(''),
         [activeRange, setReservations] = useContext(ActiveRangeContext),
-        confNumberConfirmed = input === 'CANCEL';
+        confNumberConfirmed = input === 'ΑΚΥΡΩΣΗ';
 
     return (
         <Card className={'border-0'}>
             <Card.Header className={'bg-transparent'}>
                 <Card.Title>Ακύρωση Κράτησης {activeReservation.Confirmation_Number}</Card.Title>
             </Card.Header>
-            <Card.Body className={'my-3'}>
+            <Card.Body className={'my-0 p-2'}>
                 <p className={'info-text-lg'}>
                     Είστε σίγουροι πώς θέλετε να ακυρώσετε την κράτηση;
                 </p>
@@ -29,7 +30,7 @@ export function CancelReservation() {
                     <Form.Control type="text" placeholder="Αριθμός Επιβεβαίωσης" className={'mt-4 mb-2'}
                     value={input} onChange={e=>setInput(e.target.value.trim())}/>
                 </FloatingLabel>
-                <p className={'info-text'}>Πληκτρολογήστε CANCEL για να συνεχίσετε</p>
+                <p className={'info-text'}>Πληκτρολογήστε ΑΚΥΡΩΣΗ για να συνεχίσετε</p>
             </Card.Body>
             <Card.Footer className={'d-flex bg-transparent border-0'}>
                 <Button variant={'danger'} className={'m-auto'} disabled={!confNumberConfirmed}

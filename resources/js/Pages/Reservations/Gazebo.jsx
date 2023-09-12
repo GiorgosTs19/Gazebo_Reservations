@@ -14,7 +14,7 @@ import {TypeSelectionForm} from "../Forms/ReservationTypeSelection/TypeSelection
 import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext";
 import {ErrorsContext} from "../Admin/Contexts/ErrorsContext";
 import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
-import {Container, Image} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import gsap from "gsap";
 import '../../../css/Reservations.css'
 import {DisabledDaysContext} from "../Admin/Contexts/DisabledDaysContext";
@@ -88,6 +88,7 @@ export default function Gazebo(props) {
     const getDisabledDays = () => {
         return Disabled_Days.filter(item=>item.Type === bookingDetails.type);
     }
+    console.log(bookingDetails)
     return (
         <ErrorsContext.Provider value={{errors,setErrors}}>
             <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>

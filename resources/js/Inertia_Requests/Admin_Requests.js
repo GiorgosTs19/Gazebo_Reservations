@@ -47,7 +47,7 @@ export const handleChangeReservationStatus = (status, {activeReservation,setActi
 }
 
 export const handleCreateNewReservationForDate = (date, type, people) => {
-    if(!date || !type)
+    if(!date || !type || people === 0)
         return;
     Inertia.get(route('Show.Gazebo.Reservation.Form'),{selectedDate:date, selectedType:type, selectedPeople:people});
 }

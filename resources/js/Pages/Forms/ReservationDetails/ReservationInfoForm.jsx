@@ -20,6 +20,45 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
 
     const singleGuest = bookingDetails.number_of_people === 1;
 
+    const checkAttendeesRequirements = (length) => {
+        if(bookingDetails.number_of_people === 1)
+            return true;
+
+        const containsNoEmptyStrings = bookingDetails.attendees.every(function(element) {
+            return element !== "";
+        });
+        if(!containsNoEmptyStrings)
+            return false;
+        return bookingDetails.attendees.length === length;
+    };
+
+    const checkProceedRequirements = () => {
+        // Checks the requirements for proceeding to the Menu Selection Tab
+        switch (parseInt(bookingDetails.number_of_people)) {
+            case 1:
+                return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
+                    && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== '');
+            case 2:
+            case 3:
+            case 4:
+                switch (bookingDetails.more_rooms) {
+                    case null:
+                        return false;
+                    case true:{
+                        return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
+                            && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0
+                            && bookingDetails.primary_room !== '' && bookingDetails.secondary_room !== ''
+                            && checkAttendeesRequirements(bookingDetails.number_of_people-1))
+                    }
+                    case false:
+                        return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
+                            && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== ''
+                            && checkAttendeesRequirements(bookingDetails.number_of_people-1));
+                }
+        }
+    };
+
+
     return (
         <div ref={ref} className={'d-flex'}>
             <Card className={'text-center mh-600px pb-3 my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +
@@ -42,7 +81,7 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                                     <MultipleRoomsField></MultipleRoomsField>
                                     <RoomNumberFields ></RoomNumberFields>
                                 </div>
-                                <ProceedButton></ProceedButton>
+                                {checkProceedRequirements() && <ProceedButton checkRequirements={checkProceedRequirements}></ProceedButton>}
                             </Col>}
                         </Row>
                     </Form>
@@ -51,11 +90,3 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
         </div>
     )
 });
-
-{/*<Card.Header style={{backgroundColor:'white'}} className={'w-75 mx-auto'}>*/}
-{/*    <Button variant={'outline-dark'} className={'my-2 rounded-4 shadow-sm'}*/}
-{/*            onClick={handlePreviousClick} size={'sm'}>*/}
-{/*        Back to Table Selection*/}
-{/*    </Button>*/}
-{/*    <h5>Reservation Date : {changeDateFormat(bookingDetails.date,'-','-')}</h5>*/}
-{/*</Card.Header>*/}
