@@ -1,12 +1,10 @@
 import {Button} from "react-bootstrap";
 import {useContext} from "react";
-import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import {useEffect} from "react";
 
 export function ProceedButton({shouldProceed}) {
-    const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
-    {progress, setProgress} = useContext(FormProgressContext),
+    const {progress, setProgress} = useContext(FormProgressContext),
     handleNextClick = ()=>{
         // Handles the click on the To Menu Selection Button
         // Sets progress to "Menu" to move forward to the MenuSelection tab

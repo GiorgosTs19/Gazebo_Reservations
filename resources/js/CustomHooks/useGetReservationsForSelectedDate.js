@@ -7,7 +7,7 @@ export function useGetReservationsForSelectedDate (selectedDate) {
     let reservationsToReturn = [];
     if(selectedDate === '' || selectedDate === ['',''])
         return [];
-    // console.log('Date is ',selectedDate)
+
     useEffect(()=> {
         if(!Array.isArray(selectedDate)){
             return Inertia.get(route('Get_Availability_For_Date'), {date: getFormattedDate(selectedDate,'-',1),get_reservations:true},{

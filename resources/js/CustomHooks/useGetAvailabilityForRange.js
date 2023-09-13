@@ -5,7 +5,7 @@ import {getFormattedDate} from "../ExternalJs/Util";
 export function useGetAvailabilityForRange(activeRange, reservationType, dependencies=[]) {
     const [requestProgress,setRequestProgress] = useState(''),
     [availability,setAvailability] = useState([]);
-    // console.log(activeRange)
+
     useEffect(()=>{
         Inertia.get(route('Get_Availability_For_Range'),{date_start:getFormattedDate(activeRange[0],'-',1),
                 date_end:getFormattedDate(activeRange[1],'-',1),type:reservationType},

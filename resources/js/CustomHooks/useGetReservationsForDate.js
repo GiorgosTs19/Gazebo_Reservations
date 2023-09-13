@@ -5,6 +5,7 @@ import useUpdateEffect from "./useUpdateEffect";
 export function useGetReservationsForDate(initialValue, reservationType, dependencies=[]) {
     const [requestProgress,setRequestProgress] = useState(''),
     [reservations,setReservations] = useState(initialValue);
+
     useUpdateEffect(()=>{
         Inertia.get(route('Get_Reservations_Current_Day'),{type:reservationType},
             {onStart:()=>setRequestProgress('Pending'),
@@ -15,5 +16,6 @@ export function useGetReservationsForDate(initialValue, reservationType, depende
                     setReservations(res.props.current_day_reservations);
                 }, preserveScroll:true, preserveState:true});
     },dependencies);
+
     return [requestProgress, reservations ?? [], setReservations];
 }

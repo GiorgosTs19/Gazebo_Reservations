@@ -1,4 +1,4 @@
-import {Button, Col, Container, Form, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import React, {useContext} from "react";
 import {AuthenticatedUserContext} from "../Contexts/AuthenticatedUserContext";

@@ -362,14 +362,14 @@ abbr[title] {
 /* Off-Canvas */
 /*.reservation_backdrop {}*/
 .offcanvas-backdrop.show{
-    /*opacity: 0;*/
-    /*display: none;*/
+    opacity: 0;
+    display: none;
 }
 .utility_backdrop.show {
     opacity: 0.0!important;
     display: none!important;
 }
-.reservation_backdrop.show, .nav_bar_backdrop {
+.reservation_backdrop.show, .nav_bar_backdrop, .search_filters_backdrop {
     opacity: 0.5!important;
     display: block!important;
 }

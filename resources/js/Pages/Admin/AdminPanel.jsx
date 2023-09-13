@@ -26,6 +26,7 @@ import {ActiveTabKeyContext} from "./Contexts/ActiveTabKeyContext";
 import {DisabledDaysContext} from "./Contexts/DisabledDaysContext";
 import {FetchReservationsContext} from "./Contexts/FetchReservationsContext";
 import {ActiveRangeContext} from "./Contexts/ActiveRangeContext";
+import {MobileActiveReservationOffCanvas} from "./OffCanvases/MobileActiveReservationOffCanvas";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -66,7 +67,7 @@ export default function AdminPanel(props) {
             case 'ResolveConflict' : {
                 return <section className={'h-100 d-flex flex-column mt-4 mt-lg-0'}>
                     <ActiveRangeContext.Provider value={[null, ()=>{}]}>
-                        <ReservationLong></ReservationLong>
+                        {innerWidth < 992  ? <MobileActiveReservationOffCanvas/> : <ReservationLong></ReservationLong>}
                     </ActiveRangeContext.Provider>
                 </section>;
             }

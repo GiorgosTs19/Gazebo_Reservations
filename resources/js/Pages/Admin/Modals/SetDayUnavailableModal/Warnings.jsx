@@ -51,21 +51,18 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
             </section>
             <section className={'my-3 info-text-lg ' + (reservations.length > 0 ? 'border-bottom pb-3 ' : '')}>
                 Δεν θα μπορούν να καταχωρηθούν {reservations.length > 0 ? 'άλλες' : ''} {!dateIsRange ?
-                'κρατήσεις για αυτήν την μέρα, μέχρι να την ξανά ενεργοποιήσετε.' :
-                'κρατήσεις για αυτές τις μέρες, μέχρι να τις ξανά ενεργοποιήσετε.'}
+                'κρατήσεις, μέχρι να την ξανά ενεργοποιήσετε.' :
+                'κρατήσεις, μέχρι να τις ξανά ενεργοποιήσετε.'}
             </section>
-            {reservations.length > 0 && <section className={'p-2 my-1'}>
-                <p>
-                    <Image src={'Images/Icons/warning.png'} className={'my-1'}></Image>
-                </p>
+            {reservations.length > 0 &&
                 <section className={'my-2'}>
-                    <h6 className={'mb-4'}>Οι υπάρχουσες κρατήσεις</h6>
-                    <Form className={'my-4'}>
+                    <h6 >Οι υπάρχουσες κρατήσεις</h6>
+                    <Form className={'my-2'}>
                         <Form.Check
                             inline
                             label="Μπορούν να πραγματοποιηθούν."
                             name="Existing_Reservations_Allowance"
-                            className={'my-3'}
+                            className={'my-2'}
                             type={"radio"}
                             checked={allowExistingReservations === true}
                             onChange={()=>handleChangeAllowExistingReservations(true)}
@@ -74,13 +71,12 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
                             inline
                             label="Δεν μπορούν να πραγματοποιηθούν."
                             name="Existing_Reservations_Allowance"
-                            className={'my-3'}
+                            className={'my-2'}
                             type={"radio"}
                             checked={allowExistingReservations === false}
                             onChange={()=>handleChangeAllowExistingReservations(false)}
                         />
                     </Form>
-                </section>
                 {getWarningMessage()}
             </section>}
             {dateIsRange && <section>
@@ -89,6 +85,3 @@ export function Warnings({reservations,aboutExistingReservations,show,dates}) {
         </>
     )
 }
-{/*<div>*/}
-{/*    {!allowExistingReservations && !dateIsRange && getReservationCountMessage()}*/}
-{/*</div>*/}

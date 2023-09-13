@@ -7,10 +7,11 @@ import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext"
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {Inertia} from "@inertiajs/inertia";
 
-export function ConflictsList({reservations}) {
+export function ConflictsList({reservations, overlayVisibility}) {
     const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
     {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext),
-    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext),
+    {show, setShow} = overlayVisibility;
 
     const handleFindReservation = (reservation) => {
         Inertia.get(route('Get_Reservation'),{reservation_id:reservation.id}, {onSuccess:res=>{
@@ -18,6 +19,7 @@ export function ConflictsList({reservations}) {
             setResolvingConflict([true, activeTabKey]);
             handleSetActiveKey('ResolveConflict');
             setActiveReservation(reservationFound);
+            setShow(false)
         }, only:['activeReservation'], preserveState:true, preserveScroll:true});
     }
 
