@@ -3,6 +3,7 @@ import {useState} from "react";
 import {Inertia} from "@inertiajs/inertia";
 import {handleCreateNewReservationForDate} from "../../../Inertia_Requests/Admin_Requests";
 import {formatDateInGreek, getFormattedDate} from "../../../ExternalJs/Util";
+import {AddSVG} from "../../../SVGS/AddSVG";
 
 export function AdminToNewReservationFormModal({returnButton = false, reservationType = 'Dinner'}) {
     const [showModal, setShowModal] = useState(false);
@@ -14,9 +15,7 @@ export function AdminToNewReservationFormModal({returnButton = false, reservatio
     [numberOfPeople, setNumberOfPeople] = useState(1);
     return (
         <>
-            {returnButton ? <Button variant={'outline-secondary'} className={'mx-auto my-3'}
-                onClick={handleShow}>
-                Νέα Κράτηση</Button> :<Nav.Link className={'secondary my-auto hover-scale-1_03'} onClick={handleShow}>Νέα Κράτηση</Nav.Link>}
+            {returnButton ? <AddSVG onClick={handleShow} className={'m-auto'} />:<Nav.Link className={'secondary my-auto hover-scale-1_03'} onClick={handleShow}>Νέα Κράτηση</Nav.Link>}
             <Modal show={showModal} className={'text-center'} centered>
                 <Modal.Header>
                     <Modal.Title id="example-modal-sizes-title-lg">

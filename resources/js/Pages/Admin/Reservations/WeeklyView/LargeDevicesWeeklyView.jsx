@@ -92,8 +92,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
                 <FiltersBar setReservationsFilter={setReservationsFilter}
                             reservationsFilter={reservationsFilter} direction={'horizontal'} className={'mx-auto my-2'}>
                 </FiltersBar>
-                <ListGroup horizontal={direction === 'horizontal'} gap={2}
-                           className="week-days px-3 mx-3 overflow-y-auto h-100">
+                <ListGroup horizontal={direction === 'horizontal'} gap={2} className="week-days px-3 mx-3 overflow-y-auto h-100">
                     {!largeWeekDay.date ? (requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : weekDays) : <LargeWeekDayDisplay reservations={largeWeekDay.reservations} dateToDisplay={largeWeekDay.date}
                     reservationsFilter={reservationsFilter} largeWeekDayHandling = {{largeWeekDay,setLargeWeekDay}}>
                     </LargeWeekDayDisplay>}

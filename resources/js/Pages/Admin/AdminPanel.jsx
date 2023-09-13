@@ -45,7 +45,7 @@ export default function AdminPanel(props) {
         // it also stores the previous ActiveTabKey to return to after the actions are done.
     [resolvingConflict,setResolvingConflict] = useState([false,'']),
     Conflicts = [props.Disabled_Dates_Reservations,props.Disabled_Table_Reservations];
-    console.log(props)
+
     const renderContent = () => {
         switch (activeTabKey) {
             case 'Settings' : {
@@ -116,14 +116,14 @@ export default function AdminPanel(props) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    // console.log(props)
+
     return (
         <AuthenticatedUserContext.Provider value={User}>
             <DatabaseSettingsContext.Provider value={{settings : reservationType === 'Dinner' ? Dinner_Settings : Bed_Settings}}>
                 <InnerWidthContext.Provider value={innerWidth}>
                     <GazebosContext.Provider value={Gazebos}>
                         <MenuContext.Provider value={Menus}>
-                            <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute overflow-x-hidden'}>
+                            <Container fluid className={'px-0 pt-3 pb-0 vh-100 position-absolute overflow-x-hidden overflow-y-auto scroll-bar-hidden'}>
                                 <ActiveReservationTypeContext.Provider value={{reservationType,setReservationType}}>
                                     <ViewContext.Provider value={{activeReservationsView,setActiveReservationsView}}>
                                         <ActiveReservationContext.Provider value={{activeReservation,setActiveReservation}}>
@@ -134,13 +134,14 @@ export default function AdminPanel(props) {
                                                             <DisabledDaysContext.Provider value={reservationType === 'Dinner' ? props.Disabled_Days.Dinner : props.Disabled_Days.Bed}>
                                                                 <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}>
                                                                 </NavigationBar>
-                                                                <div className={'h-90 px-xs-5  vw-100 position-absolute overflow-auto'}>
+                                                                <div className={'h-90 px-xs-5 vw-100 position-absolute overflow-hidden'}>
                                                                     <Card className={"px-2 px-lg-2 px-xxl-4 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
                                                                         {innerWidth > 992 &&
                                                                             <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
                                                                                 {typeAndViewSelectionPanel}
                                                                             </Card.Header>}
-                                                                        <Card.Body className={'px-xs-1 px-lg-2 px-xl-2 rounded-4 border-0 mt-0 mt-lg-3 overflow-x-hidden py-0 ' + (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))}>
+                                                                        {/*+ (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))*/}
+                                                                        <Card.Body className={'px-0 px-lg-2 px-xl-2 rounded-4 border-0 mt-0 mt-lg-3 overflow-x-hidden py-0'}>
                                                                             <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                                                                 <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
                                                                                     <FetchReservationsContext.Provider value={{shouldFetchReservations, setShouldFetchReservations}}>

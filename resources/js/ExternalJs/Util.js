@@ -101,8 +101,9 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menu
  * @returns the Gazebo object's ascending number whose id matches the ID passed into the function.
  */
 export function getTableAA (id,Gazebos_Array) {
-    if(typeof Gazebos_Array.find(gazepo=>gazepo.id===id) !== "undefined")
-        return (Gazebos_Array.find(gazepo=>gazepo.id===id).ascending_number);
+    const foundTable = Gazebos_Array.find(gazepo=>gazepo.id===id);
+    if(typeof foundTable !== "undefined")
+        return foundTable.ascending_number;
 }
 
 /**

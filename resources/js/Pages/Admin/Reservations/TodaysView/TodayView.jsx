@@ -4,7 +4,6 @@ import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {LargeDevicesTodayView} from "./LargeDevicesTodayView";
 import {MobileTodayView} from "./MobileTodayView";
 import {Badge} from "react-bootstrap";
-import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservationFormModal";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {useGetReservationsForDate} from "../../../../CustomHooks/useGetReservationsForDate";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
@@ -17,8 +16,7 @@ export function TodayView({todayReservations}) {
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
     const [requestProgress, reservations, setReservations] = useGetReservationsForDate(todayReservations, reservationType, [reservationType]);
     const Disabled_Days = useContext(DisabledDaysContext);
-    const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days),
-        hasReservations = reservations?.length > 0;
+    const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days);
 
     const onlyCancelledReservationsExist = () => {
         if(reservations?.length === 0)
@@ -52,14 +50,10 @@ export function TodayView({todayReservations}) {
                <LargeDevicesTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
                requestProgress={requestProgress}>
                    <h5>{formatDateInGreek(today)} {isDateDisabled && <Badge bg="danger" className={'ms-3'}>Απενεργοποιημένη</Badge>}</h5>
-                   {isDateDisabled && hasReservations && getWarningMessage()}
                </LargeDevicesTodayView>
                : <MobileTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
                 requestProgress={requestProgress}>
-                   <h5 className={'my-2'}>{formatDateInGreek(today)}</h5>
-                   {isDateDisabled &&  <Badge bg="danger" className={'mx-auto my-3'}>Απενεργοποιημένη</Badge>}
-                   {isDateDisabled && hasReservations && getWarningMessage()}
-                   <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+                       <h5 className={'m-auto'}>{formatDateInGreek(today)}</h5>
                </MobileTodayView>
            }
        </ActiveRangeContext.Provider>

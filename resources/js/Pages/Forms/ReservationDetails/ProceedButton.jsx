@@ -4,12 +4,14 @@ import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import {useEffect} from "react";
 
-export function ProceedButton({checkRequirements}) {
+export function ProceedButton({shouldProceed}) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     {progress, setProgress} = useContext(FormProgressContext),
     handleNextClick = ()=>{
         // Handles the click on the To Menu Selection Button
         // Sets progress to "Menu" to move forward to the MenuSelection tab
+        if(!shouldProceed)
+            return;
         setProgress('Menu');
     };
 

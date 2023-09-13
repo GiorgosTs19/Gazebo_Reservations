@@ -17,12 +17,12 @@ export function NavigationBar({activeTab,activeMenusTab}) {
     {editingMenu,setEditingMenu} = useContext(MenuEditModeContext);
 
     return (
-        <Navbar expand="xxl" className="bg-body-tertiary rounded-3 border mx-4" collapseOnSelect>
+        <Navbar expand="xxl" className="bg-body-tertiary rounded-3 border mx-4 sticky-top" collapseOnSelect>
             <Container fluid className={'mx-lg-3'}>
                 <Navbar.Brand href="#home" className={'user-select-none'}>Sentido Port Royal</Navbar.Brand>
                 <ConflictsContainer></ConflictsContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Offcanvas id={`Navbar-expand`} placement="start"
+                <Navbar.Offcanvas id={`Navbar-expand`} placement="start" backdropClassName={'nav_bar_backdrop'}
                     aria-labelledby={`offcanvasNavbarLabel-expand`} className={''} style={{borderRadius:'0 15px 15px 0'}}>
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title id={`offcanvasNavbarLabel-expand`} className={'user-select-none'}>
