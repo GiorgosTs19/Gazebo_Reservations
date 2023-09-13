@@ -35,7 +35,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
 
         if(filteredReservations.length === 0)
             return <h5 className={'my-auto text-wrap user-select-none info-text-xl'}>Δεν υπάρχουν κρατήσεις για σήμερα που ταιριάζουν με τα επιλεγμένα κριτήρια</h5>
-        const reservationsToRender = innerWidth < 1500 ? (activeReservation === null ? 2 : 1) : 2;
+        const reservationsToRender = innerWidth < 1500 ? (activeReservation === null ? 2 : 1) : (innerWidth > 1700 ? (activeReservation === null ? 4 : 2)  : (activeReservation === null ? 3 : 2));
         // Will always try to show 2 reservations per line, to save space.
         const reservationChunks = [];
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
@@ -48,7 +48,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
                 ))}
             </div>
         ))
-    },[reservations_of_current_date,reservationsFilter, reservationType]);
+    },[reservations_of_current_date,reservationsFilter, reservationType, activeReservation]);
 
     return (
         <Row className={'h-100 w-100'}>

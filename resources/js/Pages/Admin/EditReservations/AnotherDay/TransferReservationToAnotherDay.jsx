@@ -176,10 +176,9 @@ export function TransferReservationToAnotherDay({edit}) {
             onSuccess:(res)=> {
                 // console.log('res', res)
                 setEditing(false);
+                setActiveReservation(res.props.activeReservation);
                 if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                     setResolvingConflict([false, '']);
-                if(activeReservationsView !== 'Today')
-                    setActiveReservation(res.props.activeReservation);
                 handleSetReservations(res, activeRange, setReservations);
         }});
     };

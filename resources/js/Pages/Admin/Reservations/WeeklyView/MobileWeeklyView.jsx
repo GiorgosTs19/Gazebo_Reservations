@@ -9,13 +9,15 @@ import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
+import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
+import {ReservationShort} from "../ReservationViews/ReservationShort";
 
 export function MobileWeeklyView({currentDate, filter, children, Reservations}) {
     const {reservationsFilter, setReservationsFilter} = filter,
         [propsReservations, setPropsReservations] = Reservations,
         {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
+        disabled_days = useContext(DisabledDaysContext),
         reservationsToShow = (day)=>{
             const reservations_of_current_date = extractReservationsForDate(day,propsReservations);
             if(reservations_of_current_date.length === 0)
@@ -40,7 +42,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             return [reservationChunks.map((chunk, index) => {
                 return <ListGroup.Item key={index+1} className={'p-1 d-flex border-0 mx-auto'}>
                     {chunk.map(reservation => (
-                        <ReservationShortest Reservation={reservation} key={reservation.id}
+                        <ReservationShort Reservation={reservation} key={reservation.id}
                         className={'border my-3 ' + (chunk.length === 1 ? ' mx-auto' : ' mx-3')} />))
                     }
                 </ListGroup.Item>;
@@ -57,7 +59,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             day.setDate(currentDate.getDate() +index);
             const [Reservations,reservationsCount] = reservationsToShow(day);
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
-            const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,propsReservations);
+            const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,disabled_days);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
                 <Accordion.Header><span className={' me-1 ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
                 <Accordion.Body>

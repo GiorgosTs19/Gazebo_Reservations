@@ -94,9 +94,9 @@ class GazeboController extends Controller {
     }
 
     protected  function getBoolean($Reservations,$gazebo,$Disabled_Tables_Of_Day) {
-            if($Reservations->contains($gazebo->id))
+            if($Reservations->contains('gazebo_id',$gazebo->id))
                 return false;
-            if($Disabled_Tables_Of_Day->contains($gazebo->id))
+            if($Disabled_Tables_Of_Day->contains('gazebo_id',$gazebo->id))
                 return false;
             return true;
     }

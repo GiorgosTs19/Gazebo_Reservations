@@ -1,4 +1,3 @@
-import {Col, Row} from "react-bootstrap";
 import {WeeklyReservationsView} from "./WeeklyView/WeeklyReservationsView";
 import {useState} from "react";
 import {MonthlyView} from "./MonthlyView/MonthlyView";
@@ -6,7 +5,6 @@ import {ViewContext} from "../../../Contexts/ViewContext";
 import {useContext,useEffect} from "react";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
-import {ReservationLong} from "./ReservationViews/ReservationLong/ReservationLong";
 import {TodayView} from "./TodaysView/TodayView";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 import {SearchView} from "./SearchView/SearchView";

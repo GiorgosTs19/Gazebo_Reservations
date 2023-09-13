@@ -35,12 +35,14 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
     const checkProceedRequirements = () => {
         // Checks the requirements for proceeding to the Menu Selection Tab
         switch (parseInt(bookingDetails.number_of_people)) {
-            case 1:
+            case 1:{
+                console.log('lemao')
                 return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
                     && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== '');
+            }
             case 2:
             case 3:
-            case 4:
+            case 4: {
                 switch (bookingDetails.more_rooms) {
                     case null:
                         return false;
@@ -54,11 +56,14 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                         return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
                             && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== ''
                             && checkAttendeesRequirements(bookingDetails.number_of_people-1));
+                    default:return false;
                 }
+            }
+            default:return false;
         }
     };
 
-
+    console.log(checkProceedRequirements())
     return (
         <div ref={ref} className={'d-flex'}>
             <Card className={'text-center mh-600px pb-3 my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +
@@ -73,7 +78,7 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                                 <AttendeesNamesFields></AttendeesNamesFields>
                                 {(bookingDetails.type === 'Bed' || singleGuest )&& <>
                                     <RoomNumberFields singleGuest={true}></RoomNumberFields>
-                                    <ProceedButton></ProceedButton>
+                                    {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
                                 </>}
                             </Col>
                             {bookingDetails.type === 'Dinner' && !singleGuest && <Col className={'d-flex flex-column order-1 order-md-1'} xs={12} md={6}>
@@ -81,7 +86,7 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                                     <MultipleRoomsField></MultipleRoomsField>
                                     <RoomNumberFields ></RoomNumberFields>
                                 </div>
-                                {checkProceedRequirements() && <ProceedButton checkRequirements={checkProceedRequirements}></ProceedButton>}
+                                {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
                             </Col>}
                         </Row>
                     </Form>
