@@ -9,6 +9,7 @@ export function ConflictsContainer() {
     const [Disabled_Dates_Reservations, Disabled_Table_Reservations] = useContext(ConflictsContext);
     const previousDateConflicts = usePrevious(Disabled_Dates_Reservations);
     const previousTableConflicts = usePrevious(Disabled_Table_Reservations);
+    const [show, setShow] = useState(false);
     const date_conflicts_diff = previousDateConflicts ?
         Disabled_Dates_Reservations.length - previousDateConflicts.length : 0;
     const table_conflicts_diff = previousTableConflicts ?
@@ -34,13 +35,13 @@ export function ConflictsContainer() {
                     Ημέρα <span className={'info-text'}>({Disabled_Dates_Reservations.length})</span> {date_conflicts_diff > 0 && <Badge bg={'light'} pill text={'dark'}
                     className={'p-1 mx-1 info-text'}>{`+ ${date_conflicts_diff}`}</Badge>}
                 </>}>
-                    <ConflictsList reservations={Disabled_Dates_Reservations} type={'Date'}></ConflictsList>
+                    <ConflictsList reservations={Disabled_Dates_Reservations} overlayVisibility={{show, setShow}}/>
                 </Tab>
                 <Tab eventKey="Table" title={<>
                     Gazebo <span className={'info-text'}>({Disabled_Table_Reservations.length})</span> {table_conflicts_diff > 0 && <Badge bg={'light'} pill text={'dark'}
                     className={'p-1 mx-1 info-text'}>{`+ ${table_conflicts_diff}`}</Badge>}
                 </>}>
-                    <ConflictsList reservations={Disabled_Table_Reservations} type={'Bed'}></ConflictsList>
+                    <ConflictsList reservations={Disabled_Table_Reservations} overlayVisibility={{show, setShow}}/>
                 </Tab>
             </Tabs>
         </Popover.Body>
@@ -50,11 +51,12 @@ export function ConflictsContainer() {
         <OverlayTrigger
             rootClose
             trigger="click"
+            show={show}
             key={'bottom'}
             placement={'bottom'}
             overlay={popOver} onToggle={handleDisableBlueDot}>
             <section className={'me-xl-1'}>
-                <Button className={'bg-transparent border-0 text-dark px-1 '}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/><span className={'info-text'}>({totalConflictsCount})</span></Button>
+                <Button className={'bg-transparent border-0 text-dark px-1 '} onClick={()=>setShow(true)}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/><span className={'info-text'}>({totalConflictsCount})</span></Button>
                 {(date_conflicts_diff > 0  || table_conflicts_diff > 0) && showBlueDot && <Badge pill bg={'primary'} text={'dark'} className={'p-1 mx-1'}>{` `}</Badge>}
             </section>
         </OverlayTrigger>

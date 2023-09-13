@@ -12,7 +12,7 @@ export function useGetAvailabilityForDate(date, reservationType, dependencies=[]
             {onStart:()=>setRequestProgress('Pending'),
                 onFinish:()=>setRequestProgress('Finished'),
                 onSuccess:res=> {
-                    console.log('res', res.props);
+                    // console.log('res', res.props);
                     setAvailability(res.props.availability_for_date);
                 }, preserveScroll:true, preserveState:true, only:['availability_for_date']});
     },[...dependencies]);

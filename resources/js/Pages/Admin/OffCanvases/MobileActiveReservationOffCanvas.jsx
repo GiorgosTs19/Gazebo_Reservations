@@ -3,14 +3,26 @@ import {useContext} from "react";
 import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 import {ReservationLong} from "../Reservations/ReservationViews/ReservationLong/ReservationLong";
 import {ChevronDownSVG} from "../../../SVGS/ChevronDownSVG";
+import {ResolvingConflictContext} from "../Contexts/ResolvingConflictContext";
+import {ActiveTabKeyContext} from "../Contexts/ActiveTabKeyContext";
 
 export function MobileActiveReservationOffCanvas() {
     const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext)
     const reservationIsNotNull = activeReservation !== null;
+    const {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
+    const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
+    const handleBack = () => {
+        if(resolvingConflict[0]) {
+            handleSetActiveKey(resolvingConflict[1]);
+            setResolvingConflict([false,'']);
+        }
+        setActiveReservation(null);
+    };
+
     return (
-        <Offcanvas show={reservationIsNotNull} onHide={()=>setActiveReservation(null)} placement={'bottom'}
+        <Offcanvas show={reservationIsNotNull} onHide={handleBack} placement={'bottom'}
         style={{height:'85%', borderRadius:'30px 30px 0 0'}} className={'mx-2'} backdropClassName={'reservation_backdrop'}>
-            <Offcanvas.Header className={'py-0 mb-3 justify-content-center'} onClick={()=>setActiveReservation(null)}>
+            <Offcanvas.Header className={'py-0 mb-3 justify-content-center'} onClick={handleBack}>
                 <ChevronDownSVG  height={32} width={32}/>
             </Offcanvas.Header>
             <Offcanvas.Body className={'d-flex px-4 overflow-y-auto scroll-bar-hidden'}>

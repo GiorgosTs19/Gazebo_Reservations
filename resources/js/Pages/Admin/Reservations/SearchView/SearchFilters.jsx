@@ -20,8 +20,9 @@ export function SearchFilters({SearchCriteria,inputRefs, filtersVisibility}) {
                 <ChevronDownSVG height={30} width={30} className={'border-0 text-dark align-self-end m-auto pe-1'}
                 onClick={() => setShowFilters(true)}/>
                 </div>}
-            <Offcanvas show={showFilters} placement={'top'} responsive={'xl'} scroll={true} backdrop={true} className={'mx-2 h-fit-content my-lg-auto d-flex'}
-                       style={{borderRadius:'0 0 15px 15px', height:innerWidth < 1200 ? 'fit-content' : '100%'}} onHide={()=>setShowFilters(false)}>
+            <Offcanvas show={showFilters} placement={'top'} responsive={'xl'} scroll={true} backdrop={true}
+               className={'mx-2 h-fit-content my-lg-auto d-flex'} backdropClassName={'search_filters_backdrop'}
+               style={{borderRadius:'0 0 15px 15px', height:innerWidth < 1200 ? 'fit-content' : '100%'}} onHide={()=>setShowFilters(false)}>
                 <div className={'d-flex'}>
                 </div>
                 <Offcanvas.Header closeButton>
