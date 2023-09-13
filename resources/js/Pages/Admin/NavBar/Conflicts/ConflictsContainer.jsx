@@ -56,7 +56,7 @@ export function ConflictsContainer() {
             placement={'bottom'}
             overlay={popOver} onToggle={handleDisableBlueDot}>
             <section className={'me-xl-1'}>
-                <Button className={'bg-transparent border-0 text-dark px-1 '} onClick={()=>setShow(true)}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/><span className={'info-text'}>({totalConflictsCount})</span></Button>
+                <Button className={`${show ? 'bg-secondary-subtle' : 'bg-transparent'} border-0 text-dark px-1`} onClick={()=>setShow(!show)}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/><span className={'info-text'}>({totalConflictsCount})</span></Button>
                 {(date_conflicts_diff > 0  || table_conflicts_diff > 0) && showBlueDot && <Badge pill bg={'primary'} text={'dark'} className={'p-1 mx-1'}>{` `}</Badge>}
             </section>
         </OverlayTrigger>

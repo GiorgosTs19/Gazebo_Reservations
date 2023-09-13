@@ -10,7 +10,7 @@ import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {EditModalContentContext} from "../../Contexts/EditModalContentContext";
 import {CancelReservation} from "../../EditReservations/CancelReservation/CancelReservation";
 
-export function ReservationEditingOptions({conflictType = null, edit}) {
+export function ReservationEditingOptions({conflictType = null, edit, children = null}) {
     const {content,setContent} = useContext(EditModalContentContext),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     [availableTables, setAvailableTables] = useState([]),
@@ -48,7 +48,10 @@ export function ReservationEditingOptions({conflictType = null, edit}) {
 
     return (
         <>
-            <Stack className={'my-4 '} gap={5}>
+            <Stack className={'my-4'} gap={4}>
+                <section>
+                    {children}
+                </section>
                 <section>
                     <p className={'info-text-lg my-auto'}>
                         Θα γίνει προσπάθεια ανάθεσης του ίδιου Gazebo αυτόματα
@@ -56,10 +59,10 @@ export function ReservationEditingOptions({conflictType = null, edit}) {
                     <Button variant={'secondary'} className={'mt-3 mx-auto'} onClick={handleClickTransfer}>Αλλαγή Ημερομηνίας</Button>
                 </section>
                 {((conflictType === 'Table' || conflictType === null) && !isDateDisabled ) && <section>
-                    <p className={'info-text-lg my-auto'}>Αλλαγή Gazebo για την ίδια μέρα</p>
+                    <p className={'info-text-lg my-auto'}>Αλλαγή Gazebo την ίδια μέρα</p>
                     {noAvailableTablesExist &&
-                        <p className={'text-danger fw-bold info-text-lg'}>Δεν υπάρχουν διαθέσιμα τραπέζια την ίδια μέρα.</p>}
-                    <Button variant={'secondary'} className={'mt-3 mx-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
+                        <p className={'text-danger fw-bold info-text-lg mt-2 mb-1'}>Δεν υπάρχουν άλλα διαθέσιμα Gazebo την ίδια μέρα.</p>}
+                    <Button variant={'secondary'} className={'mt-2 mx-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
                             onClick={handleClickChangeTable} disabled={noAvailableTablesExist || isDateDisabled}>
                         Αλλαγή Gazebo
                     </Button>
