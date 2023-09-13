@@ -37,7 +37,6 @@ export function ReservationLong({setReservations = ()=>{}}) {
     {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     [editing, setEditing] = useState(false),
     isInResolveConflictTab = activeTabKey === 'ResolveConflict';
-
     const handleBack = () => {
         setActiveReservation(null);
         if(resolvingConflict[0]) {
@@ -52,23 +51,22 @@ export function ReservationLong({setReservations = ()=>{}}) {
 
     const [isConflicted,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     const reservationTab = <>
-        {(innerWidth > 992 && activeReservationsView === 'Search' || isInResolveConflictTab) &&
-            <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
+        {/*{(innerWidth > 992 && activeReservationsView === 'Search') &&*/}
+        {/*    <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}*/}
         <ReservationDetails activeReservation={activeReservation} Attendees={attendees} handleActiveReservation={setActiveReservation}
         editReservation={{editing, setEditing}} isConflicted={isConflicted} conflictMessage={conflictMessage}>
         </ReservationDetails>
-        <Row className={'mt-2 mt-lg-1 '}>
+        <Row className={'mt-2 mt-lg-1'}>
             <Col sm={12} md={6} className={'d-flex flex-column ' + (innerWidth > 992 ? 'border-end border-dark' : '')}>
-                <section className={`mx-auto ${attendeesExist ? 'my-2' : 'my-auto'}`}>
+                <section className={`mx-auto ${attendeesExist ? 'my-0 my-md-2' : 'my-auto'}`}>
                     <h5 className={'user-select-none '}>Στοιχεία Επικοινωνίας</h5>
                     <p className={'info-text-lg mx-auto my-2'}>{name}</p>
                     <p className={'info-text-lg mx-auto my-2'}>{contactDetails?.Email}</p>
                     <p className={'info-text-lg mx-auto my-2'}>{contactDetails?.Phone}</p>
-                    <a className={'m-auto w-fit-content btn'} href={'mailto:' + contactDetails.Email}><MailSVG height={32} width={32}/></a>
                 </section>
-                {attendeesExist && <div className={'p-2 my-3'}>
+                {attendeesExist && <div className={'p-1 my-1'}>
                     <h5 className={'user-select-none'}>Συνοδοί</h5>
-                    <p className={'user-select-none'}>
+                    <p className={'user-select-none mb-0'}>
                         {attendees?.map((attendee, index) => {
                             return <span className={'info-text-lg'}
                                          key={index}>{index > 0 && ', '}{attendee.Name}</span>
@@ -77,28 +75,28 @@ export function ReservationLong({setReservations = ()=>{}}) {
                 </div>}
             </Col>
             <Col sm={12} md={6} className={'d-flex flex-column'}>
-            <Row>
-                <Col>
-                    <div className={'p-2 my-auto user-select-none'}>
-                        <h5>{rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
-                        <p className={'mb-1'}>
-                            {rooms?.map((room,index)=>{
-                                return <span key={index} className={'user-select-none'}>{index>0 && ', '}{room.Room_Number}</span>
-                            })}
-                        </p>
-                    </div>
-                </Col>
-                <Col>
-                    <div className={'p-2 user-select-none'}>
-                        <h5>Gazebo</h5>
-                        <p className={'mb-1'}>{Gazebo}</p>
-                    </div>
-                </Col>
-            </Row>
-            <div className={'p-2 my-auto'}>
-                <h5 className={'user-select-none'}>Menu</h5>
-                <SelectedMenus Menus={menus} Type={type} MenuCatalog={type === 'Dinner' ? menuCatalog.Dinner : menuCatalog.Bed}/>
-            </div>
+                <Row>
+                    <Col>
+                        <div className={'p-2 my-auto user-select-none'}>
+                            <h5>{rooms?.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</h5>
+                            <p className={'mb-1'}>
+                                {rooms?.map((room,index)=>{
+                                    return <span key={index} className={'user-select-none'}>{index>0 && ', '}{room.Room_Number}</span>
+                                })}
+                            </p>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className={'p-2 user-select-none'}>
+                            <h5>Gazebo</h5>
+                            <p className={'mb-1'}>{Gazebo}</p>
+                        </div>
+                    </Col>
+                </Row>
+                <div className={'p-2 my-auto'}>
+                    <h5 className={'user-select-none'}>Menu</h5>
+                    <SelectedMenus Menus={menus} Type={type} MenuCatalog={type === 'Dinner' ? menuCatalog.Dinner : menuCatalog.Bed}/>
+                </div>
             </Col>
             {notes !== null && <div className={'p-2 my-2 user-select-none text-center mx-auto w-100'}>
                 <h5>Σημειώσεις</h5>
@@ -109,12 +107,17 @@ export function ReservationLong({setReservations = ()=>{}}) {
     </>
 
     return (
-        <div className={'d-flex flex-column m-auto pt-3 pt-md-0'}>
+        <div className={'d-flex flex-column m-auto pt-md-0'}>
             {(activeReservation.Status === 'Pending' ? isConflicted : activeReservation.Status !== 'Cancelled') &&
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-3 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
-                onClick={()=>setEditing(!editing)}>{!editing ? 'Επεξεργασία' : 'Κράτηση'}</Button>}
-            <div className={`text-center box_shadow rounded-3 border ${editing ? 'px-1 py-3' : 'p-3'} m-auto h-fit-content ${isInResolveConflictTab ? ' mw-550px' : 'w-100 my-xl-auto '}`}>
-                {!editing ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}></ReservationEditModal>}
+                onClick={()=>setEditing(!editing)}>{!editing ? 'Ενέργειες' : 'Κράτηση'}</Button>}
+            <div className={`text-center box_shadow rounded-3 border ${editing ? 'px-1 py-3' : 'px-3 py-2'} m-auto h-fit-content ${isInResolveConflictTab ? ' mw-550px' : 'w-100 my-xl-auto '}`}>
+                {!editing ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}>
+                    <p className={'info-text-lg my-auto'}>
+                        Αποστολή E-mail
+                    </p>
+                    <a className={'mx-auto mt-2 w-fit-content btn btn-secondary'} href={'mailto:' + contactDetails.Email}>{contactDetails.Email}</a>
+                </ReservationEditModal>}
             </div>
         </div>
     )

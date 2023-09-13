@@ -37,7 +37,6 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
             totalWeekReservations += totalReservations;
             return <ListGroup.Item className={'my-2 d-flex flex-column box_shadow '} key={index}>
                 <div className={'d-flex flex-row'}>
-                    {/*{reservationsCount >= 3 && }*/}
                     {reservationsCount > 0 && <p className={'my-2 border-bottom py-2 px-4 box_shadow rounded-5 mx-auto user-select-none'} style={{width:'fit-content'}}>
                         {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount)}</p>}
                 </div>

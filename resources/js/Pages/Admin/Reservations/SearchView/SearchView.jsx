@@ -1,8 +1,7 @@
-import {Badge, Col, Row, Stack} from "react-bootstrap";
+import {Badge, Col, FloatingLabel, Form, Row, Stack} from "react-bootstrap";
 import {useCallback, useContext, useEffect, useReducer, useRef, useState} from "react";
 import {Inertia} from "@inertiajs/inertia";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
-import gsap from "gsap";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {SearchFilters} from "./SearchFilters";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
@@ -12,58 +11,22 @@ import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveRe
 
 export function SearchView() {
     const [searchResult,setSearchResult] = useState(null);
-    const emailInputRef = useRef(null),
-    phoneInputRef = useRef(null),
-    confNumberInputRef = useRef(null),
-    {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-    [showFilters, setShowFilters] = useState(true),
+    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+    [showCriteria, setShowCriteria] = useState(true),
     InnerWidth = useContext(InnerWidthContext);
-
-    const animateInputFocus = (inputRef) => {
-        const inputRefs = [emailInputRef, phoneInputRef, confNumberInputRef];
-        inputRefs.forEach((ref) => {
-            const tl = gsap.timeline();
-            if(inputRef === null || inputRef === ref.current)
-                tl.to(ref.current, {
-                    x: 0, // Set the default position to 0
-                    opacity: 1, // Set the default opacity to 1
-                    duration: 0.3,
-                    ease: 'power3.out', // Add easing for smoother animation
-                    overwrite: 'auto', // Automatically handle conflicting animations
-                    display:'block'
-                });
-
-            if (inputRef !== null && ref.current !== inputRef) {
-                tl.to(ref.current, {
-                    x: -200,
-                    opacity: 0,
-                    duration: 0.3,
-                    ease: 'power3.out',
-                    overwrite: 'auto',
-                });
-                tl.to(ref.current, {
-                    display:'none',
-                    duration:0,
-                })
-            }
-        });
-    };
 
     const searchCriteriaReducer = (state,action) => {
         switch (action.type) {
             case 'Set_Email' : {
-                // if(action.value.length === 0 || state.email.length === 0)
-                    animateInputFocus(emailInputRef.current);
+                    // animateInputFocus(emailInputRef.current);
                 return {...state,email:action.value};
             }
             case 'Set_Phone' : {
-                // if(action.value.length === 0 || state.phone_number.length === 0)
-                    animateInputFocus(phoneInputRef.current);
+                    // animateInputFocus(phoneInputRef.current);
                 return {...state,phone_number:action.value};
             }
             case 'Set_Confirmation_Number' : {
-                // if(action.value.length === 0 || state.conf_number.length === 0)
-                    animateInputFocus(confNumberInputRef.current);
+                    // animateInputFocus(confNumberInputRef.current);
                 return {...state,conf_number:action.value};
             }
             case 'Set_Reservation_Type' : {
@@ -96,9 +59,6 @@ export function SearchView() {
 
     useEffect(()=>{
         if(noCriteriaActive) {
-            if(activeReservation !== null)
-                setActiveReservation(null)
-            animateInputFocus(null);
             return setSearchResult(null);
         }
         if(searchCriteria.email !== '' || searchCriteria.conf_number !== '' || searchCriteria.phone_number !== '')
@@ -159,14 +119,32 @@ export function SearchView() {
         </Stack>}
     </Col>;
 
+    const Criteria = <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} filtersVisibility={{showCriteria, setShowCriteria}}>
+        <FloatingLabel controlId="conf_number_search_input" label={'Αριθμός Κράτησης'} className="my-3 mx-auto mw-250px">
+            <Form.Control
+                type="text" placeholder="Αρ. Κράτησης" value={searchCriteria.conf_number} required aria-label="Reservation Number"
+                onChange={(e) => dispatchSearchCriteria({type:'Set_Confirmation_Number', value:e.target.value})}
+                className={'rounded-4'} aria-describedby="Reservation Number" disabled={searchCriteria.phone_number !== '' || searchCriteria.email !== ''}/>
+        </FloatingLabel>
+        <FloatingLabel controlId="email_search_input" label={'Email'} className="my-3 mx-auto mw-250px">
+            <Form.Control
+                type="email" placeholder="Email" value={searchCriteria.email} required aria-label="Email"
+                onChange={(e) => dispatchSearchCriteria({type:'Set_Email', value:e.target.value})}
+                className={'rounded-4'}  aria-describedby="Email" disabled={searchCriteria.phone_number !== '' || searchCriteria.conf_number !== ''}/>
+        </FloatingLabel>
+        <FloatingLabel controlId="phone_number_search_input" label={'Τηλέφωνο'} className="my-3 mx-auto mw-250px">
+            <Form.Control
+                type="email" placeholder="Τηλέφωνο" aria-label="Phone Number" aria-describedby="Phone Number"
+                value={searchCriteria.phone_number} className={'rounded-4'} disabled={searchCriteria.email !== '' || searchCriteria.conf_number !== ''}
+                onChange={(e) => dispatchSearchCriteria({type:'Set_Phone', value:e.target.value})}/>
+        </FloatingLabel>
+    </SearchFilters>;
     const renderContent = () => {
         if(InnerWidth >= 1200) {
             return <>
                 <Col className={`search-filters d-flex flex-column bg-white py-3 ${innerWidth < 992 ? 'sticky-top' : ''} ${InnerWidth < 768 ? 'h-fit-content' : 'h-100'}`}
                      xl={3}>
-                    <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
-                                   filtersVisibility={{showFilters, setShowFilters}}>
-                    </SearchFilters>
+                    {Criteria}
                 </Col>
                 {reservationsStack}
                 {activeReservation !==null && <Col className={'d-flex h-100 overflow-y-auto px-1'} >
@@ -176,8 +154,7 @@ export function SearchView() {
         }
 
         return <>
-            <SearchFilters SearchCriteria={{searchCriteria,dispatchSearchCriteria,noCriteriaActive}} inputRefs={{confNumberInputRef, emailInputRef, phoneInputRef}}
-                           filtersVisibility={{showFilters, setShowFilters}}/>
+            {Criteria}
             {reservationsStack}
             <MobileActiveReservationOffCanvas/>
         </>
@@ -191,15 +168,4 @@ export function SearchView() {
         </Row>
     )
 }
-{/*<h6 className={'my-2'}>Ή</h6>*/}
-{/*<InputGroup className="my-3">*/}
-{/*    <InputGroup.Text className={'bg-transparent'}>Αριθμός Δωματίου</InputGroup.Text>*/}
-{/*    <Form.Control*/}
-{/*        placeholder="Αριθμός Δωματίου"*/}
-{/*        aria-label="Room Number"*/}
-{/*        aria-describedby="Room Number"*/}
-{/*        value={searchCriteria.room_number}*/}
-{/*        onChange={(e)=> dispatchSearchCriteria(*/}
-{/*            {type:'Set_Room_Number',value:e.target.value})}*/}
-{/*    />*/}
-{/*</InputGroup>*/}
+

@@ -13,12 +13,13 @@ import {MobileUtilityOffCanvas} from "../../OffCanvases/MobileUtilityOffCanvas";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservationFormModal";
 
-export function MobileTodayView({reservations_of_current_date,filter,children, requestProgress}) {
+export function MobileTodayView({reservations_of_current_date, filter, children, requestProgress, dateDisabled}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     {reservationsFilter,setReservationsFilter} = filter,
     innerWidth = useContext(InnerWidthContext),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
-    const shouldShowStack = activeReservation === null;
+    const shouldShowStack = activeReservation === null,
+    [isDateDisabled,existingReservationsAllowed] = dateDisabled;
 
     const reservationsToShow = useCallback(()=> {
         if(reservations_of_current_date.length === 0)
@@ -55,13 +56,14 @@ export function MobileTodayView({reservations_of_current_date,filter,children, r
     return ( <div className={'h-100 d-flex flex-column text-center'}>
             {shouldShowStack ? <>
                 <MobileUtilityOffCanvas title={'Φίλτρα και Πληροφορίες'} height={20}>
-                    <Stack direction={(innerWidth > innerHeight ) ? 'horizontal' : 'vertical'} gap={4} className={'flex-fill'}>
-                        {/*<Stack direction={'horizontal'} className={'flex-fill'}>*/}
-                        <section className={'d-flex mb-1 gap-4'}>
-                            <Badge bg="danger" className={'m-auto'}>Απενεργοποιημένη</Badge>
-                            <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
-                        </section>
+                    <Stack direction={(innerWidth > innerHeight ) ? 'horizontal' : 'vertical'} gap={3} className={'flex-fill'}>
                             {children}
+                        <section className={'d-flex gap-4'}>
+                            {
+                                isDateDisabled ? <Badge bg="danger" className={'m-auto ms-'}>Απενεργοποιημένη</Badge> :
+                                    <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+                            }
+                        </section>
                         {reservations_of_current_date.length > 0 &&
                             <FiltersBar setReservationsFilter={setReservationsFilter}
                                         disabled={reservations_of_current_date.length === 0}

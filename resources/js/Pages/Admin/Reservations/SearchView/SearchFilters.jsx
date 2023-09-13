@@ -1,28 +1,20 @@
-import {OptionsSVG} from "../../../../SVGS/OptionsSVG";
-import {Button, FloatingLabel, Form, Offcanvas, Stack} from "react-bootstrap";
-import {useState} from "react";
-import {CloseSVG} from "../../../../SVGS/CloseSVG";
-import {ChevronUpSVG} from "../../../../SVGS/ChevronUpSVG";
+import {Button, Form, Offcanvas, Stack} from "react-bootstrap";
 import {ChevronDownSVG} from "../../../../SVGS/ChevronDownSVG";
-import {ChevronLeftSVG} from "../../../../SVGS/ChevronLeftSVG";
-import {ChevronRightSVG} from "../../../../SVGS/ChevronRightSVG";
 
-export function SearchFilters({SearchCriteria,inputRefs, filtersVisibility}) {
-    const {confNumberInputRef,emailInputRef,phoneInputRef} = inputRefs,
-        {searchCriteria,dispatchSearchCriteria, noCriteriaActive} = SearchCriteria,
-        {showFilters, setShowFilters} = filtersVisibility;
-
+export function SearchFilters({SearchCriteria, filtersVisibility, children}) {
+    const {searchCriteria,dispatchSearchCriteria, noCriteriaActive} = SearchCriteria,
+        {showCriteria, setShowCriteria} = filtersVisibility;
 
     return (
         <>
             {innerWidth <= 1200 && <div className={'m-auto d-flex flex-column p-2'}>
                 <h6 className={'text-center '}>Φίλτρα</h6>
                 <ChevronDownSVG height={30} width={30} className={'border-0 text-dark align-self-end m-auto pe-1'}
-                onClick={() => setShowFilters(true)}/>
+                onClick={() => setShowCriteria(true)}/>
                 </div>}
-            <Offcanvas show={showFilters} placement={'top'} responsive={'xl'} scroll={true} backdrop={true}
-               className={'mx-2 h-fit-content my-lg-auto d-flex'} backdropClassName={'search_filters_backdrop'}
-               style={{borderRadius:'0 0 15px 15px', height:innerWidth < 1200 ? 'fit-content' : '100%'}} onHide={()=>setShowFilters(false)}>
+            <Offcanvas show={showCriteria} placement={'top'} responsive={'xl'} scroll={true} backdrop={true}
+                       className={'mx-2 h-fit-content my-lg-auto d-flex'} backdropClassName={'search_filters_backdrop'}
+                       style={{borderRadius:'0 0 15px 15px', height:innerWidth < 1200 ? 'fit-content' : '100%'}} onHide={()=>setShowCriteria(false)}>
                 <div className={'d-flex'}>
                 </div>
                 <Offcanvas.Header closeButton>
@@ -68,24 +60,7 @@ export function SearchFilters({SearchCriteria,inputRefs, filtersVisibility}) {
                                 />
                             </div>
                             <Stack direction={innerWidth < 1200 ? 'horizontal' : 'vertical'} gap={3} className={'flex-wrap'}>
-                                <FloatingLabel controlId="conf_number_search_input" label={'Αριθμός Κράτησης'} className="my-3 mx-auto mw-250px" ref={confNumberInputRef} >
-                                    <Form.Control
-                                        type="text" placeholder="Αρ. Κράτησης" value={searchCriteria.conf_number} required aria-label="Reservation Number"
-                                        onChange={(e) => dispatchSearchCriteria({type:'Set_Confirmation_Number', value:e.target.value})}
-                                        className={'rounded-4'} aria-describedby="Reservation Number"/>
-                                </FloatingLabel>
-                                <FloatingLabel controlId="email_search_input" label={'Email'} className="my-3 mx-auto mw-250px" ref={emailInputRef}>
-                                    <Form.Control
-                                        type="email" placeholder="Email" value={searchCriteria.email} required aria-label="Email"
-                                        onChange={(e) => dispatchSearchCriteria({type:'Set_Email', value:e.target.value})}
-                                        className={'rounded-4'}  aria-describedby="Email"/>
-                                </FloatingLabel>
-                                <FloatingLabel controlId="phone_number_search_input" label={'Τηλέφωνο'} className="my-3 mx-auto mw-250px" ref={phoneInputRef}>
-                                    <Form.Control
-                                        type="email" placeholder="Τηλέφωνο" aria-label="Phone Number" aria-describedby="Phone Number"
-                                        value={searchCriteria.phone_number} className={'rounded-4'}
-                                        onChange={(e) => dispatchSearchCriteria({type:'Set_Phone', value:e.target.value})}/>
-                                </FloatingLabel>
+                                {children}
                             </Stack>
                         </Stack>
                         <Button variant={'outline-secondary'} className={'my-3 w-fit-content mx-auto'}
@@ -93,7 +68,7 @@ export function SearchFilters({SearchCriteria,inputRefs, filtersVisibility}) {
                                 onClick={() => dispatchSearchCriteria({type: 'Reset'})}>
                             Καθαρισμός φίλτρων
                         </Button>
-                        <p className={'info-text'} hidden={!showFilters}>Εμφανίζονται μόνο κρατήσεις, με ημερομηνία αργότερη της σημερινής.</p>
+                        <p className={'info-text'} hidden={!showCriteria}>Εμφανίζονται μόνο κρατήσεις, με ημερομηνία αργότερη της σημερινής.</p>
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>

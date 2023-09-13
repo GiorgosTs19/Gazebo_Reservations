@@ -52,7 +52,7 @@ export function TodayView({todayReservations}) {
                    <h5>{formatDateInGreek(today)} {isDateDisabled && <Badge bg="danger" className={'ms-3'}>Απενεργοποιημένη</Badge>}</h5>
                </LargeDevicesTodayView>
                : <MobileTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
-                requestProgress={requestProgress}>
+                requestProgress={requestProgress} dateDisabled={[isDateDisabled,existingReservationsAllowed]}>
                        <h5 className={'m-auto'}>{formatDateInGreek(today)}</h5>
                </MobileTodayView>
            }
