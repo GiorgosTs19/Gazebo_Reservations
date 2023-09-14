@@ -31,7 +31,7 @@ export function ConflictsContainer() {
     },[date_conflicts_diff, table_conflicts_diff]);
 
 
-    const popOver = <Popover id={`Conflicts`} className={'my-4'} >
+    const popOver = <Popover id={`Conflicts`} className={'my-4'} hidden={!show}>
         <Popover.Header className={'text-center'} as="h3">Κρατήσεις που απαιτούν αλλαγές</Popover.Header>
         <Popover.Body className={'px-1'}>
             <Tabs defaultActiveKey="Day" id="justify-tab-example" className="mb-3 flex-row" fill>

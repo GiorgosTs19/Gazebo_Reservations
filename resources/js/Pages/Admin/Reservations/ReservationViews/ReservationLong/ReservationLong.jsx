@@ -37,6 +37,7 @@ export function ReservationLong({setReservations = ()=>{}}) {
     {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     [editing, setEditing] = useState(false),
     isInResolveConflictTab = activeTabKey === 'ResolveConflict';
+
     const handleBack = () => {
         setActiveReservation(null);
         if(resolvingConflict[0]) {
@@ -51,8 +52,8 @@ export function ReservationLong({setReservations = ()=>{}}) {
 
     const [isConflicted,conflictType,conflictMessage] = useCheckConflict(activeReservation.id);
     const reservationTab = <>
-        {/*{(innerWidth > 992 && activeReservationsView === 'Search') &&*/}
-        {/*    <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}*/}
+        {(innerWidth > 992 && isInResolveConflictTab) &&
+            <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
         <ReservationDetails activeReservation={activeReservation} Attendees={attendees} handleActiveReservation={setActiveReservation}
         editReservation={{editing, setEditing}} isConflicted={isConflicted} conflictMessage={conflictMessage}>
         </ReservationDetails>
