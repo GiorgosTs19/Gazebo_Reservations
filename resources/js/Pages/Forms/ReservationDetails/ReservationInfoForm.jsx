@@ -36,7 +36,6 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
         // Checks the requirements for proceeding to the Menu Selection Tab
         switch (parseInt(bookingDetails.number_of_people)) {
             case 1:{
-                console.log('lemao')
                 return (bookingDetails.last_name.length > 0 && bookingDetails.first_name.length > 0
                     && bookingDetails.email.length > 0 && bookingDetails.phone_number.length > 0 && bookingDetails.primary_room !== '');
             }
@@ -63,7 +62,6 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
         }
     };
 
-    console.log(checkProceedRequirements())
     return (
         <div ref={ref} className={'d-flex'}>
             <Card className={'text-center mh-600px pb-3 my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +

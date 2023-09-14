@@ -34,13 +34,13 @@ export function MenusOverview({className = ''}) {
     };
 
     return (
-        <div className={'mx-auto w-fit-content ' + className}>
-            <i><Card.Subtitle className={'mb-2 info-text-lg'}>Selected {bookingDetails.more_rooms ? 'Menu / Room' : 'Menu'}</Card.Subtitle></i>
+        <div className={'w-fit-content text-start ' + className}>
+            <p className={'mb-1 info-text'}>Selected {bookingDetails.more_rooms ? 'Menu / Room' : 'Menu'}</p>
             <Card.Text className={'mb-2'}>
-                <i>{getContent(true)}</i>
+                {getContent(true)}
             </Card.Text>
             {bookingDetails.more_rooms && bookingDetails.secondary_room !== '' && <Card.Text className={'mb-2'}>
-                <i>{getContent(false)}</i>
+                {getContent(false)}
             </Card.Text>}
         </div>
     )

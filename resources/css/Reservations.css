@@ -166,7 +166,7 @@ h1.night,h2.night,h3.night,h4.night,h5.night,h6.night, div.night
     color: #FFFFE0;
 }
 
-ul .list-group-item.active {
+.menu-list .menu-item.active {
     background-color: rgba(51, 100, 112, 0.42) !important;
 }
 

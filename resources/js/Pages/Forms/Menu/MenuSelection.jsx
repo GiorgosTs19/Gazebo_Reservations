@@ -1,5 +1,3 @@
-import {Badge,ListGroup} from "react-bootstrap";
-
 import {useContext, useEffect} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {MenuInfoModal} from "./MenuInfoModal";
@@ -86,12 +84,12 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
         if(onlyOne)
             handleSelectMenu();
     },[bookingDetails.type]);
-
+    console.log(onlyOne, dessert)
     return (
-        <ListGroup.Item eventKey={index} key={menu.id} as={'li'} onClick={handleSelectMenu} className={`d-flex justify-content-between align-items-start border-0 bg-transparent ` + (isSelected() && !dessert ? 'active' : '')}
-        disabled={onlyOne}>
-            <div className={"fw-bold"} >{menu.Name} {isSelected()}</div>
+        <div key={menu.id} onClick={handleSelectMenu}
+        className={`d-flex justify-content-between py-0 px-2 align-items-start bg-transparent my-2 rounded-3 menu-item ${((isSelected() && !dessert) ? ' active' : '')}`}>
+            <p className={"fw-bold my-auto"}>{menu.Name} {isSelected()}</p>
             {<MenuInfoModal menu={menu}></MenuInfoModal>}
-        </ListGroup.Item>
+        </div>
     )
 }

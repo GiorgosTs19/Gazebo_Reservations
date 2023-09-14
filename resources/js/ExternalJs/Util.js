@@ -26,7 +26,7 @@ export function getFormattedDate(date, prefix='-', selection=1) {
  * @param withTime
  * @returns the new date string using the new prefix (for example : Y-m-d -> d-m-Y, d-m-Y -> Y-m-d).
  */
-export function changeDateFormat(date,oldPrefix,newPrefix=oldPrefix,withTime=false) {
+export function changeDateFormat(date,oldPrefix='-',newPrefix=oldPrefix,withTime=false) {
     const date_parts = withTime ? date?.split(' ')[0].split(oldPrefix) : date?.split(oldPrefix);
     if(date_parts)
         return date_parts[2] + newPrefix + date_parts[1] + newPrefix + date_parts[0];

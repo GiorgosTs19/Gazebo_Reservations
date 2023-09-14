@@ -1,20 +1,23 @@
 import {Badge, Col, Image, ListGroup, Modal, Row, Stack} from "react-bootstrap";
 import {Inertia} from "@inertiajs/inertia";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {MenuItem} from "../../Admin/Menu/MenuItem";
 import {InfoSVG} from "../../../SVGS/InfoSVG";
+import {IsDemoContext} from "../../../Contexts/IsDemoContext";
 
 export function MenuInfoModal({menu}) {
     const [show, setShow] = useState(false);
     const [menuItems,setMenuItems] = useState([]);
+    const isDemo = useContext(IsDemoContext);
     useEffect(()=>{
-        if(show)
+        if(!show)
+            return
             Inertia.get(route('Menu_Items'), {menu_id:menu.id}, {onSuccess:(res)=>setMenuItems(res.props.Menu_Items),
                 preserveState:true, preserveScroll:true, only:['Menu_Items']});
     },[show]);
     return (
         <>
-            <Badge bg="transparent" pill className={'my-auto'} onClick={() => setShow(true)}>
+            <Badge bg="transparent" pill className={`my-auto ${isDemo ? 'text-dark' : ''}`} onClick={() => setShow(true)}>
                 <InfoSVG/>
             </Badge>
             <Modal size="sm" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
