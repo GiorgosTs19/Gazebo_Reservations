@@ -1,11 +1,9 @@
 import {Badge, Stack} from "react-bootstrap";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback} from "react";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
-import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
-import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";

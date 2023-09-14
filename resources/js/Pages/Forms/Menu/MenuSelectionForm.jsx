@@ -32,11 +32,11 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
         }
     },[bookingDetails.primary_menu,bookingDetails.secondary_menu]);
     return (
-        <div className={'px-4 overflow-y-auto mh-600px'} ref={ref}>
+        <div className={'px-1 overflow-y-auto overflow-x-hidden mh-660px '} ref={ref}>
             {innerWidth > 1300 ? <LargeDevicesMenus bookingDetails={bookingDetails}></LargeDevicesMenus> :
             <MobileMenus bookingDetails={bookingDetails}></MobileMenus>}
             {checkRequirement() &&
-                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 box_shadow border-0 mb-3 reservation-button text-dark position-relative'}>Finalize Reservation</Button>
+                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 border-0 mb-3 reservation-button text-dark position-relative'}>Finalize Reservation</Button>
             }
         </div>
     )

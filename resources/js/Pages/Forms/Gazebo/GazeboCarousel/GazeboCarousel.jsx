@@ -37,10 +37,11 @@ export function GazeboCarousel() {
         <GazebosContext.Provider value={Gazebos}>
             {requestProgress === 'Pending' ? <SpinnerSVG/> :
                 <Carousel activeIndex={index} onSelect={handleSelect}
-                   className={'mx-auto py-4 text-dark'}
+                   className={'my-auto pt-2 pb-4 py-md-4 text-dark'}
                    variant={'dark'}
                    controls
-                   interval={null}>
+                   interval={null}
+                    slide={innerWidth >= 768}>
                 {gazebosToShow}
             </Carousel>}
         </GazebosContext.Provider>

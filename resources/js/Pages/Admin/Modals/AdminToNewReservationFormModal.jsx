@@ -13,10 +13,26 @@ export function AdminToNewReservationFormModal({returnButton = false, reservatio
     };
     const date = getFormattedDate(new Date(),'-',1),
     [numberOfPeople, setNumberOfPeople] = useState(1);
+
+    const canProceed = () => {
+        if(numberOfPeople <=0)
+            return false;
+        switch (reservationType) {
+            case 'Dinner' : {
+                return numberOfPeople <=4;
+            }
+            case 'Bed' : {
+                return numberOfPeople <=2;
+            }
+            default : {
+                return false;
+            }
+        }
+    }
     return (
         <>
             {returnButton ? <AddSVG onClick={handleShow} className={'m-auto'} />:<Nav.Link className={'secondary my-auto hover-scale-1_03'} onClick={handleShow}>Νέα Κράτηση</Nav.Link>}
-            <Modal show={showModal} className={'text-center'} centered>
+            <Modal show={showModal} className={'text-center'} centered onHide={()=>setShowModal(false)}>
                 <Modal.Header>
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Μετάβαση στην φόρμα νέων κρατήσεων
@@ -38,8 +54,10 @@ export function AdminToNewReservationFormModal({returnButton = false, reservatio
                         <FloatingLabel controlId="floatingInput" label={'Αριθμός Ατόμων'} className="my-3 mx-auto w-100">
                             <Form.Control
                                 type="number" placeholder="Αριθμός Ατόμων" onChange={e=>setNumberOfPeople(e.target.value)}
-                                value={numberOfPeople} required />
-                            {numberOfPeople <0 && <p className={'text-danger'}>Ο αριθμός ατόμων, πρέπει να είναι θετικός αριθμός.</p>}
+                                value={numberOfPeople} required max={reservationType === 'Dinner' ? 4 : 2} min={0}/>
+                            {numberOfPeople <0 && <p className={'text-danger mt-2'}>Ο αριθμός ατόμων, πρέπει να είναι θετικός αριθμός.</p>}
+                            {reservationType === 'Dinner' ? (numberOfPeople > 4 && <p className={'text-danger mt-2'}>Επιτρέπονται μέχρι 4 άτομα για το είδος κράτησης που επιλέξατε</p>) :
+                                (numberOfPeople > 2 && <p className={'text-danger mt-2'}>Επιτρέπονται μέχρι 2 άτομα για το είδος κράτησης που επιλέξατε</p>)}
                         </FloatingLabel>
                         <p className={'my-3 info-text-lg'}>
                             Η ημερομηνία, ο τύπος κράτησης και ο αριθμός ατόμων, θα καταχωρηθούν αυτόματα για εσάς.
@@ -54,7 +72,7 @@ export function AdminToNewReservationFormModal({returnButton = false, reservatio
                     <Button variant="outline-secondary" onClick={()=>setShowModal(false)}>Ακύρωση</Button>
                     {returnButton ?
                         <Button variant="outline-primary"
-                                onClick={()=>handleCreateNewReservationForDate(date,reservationType, numberOfPeople)} disabled={numberOfPeople <= 0}>Μετάβαση</Button>
+                                onClick={()=>handleCreateNewReservationForDate(date,reservationType, numberOfPeople)} disabled={!canProceed()}>Μετάβαση</Button>
                         :
                         <Button variant="outline-primary"
                              onClick={() => Inertia.get(route('Show.Gazebo.Reservation.Form'))}>Μετάβαση</Button>}

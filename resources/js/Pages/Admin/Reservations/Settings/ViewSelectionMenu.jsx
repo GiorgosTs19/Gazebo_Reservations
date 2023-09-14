@@ -1,12 +1,7 @@
-import {ListGroup, Stack} from "react-bootstrap";
+import {Stack} from "react-bootstrap";
 import {useContext} from "react";
 import {ViewContext} from "../../../../Contexts/ViewContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {TodayViewSVG} from "../../../../SVGS/TodayViewSVG";
-import {WeeklyViewSVG} from "../../../../SVGS/WeeklyViewSVG";
-import {MonthlyViewSVG} from "../../../../SVGS/MonthlyViewSVG";
-import {SearchViewSVG} from "../../../../SVGS/SearchViewSVG";
-import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 
 export function ViewSelectionMenu() {
     const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),

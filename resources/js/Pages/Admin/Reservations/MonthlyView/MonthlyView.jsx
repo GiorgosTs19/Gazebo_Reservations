@@ -103,7 +103,7 @@ export function MonthlyView() {
         return "›";
     };
     // Will always try to show as many reservations per line, to save space.
-    const reservationsToRender = (activeReservation !== null) ? 1 : (innerWidth > 1600 ? 3 : (innerWidth > 1400 ? (2) : (innerWidth > 1150 ? 3 : (innerWidth > 900 ? 2 : 1))));
+    const reservationsToRender = (activeReservation !== null) ? 1 : (innerWidth > 1600 ? 3 : (innerWidth > 1400 ? (2) : (innerWidth > 1150 ? 3 : (innerWidth > 700 ? 2 : 1))));
 
     // Renders the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
@@ -128,8 +128,7 @@ export function MonthlyView() {
         }
         return [reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
-                {chunk.map(reservation =>
-                    innerWidth < 500 ? <ReservationShortest Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-2 my-4'}/> : <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-2 my-4'}/>
+                {chunk.map(reservation => <ReservationShort Reservation={reservation} key={reservation.id} className={`border mx-0 mx-sm-2 my-4 flex-fill`}/>
                 )}
             </div>
         )),reservations_of_current_date.length]

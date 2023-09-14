@@ -5,8 +5,6 @@ import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
-import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
-import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 
 export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
@@ -36,8 +34,7 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
                                 reservationsFilter={reservationsFilter}
                                 className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
                     </FiltersBar>}
-                <Stack className={'p-3 overflow-y-auto ' + (innerWidth > 992 ? ' mh-600px' : ' h-75')}>
-                    {/**/}
+                <Stack className={'p-3 overflow-y-auto d-flex' + (innerWidth > 992 ? ' mh-600px' : ' h-75')}>
                     {reservations}
                 </Stack>
             </>

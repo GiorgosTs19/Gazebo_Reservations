@@ -87,6 +87,7 @@ export default function Gazebo(props) {
             }
         }
     },[progress]);
+
     const getDisabledDays = () => {
         return Disabled_Days.filter(item=>item.Type === bookingDetails.type);
     }
@@ -101,7 +102,7 @@ export default function Gazebo(props) {
                                 <GazebosContext.Provider value={Gazebos}>
                                     <IsTouchableContext.Provider value={isTouchDevice()}>
                                         <InnerWidthContext.Provider value={innerWidth}>
-                                            <Container fluid className={`p-3 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}>
+                                            <Container fluid className={`px-3 py-1 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}>
                                                 <DisabledDaysContext.Provider value={getDisabledDays()}>
                                                     {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
                                                                              onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}

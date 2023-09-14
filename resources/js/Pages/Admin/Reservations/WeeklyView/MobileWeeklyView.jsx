@@ -7,7 +7,6 @@ import {Accordion, ListGroup} from "react-bootstrap";
 import {useCallback,useContext} from "react";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
-import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
@@ -23,7 +22,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             if(reservations_of_current_date.length === 0)
                 return [<h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>,0];
 
-            const reservationsToRender = innerWidth > 700 ? 2 : 1;
+            const reservationsToRender = innerWidth >= 768 ? 2 : 1;
 
             const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
                 reservations_of_current_date.filter((reservation)=>{
@@ -61,8 +60,8 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
             const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,disabled_days);
             return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
-                <Accordion.Header><span className={' me-1 ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Header><span className={' me-1 mx-auto ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
+                <Accordion.Body className={'px-3'}>
                     <ListGroup horizontal={false} gap={5} className={'py-1'}>
                         {Reservations}
                     </ListGroup>
@@ -81,7 +80,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
                             reservationsFilter={reservationsFilter} className={'mx-auto my-3'}>
                 </FiltersBar>
                 <Accordion className="week-days p-0 mx-1 overflow-auto" gap={2}>
-                    {renderWeekDays()}
+                        {renderWeekDays()}
                 </Accordion>
             </> : <MobileActiveReservationOffCanvas/>}
         </div>
