@@ -20,14 +20,18 @@ export function ConflictsContainer() {
         if(showBlueDot)
             setShowBlueDot(false);
     }
-
+    const handleClose = () => {
+        console.log('closing')
+        setShow(false);
+    }
     useEffect(()=> {
         if(showBlueDot)
             return;
         setShowBlueDot(date_conflicts_diff > 0 || table_conflicts_diff > 0);
     },[date_conflicts_diff, table_conflicts_diff]);
 
-    const popOver = <Popover id={`Conflicts`} className={'my-4'}>
+
+    const popOver = <Popover id={`Conflicts`} className={'my-4'} >
         <Popover.Header className={'text-center'} as="h3">Κρατήσεις που απαιτούν αλλαγές</Popover.Header>
         <Popover.Body className={'px-1'}>
             <Tabs defaultActiveKey="Day" id="justify-tab-example" className="mb-3 flex-row" fill>
@@ -51,9 +55,9 @@ export function ConflictsContainer() {
         <OverlayTrigger
             rootClose
             trigger="click"
-            show={show}
             key={'bottom'}
             placement={'bottom'}
+            onExit={handleClose}
             overlay={popOver} onToggle={handleDisableBlueDot}>
             <section className={'me-xl-1'}>
                 <Button className={`${show ? 'bg-secondary-subtle' : 'bg-transparent'} border-0 text-dark px-1`} onClick={()=>setShow(!show)}><BellSVG height={24} width={24} className={'mx-0 hover-scale-1_1'}/><span className={'info-text'}>({totalConflictsCount})</span></Button>

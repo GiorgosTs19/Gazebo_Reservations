@@ -38,8 +38,8 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
-    public function share(Request $request): array
-    {
+    public function share(Request $request): array {
+        $is_Demo = env('IS_DEMO', false);
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'is_Demo' => $is_Demo,
         ]);
     }
 }

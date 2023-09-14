@@ -30,7 +30,6 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
             }
         }
     },
-    isTouchable = useContext(IsTouchableContext),
     innerWidth = useContext(InnerWidthContext),
     typeSelectionRef = useRef(null),
     dateSelectionRef = useRef(null),
@@ -103,12 +102,12 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
     },[progress]);
 
     return (
-        <div className={`${progress === 'Table' ? 'px-0 py-3' : 'p-3 '} border border-1 rounded-5 mx-auto content-card h-fit-content my-auto position-relative `
+        <div className={`${progress === 'Table' ? 'px-0 py-3' : 'px-3 pt-3 pb-3'} border border-1 rounded-5 mx-auto content-card h-fit-content my-auto position-relative `
             + (innerWidth > 992 ? ' w-50 ' : ' w-100 ')}
               ref={ref}>
             <GazeboBookingProgressBar></GazeboBookingProgressBar>
             <Row className={'w-100 d-flex mx-0 '}>
-                <Col ref={typeSelectionRef} className={'my-auto'} xs={12} md={bookingDetails.type === '' ? 12 : (progress !== 'Type' ? 12 : 5)}>
+                <Col ref={typeSelectionRef} className={'mb-2 my-md-auto'} xs={12} md={bookingDetails.type === '' ? 12 : (progress !== 'Type' ? 12 : 5)}>
                     <Row className={'m-auto'}>
                         <Col className={'p-2 border-blue border border-start-0 border-top-0 border-bottom-0 d-flex ' + (progress !== 'Type' ? 'opacity-50' : '')}
                              style={{backgroundColor:bookingDetails.type ==='Dinner' ? 'rgba(79,158,178,0.7)' : '',borderRadius:'15px 0 0 15px',userSelect:'none',cursor:'pointer'}}
@@ -166,7 +165,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
             </div>}
             {/*<DateNotes></DateNotes>*/}
             {progress === 'Type' && !showCalendar && <Button variant={'outline-light'} hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
-                className={'my-2 box_shadow reservation-button text-dark'}
+                className={'my-2 reservation-button text-dark'}
                 onClick={handleNextClick}
                 style={{width: 'fit-content', height: 'fit-content'}}>
                 Book on {changeDateFormat(bookingDetails?.date,'-','/')}

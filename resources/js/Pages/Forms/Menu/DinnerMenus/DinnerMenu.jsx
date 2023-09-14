@@ -1,32 +1,31 @@
-import {Col, ListGroup, Row} from "react-bootstrap";
+import {Col, ListGroup, Row, Stack} from "react-bootstrap";
 import {MenuSelection} from "../MenuSelection";
 import {useContext} from "react";
 import {MenuContext} from "../../../../Contexts/MenuContext";
 import {BookingDetailsContext} from "../../../../Contexts/BookingDetailsContext";
 
 export function DinnerMenu({primary}) {
-    const Menus = useContext(MenuContext),
-        {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext);
+    const Menus = useContext(MenuContext);
     return (
         <>
             <Row>
-                <Col xs={12}>
+                <Col xs={12} className={'px-0'}>
                     <div className={'p-2 box_shadow border-0 rounded-4 my-2 menu-list'}>
                         <h5>Main Dishes</h5>
-                        <ListGroup as="ul">
+                        <Stack>
                             {
                                 Menus.Mains?.map((menu,index) => {
                                     return <MenuSelection menu={menu} index={index} key={menu.id} primary={primary}
                                                           onlyOne={Menus.Mains.length === 1}></MenuSelection>
                                 })
                             }
-                        </ListGroup>
+                        </Stack>
                     </div>
                 </Col>
-                <Col className={'text-center d-flex flex-column mt-3 mt-lg-2'} xs={12}>
+                <Col className={'text-center d-flex flex-column mt-3 mt-lg-2 px-0'} xs={12}>
                     <div className={'p-2 box_shadow border-0 rounded-4 my-auto menu-list'}>
                         <h5 className={'text-center'}>Desserts</h5>
-                        <ListGroup as="ul" className={'my-auto'}>
+                        <Stack className={'my-auto menu-list'}>
                             {
                                 Menus.Desserts?.map((menu,index) => {
                                     return <MenuSelection menu={menu} index={index} key={menu.id} primary={primary} dessert
@@ -34,7 +33,7 @@ export function DinnerMenu({primary}) {
                                     </MenuSelection>
                                 })
                             }
-                        </ListGroup>
+                        </Stack>
                     </div>
                 </Col>
             </Row>
