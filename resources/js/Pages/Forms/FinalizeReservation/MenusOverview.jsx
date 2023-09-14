@@ -34,7 +34,7 @@ export function MenusOverview({className = ''}) {
     };
 
     return (
-        <div className={'w-fit-content text-start ' + className}>
+        <div className={`w-fit-content mx-xl-auto ${innerWidth >= 1200 ? 'text-center' : 'text-start '} ${className}`}>
             <p className={'mb-1 info-text'}>Selected {bookingDetails.more_rooms ? 'Menu / Room' : 'Menu'}</p>
             <Card.Text className={'mb-2'}>
                 {getContent(true)}

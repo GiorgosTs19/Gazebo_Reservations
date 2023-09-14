@@ -204,6 +204,9 @@ abbr[title] {
 .w-90 {
     width: 90%;
 }
+.w-350px {
+    width: 350px;
+}
 .mw-200px {
     max-width: 200px;
 }
@@ -359,6 +362,10 @@ abbr[title] {
     }
 }
 
+.weekly-accordion .accordion-body {
+    padding-left: 5px;
+    padding-right: 5px;
+}
 /* Off-Canvas */
 /*.reservation_backdrop {}*/
 .offcanvas-backdrop.show{
@@ -416,7 +423,12 @@ ul {
     list-style-type: none;
 }
 /* Font Size */
-
+.font-size-10px {
+    font-size: 10px;
+}
+.font-size-13px {
+    font-size: 13px;
+}
 /* Font Size */
 
 

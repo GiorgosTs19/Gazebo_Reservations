@@ -10,9 +10,9 @@ export function MobileUtilityOffCanvas({height = 20,children, title = ''}) {
     const [show, setShow] = useState(true);
     return (
         <>
-            {!show && <div className={'mt-3'}>
+            {!show && <div className={'mt-3'} onClick={()=>setShow(true)} style={{cursor:'pointer'}}>
                 {title !== '' && <h6>{title}</h6>}
-                <ChevronUpSVG className={'mx-auto'} onClick={()=>setShow(true)}/>
+                <ChevronUpSVG className={'mx-auto'}/>
             </div>}
             <Offcanvas show={show} placement={'bottom'}  onHide={()=>setShow(false)} backdropClassName={'utility_backdrop'}
                        style={{height:`${height}%`, borderRadius:'30px 30px 0 0'}} className={'mx-1'} scroll={true} backdrop={true}>

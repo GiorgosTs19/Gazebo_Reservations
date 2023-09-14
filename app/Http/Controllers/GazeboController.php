@@ -82,14 +82,19 @@ class GazeboController extends Controller {
         $input = $request->only(['date','type', 'exceptCancelled']);
 
         $Availability = [];
+
         $Gazebos = Gazebo::all();
-        $Reservations = Reservation::date($input['date'])->when($request->exists('exceptCancelled'), function ($query) use ($input) {
+
+        $Reservations = Reservation::date($input['date'])->type($input['type'])->when($request->exists('exceptCancelled'), function ($query) use ($input) {
             return $query->status('Cancelled', $input['exceptCancelled']);
         })->get();
+
         $Disabled_Tables_Of_Day = DisabledTable::date($input['date'])->type($input['type'])->get()->pluck('gazebo_id');
+
         foreach ($Gazebos as $gazebo) {
             $Availability[] = ['id' => $gazebo->id, 'isAvailable' => self::getBoolean($Reservations,$gazebo,$Disabled_Tables_Of_Day)];
         }
+
         return Redirect::back()->with(['availability_for_date'=>$Availability]);
     }
 

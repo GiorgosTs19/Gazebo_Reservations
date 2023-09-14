@@ -84,11 +84,11 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
         if(onlyOne)
             handleSelectMenu();
     },[bookingDetails.type]);
-    console.log(onlyOne, dessert)
+
     return (
         <div key={menu.id} onClick={handleSelectMenu}
         className={`d-flex justify-content-between py-0 px-2 align-items-start bg-transparent my-2 rounded-3 menu-item ${((isSelected() && !dessert) ? ' active' : '')}`}>
-            <p className={"fw-bold my-auto"}>{menu.Name} {isSelected()}</p>
+            <p className={"fw-bold my-auto align-self-start"}>{menu.Name} {isSelected()}</p>
             {<MenuInfoModal menu={menu}></MenuInfoModal>}
         </div>
     )

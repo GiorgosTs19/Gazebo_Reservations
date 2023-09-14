@@ -14,12 +14,13 @@ export function GazeboCarouselItem({Gazebo,isAvailable, children}) {
         <div className={`my-auto d-flex flex-column ${!isAvailable ? 'opacity-25':''}`}>
             <h3>Gazebo {Gazebo.ascending_number}</h3>
             {isAvailable ? <>
-                <GazeboLocation index={Gazebo.ascending_number}></GazeboLocation>
-                <Button variant="outline-dark"  onClick={handleSelect}
-                disabled={!isAvailable || bookingDetails.table === Gazebo.id}
-                className={'border-0 rounded-3 box_shadow mt-3 py-2 px-4 reservation-button mx-auto w-auto'}>
-                {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
-                </Button>
+                <GazeboLocation index={Gazebo.ascending_number}>
+                    <Button variant="outline-dark"  onClick={handleSelect}
+                            disabled={!isAvailable || bookingDetails.table === Gazebo.id}
+                            className={'border-0 rounded-3 my-auto py-1 px-2 reservation-button mx-auto w-auto z-2 gazebo-select-button'}>
+                        {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
+                    </Button>
+                </GazeboLocation>
             </> : children}
         </div>
     )

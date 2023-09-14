@@ -92,7 +92,7 @@ export function ReservationCalendar() {
 
     return (
         <Calendar onChange={handleDateChange} value={bookingDetails.date ?? null} tileDisabled={({ date }) => isDateDisabled(date)}
-        className={'mx-auto my-4 rounded-5 calendar'} tileContent={({ activeStartDate , date, view }) =>
+        className={'mx-auto my-2 rounded-5 calendar'} tileContent={({ activeStartDate , date, view }) =>
         view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
         prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}
         onActiveStartDateChange={({activeStartDate}) => setActiveRange(getFirstAndLastDateOfMonth(activeStartDate.getMonth()+1, lastDay))}

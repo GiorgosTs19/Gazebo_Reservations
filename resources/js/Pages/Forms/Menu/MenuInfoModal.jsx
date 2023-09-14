@@ -17,7 +17,7 @@ export function MenuInfoModal({menu}) {
     },[show]);
     return (
         <>
-            <Badge bg="transparent" pill className={`my-auto ${isDemo ? 'text-dark' : ''}`} onClick={() => setShow(true)}>
+            <Badge bg="transparent" pill className={`my-auto text-dark $`} onClick={() => setShow(true)}>
                 <InfoSVG/>
             </Badge>
             <Modal size="sm" show={show} onHide={() => setShow(false)} className={'text-center'} scrollable
@@ -35,18 +35,18 @@ export function MenuInfoModal({menu}) {
                     })}
                     </ListGroup>
                     <Row>
-                        <p className={'info-text-lg my-1'}>Allergens</p>
+                        <p className={'info-text-lg mt-5 mb-1'}>Allergens</p>
                         <Col xs={6}>
-                            <Stack gap={1} className={'text-center my-2'}>
+                            <Stack gap={1} className={'text-start my-2'}>
                                 <span className={'info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/gluten_free.png'}/> Gluten Free</span>
                                 <span className={'info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/lactose_free.png'}/> Lactose Free</span>
                                 <span className={'info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/wheat_free.png'}/> Wheat Free</span>
                             </Stack>
                         </Col>
                         <Col xs={6}>
-                            <Stack gap={1} className={'text-center my-2'}>
-                                <span className={'mx-auto info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/vegetarian.png'}/> Vegetarian</span>
-                                <span className={'mx-auto info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/vegan.png'}/> Vegan</span>
+                            <Stack gap={1} className={'text-end my-2'}>
+                                <span className={'info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/vegetarian.png'}/> Vegetarian</span>
+                                <span className={'info-text-lg'}><Image src={'Images/Icons/MenuAllergensIcons/vegan.png'}/> Vegan</span>
                             </Stack>
                         </Col>
                     </Row>

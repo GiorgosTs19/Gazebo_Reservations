@@ -1,5 +1,5 @@
 .beach {
-    width: 85%;
+    width: 89%;
     height: 50px;
     background-color: #fddac5;
     position: relative;
@@ -28,7 +28,13 @@
     background-image: linear-gradient(to bottom, #ffffff 0%, #f9fbfd 50%, #eaf3f9 100%);
     opacity: 0.8;
 }
-
+.content-card .gazebo-select-button {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+    color: black;
+}
+.opacity-35 {
+    opacity: 0.35;
+}
 @keyframes wave {
     0% {
         transform: skewY(-5deg) translateY(-100%);
@@ -41,31 +47,7 @@
     }
 }
 
-.horizontal_bridge {
-    width: 75%;
-    height: 20px;
-    position: relative;
-    background-color: #8d5f2b; /* Brown color for the bridge */
-    overflow: hidden;
-}
-
-.horizontal_bridge-corridor {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-}
-
-.horizontal_bridge-corridor .plank {
-    width: 4px;
-    height: 100%;
-    background-color: #a06b38; /* Lighter brown color for the planks */
-}
-
 .carousel-control-next, .carousel-control-prev {
     width: 10% !important;
 }
+

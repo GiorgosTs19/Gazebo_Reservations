@@ -6,7 +6,7 @@ export function useGetAvailabilityForDate(date, reservationType, dependencies=[]
     const [requestProgress,setRequestProgress] = useState(''),
     [availability,setAvailability] = useState([]);
     const dateToSearch = typeof date === "object" ? getFormattedDate(date) : date;
-    useEffect(()=>{
+    useEffect(()=> {
         Inertia.get(route('Get_Availability_For_Date'),{date:dateToSearch,type:reservationType,
                 exceptCancelled:true},
             {onStart:()=>setRequestProgress('Pending'),

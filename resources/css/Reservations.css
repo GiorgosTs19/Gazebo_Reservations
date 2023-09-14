@@ -160,19 +160,8 @@ ul .nav-tabs:last-child .nav-link{
     color: #1389a9;
 }
 
-.navigation-item.night a, .reservation-button.night, .reservation-note.night, p.night,
-h1.night,h2.night,h3.night,h4.night,h5.night,h6.night, div.night
-{
-    color: #FFFFE0;
-}
-
 .menu-list .menu-item.active {
     background-color: rgba(51, 100, 112, 0.42) !important;
-}
-
-
-.reservation-button.night {
-    border-color: #FFFFE0;
 }
 
 .menu-list, .content-card, .border-blue, .grey-border {
@@ -304,7 +293,13 @@ h1.night,h2.night,h3.night,h4.night,h5.night,h6.night, div.night
     border-radius: 6px;
 }
 
-/* Height Utility Classes */
+/* Height and Width Utility Classes */
+.w-35 {
+    width: 35%;
+}
+.w-40 {
+    width: 40%;
+}
 .mh-100 {
     max-height: 100%;
 }
@@ -337,6 +332,9 @@ h1.night,h2.night,h3.night,h4.night,h5.night,h6.night, div.night
 }
 .mh-600px {
     max-height: 600px;
+}
+.mh-660px {
+    max-height: 660px;
 }
 .mh-720px {
     max-height: 720px;
@@ -436,7 +434,10 @@ video {
 }
 
 .content-card .btn {
-    background-color: rgba(255, 255, 255, 0.75) !important;
+    background-color: rgba(255, 255, 255, 0.85);
+}
+.bg-white-0_55 {
+    background-color: rgba(255, 255, 255, 0.55);
 }
 
 /* WebKit (Safari, Chrome, Opera) */
