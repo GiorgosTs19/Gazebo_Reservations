@@ -19,6 +19,7 @@ import gsap from "gsap";
 import '../../../css/Reservations.css'
 import {DisabledDaysContext} from "../Admin/Contexts/DisabledDaysContext";
 import {IsDemoContext} from "../../Contexts/IsDemoContext";
+import {RefContext} from "../../Contexts/RefContext";
 
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
@@ -93,35 +94,38 @@ export default function Gazebo(props) {
     }
 
     return (
-        <IsDemoContext.Provider value={isDemo}>
-            <ErrorsContext.Provider value={{errors,setErrors}}>
-                <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
-                    <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
-                        <FormProgressContext.Provider value={{progress,setProgress}}>
-                            <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
-                                <GazebosContext.Provider value={Gazebos}>
-                                    <IsTouchableContext.Provider value={isTouchDevice()}>
-                                        <InnerWidthContext.Provider value={innerWidth}>
-                                            <Container fluid className={`px-3 py-1 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}>
-                                                <DisabledDaysContext.Provider value={getDisabledDays()}>
-                                                    {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
-                                                                             onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
-                                                    <TypeSelectionForm ref={typeRef}>
-                                                        {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}></GazeboSelectionForm>}
-                                                        {progress === 'Details' && <ReservationInfoForm ref={detailsRef}></ReservationInfoForm>}
-                                                        {progress === 'Menu' && <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
-                                                        {progress === 'Finalize' && <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
-                                                    </TypeSelectionForm>
-                                                </DisabledDaysContext.Provider>
-                                            </Container>
-                                        </InnerWidthContext.Provider>
-                                    </IsTouchableContext.Provider>
-                                </GazebosContext.Provider>
-                            </MenuContext.Provider>
-                        </FormProgressContext.Provider>
-                    </BookingDetailsContext.Provider>
-                </DatabaseSettingsContext.Provider>
-            </ErrorsContext.Provider>
-        </IsDemoContext.Provider>
+        <RefContext.Provider value={ContainerRef}>
+            <IsDemoContext.Provider value={isDemo}>
+                <ErrorsContext.Provider value={{errors,setErrors}}>
+                    <DatabaseSettingsContext.Provider value={bookingDetails.type === 'Dinner' ? DinnerSettings : BedSettings}>
+                        <BookingDetailsContext.Provider value={{bookingDetails, setBookingDetails}}>
+                            <FormProgressContext.Provider value={{progress,setProgress}}>
+                                <MenuContext.Provider value={bookingDetails.type === 'Dinner' ? Menus.Dinner : Menus.Morning}>
+                                    <GazebosContext.Provider value={Gazebos}>
+                                        <IsTouchableContext.Provider value={isTouchDevice()}>
+                                            <InnerWidthContext.Provider value={innerWidth}>
+                                                <Container fluid className={`px-3 py-2 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}
+                                                           ref={ContainerRef}>
+                                                    <DisabledDaysContext.Provider value={getDisabledDays()}>
+                                                        {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
+                                                                                 onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
+                                                        <TypeSelectionForm ref={typeRef}>
+                                                            {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}></GazeboSelectionForm>}
+                                                            {progress === 'Details' && <ReservationInfoForm ref={detailsRef}></ReservationInfoForm>}
+                                                            {progress === 'Menu' && <MenuSelectionForm ref={menuRef}></MenuSelectionForm>}
+                                                            {progress === 'Finalize' && <FinalizeReservation ref={finalizeRef}></FinalizeReservation>}
+                                                        </TypeSelectionForm>
+                                                    </DisabledDaysContext.Provider>
+                                                </Container>
+                                            </InnerWidthContext.Provider>
+                                        </IsTouchableContext.Provider>
+                                    </GazebosContext.Provider>
+                                </MenuContext.Provider>
+                            </FormProgressContext.Provider>
+                        </BookingDetailsContext.Provider>
+                    </DatabaseSettingsContext.Provider>
+                </ErrorsContext.Provider>
+            </IsDemoContext.Provider>
+        </RefContext.Provider>
     )
 }

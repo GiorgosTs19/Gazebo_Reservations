@@ -12,7 +12,7 @@ export function DinnerMenu({primary}) {
                 <Col xs={12} className={'px-0 '}>
                     <div className={'p-2 box_shadow border-0 rounded-4 my-2 menu-list bg-white-0_55'}>
                         <h5>Main Dishes</h5>
-                        <Stack>
+                        <Stack gap={1}>
                             {
                                 Menus.Mains?.map((menu,index) => {
                                     return <MenuSelection menu={menu} index={index} key={menu.id} primary={primary}
@@ -25,7 +25,7 @@ export function DinnerMenu({primary}) {
                 <Col className={'text-center d-flex flex-column mt-3 mt-lg-2 px-0'} xs={12}>
                     <div className={'p-2 box_shadow border-0 rounded-4 my-auto menu-list bg-white-0_55'}>
                         <h5 className={'text-center'}>Desserts</h5>
-                        <Stack className={'my-auto menu-list'}>
+                        <Stack className={'my-auto menu-list'} gap={2}>
                             {
                                 Menus.Desserts?.map((menu,index) => {
                                     return <MenuSelection menu={menu} index={index} key={menu.id} primary={primary} dessert

@@ -58,7 +58,7 @@ export function GazeboBookingProgressBar() {
         }
     };
     return (
-        <div className={'my-3 mx-auto bg-transparent d-flex'}>
+        <div className={'my-2 my-md-3 mx-auto bg-transparent d-flex'}>
             <Breadcrumb className={'mx-auto'}>
                     <Breadcrumb.Item onClick={()=>setProgress('Type')} active={progress === 'Type'} className={'navigation-item bold-info-text'}>
                         {bookingDetails.type === '' ? 'Type Selection' : (bookingDetails.number_of_people === 0 ? 'Guest Count Selection' : (progress === 'Type' ? 'Date Selection' : 'Date'))}

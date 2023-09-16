@@ -34,12 +34,12 @@ export function MenusOverview({className = ''}) {
     };
 
     return (
-        <div className={`w-fit-content mx-xl-auto ${innerWidth >= 1200 ? 'text-center' : 'text-start '} ${className}`}>
-            <p className={'mb-1 info-text'}>Selected {bookingDetails.more_rooms ? 'Menu / Room' : 'Menu'}</p>
-            <Card.Text className={'mb-2'}>
+        <div className={`w-fit-content ${className}`}>
+            <p className={'mb-1 info-text-lg'}>Selected {bookingDetails.more_rooms ? 'Menu / Room' : 'Menu'}</p>
+            <Card.Text className={'mb-2 fw-350 reservation-finalize-view-text'}>
                 {getContent(true)}
             </Card.Text>
-            {bookingDetails.more_rooms && bookingDetails.secondary_room !== '' && <Card.Text className={'mb-2'}>
+            {bookingDetails.more_rooms && bookingDetails.secondary_room !== '' && <Card.Text className={'mb-2 fw-350 reservation-finalize-view-text'}>
                 {getContent(false)}
             </Card.Text>}
         </div>

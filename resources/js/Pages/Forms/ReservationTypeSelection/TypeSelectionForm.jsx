@@ -103,7 +103,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
     },[progress]);
 
     return (
-        <div className={`${progress === 'Table' ? 'px-0 py-3' : 'px-3 pt-3 pb-3'} border border-1 rounded-5 mx-auto content-card h-fit-content
+        <div className={`${progress === 'Table' ? 'px-0 py-0' : 'px-3 py-2'} border border-1 rounded-5 mx-auto content-card h-fit-content
         ${innerWidth <= 576 && (showCalendar  || (progress !== 'Type' && progress !== 'Table')) ? 'mt-1 my-md-auto' : 'my-auto'} position-relative `
             + (innerWidth > 992 ? ' w-50 ' : (innerWidth >= 576 ? 'w-75' : ' w-100 '))} ref={ref}>
             <GazeboBookingProgressBar></GazeboBookingProgressBar>

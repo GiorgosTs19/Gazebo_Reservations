@@ -1,20 +1,13 @@
 import {Image, Stack} from "react-bootstrap";
-import {useContext, useRef, useState} from "react";
+import {useContext} from "react";
 import '../../../../../css/GazeboCarousel.css'
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {PinSVG} from "../../../../SVGS/PinSVG";
 
-export function GazeboLocation({index, className, width,gap=3, children}) {
-    const [show, setShow] = useState(false),
-    [target, setTarget] = useState(null),
-        ref = useRef(null),
-    Gazebos = useContext(GazebosContext);
-    const handleClick = (event) => {
-        setShow(!show);
-        setTarget(event.target);
-    };
+export function GazeboLocation({index, className, width, gap=3, children}) {
+    const Gazebos = useContext(GazebosContext);
     return (
-        <div ref={ref} className={'mx-auto ' + className}>
+        <div className={'mx-auto ' + className}>
             <div className="beach rounded-2 mx-auto d-flex">
                 <div className="wave"></div>
                 {children}
@@ -26,7 +19,7 @@ export function GazeboLocation({index, className, width,gap=3, children}) {
                         : <Image src={'Images/Icons/gazebo_icon.png'} key={number}
                                   height={innerWidth > 992 ? 48 : 37}
                                   width={innerWidth > 992 ? 48 : 37}
-                  className={`mt-4 mx-0 perspective-1000px rounded-3 p-1 p-md-2 opacity-35`}></Image>
+                  className={`mt-4 mx-0 perspective-1000px rounded-3 p-1 p-md-2 opacity-50`}></Image>
                 })}
             </Stack>
         </div>
