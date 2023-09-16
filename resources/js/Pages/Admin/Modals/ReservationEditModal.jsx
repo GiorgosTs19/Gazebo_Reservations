@@ -1,10 +1,9 @@
 import {Card} from "react-bootstrap";
 import {useState} from "react";
-import {ReservationEditingOptions} from "../Reservations/ReservationEditing/ReservationEditingOptions";
+import {ReservationEditingOptions} from "../EditReservations/ReservationEditingOptions";
 import {EditReservationModalTitleContext} from "../Contexts/EditReservationModalTitleContext";
 import {EditModalContentContext} from "../Contexts/EditModalContentContext";
 import {LeftArrowSVG} from "../../../SVGS/LeftArrowSVG";
-import useCheckConflict from "../../../CustomHooks/useCheckConflict";
 
 export function ReservationEditModal({conflictType, edit, children = null}) {
     const [content,setContent] = useState('Options');
@@ -12,7 +11,7 @@ export function ReservationEditModal({conflictType, edit, children = null}) {
     const handleBackToOptions = () => {setContent('Options');setModalTitle('Επεξεργασία Κράτησης')};
 
     return (
-        <Card className={'text-center border-0 w-100'}>
+        <Card className={'text-center border-0'}>
             <EditReservationModalTitleContext.Provider value={{modalTitle,setModalTitle}}>
                     <EditModalContentContext.Provider value={{content,setContent}}>
                         {modalTitle !== '' && <Card.Header className={'bg-transparent'}>
@@ -21,7 +20,7 @@ export function ReservationEditModal({conflictType, edit, children = null}) {
                             </Card.Title>
                         </Card.Header>}
                         <Card.Body className={`h-100 px-1 py-0`}>
-                            {content !== 'Options' && <LeftArrowSVG onClick={handleBackToOptions} className={'mx-auto mb-3 cursor-pointer'}/>}
+                            {content !== 'Options' && <LeftArrowSVG onClick={handleBackToOptions} className={'mx-auto mb-3 cursor-pointer hover-scale-1_1'}/>}
                             {content === 'Options' &&
                                 <ReservationEditingOptions conflictType={conflictType} edit={edit}>
                                     {children}
