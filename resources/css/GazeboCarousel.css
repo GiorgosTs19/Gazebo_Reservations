@@ -49,5 +49,11 @@
 
 .carousel-control-next, .carousel-control-prev {
     width: 10% !important;
+    font-size: 25px;
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+;
 }
 

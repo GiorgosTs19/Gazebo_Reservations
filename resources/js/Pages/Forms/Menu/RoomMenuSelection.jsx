@@ -40,7 +40,7 @@ export function RoomMenuSelection({Room,primary= false}) {
     return (
         <Card className={'my-3 border-0 bg-transparent'}>
             <Card.Header className={'bg-transparent'}><b><i>{getContent()}</i></b> for Room {Room}</Card.Header>
-            <Card.Body>
+            <Card.Body className={'py-1'}>
                 {bookingDetails.type === 'Bed' ? <BedPackage/> : <DinnerMenu primary={primary}></DinnerMenu>}
             </Card.Body>
         </Card>

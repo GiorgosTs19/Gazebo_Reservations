@@ -5,7 +5,7 @@ import {
     getFormattedDate,
     isDateDisabledByAdmin,
 } from "../../../ExternalJs/Util";
-import {useContext, useRef, useState} from "react";
+import {useCallback, useContext, useRef, useState} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {DatabaseSettingsContext} from "../../Admin/Contexts/DatabaseSettingsContext";
 import {useGetAvailabilityForRange} from "../../../CustomHooks/useGetAvailabilityForRange";
@@ -27,7 +27,7 @@ export function ReservationCalendar() {
     const [activeRange, setActiveRange] = useState(getFirstAndLastDateOfMonth(today.getMonth()+1, lastDay));
 
     // Retrieves the availability of the currently viewing month.
-    const [requestProgress, avalability, setReservations] = useGetAvailabilityForRange(activeRange, bookingDetails.type,
+    const [requestProgress, availability, setReservations] = useGetAvailabilityForRange(activeRange, bookingDetails.type,
     [activeRange]);
 
     // Checks if the previousMonth button on the calendar should be disabled.
@@ -63,39 +63,38 @@ export function ReservationCalendar() {
     // Gets the tile content for each 'day' in the calendar. It pretty much shows a colored div,
     // based on the reservations that exist on that day, to indicate the availability of that day.
 
-    getTileContent = (date) => {
+    getTileContent = useCallback((date) => {
         // Calculate the date range for adding the element
         const startDate = new Date();
         startDate.setDate(startDate.getDate()); // Start from the next day
         if(!isDateDisabled(date)) {
-            const current_date_availability = extractReservationsForDate(date,avalability);
+            const current_date_availability = extractReservationsForDate(date,availability);
             // Check if the date falls within the range
             if(current_date_availability.length === 0)
                 return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
-                if(current_date_availability.length < 2)
-                    return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
-                else if(current_date_availability.length === 2)
-                    return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#eef507',width:'76%', height:'4px'}}></div>;
-                else if(current_date_availability.length > 2 && current_date_availability.length <= 4)
-                    return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#F68908',width:'76%', height:'4px'}}></div>;
-                else if(current_date_availability.length > 4)
-                    return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#D2042D',width:'76%', height:'4px'}}></div>;
+            if(current_date_availability.length < 2)
+                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length === 2)
+                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#eef507',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length > 2 && current_date_availability.length <= 4)
+                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#F68908',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length > 4)
+                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#D2042D',width:'76%', height:'4px'}}></div>;
         }
         return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#555557',width:'76%', height:'4px'}}></div>;
-    };
+    },[availability]);
 
-    const getTileClassName = (date) => {
+    const getTileClassName = useCallback((date) => {
         if(isDateDisabled(date))
             return 'disabled';
         return '';
-    }
+    },[activeRange]);
 
     return (
         <Calendar onChange={handleDateChange} value={bookingDetails.date ?? null} tileDisabled={({ date }) => isDateDisabled(date)}
-        className={'mx-auto my-2 rounded-5 calendar'} tileContent={({ activeStartDate , date, view }) =>
-        view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
+        className={'mx-auto my-2 rounded-5 calendar'} tileContent={({date, view }) => view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
         prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}
         onActiveStartDateChange={({activeStartDate}) => setActiveRange(getFirstAndLastDateOfMonth(activeStartDate.getMonth()+1, lastDay))}
-        tileClassName={({ activeStartDate , date, view }) => getTileClassName(date)}/>
+        tileClassName={({date}) => getTileClassName(date)}/>
     )
 }
