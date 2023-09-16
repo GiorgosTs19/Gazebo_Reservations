@@ -52,7 +52,7 @@ Route::prefix('/book')->group(function () {
     });
 });
 
-Route::middleware('auth')->prefix('/Administrator')->group(function () {
+Route::middleware('auth')->prefix('/Admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,
         'showAdminPanel'])->name('ShowAdminPanel');
 
