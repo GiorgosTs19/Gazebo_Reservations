@@ -1,18 +1,20 @@
 import {Card} from "react-bootstrap";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {ReservationEditingOptions} from "../EditReservations/ReservationEditingOptions";
 import {EditReservationModalTitleContext} from "../Contexts/EditReservationModalTitleContext";
 import {EditModalContentContext} from "../Contexts/EditModalContentContext";
 import {LeftArrowSVG} from "../../../SVGS/LeftArrowSVG";
+import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 
 export function ReservationEditModal({conflictType, edit, children = null}) {
     const [content,setContent] = useState('Options');
     const [modalTitle,setModalTitle] = useState('Επεξεργασία Κράτησης');
+    const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
     const {editing, setEditing} = edit;
     const handleBackToOptions = () => {
         setContent('Options');
         setModalTitle('Επεξεργασία Κράτησης');
-        setEditing([editing[0], '']);
+        setEditing(activeReservation.Status === 'Pending' ? false : [editing[0], '']);
     };
 
     return (

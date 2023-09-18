@@ -42,7 +42,7 @@ export const handleChangeReservationStatus = (status, activeReservation, setActi
     Inertia.patch(route('Change_Reservation_Status'),{date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)
         ,reservation_id:activeReservation.id,status:status},{
         onSuccess:(res)=> {
-            setActiveReservation(status !== 'Cancelled' || activeView === 'Search' ? res.props.activeReservation : null);
+            setActiveReservation(res.props.activeReservation);
             handleSetReservations(res,activeRange, setReservations, activeView);
         },
         only:[getParameter(activeRange), 'activeReservation']
