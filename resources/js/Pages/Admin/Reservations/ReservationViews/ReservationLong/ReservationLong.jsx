@@ -1,5 +1,5 @@
 import {ActiveReservationContext} from "../../../Contexts/ActiveReservationContext";
-import {Button, Col, Row} from "react-bootstrap";
+import {Alert, Button, Col, Row} from "react-bootstrap";
 import {MenuContext} from "../../../../../Contexts/MenuContext";
 import {GazebosContext} from "../../../../../Contexts/GazebosContext";
 import {ActiveTabKeyContext} from "../../../Contexts/ActiveTabKeyContext";
@@ -14,6 +14,8 @@ import {ReservationEditModal} from "../../../Modals/ReservationEditModal";
 import useUpdateEffect from "../../../../../CustomHooks/useUpdateEffect";
 import {useGetActiveReservation} from "../../../../../CustomHooks/useGetActiveReservation";
 import {SpinnerSVG} from "../../../../../SVGS/SpinnerSVG";
+import usePrevious from "../../../../../CustomHooks/usePrevious";
+import useCheckChanges from "../../../../../CustomHooks/useCheckChanges";
 
 export function ReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
@@ -47,8 +49,12 @@ export function ReservationLong() {
     };
 
     useUpdateEffect(()=> {
-        setEditing(false);
+        setEditing([false, '']);
     },[activeReservation]);
+
+    const previousActive = usePrevious(activeReservation);
+
+    const reservationAlert = useCheckChanges(previousActive, activeReservation);
 
     const [isConflicted,conflictType,conflictMessage] = useCheckConflict(reservation?.id);
     const reservationTab = <>
@@ -112,6 +118,7 @@ export function ReservationLong() {
 
     return (
         requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : <div className={`d-flex flex-column pt-md-0 mw-550px justify-content-center m-auto`}>
+            {reservationAlert}
             {(reservation?.Status === 'Pending' ? isConflicted : reservation?.Status !== 'Cancelled') &&
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-2 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
                 onClick={()=>setEditing([!editing[0],''])}>{!editing[0] ? 'Ενέργειες' : 'Κράτηση'}</Button>}

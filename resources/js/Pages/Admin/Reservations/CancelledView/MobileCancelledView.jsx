@@ -1,6 +1,6 @@
 import {useCallback, useContext} from "react";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
-import {Badge, Stack} from "react-bootstrap";
+import {Stack} from "react-bootstrap";
 import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
