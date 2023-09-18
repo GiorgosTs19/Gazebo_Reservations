@@ -104,7 +104,7 @@ export function ReservationLong() {
             </div>
             {notes !== null && <div className={'p-2 my-2 user-select-none text-center mx-auto w-100'}>
                 <h5>Σημειώσεις</h5>
-                <p>{notes}</p>
+                <p className={'mb-1'}>{notes}</p>
             </div>}
             {hasChanges &&<p className={'p-1 my-1 user-select-none info-text text-center'}><i>{`${reservationIsCancelled ? 'Ακυρώθηκε' : 'Τελευταία αλλαγή'} : ${getDateTime(updatedAt)}`}</i></p>}
         </Row>

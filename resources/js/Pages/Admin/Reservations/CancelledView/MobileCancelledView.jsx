@@ -8,13 +8,14 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 export function MobileCancelledView({requestProgress, cancelledReservations, reservationType, children}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     shouldShowStack = activeReservation === null;
+
     const reservationsToShow = useCallback(()=> {
         if(cancelledReservations.length === 0)
             return <h4 className={'text-muted my-auto info-text-lg'}>Δεν υπάρχει κάποια Ακυρωμένη κράτηση</h4>;
 
         const reservationsToRender = innerWidth > 800 ? 2 : 1;
 
-        if(innerWidth > 500) {
+
             const reservationChunks = [];
             for (let i = 0; i < cancelledReservations.length; i += reservationsToRender) {
                 reservationChunks.push(cancelledReservations.slice(i, i + reservationsToRender));
@@ -26,7 +27,7 @@ export function MobileCancelledView({requestProgress, cancelledReservations, res
                     ))}
                 </div>
             ))
-        }
+
     },[cancelledReservations, innerWidth]);
 
     return ( <div className={'h-100 d-flex flex-column text-center'}>
