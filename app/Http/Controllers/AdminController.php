@@ -35,6 +35,7 @@ class AdminController extends Controller {
             'reservations_of_table' => Inertia::lazy(fn () => $this->retrieveTableReservations($request)),
             'disabled_days_for_table' => Inertia::lazy(fn () => $this->retrieveTableDisabledDays($request))]);
     }
+
     private function retrieveDisabledDays () {
         // Retrieve all the days that were disabled by the admins, regardless of type
         $Disabled_Days = DisabledDay::afterToday()->order()->get();

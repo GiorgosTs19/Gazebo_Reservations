@@ -8,17 +8,13 @@ import {Badge} from "react-bootstrap";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
-import {ViewContext} from "../../../../Contexts/ViewContext";
 
 export function TodayView({todayReservations}) {
-    const {activeReservationsView,setActiveReservationsView} = useContext(ViewContext);
-    console.log(activeReservationsView)
     const today = new Date(),
     innerWidth = useContext(InnerWidthContext);
     const [reservationsFilter,setReservationsFilter] = useState('All'),
     {reservationType, setReservationType} = useContext(ActiveReservationTypeContext);
-    const [requestProgress, reservations, setReservations] = useGetReservationsForToday(todayReservations, reservationType, [reservationType, activeReservationsView],
-        activeReservationsView === 'Today');
+    const [requestProgress, reservations, setReservations] = useGetReservationsForToday(todayReservations, reservationType, [reservationType]);
     const Disabled_Days = useContext(DisabledDaysContext);
     const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(today,Disabled_Days);
 

@@ -2,14 +2,11 @@ import {Inertia} from "@inertiajs/inertia";
 import {useEffect, useState} from "react";
 import useUpdateEffect from "./useUpdateEffect";
 
-export function useGetReservationsForToday(initialValue, reservationType, dependencies=[], conditions = true) {
+export function useGetReservationsForToday(initialValue, reservationType, dependencies=[]) {
     const [requestProgress,setRequestProgress] = useState(''),
     [reservations,setReservations] = useState(initialValue);
 
     useEffect(()=>{
-        if(!conditions)
-            return;
-
         Inertia.get(route('Get_Reservations_Current_Day'),{type:reservationType},
             {onStart:()=>setRequestProgress('Pending'),
                 only:['current_day_reservations'],
