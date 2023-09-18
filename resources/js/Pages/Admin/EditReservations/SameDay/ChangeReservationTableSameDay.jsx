@@ -22,8 +22,9 @@ export function ChangeReservationTableSameDay({edit, availability}) {
     {editing, setEditing} = edit;
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id),
     [activeRange, setReservations] = useContext(ActiveRangeContext);
+    console.log(activeReservation)
     const handleSelectTable = (table,index) => {
-        if(table.isAvailable && table.id !== activeReservation.Gazebo)
+        if(table.isAvailable && table.id !== activeReservation.gazebo_id)
             setSelectedTable(table.id);
         if (TablesListRef.current) {
             if(index === 0)
@@ -49,7 +50,7 @@ export function ChangeReservationTableSameDay({edit, availability}) {
     const getTableAvailabilityText = (table) => {
         if(selectedTable === table.id)
             return <span>Επιλεγμένο</span>;
-        if(table.id === activeReservation.Gazebo)
+        if(table.id === activeReservation.gazebo_id)
             return <span className={'text-warning'}>Τρέχων</span>;
         if(table.isAvailable)
             return <span className={'text-success'}>Διαθέσιμο</span>;
@@ -58,7 +59,7 @@ export function ChangeReservationTableSameDay({edit, availability}) {
     };
 
     const getTableOpacity = (table) => {
-        if(table.id === activeReservation.Gazebo)
+        if(table.id === activeReservation.gazebo_id)
             return 'opacity-50';
         if(!table.isAvailable)
             return 'opacity-25';
@@ -85,7 +86,7 @@ export function ChangeReservationTableSameDay({edit, availability}) {
 
         return availability.map((table, index)=>{
             return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
-               style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed') }}
+               style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.gazebo_id ? 'not-allowed' : 'not-allowed') }}
                className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                 <Row>
                     <Col>

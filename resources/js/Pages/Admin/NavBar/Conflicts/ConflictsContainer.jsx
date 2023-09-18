@@ -21,7 +21,6 @@ export function ConflictsContainer() {
             setShowBlueDot(false);
     }
     const handleClose = () => {
-        console.log('closing')
         setShow(false);
     }
     useEffect(()=> {

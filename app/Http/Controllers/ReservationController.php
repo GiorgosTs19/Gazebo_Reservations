@@ -22,9 +22,10 @@ class ReservationController extends Controller {
      * Display a listing of the resource.
      */
     public function getReservation(Request $request): \Illuminate\Http\RedirectResponse {
+        $shouldBeResource = $request->exists(['shouldBeResource']) ?filter_var($request->only(['shouldBeResource'])['shouldBeResource'], FILTER_VALIDATE_BOOLEAN) : true;
         $reservation_id = $request->only(['reservation_id'])['reservation_id'];
 
-        return Redirect::back()->with(['activeReservation'=>$reservation_id, 'shouldBeResource'=>true]);
+        return Redirect::back()->with(['activeReservation'=>$reservation_id, 'shouldBeResource'=>$shouldBeResource]);
     }
 
     public function generateConfirmationNumber() {

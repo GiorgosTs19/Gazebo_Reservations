@@ -62,7 +62,6 @@ export function SearchView() {
     const [requestProgress, searchResult, setSearchResult] = useSearch(searchCriteria, noCriteriaActive, [searchCriteria]);
 
     const handleReplaceReservation = (reservation) => {
-        console.log('GotCalled')
         const foundIndex = searchResult.findIndex(item=>item.id === reservation.id);
         if (searchResult[foundIndex]) {
             // Replace the reservation with the same id in the search result, with the newly fetched one,
