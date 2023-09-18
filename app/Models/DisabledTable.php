@@ -27,7 +27,8 @@ class DisabledTable extends Model {
         if(!$date_end)
             return $query->where('Date',$date_start);
 
-        return $query->whereBetween('Date',[$date_start,$date_end]);
+        return $query->where('Date', '>=', $date_start)
+            ->where('Date', '<=', $date_end);
     }
     public function scopeAfterToday($query) {
         return $query->whereDate('Date','>=',date("Y-m-d"));

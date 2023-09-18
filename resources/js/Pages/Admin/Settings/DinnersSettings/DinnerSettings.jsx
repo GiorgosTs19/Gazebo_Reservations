@@ -20,7 +20,7 @@ export function DinnerSettings({Settings}) {
         Arrival : '',
         First_Day : '',
         Last_Day : '',
-        Arrival_Times_Too_Close:''
+        Arrival_Times_Too_Close:'',
     }),
     InnerWidth = useContext(InnerWidthContext);
 
@@ -60,6 +60,18 @@ export function DinnerSettings({Settings}) {
             case 'Change_Last_Date' : {
                 return {...settings,Last_Day : action.value};
             }
+            // case 'Change_Same_Day_Allowance' : {
+            //     return {...settings,Allow_Same_Day : action.value};
+            // }
+            // case 'Change_Same_Day_Time' : {
+            //     return {...settings,Same_Day_Time : action.value};
+            // }
+            // case 'Change_Next_Day_Allowance' : {
+            //     return {...settings,Allow_Next_Day : action.value};
+            // }
+            // case 'Change_Next_Day_Time' : {
+            //     return {...settings,Next_Day_Time : action.value};
+            // }
             case 'Change_Arrival_Message' : {
                 return {...settings,Arrival_Message:action.value};
             }
@@ -70,11 +82,15 @@ export function DinnerSettings({Settings}) {
     };
 
     const [settings, dispatchSetting] = useReducer(settings_reducer, {
-        Arrival_Start: Settings.Arrival_Start,
-        Arrival_End: Settings.Arrival_End,
-        First_Day: Settings.First_Day,
-        Last_Day: Settings.Last_Day,
+        Arrival_Start : Settings.Arrival_Start,
+        Arrival_End : Settings.Arrival_End,
+        First_Day : Settings.First_Day,
+        Last_Day : Settings.Last_Day,
         Arrival_Message : Settings.Arrival_Message,
+        // Allow_Same_Day : false,
+        // Same_Day_Time : '',
+        // Allow_Next_Day : false,
+        // Next_Day_Time : ''
     });
 
     useUpdateEffect(()=>{

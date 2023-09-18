@@ -17,6 +17,7 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
         if(selectedDate !== '')
             setShouldShowCalendar(false)
     },[selectedDate]);
+
     const handleBackToCalendar = () =>{
         setShouldShowCalendar(true);
         setActiveReservation(null);
@@ -43,9 +44,6 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
     return (
         <Row className={`text-center h-100 ${shouldShowCalendar ? 'py-1' : 'py-0'}`}>
             {innerWidth < 992 ? (activeReservation === null && calendarAndReservations) : calendarAndReservations}
-            {/*{activeReservation !== null && <Col lg={5} className={'d-flex flex-column text-center overflow-y-auto reservation-long-view py-lg-4'}>*/}
-            {/*    <ReservationLong/>*/}
-            {/*</Col>}*/}
             <MobileActiveReservationOffCanvas/>
         </Row>
     )

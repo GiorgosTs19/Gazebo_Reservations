@@ -30,11 +30,11 @@ export function MultipleRoomsField() {
     };
     return (
         checkShowRequirements() &&
-        <div className={'text-center my-2'}>
+        <div className={'text-center my-2 my-md-2'}>
             <p className={'mx-auto my-1 bold-info-text'}>
                 Multiple Rooms
             </p>
-            <div className="mb-3">
+            <div className="mb-2">
                 <Form.Check inline label="Yes" name="MoreRooms" type={"radio"} id={'Yes'}
                     onChange={handleMRChange} value={"Yes"} checked={bookingDetails.more_rooms === true}/>
                 <Form.Check inline label="No" name="MoreRooms" type={"radio"} id={'No'}

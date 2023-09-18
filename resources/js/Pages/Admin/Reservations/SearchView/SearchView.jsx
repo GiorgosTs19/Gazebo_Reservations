@@ -1,19 +1,22 @@
 import {Badge, Col, FloatingLabel, Form, Row, Stack} from "react-bootstrap";
-import {useCallback, useContext, useEffect, useReducer, useRef, useState} from "react";
-import {Inertia} from "@inertiajs/inertia";
-import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {SearchFilters} from "./SearchFilters";
-import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
+import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
+import {useCallback, useContext, useRef, useReducer, useState} from "react";
+import {SearchFilters} from "./SearchFilters";
+import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
+import {useSearch} from "../../../../CustomHooks/useSearch";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
+import {useScrollToActiveReservation} from "../../../../CustomHooks/useScrollToActiveReservation";
 
 export function SearchView() {
-    const [searchResult,setSearchResult] = useState(null);
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     [showCriteria, setShowCriteria] = useState(true),
     InnerWidth = useContext(InnerWidthContext);
+    const activeReservationRef = useRef(null);
+    useScrollToActiveReservation(activeReservationRef);
 
     const searchCriteriaReducer = (state,action) => {
         switch (action.type) {
@@ -36,7 +39,6 @@ export function SearchView() {
             //     return {...state,room_number:action.value};
             // }
             case 'Reset' : {
-                setSearchResult(null);
                 return {conf_number:'',
                     email:'',
                     phone_number:'',
@@ -57,18 +59,33 @@ export function SearchView() {
     const noCriteriaActive = searchCriteria.email === '' && searchCriteria.conf_number === ''
     && searchCriteria.phone_number === '';
 
-    useEffect(()=>{
-        if(noCriteriaActive) {
-            return setSearchResult(null);
+    const [requestProgress, searchResult, setSearchResult] = useSearch(searchCriteria, noCriteriaActive, [searchCriteria]);
+
+    const handleReplaceReservation = (reservation) => {
+        const foundIndex = searchResult.findIndex(item=>item.id === reservation.id);
+        if (searchResult[foundIndex]) {
+            // Replace the reservation with the same id in the search result, with the newly fetched one,
+            // to show the updates that have occurred;
+            const newArray = [...searchResult];
+            newArray[foundIndex] = {
+                id: reservation.id,
+                gazebo_id: reservation.Gazebo,
+                Date: reservation.Date,
+                Email: reservation.Contact.Email,
+                Phone_Number: reservation.Contact.Phone,
+                Notes: reservation.Notes,
+                created_at: reservation.Placed_At,
+                updated_at: reservation.Updated_At,
+                Confirmation_Number: reservation.Confirmation_Number,
+                First_Name: reservation.Name.First,
+                Last_Name: reservation.Name.Last,
+                Type: reservation.Type,
+                Status: reservation.Status,
+                rooms: reservation.Rooms,
+            };
+            setSearchResult(newArray)
         }
-        if(searchCriteria.email !== '' || searchCriteria.conf_number !== '' || searchCriteria.phone_number !== '')
-            Inertia.get(route('Search_Reservations'),searchCriteria,{
-                only:['search_result'],
-                preserveScroll:true,
-                preserveState:true,
-                onSuccess:(res)=>{setSearchResult(res.props.search_result)}
-            });
-    },[searchCriteria]);
+    };
 
     // Generates the reservations to show for the selected date.
     const reservationsToShow = ()=> {
@@ -79,7 +96,7 @@ export function SearchView() {
             return <h5 className={'m-auto text-wrap info-text-xl'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης</h5>
 
         // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = InnerWidth > 992 ? (activeReservation === null ? 2 : 1) : 1;
+        const reservationsToRender = InnerWidth > 992 ? (innerWidth >= 1600 ? (activeReservation === null ? 3 : 2) : (activeReservation === null ? 2 : 1)) : 1;
         const reservationChunks = [];
         for (let i = 0; i < searchResult.length; i += reservationsToRender) {
             reservationChunks.push(searchResult.slice(i, i + reservationsToRender));
@@ -87,7 +104,7 @@ export function SearchView() {
         return reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
                 {chunk.map(reservation => (
-                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-4 mb-3 mb-lg-5'} />
+                    <ReservationShort ref={reservation.id === activeReservation?.id ? activeReservationRef : null} Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-4 mb-3 mb-lg-5'} />
                 ))}
             </div>
         ))
@@ -109,7 +126,7 @@ export function SearchView() {
         </Stack>
     },[searchCriteria]);
 
-    const reservationsStack = <Col xl={activeReservation === null ? 9 : 5} className={'d-flex flex-column h-100 overflow-y-auto'}>
+    const reservationsStack = <Col xl={activeReservation === null ? 9 : 5} xxl={innerWidth > 1600 ? activeReservation === null ? 10 : 6 : activeReservation === null ? 9 : 5} className={'d-flex flex-column h-100 overflow-y-auto'}>
         {Array.isArray(searchResult) && searchResult.length > 0 && <h5 className={'m-auto'}>
             {searchResult.length === 1 ? `Βρέθηκε 1 αποτέλεσμα` : `Βρέθηκαν ${searchResult.length} αποτελέσματα`}
         </h5>}
@@ -139,15 +156,16 @@ export function SearchView() {
                 onChange={(e) => dispatchSearchCriteria({type:'Set_Phone', value:e.target.value})}/>
         </FloatingLabel>
     </SearchFilters>;
+
     const renderContent = () => {
         if(InnerWidth >= 1200) {
             return <>
                 <Col className={`search-filters d-flex flex-column bg-white py-3 ${innerWidth < 992 ? 'sticky-top' : ''} ${InnerWidth < 768 ? 'h-fit-content' : 'h-100'}`}
-                     xl={3}>
+                     xl={3} xxl={innerWidth > 1600 ? 2 : 3}>
                     {Criteria}
                 </Col>
-                {reservationsStack}
-                {activeReservation !==null && <Col className={'d-flex h-100 overflow-y-auto px-1'} >
+                {requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : reservationsStack}
+                {activeReservation !==null && <Col className={'h-fit-content m-auto overflow-y-auto p-4'} >
                     <ReservationLong/>
                 </Col>}
             </>
@@ -155,14 +173,14 @@ export function SearchView() {
 
         return <>
             {Criteria}
-            {reservationsStack}
+            {requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : reservationsStack}
             <MobileActiveReservationOffCanvas/>
         </>
     }
 
     return (
-        <Row className={'h-100 px-2 py-0 px-lg-0 pt-lg-0 overflow-y-auto'}>
-            <ActiveRangeContext.Provider value={[null,()=>{}]}>
+        <Row className={'h-100 px-2 py-0 px-lg-0 pt-lg-0 overflow-y-auto d-flex'}>
+            <ActiveRangeContext.Provider value={[null,handleReplaceReservation]}>
                 {renderContent()}
             </ActiveRangeContext.Provider>
         </Row>

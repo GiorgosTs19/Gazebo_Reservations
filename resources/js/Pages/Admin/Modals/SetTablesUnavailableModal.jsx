@@ -6,6 +6,7 @@ import {CalendarSettings} from "../Settings/DinnersSettings/CalendarSettings";
 import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 import {getFormattedDate, isDateDisabledByAdmin} from "../../../ExternalJs/Util";
 import {DisabledDaysContext} from "../Contexts/DisabledDaysContext";
+import {OptionsSVG} from "../../../SVGS/OptionsSVG";
 
 export function SetTablesUnavailableModal({gazebo}) {
     const [show, setShow] = useState(false);
@@ -77,9 +78,9 @@ export function SetTablesUnavailableModal({gazebo}) {
 
     return (<>
             {/* Button that is being returned to open the modal. */}
-            <Button variant={'outline-secondary'} className={'p-2 m-auto rounded-3'}
+            <Button variant={'outline-secondary'} className={'p-1 m-auto border-0'}
                     onClick={handleShow}>
-               Διαχείριση
+               <OptionsSVG height={24} width={24}/>
             </Button>
             <Modal show={show} onHide={handleClose} className={'day-unavailable-modal'}>
                 {/* Shows the date|s to be disabled as the title of the modal*/}

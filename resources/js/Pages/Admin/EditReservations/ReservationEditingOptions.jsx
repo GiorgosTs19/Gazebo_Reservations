@@ -50,7 +50,7 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
             </Row>
             <Row className={'my-3'}>
                 {canChangeGazeboSameDay &&
-                    <Col className={'d-flex flex-column'} xs={12} sm={6}>
+                    <Col className={'d-flex flex-column'} xs={6}>
                         <p className={'info-text-lg mb-3'}>Gazebo</p>
                         {noAvailableTablesExist &&
                             <p className={'text-danger fw-bold info-text-lg mt-2 mb-1'}>Δεν υπάρχουν διαθέσιμα Gazebo την ίδια μέρα.</p>}
@@ -59,7 +59,7 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
                             Αλλαγή Gazebo
                         </Button>
                     </Col>}
-                <Col sm={6} className={'d-flex flex-column my-3 my-sm-0'}>
+                <Col xs={canChangeGazeboSameDay ? 6 : 12} className={'d-flex flex-column my-3 my-sm-0'}>
                     <p className={'info-text-lg mb-3 '}>Μενού</p>
                     <Button variant={'secondary'} className={'m-auto'} disabled>Αλλαγή Μενού</Button>
                 </Col>

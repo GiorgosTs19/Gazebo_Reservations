@@ -22,6 +22,9 @@ export function ViewSelectionMenu() {
     MonthlyViewIcon = <h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Monthly' ? 'opacity-25' : ''}`
     + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_1')}
     onClick={()=>handleSetActiveView('Monthly')}>Μηνιαίες</h6>,
+    CancelledViewIcon = <h6 className={`flex-fill user-select-none info-text-lg text-danger ${activeReservationsView === 'Cancelled' ? 'opacity-25' : ''}`
+    + (activeReservationsView === 'Cancelled' ? '' : 'cursor-pointer hover-scale-1_1')}
+    onClick={()=>handleSetActiveView('Cancelled')}>Ακυρωμένες</h6>,
 
     SearchViewIcon =<h6 className={`flex-fill user-select-none info-text-lg ${activeReservationsView === 'Search' ? 'opacity-25' : ''} ` +
     (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_1')}
@@ -32,6 +35,7 @@ export function ViewSelectionMenu() {
             {TodayViewIcon}
             {WeeklyViewIcon}
             {MonthlyViewIcon}
+            {CancelledViewIcon}
             {SearchViewIcon}
         </Stack>
     )

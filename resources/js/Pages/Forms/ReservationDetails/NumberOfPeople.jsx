@@ -37,7 +37,7 @@ export function NumberOfPeople() {
     return (
         <>
             <Select size="sm" defaultValue={bookingDetails.number_of_people ?? "Please Select"}
-                    className={'my-2 text-center '} isDisabled={bookingDetails.type === ''} isSearchable={false}
+                    className={'my-2 text-center mw-350px mx-auto'} isDisabled={bookingDetails.type === ''} isSearchable={false}
                          onChange={handleNOPChange} value={bookingDetails.number_of_people !== 0 ?
                 Options.find(obj => obj.value === parseInt(bookingDetails.number_of_people)) : 'Select'}
                     options={Options}

@@ -7,8 +7,8 @@ export function useGetReservationsForRange(activeRange, reservationType, depende
     [reservations,setReservations] = useState([]);
 
     useEffect(()=>{
-        Inertia.get(route('Get_Reservations_For_Dates'),{date_start:getFormattedDate(activeRange[0],'-',1),
-                date_end:getFormattedDate(activeRange[1],'-',1),type:reservationType},
+        Inertia.get(route('Get_Reservations_For_Dates'),{date_start:typeof activeRange[0] === 'string' ? activeRange[0] : getFormattedDate(activeRange[0]),
+                date_end:typeof activeRange[1] === 'string' ? activeRange[1] : getFormattedDate(activeRange[1]),type:reservationType, exceptCancelled:true},
             {onStart:()=>setRequestProgress('Pending'),
                 onFinish:()=>setRequestProgress('Finished'),
                 onSuccess:res=> {

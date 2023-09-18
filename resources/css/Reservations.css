@@ -168,9 +168,21 @@ ul .nav-tabs:last-child .nav-link{
     border-color: #eaefef !important;
 }
 
+.disabled-day-availability {
+    color: #000000 !important;
+    opacity: 0.25 !important;
+    pointer-events: none;
+    background-color: transparent;
+    cursor: not-allowed!important;
+}
+
 .react-calendar__tile,.react-calendar__month-view__days__day {
     padding: 6px 4px !important;
     /*background-color: rgba(255, 255, 255, 0.42) !important;*/
+}
+
+.react-calendar__tile--now {
+    background-color: transparent;
 }
 
 .react-calendar__month-view__days__day.disabled {
@@ -183,11 +195,26 @@ ul .nav-tabs:last-child .nav-link{
     background-color: rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0 1px 5px 5px rgba(163, 169, 169, 0.6);
     padding: 10px 7px;
+    font-size: 12px;
+    max-width: 300px !important;
+}
+/*@media screen and (max-width: 280px) {*/
+/*    .react-calendar {*/
+/*        max-width: 200px;*/
+/*    }*/
+/*}*/
+@media screen and (max-width: 360px) {
+    .react-calendar {
+        width: 100%;
+    }
 }
 .react-calendar__tile--active {
     color:black;
     border-radius: 10px;
     background-color: rgba(125, 129, 127, 0.8) !important;
+}
+.react-calendar__month-view__weekdays__weekday {
+ font-size: 11px;
 }
 .react-calendar__tile.disabled {
     background-color: transparent !important;
@@ -195,16 +222,26 @@ ul .nav-tabs:last-child .nav-link{
 .react-calendar__month-view__days__day--weekend {
     color: black !important;
 }
+.react-calendar__tile:enabled:hover {
+    border-radius: 10px;
+}
+.react-calendar__tile, .react-calendar__month-view__days__day {
+    padding: 8px 4px!important;
+}
 .react-calendar__month-view__days__day--weekend.disabled {
     color: black !important;
     opacity: 75%;
 }
-
+.react-calendar__navigation {
+    margin-bottom: 0.1em;
+}
 .react-calendar__navigation button:disabled {
     background-color: transparent;
     color:black !important;
 }
-
+.react-calendar__navigation__label {
+    font-size: 15px;
+}
 .react-calendar__navigation .react-calendar__navigation__prev-button {
     border-radius: 20px 0 0 0 ;
     font-size: 30px;
@@ -297,12 +334,45 @@ ul .nav-tabs:last-child .nav-link{
     border-radius: 6px;
 }
 
+/* Opacity Utility Classes */
+.opacity-30 {
+    opacity: 0.3;
+}
+.opacity-35 {
+    opacity: 0.35;
+}
+.opacity-40 {
+    opacity: 0.4;
+}
+/* Opacity Utility Classes */
+
 /* Height and Width Utility Classes */
 .w-35 {
     width: 35%;
 }
 .w-40 {
     width: 40%;
+}
+.mw-200px {
+    max-width: 200px;
+}
+.mw-250px {
+    max-width: 250px;
+}
+.mw-300px {
+    max-width: 300px;
+}
+.mw-350px {
+    max-width: 350px;
+}
+.mnw-350px {
+    min-width: 450px;
+}
+.mnw-350px {
+    min-width: 450px;
+}
+.mw-850px {
+    max-width:850px;
 }
 .mh-100 {
     max-height: 100%;
@@ -439,9 +509,6 @@ video {
     /* Set a fixed background attachment, or you can use 'scroll' for a scrolling background */
     background-attachment: fixed;
 }
-.react-calendar__tile--now {
-    background-color: transparent;
-}
 
 .content-card .btn {
     background-color: rgba(255, 255, 255, 0.85);
@@ -492,4 +559,20 @@ video {
 ::-webkit-scrollbar-thumb {
     background-color: #888; /* Change the thumb color here */
     border-radius: 6px;
+}
+
+@keyframes flash {
+    0% {
+        background-color: inherit; /* Use the default color */
+    }
+    50% {
+        background-color: #daba64; /* Change to the flashing color */
+    }
+    100% {
+        background-color: inherit; /* Return to the default color */
+    }
+}
+
+.flash-animation {
+    animation: flash 1.6s infinite; /* Adjust duration as needed */
 }

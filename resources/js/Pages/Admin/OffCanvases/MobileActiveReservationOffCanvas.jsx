@@ -21,11 +21,11 @@ export function MobileActiveReservationOffCanvas() {
 
     return (
         <Offcanvas show={reservationIsNotNull} onHide={handleBack} placement={'bottom'}
-        style={{height:'88%', borderRadius:'30px 30px 0 0'}} className={'mx-2'} backdropClassName={'reservation_backdrop'}>
+        style={{height:'93%', borderRadius:'30px 30px 0 0'}} className={'mx-2 d-flex'} backdropClassName={'reservation_backdrop'}>
             <Offcanvas.Header className={'py-0 mb-2 justify-content-center'} onClick={handleBack}>
                 <ChevronDownSVG  height={32} width={32}/>
             </Offcanvas.Header>
-            <Offcanvas.Body className={'d-flex px-4 pt-0 overflow-y-auto scroll-bar-hidden'}>
+            <Offcanvas.Body className={'px-4 pt-0 overflow-y-auto scroll-bar-hidden'}>
                 {reservationIsNotNull && <ReservationLong/>}
             </Offcanvas.Body>
         </Offcanvas>

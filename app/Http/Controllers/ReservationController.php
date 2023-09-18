@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -41,7 +42,6 @@ class ReservationController extends Controller {
      */
     public function create(Request $request) {
         DB::beginTransaction();
-
         try {
             $input = $request->only([
                 'date', 'table',
@@ -130,25 +130,42 @@ class ReservationController extends Controller {
     }
 
     protected function getAction($input, $Reservation) {
+        if(isset($input['active_view']) && $input['active_view'] === 'Monthly')
+            return redirect()->action([GazeboController::class, 'checkRangeAvailability'],
+                ['date_start'=>$input['date_start'], 'date_end'=>$input['date_end'], 'type'=>$Reservation->Type,
+                    'activeReservation'=>$Reservation->id, 'withDisabledTables'=>false]);
+
         if(is_null($input['date_start']) && is_null($input['date_end']))
             return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
+
         if(is_null($input['date_end']))
             return redirect()->action([GazeboController::class, 'getReservationsForDate'],
                 ['date'=>$input['date_start'], 'type'=>$Reservation->Type, 'activeReservation'=>$Reservation->id]);
+
         return redirect()->action([GazeboController::class, 'getReservationsForDates'],
             ['date_start'=>$input['date_start'], 'date_end'=>$input['date_end'], 'type'=>$Reservation->Type,
                 'activeReservation'=>$Reservation->id]);
     }
+
     /**
      * Show the form for editing the specified resource.
+     * @throws ValidationException
      */
     public function changeReservationDate(Request $request): \Illuminate\Http\RedirectResponse {
-        $input = $request->only(['Reservation_id','Date','Table_id', 'date_start', 'date_end']);
-        $Reservation = Reservation::find($input['Reservation_id']);
-        if($Reservation->Date !== $input['Date'])
-            $Reservation->Date =$input['Date'];
-        if($Reservation->gazebo_id !== $input['Table_id'])
-            $Reservation->gazebo_id = $input['Table_id'];
+        $input = $request->only(['reservation_id','date','gazebo_id', 'date_start', 'date_end', 'active_view', 'reservation_type']);
+        $Reservation = Reservation::find($input['reservation_id']);
+//        try {
+//            $Reservation_Already_Exists = Reservation::date($input['date'])->type($input['reservation_type'])->table($input['gazebo_id'])->
+//            status('Cancelled',true)->exists();
+//            if(!$Reservation_Already_Exists)
+//                throw new \Exception('Το Gazebo που επιλέξατε για τις '.$input['date'].' φαίνεται πώς είναι ήδη πιασμένο');
+//        } catch (\Exception $e) {
+//            return back()->withErrors(['date_error'=>'Το Gazebo που επιλέξατε για τις '.$input['date'].' φαίνεται πώς είναι ήδη πιασμένο']);
+//        }
+        if($Reservation->Date !== $input['date'])
+            $Reservation->Date =$input['date'];
+        if($Reservation->gazebo_id !== $input['gazebo_id'])
+            $Reservation->gazebo_id = $input['gazebo_id'];
         $Reservation->save();
         return $this->getAction($input, $Reservation);
     }
@@ -168,12 +185,10 @@ class ReservationController extends Controller {
      */
     public function Search(Request $request) {
         $input = $request->only(['conf_number','email','phone_number','room_number','type']);
-        $result = ReservationResource::collection(Reservation::confirmationNumber($input['conf_number'])->
-        phone($input['phone_number'])->email($input['email'])->type($input['type'])->afterToday()->get());
+        $result = Reservation::confirmationNumber($input['conf_number'])->
+        phone($input['phone_number'])->email($input['email'])->type($input['type'])->afterToday()->with(['Rooms'])->get();
         return Redirect::back()->with(['search_result'=>$result]);
     }
-
-
 }
 //    /**
 //     * Looks for reservations in disabled_days that do not allow them to be fulfilled.

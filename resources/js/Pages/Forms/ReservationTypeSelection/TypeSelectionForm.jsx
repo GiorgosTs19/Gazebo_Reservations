@@ -1,36 +1,18 @@
-import {Button, Col, Image, Row} from "react-bootstrap";
-import {forwardRef, useContext, useEffect, useRef, useState} from "react";
+import {Button, Col, Row} from "react-bootstrap";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
-import {IsTouchableContext} from "../../../Contexts/IsTouchableContext";
+import {FormProgressContext} from "../../../Contexts/FormProgressContext";
+import {forwardRef, useContext, useEffect, useRef, useState} from "react";
 import {ReservationCalendar} from "../Date/ReservationCalendar";
 import {changeDateFormat} from "../../../ExternalJs/Util";
 import {NumberOfPeople} from "../ReservationDetails/NumberOfPeople";
-import {FormProgressContext} from "../../../Contexts/FormProgressContext";
-import {DateNotes} from "../../../Notes/DateNotes";
-import gsap from "gsap";
 import useUpdateEffect from "../../../CustomHooks/useUpdateEffect";
 import {GazeboBookingProgressBar} from "../../../ProgressBars/GazeboBookingProgressBar";
-import {IsDemoContext} from "../../../Contexts/IsDemoContext";
+import {TypeOptionsRow} from "./TypeOptionsRow";
 
 export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children},ref) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
     {progress, setProgress} = useContext(FormProgressContext),
-    handleImageClick = (value) => {
-        if(progress === 'Type') {
-            setBookingDetails(prev=>{return{...prev,type:value,more_rooms:false}});
-            switch (value) {
-                case 'Bed' : {
-                    gsap.fromTo('#sun-img', 2, {rotation:0, transformOrigin:"50% 50%"},{rotation:180, transformOrigin:"50% 50%"});
-                    break;
-                }
-                case 'Dinner' : {
-                    gsap.fromTo('#moon-img', 1, {rotation:90, transformOrigin:"50% 50%"},{rotation:0, transformOrigin:"50% 50%"});
-                    break;
-                }
-            }
-        }
-    },
     innerWidth = useContext(InnerWidthContext),
     typeSelectionRef = useRef(null),
     dateSelectionRef = useRef(null),
@@ -48,28 +30,10 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
         setProgress('Table');
     };
 
-    useEffect(()=>{
-        const tl = gsap.timeline();
-            if(showCalendar) {
-                if(bookingDetails.type ==='Dinner') {
-                    tl.to('#date_notes',{duration:1.5,x:'2500px',ease:'power1.out'});
-                    tl.to('#date_notes',{duration:0,display:'none'},0.5);
-                }
-                tl.from(calendarRef.current,{y:'1500px',duration:0.5,ease:'power1.in'},0);
-            }
-            if(progress === 'Type' && !showCalendar) {
-                if(bookingDetails.type ==='Dinner'){
-                    tl.to('#date_notes', {duration: 0, display: 'block'});
-                    tl.to('#date_notes', {duration: 0.5, x: '0'}, '>');
-                }
-            }
-    },[showCalendar]);
-
     useUpdateEffect(()=>{
         setBookingDetails(prev=>{return{...prev,number_of_people:0,date:'',more_rooms:false,table:'',
             primary_menu:{Main:'',Dessert:''}, secondary_menu:{Main:'',Dessert:''}, secondary_room : bookingDetails.type === 'Bed' ? '' : prev.secondary_room}});
         setShowCalendar(false);
-        setProgress('Type');
     },[bookingDetails.type]);
 
     useEffect(()=>{
@@ -84,94 +48,68 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
         }
     },[bookingDetails.number_of_people]);
 
-    useEffect(()=>{
-        const tl = gsap.timeline();
-        if(bookingDetails.type === 'Dinner') {
-            switch (progress) {
-                case 'Table' : {
-                    tl.to('#date_notes',{duration:1,x:'2500px'});
-                    tl.to('#date_notes',{duration:0,display:'none'},'>');
-                    break;
-                }
-                case 'Type' : {
-                    tl.to('#date_notes',{duration:0,display:'block'});
-                    tl.fromTo('#date_notes',{duration:1,x:'2500px'},{duration:1,x:'0'},'>');
-                    break;
-                }
-            }
-        }
-    },[progress]);
-
     return (
-        <div className={`${progress === 'Table' ? 'px-0 py-0' : 'px-3 py-2'} border border-1 rounded-5 mx-auto content-card h-fit-content
-        ${innerWidth <= 576 && (showCalendar  || (progress !== 'Type' && progress !== 'Table')) ? 'mt-1 my-md-auto' : 'my-auto'} position-relative `
-            + (innerWidth > 992 ? ' w-50 ' : (innerWidth >= 576 ? 'w-75' : ' w-100 '))} ref={ref}>
+        <div className={`${progress === 'Table' ? 'p-0' : (progress === 'Details' ? 'p-2 p-md-3' : 'p-3')}) border border-1 rounded-5 mx-auto content-card h-fit-content mw-850px w-100
+        ${innerWidth <= 576 && (showCalendar  || progress === 'Details' || progress === 'Finalize') ? 'mt-1 my-md-auto' : 'my-auto'} position-relative`} ref={ref}>
             <GazeboBookingProgressBar></GazeboBookingProgressBar>
-            <Row className={'w-100 d-flex mx-0 '}>
-                <Col ref={typeSelectionRef} className={'mb-2 my-md-auto'} xs={12} md={bookingDetails.type === '' ? 12 : (progress !== 'Type' ? 12 : 5)}>
-                    <Row className={'m-auto'}>
-                        <Col className={'p-2 border-blue border border-start-0 border-top-0 border-bottom-0 d-flex ' + (progress !== 'Type' ? 'opacity-50' : '')}
-                             style={{backgroundColor:bookingDetails.type ==='Dinner' ? 'rgba(79,158,178,0.7)' : '',borderRadius:'15px 0 0 15px',userSelect:'none',
-                                 cursor:progress === 'Type' ? "pointer" : 'default'}}
-                             onClick={()=>handleImageClick('Dinner')}>
-                            <Image src={'Images/Icons/moon.png'} width={'20px'} height={'20px'} className={'ms-2 my-auto'} id={'moon-img'}></Image>
-                            <h6 className={'m-auto'}>
-                                Seaside Dinner
-                            </h6>
+            {progress === 'Type' ? <Row className={`pb-3 pb-md-3`}>
+                <Col md={bookingDetails.number_of_people === 0 ? 12 : progress === 'Type' ? (showCalendar ? 6 : 8) : 12}
+                     className={'d-flex'}>
+                    <Row className={'w-100 d-flex mx-auto mb-3 mb-lg-0'}>
+                        <Col ref={typeSelectionRef} className={'mb-2 my-md-auto'}
+                             md={bookingDetails.type === '' && bookingDetails.number_of_people === 0 ? 12 : (bookingDetails.number_of_people === 0 ? 7 : 12)}>
+                            <TypeOptionsRow/>
                         </Col>
-                        <Col className={'p-2 d-flex me-0 me-lg-3 ' + (progress !== 'Type' ? 'opacity-50' : '')}
-                             style={{backgroundColor:bookingDetails.type ==='Bed'?'rgba(217,232,112,0.7)':''
-                            ,borderRadius:'0 15px 15px 0',userSelect:'none',cursor:progress === 'Type' ? "pointer" : 'default'}} onClick={()=>handleImageClick('Bed')}>
-                            <h6 className={'m-auto'}>
-                                Sun Bed
-                            </h6>
-                            <Image src={'Images/Icons/sun.png'} width={'24px'} height={'24px'} id={'sun-img'} className={'my-auto'}></Image>
-                        </Col>
+                        {/*border-start ${innerWidth >= 1400 && bookingDetails.number_of_people !== 0 ? 'border-end' : ''}*/}
+                        {bookingDetails.type !== '' && progress === 'Type' &&
+                            <Col ref={numberOfPeopleSelectionRef} md={bookingDetails.number_of_people === 0 ? 5 : 12}
+                                 className={`my-auto border-blue px-4 text-center m-auto py-2 ${bookingDetails.number_of_people === 0 && innerWidth >= 1400 ? 'border-start' : ''} ` + (innerWidth > 768 ? 'border-bottom-0 border-top-0' : 'border-start-0 ') +
+                                     (bookingDetails.number_of_people === 0 ? ' border-bottom-0' : '')}>
+                                <span className={'info-text-lg'}>Guest Count</span>
+                                <NumberOfPeople></NumberOfPeople>
+                            </Col>}
+                        {showCalendar && bookingDetails.number_of_people !== 0 && progress === 'Type' &&
+                            <div ref={dateSelectionRef}
+                                 className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative'}
+                                 style={{
+                                     backgroundColor: 'rgba(253,249,249,0.75)',
+                                     userSelect: 'none',
+                                     maxWidth: '330px'
+                                 }}>
+                                {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
+                                <h6 style={{cursor: bookingDetails.number_of_people === 0 ? '' : 'pointer'}}
+                                    onClick={handleShowCalendar} className={'mb-0'}>
+                                    {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
+                                </h6>
+                            </div>}
                     </Row>
                 </Col>
-                {bookingDetails.type !== '' && progress === 'Type' && <Col ref={numberOfPeopleSelectionRef} md={7} xxl={bookingDetails.number_of_people !== 0 ? 3 : 7}
-                      className={'my-auto border-blue border border-end-0  mt-2 mt-md-0 py-2 ' + (innerWidth > 768 ? 'border-bottom-0 border-top-0' : 'border-start-0 ') +
-                          (bookingDetails.number_of_people === 0 ? ' border-bottom-0' : '')}>
-                    <div className={`m-auto px-4 text-center`} style={{ userSelect: 'none'}}>
-                        <span className={'fw-bold fst-italic'}>Guest Count</span>
-                        <NumberOfPeople></NumberOfPeople>
-                    </div>
-                </Col>}
-                {bookingDetails.number_of_people !== 0 && progress === 'Type'  && <Col ref={dateSelectionRef}
-                      className={'text-center border-blue d-flex my-auto border-end-0 border-top-0 border-bottom-0 py-2 ' + (!showCalendar ? 'border' : '') +
-                          (innerWidth < 768 ? 'border-start-0' : '')}
-                      xxl={4}>
-                    <div className={'p-2 mx-auto w-100 ' + (bookingDetails.number_of_people === 0 ? 'opacity-25' : '')}>
-                        <div className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 w-100 position-relative '}
-                             style={{
-                                 backgroundColor: 'rgba(253,249,249,0.75)',
-                                 userSelect: 'none'
-                             }}>
-                            <span>Date</span>
-                            <h6 style={{cursor: bookingDetails.number_of_people === 0 ? '' : 'pointer'}}
-                                onClick={handleShowCalendar}>
+                {progress === 'Type' && <Col className={'d-flex flex-column'} md={showCalendar ? 6 : 4}>
+                    {!showCalendar && bookingDetails.number_of_people !== 0 && progress === 'Type' &&
+                        <div ref={dateSelectionRef}
+                             className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative'}
+                             onClick={handleShowCalendar}
+                             style={{backgroundColor: 'rgba(253,249,249,0.75)', userSelect: 'none', maxWidth: '330px', cursor:'pointer'}}>
+                            {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
+                            <h6 className={'mb-0'}>
                                 {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
                             </h6>
                         </div>
-                    </div>
+                    }
+                    {showCalendar && <div className={'mx-auto'} ref={calendarRef}>
+                        <ReservationCalendar></ReservationCalendar>
+                    </div>}
+                    {progress === 'Type' && <Button variant={'outline-light'}
+                                                    hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
+                                                    className={'mt-4 my-md-3 mx-auto box_shadow border-0 reservation-button text-dark'}
+                                                    onClick={handleNextClick}
+                                                    style={{width: 'fit-content', height: 'fit-content'}}>
+                        Book on {changeDateFormat(bookingDetails?.date, '-', '/')}
+                    </Button>}
                 </Col>}
-            </Row>
-            {showCalendar && <div ref={calendarRef}>
-                <ReservationCalendar></ReservationCalendar>
-                {progress === 'Type' && <Button variant={'outline-light'} hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
-                    className={'my-2 box_shadow border-0 reservation-button text-dark'}
-                    onClick={handleNextClick}
-                    style={{width: 'fit-content', height: 'fit-content'}}>
-                    Book on {changeDateFormat(bookingDetails?.date,'-','/')}
-                </Button>}
+            </Row> : <div className={'px-2 pb-3'}>
+                <TypeOptionsRow/>
             </div>}
-            {/*<DateNotes></DateNotes>*/}
-            {progress === 'Type' && !showCalendar && <Button variant={'outline-light'} hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
-                className={'my-2 reservation-button text-dark'}
-                onClick={handleNextClick}
-                style={{width: 'fit-content', height: 'fit-content'}}>
-                Book on {changeDateFormat(bookingDetails?.date,'-','/')}
-            </Button>}
                 {children}
         </div>
     );

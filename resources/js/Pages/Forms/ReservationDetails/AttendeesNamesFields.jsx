@@ -17,12 +17,12 @@ export function AttendeesNamesFields() {
         checkShowRequirements() &&
         <>
             <p className={'bold-info-text'}>Guests accompanying you</p>
-            <InputGroup className="mb-3">
+            <InputGroup className={`mx-auto`} style={{maxWidth:`${(bookingDetails.number_of_people-1)*250}px`}}>
                 {/*Return inputs for attendee's first names based on the number of people variables */}
-                {Array.from({ length:bookingDetails.number_of_people-1 }).map((_, index)=>{
+                {Array.from({ length:bookingDetails.number_of_people-1}).map((_, index)=>{
                     let number = index +2;
                     return <Form.Control key={'Attendee ' + number} type="text" placeholder={"Guest " + number}
-                                         size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'} value={bookingDetails.attendees[index] || ''}
+                                         size={"sm"} className={`mb-2 text-center box_shadow border-0 mx-1 mw-250px `} value={bookingDetails.attendees[index] || ''}
                                          onChange={(e)=>handleAttendeeNameChange(e,index)}/>
                 })}
             </InputGroup>

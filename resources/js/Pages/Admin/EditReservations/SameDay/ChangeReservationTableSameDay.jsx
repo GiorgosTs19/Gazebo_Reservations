@@ -1,5 +1,5 @@
 import {changeDateFormat, getTableAA} from "../../../../ExternalJs/Util";
-import {useContext,useState,useRef,useEffect} from "react";
+import {useContext,useState,useRef} from "react";
 import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
 import {getDate, getParameter, handleSetReservations} from "../../../../Inertia_Requests/Admin_Requests";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
@@ -9,14 +9,16 @@ import {Button, Card, Col, Form, ListGroup, Row, Stack} from "react-bootstrap";
 import {ResolvingConflictContext} from "../../Contexts/ResolvingConflictContext";
 import {ActiveTabKeyContext} from "../../Contexts/ActiveTabKeyContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
+import {ViewContext} from "../../../../Contexts/ViewContext";
 
-export function ChangeReservationTableSameDay({edit}) {
+export function ChangeReservationTableSameDay({edit, availability}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-        Gazebos = useContext(GazebosContext),
-        {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
+    Gazebos = useContext(GazebosContext),
+    {resolvingConflict,setResolvingConflict} = useContext(ResolvingConflictContext);
     const [selectedTable,setSelectedTable] = useState('');
     const TablesListRef = useRef(null);
     const {activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext),
+    {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
     {editing, setEditing} = edit;
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id),
     [activeRange, setReservations] = useContext(ActiveRangeContext);
@@ -36,25 +38,13 @@ export function ChangeReservationTableSameDay({edit}) {
     };
 
     const date = activeReservation.Date;
-    const [tables,setTables] = useState([]);
-    useEffect(()=>{
-        if(date !== null) {
-            Inertia.get(route('Get_Availability_For_Date'), {date: date, type:activeReservation.Type},{
-                only:['availability_for_date'],
-                preserveScroll:true,
-                preserveState:true,
-                onSuccess:(res)=>{
-                    setTables(res.props.availability_for_date);
-                }
-            });
-        }
-    },[]);
+
     const [showOnlyAvailableTables,setShowOnlyAvailableTables] = useState(false);
     const handleShowOnlyAvailableTablesChange = (e) => {
         setShowOnlyAvailableTables(!showOnlyAvailableTables);
     };
 
-    const unavailableTablesExist = tables.some(table=>{return table.isAvailable === false});
+    const unavailableTablesExist = availability.some(table=>{return table.isAvailable === false});
 
     const getTableAvailabilityText = (table) => {
         if(selectedTable === table.id)
@@ -76,7 +66,7 @@ export function ChangeReservationTableSameDay({edit}) {
 
     const getTablesList = () => {
         if(showOnlyAvailableTables)
-            return tables.filter(table=>{
+            return availability.filter(table=>{
                 return table.isAvailable === true;
             }).map((table,index)=>{
                 return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
@@ -93,7 +83,7 @@ export function ChangeReservationTableSameDay({edit}) {
                 </ListGroup.Item>;
             });
 
-        return tables.map((table,index)=>{
+        return availability.map((table, index)=>{
             return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
                style={{cursor:table.isAvailable ? 'pointer' : (table.id === activeReservation.Gazebo ? 'not-allowed' : 'not-allowed') }}
                className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
@@ -119,7 +109,7 @@ export function ChangeReservationTableSameDay({edit}) {
                 if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                     setResolvingConflict([false, '']);
                 setActiveReservation(res.props.activeReservation);
-                handleSetReservations(res, activeRange, setReservations)
+                handleSetReservations(res, activeRange, setReservations,activeReservationsView)
             }});
     };
 
@@ -127,16 +117,16 @@ export function ChangeReservationTableSameDay({edit}) {
         <Row className={'p-2 '}>
             <Col className={'h-100'}>
                 <div className={'d-flex mb-4'}>
-                    {unavailableTablesExist && <Stack direction={'horizontal'} className={'mx-auto'}>
+                    {unavailableTablesExist && <div className={'mx-auto info-text-xl'}>
                         <h6 onClick={handleShowOnlyAvailableTablesChange} style={{cursor:'pointer'}}>
                             Εμφάνιση μόνο των διαθέσιμων Gazebo
                         </h6>
                         <Form.Switch className={'mx-1 mb-1'} checked={showOnlyAvailableTables}
                                      onChange={handleShowOnlyAvailableTablesChange}></Form.Switch>
-                    </Stack>}
+                    </div>}
                 </div>
                 <Card className={'h-100 border-0'}>
-                    <Card.Header className={'bg-transparent'}>
+                    <Card.Header className={'bg-transparent info-text-lg'}>
                         Διαθέσιμα Τραπέζια για {changeDateFormat(date, '-', '-')}
                     </Card.Header>
                     <Card.Body className={'d-flex flex-column'}>

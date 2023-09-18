@@ -5,15 +5,18 @@ export const getParameter = (activeRange) => {
         return '';
     if(Array.isArray(activeRange))
         return 'availability_for_date_range';
-    return 'availability_for_date';
+    return 'current_day_reservations';
 }
 
-export const handleSetReservations = (res, activeRange, setReservations) => {
+export const handleSetReservations = (res, activeRange, setReservations, activeView) => {
+    if(activeView === 'Search') {
+        return setReservations(res.props.activeReservation);
+    }
     if(!activeRange)
         return;
     if(Array.isArray(activeRange))
         return setReservations(res.props.availability_for_date_range);
-    return setReservations(res.props.availability_for_date);
+    return setReservations(res.props.current_day_reservations);
 }
 
 export const getDate = (num, activeRange) => {
@@ -35,12 +38,12 @@ export const getDate = (num, activeRange) => {
     }
 }
 
-export const handleChangeReservationStatus = (status, {activeReservation,setActiveReservation}, activeRange, setReservations) => {
+export const handleChangeReservationStatus = (status, activeReservation, setActiveReservation, activeRange, setReservations, activeView) => {
     Inertia.patch(route('Change_Reservation_Status'),{date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)
         ,reservation_id:activeReservation.id,status:status},{
         onSuccess:(res)=> {
             setActiveReservation(res.props.activeReservation);
-            handleSetReservations(res,activeRange, setReservations);
+            handleSetReservations(res,activeRange, setReservations, activeView);
         },
         only:[getParameter(activeRange), 'activeReservation']
     });

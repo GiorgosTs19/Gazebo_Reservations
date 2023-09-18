@@ -14,13 +14,12 @@ export function LargeDevicesSettings({children}) {
                         {children[1]}
                     </Col>
                 </Row>
-                {/*{children}*/}
             </Col>
             <Col xxl={4} className={'d-flex mt-4 mt-lg-0'}>
-                <DinnerDateSettings></DinnerDateSettings>
             </Col>
-            <Col xxl={4} className={'d-flex'}>
+            <Col xxl={4} className={'d-flex flex-column gap-2'}>
                 <DinnerTableSettings></DinnerTableSettings>
+                <DinnerDateSettings></DinnerDateSettings>
             </Col>
         </Row>
     )

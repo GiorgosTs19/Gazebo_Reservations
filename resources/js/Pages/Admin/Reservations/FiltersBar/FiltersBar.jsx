@@ -23,11 +23,11 @@ export function FiltersBar({reservationsFilter,setReservationsFilter,direction='
                        onClick={()=>handleClick('Confirmed')}>
                     Επιβεβαιωμένες
                 </Badge>
-                <Badge pill bg={"danger"} className={'cursor-pointer user-select-none hover-scale-0_95 '
-                    + ((reservationsFilter === 'Cancelled' || disabled)? ' opacity-25' : '')}
-                       onClick={()=>handleClick('Cancelled')}>
-                    Ακυρωμένες
-                </Badge>
+                {/*<Badge pill bg={"danger"} className={'cursor-pointer user-select-none hover-scale-0_95 '*/}
+                {/*    + ((reservationsFilter === 'Cancelled' || disabled)? ' opacity-25' : '')}*/}
+                {/*       onClick={()=>handleClick('Cancelled')}>*/}
+                {/*    Ακυρωμένες*/}
+                {/*</Badge>*/}
             </Stack>
     )
 }

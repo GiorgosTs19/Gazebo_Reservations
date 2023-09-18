@@ -6,6 +6,7 @@ import {ReservationTypeSelectionMenu} from "./Reservations/Settings/ReservationT
 import {ViewSelectionMenu} from "./Reservations/Settings/ViewSelectionMenu";
 import {NavigationBar} from "./NavBar/NavigationBar";
 import {ReservationLong} from "./Reservations/ReservationViews/ReservationLong/ReservationLong";
+import {MobileActiveReservationOffCanvas} from "./OffCanvases/MobileActiveReservationOffCanvas";
 import '../../../css/Admin.css'
 import '../../../css/Calendar.css';
 import {Card, Col, Container, Row} from "react-bootstrap";
@@ -26,7 +27,6 @@ import {ActiveTabKeyContext} from "./Contexts/ActiveTabKeyContext";
 import {DisabledDaysContext} from "./Contexts/DisabledDaysContext";
 import {FetchReservationsContext} from "./Contexts/FetchReservationsContext";
 import {ActiveRangeContext} from "./Contexts/ActiveRangeContext";
-import {MobileActiveReservationOffCanvas} from "./OffCanvases/MobileActiveReservationOffCanvas";
 
 export default function AdminPanel(props) {
     const Menus = props.Menus,
@@ -65,7 +65,7 @@ export default function AdminPanel(props) {
                 return MenuContent;
             }
             case 'ResolveConflict' : {
-                return <section className={'h-100 d-flex flex-column mt-4 mt-lg-0'}>
+                return <section className={'h-100 mt-4 mt-lg-0'}>
                     <ActiveRangeContext.Provider value={[null, ()=>{}]}>
                         {innerWidth < 992  ? <MobileActiveReservationOffCanvas/> : <ReservationLong></ReservationLong>}
                     </ActiveRangeContext.Provider>
@@ -141,7 +141,6 @@ export default function AdminPanel(props) {
                                                                             <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
                                                                                 {typeAndViewSelectionPanel}
                                                                             </Card.Header>}
-                                                                        {/*+ (innerWidth > 500 ? 'h-77 ' : (activeReservationsView === 'Search' ? 'h-100' : 'h-75'))*/}
                                                                         <Card.Body className={'px-0 px-lg-2 px-xl-2 rounded-4 border-0 mt-0 mt-lg-3 overflow-x-hidden py-0'}>
                                                                             <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                                                                 <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>

@@ -162,26 +162,91 @@ abbr[title] {
     text-decoration: none !important;
 }
 .disabled-day_transfer {
-    color: #ea1414 !important;
-    opacity: 25% !important;
+    color: #000000 !important;
+    opacity: 0.25 !important;
     pointer-events: none;
+    background-color: transparent;
+    cursor: not-allowed!important;
 }
+
 /*Calendar*/
 
-.react-calendar__tile:disabled {
+.admin-calendar .react-calendar__tile:disabled {
     background-color: white !important;
     opacity: 50% !important;
     cursor: not-allowed;
 }
-/*.react-calendar__month-view__days__day--weekend {*/
-/*    color: black !important;*/
-/*}*/
 
-.react-calendar__navigation button:disabled {
+.admin-calendar .react-calendar__navigation button:disabled {
     background-color: transparent !important;
     color: black !important;
 }
 
+.react-calendar__tile,.react-calendar__month-view__days__day {
+    padding: 6px 4px !important;
+    /*background-color: rgba(255, 255, 255, 0.42) !important;*/
+}
+
+.react-calendar__tile--now {
+    background-color: transparent;
+}
+
+.react-calendar__month-view__days__day.disabled {
+    background-color: transparent !important;
+    opacity: 50% !important;
+    color: black !important;
+}
+
+.react-calendar {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    padding: 10px 7px;
+    font-size: 12px;
+}
+.react-calendar__tile--active {
+    color:black;
+    border-radius: 10px;
+    background-color: rgba(125, 129, 127, 0.8) !important;
+}
+.react-calendar__month-view__weekdays__weekday {
+    font-size: 11px;
+}
+.react-calendar__tile.disabled {
+    background-color: transparent !important;
+}
+.react-calendar__month-view__days__day--weekend {
+    color: black !important;
+}
+.react-calendar__tile:enabled:hover {
+    border-radius: 10px;
+}
+.react-calendar__tile, .react-calendar__month-view__days__day {
+    padding: 8px 4px!important;
+}
+.react-calendar__month-view__days__day--weekend.disabled {
+    color: black !important;
+    opacity: 75%;
+}
+.react-calendar__navigation {
+    margin-bottom: 0.1em;
+}
+.react-calendar__navigation button:disabled {
+    background-color: transparent;
+    color:black !important;
+}
+.react-calendar__navigation__label {
+    font-size: 15px;
+}
+.react-calendar__navigation .react-calendar__navigation__prev-button {
+    border-radius: 20px 0 0 0 ;
+    font-size: 30px;
+}
+.react-calendar__navigation .react-calendar__navigation__next-button {
+    border-radius: 0 20px 0 0 ;
+    font-size: 30px;
+}
+/*.transfer-reservation-calendar {*/
+/*    border-radius: 15px 15px 5px 5px!important;*/
+/*}*/
 /*Calendar*/
 /* Settings */
 .admin-carousel.carousel-inner {
@@ -200,6 +265,12 @@ abbr[title] {
 /* Width */
 .w-fit-content {
     width: fit-content;
+}
+.w-80 {
+    width: 85%;
+}
+.w-85 {
+    width: 85%;
 }
 .w-90 {
     width: 90%;
@@ -254,6 +325,9 @@ abbr[title] {
 }
 .h-95 {
     height: 95%;
+}
+.mh-300px {
+    max-height: 300px;
 }
 .mh-400px {
     max-height: 400px;

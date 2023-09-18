@@ -256,7 +256,7 @@ export function isDateDisabledByAdmin (givenDate,Disabled_Days_Array) {
     }
 }
 
-export function getFirstAndLastDateOfMonth(month, lastAllowedDate=null) {
+export function getFirstAndLastDateOfMonth(month, lastAllowedDate) {
     const today = new Date();
     const year = today.getFullYear();
 
@@ -283,6 +283,26 @@ export function getFirstAndLastDateOfMonth(month, lastAllowedDate=null) {
 //     }
 //     return [availableTables,totalTables,availableTables/totalTables];
 // }
+
+export function ensureDate (date,returnType = 'Object') {
+    switch (returnType) {
+        case 'Object' : {
+            if (typeof date === 'string') {
+                return new Date(date);
+            }
+            else if (typeof date === 'object')
+                return date;
+            break;
+        }
+        case 'String' : {
+            if (typeof date === 'string') {
+                return date;
+            }
+            else if (typeof date === 'object')
+                return getFormattedDate(date);
+        }
+    }
+}
 
 Date.prototype.addDays = function(days) {
     const date = new Date(this.valueOf());

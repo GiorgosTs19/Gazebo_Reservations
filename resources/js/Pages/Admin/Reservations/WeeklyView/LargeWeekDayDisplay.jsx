@@ -3,10 +3,15 @@ import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {changeDateFormat, extractReservationsForDate, getFormattedDate} from "../../../../ExternalJs/Util";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {MinimizeSVG} from "../../../../SVGS/MinimizeSVG";
+import {useRef, useContext} from "react";
+import {useScrollToActiveReservation} from "../../../../CustomHooks/useScrollToActiveReservation";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
 export function LargeWeekDayDisplay({dateToDisplay,reservations,reservationsFilter, largeWeekDayHandling}) {
     const {largeWeekDay,setLargeWeekDay} = largeWeekDayHandling;
-    // const [count,setCount] = useState(reservations.length);
+    const activeReservationRef = useRef(null);
+    useScrollToActiveReservation(activeReservationRef);
+    const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
     const reservationsToShow = ()=> {
         const filteredReservations = reservationsFilter === 'All' ? extractReservationsForDate(dateToDisplay,largeWeekDay.reservations) :
             reservations.filter((reservation)=>{
@@ -26,7 +31,7 @@ export function LargeWeekDayDisplay({dateToDisplay,reservations,reservationsFilt
         return [reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center mx-auto">
                 {chunk.map(reservation => (
-                    <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-3 my-5 hover-scale-0_95'} />
+                    <ReservationShort ref={reservation.id === activeReservation?.id ? activeReservationRef : null} Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-3 my-5 hover-scale-0_95'} />
                 ))}
             </div>
         )),filteredReservations.length]

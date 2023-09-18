@@ -5,7 +5,7 @@ import {Button, Col, Row} from "react-bootstrap";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import { forwardRef } from 'react';
 import {LargeDevicesMenus} from "./LargeDevicesMenus";
-import {MobileMenus} from "./MobileMenus";
+import {MobileMenus} from "./MobileMenus/MobileMenus";
 
 export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props},ref) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
@@ -36,7 +36,7 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
             {innerWidth > 1300 ? <LargeDevicesMenus bookingDetails={bookingDetails}></LargeDevicesMenus> :
             <MobileMenus bookingDetails={bookingDetails}></MobileMenus>}
             {checkRequirement() &&
-                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 border-0 mb-1 reservation-button text-dark position-relative'}>Finalize Reservation</Button>
+                <Button variant={'outline-light'} onClick={handleFinalize} className={'rounded-3 border-0 mb-3 reservation-button text-dark position-relative'}>Finalize Reservation</Button>
             }
         </div>
     )

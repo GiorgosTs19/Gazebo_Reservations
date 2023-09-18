@@ -6,9 +6,9 @@ import {
     isDateDisabledByAdmin,
 } from "../../../ExternalJs/Util";
 import {useCallback, useContext, useRef, useState} from "react";
+import {useGetAvailabilityForRange} from "../../../CustomHooks/useGetAvailabilityForRange";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {DatabaseSettingsContext} from "../../Admin/Contexts/DatabaseSettingsContext";
-import {useGetAvailabilityForRange} from "../../../CustomHooks/useGetAvailabilityForRange";
 import {DisabledDaysContext} from "../../Admin/Contexts/DisabledDaysContext";
 
 export function ReservationCalendar() {
@@ -71,28 +71,28 @@ export function ReservationCalendar() {
             const current_date_availability = extractReservationsForDate(date,availability);
             // Check if the date falls within the range
             if(current_date_availability.length === 0)
-                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
+                return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
             if(current_date_availability.length < 2)
-                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
-            else if(current_date_availability.length === 2)
-                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#eef507',width:'76%', height:'4px'}}></div>;
-            else if(current_date_availability.length > 2 && current_date_availability.length <= 4)
-                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#F68908',width:'76%', height:'4px'}}></div>;
-            else if(current_date_availability.length > 4)
-                return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#D2042D',width:'76%', height:'4px'}}></div>;
+                return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#42C618',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length >= 2 && current_date_availability.length < 4)
+                return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#eef507',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length >= 4 && current_date_availability.length < 6)
+                return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#F68908',width:'76%', height:'4px'}}></div>;
+            else if(current_date_availability.length === 6)
+                return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#D2042D',width:'76%', height:'4px'}}></div>;
         }
-        return <div className={'my-2 mx-auto'}  style={{backgroundColor:'#555557',width:'76%', height:'4px'}}></div>;
+        return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#555557',width:'76%', height:'4px'}}></div>;
     },[availability]);
 
     const getTileClassName = useCallback((date) => {
         if(isDateDisabled(date))
             return 'disabled';
-        return '';
-    },[activeRange]);
+        return extractReservationsForDate(date,availability).length === 6 ? 'disabled-day-availability' : '';
+    },[activeRange, availability]);
 
     return (
         <Calendar onChange={handleDateChange} value={bookingDetails.date ?? null} tileDisabled={({ date }) => isDateDisabled(date)}
-        className={'mx-auto my-2 rounded-5 calendar'} tileContent={({date, view }) => view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
+        className={'mx-auto mt-2 rounded-5 reservations-calendar'} tileContent={({date, view }) => view === 'month' && getTileContent(date)} inputRef={CalendarRef} showNeighboringMonth={false}
         prev2Label={null} next2Label={null} minDetail={'month'} prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()}
         onActiveStartDateChange={({activeStartDate}) => setActiveRange(getFirstAndLastDateOfMonth(activeStartDate.getMonth()+1, lastDay))}
         tileClassName={({date}) => getTileClassName(date)}/>

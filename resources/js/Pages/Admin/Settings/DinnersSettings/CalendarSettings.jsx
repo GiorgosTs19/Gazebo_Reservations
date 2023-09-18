@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState,useRef} from "react";
+import {useContext, useState,useRef} from "react";
 import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 import {SelectedDateContext} from "../../Contexts/SelectedDateContext";
 import {Button, Form, Stack} from "react-bootstrap";
@@ -94,7 +94,7 @@ export function CalendarSettings({isInTableSettings = false, Reservations, disab
             <Button className={'my-2 px-2 py-0 m-auto'} onClick={()=>setSelectedDate(canSelectRange ? [] : '')}
                     disabled={canSelectRange ? (selectedDate[0] === '' && selectedDate[1] === '') : selectedDate === ''}>Καθαρισμός επιλογής</Button>
             <h6 className={'mb-3 user-select-none info-text'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει !</h6>
-            <Calendar className={'rounded box_shadow m-auto '} tileDisabled={({ date }) => isDateDisabled(date)}
+            <Calendar className={'rounded-5 m-auto admin-calendar'} tileDisabled={({ date }) => isDateDisabled(date)}
                       inputRef={CalendarRef} showNeighboringMonth={false} value={selectedDate} onChange={handleDateChange}
                       tileClassName={getTileClassName} prev2Label={null} next2Label={null} selectRange={canSelectRange}
                       nextLabel={isNextLabelDisabled()} prevLabel={isPrevLabelDisabled()} minDetail={'month'}

@@ -11,7 +11,7 @@ export function DateAvailability() {
     const [isDateDisabled,existingReservationsAllowed] = !dateIsRange ?  isDateDisabledByAdmin(selectedDate,Disabled_Days) : [false,true];
 
     return (
-        <div className={'text-center mx-auto mt-4'}>
+        <div className={'text-center mx-auto mt-2'}>
             <DateAvailabilitySettings
             isDateDisabled={isDateDisabled} selectedDate={selectedDate}></DateAvailabilitySettings>
         </div>

@@ -31,10 +31,10 @@ class AdminController extends Controller {
             'availability_for_date' => Inertia::lazy(fn () => $this->retrieveAvailabilityForDate($request)),
             'search_result' => Inertia::lazy(fn ()=>$this->retrieveSearchResult($request)),
             'availability_for_date_range' => Inertia::lazy(fn ()=>$this->retrieveAvailabilityForDateRange($request)),
+            'cancelled_reservations' => Inertia::lazy(fn ()=> $this->retrieveCancelledReservations($request)),
             'reservations_of_table' => Inertia::lazy(fn () => $this->retrieveTableReservations($request)),
             'disabled_days_for_table' => Inertia::lazy(fn () => $this->retrieveTableDisabledDays($request))]);
     }
-
     private function retrieveDisabledDays () {
         // Retrieve all the days that were disabled by the admins, regardless of type
         $Disabled_Days = DisabledDay::afterToday()->order()->get();
@@ -70,6 +70,13 @@ class AdminController extends Controller {
         return ['Dinner'=>$Dinner_Menus,'Bed'=>$Bed_Menus];
     }
 
+    protected function retrieveCancelledReservations($request) {
+        // True when a request that requires the activeReservation of that time to be returned is fired.
+        if($request->session()->exists('cancelled_reservations'))
+            return $request->session()->get('cancelled_reservations');
+        return [];
+    }
+
     protected function retrieveActiveReservation($request): ?ReservationResource {
         // True when a request that requires the activeReservation of that time to be returned is fired.
         if($request->session()->exists('activeReservation'))
@@ -83,7 +90,7 @@ class AdminController extends Controller {
            return $request->session()->get('current_day_reservations');
 
         $type = $request->exists('type') ? $request->only('type')['type'] : 'Dinner';
-        return ReservationResource::collection(Reservation::date(date('y-m-d'))->type($type)->get());
+        return Reservation::date(date('y-m-d'))->type($type)->status('Cancelled',true)->with(['Rooms'])->get();
     }
 
     protected function retrieveAvailabilityForDate($request) {
@@ -120,27 +127,25 @@ class AdminController extends Controller {
         return [];
     }
 
-    protected function retrieveTableConflicts(): array
-    {
+    protected function retrieveTableConflicts(): array {
         // Retrieve all the disabled tables ( only the date and their ids ) after today.
         $Disabled_Tables = DisabledTable::afterToday()->order()->get(['gazebo_id', 'Date', 'Type']);
         $Conflicts = [];
         foreach ($Disabled_Tables as $disabled_Table) {
             $Reservations_Found = Reservation::date($disabled_Table->Date)->table($disabled_Table->gazebo_id)
-                ->status('Cancelled', true)->get();
+                ->status('Cancelled', true)->type($disabled_Table->Type)->get();
             $Conflicts = [...$Conflicts,...$Reservations_Found];
         }
         return $Conflicts;
     }
 
-    protected function retrieveDateConflicts(): array
-    {
+    protected function retrieveDateConflicts(): array {
         $Disabled_Days = DisabledDay::afterToday()->order()->get();
         $Conflicts = [];
         foreach ($Disabled_Days as $disabled_Day) {
             if(!!$disabled_Day->Allow_Existing_Reservations)
                 continue;
-            $Reservations_Found = Reservation::date($disabled_Day->Date)->status('Cancelled', true)->get();
+            $Reservations_Found = Reservation::date($disabled_Day->Date)->status('Cancelled', true)->type($disabled_Day->Type)->get();
             $Conflicts = [...$Conflicts,...$Reservations_Found];
         }
         return $Conflicts;

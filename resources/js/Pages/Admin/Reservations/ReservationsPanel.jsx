@@ -1,13 +1,14 @@
+import {ViewContext} from "../../../Contexts/ViewContext";
+import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
+import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
+import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 import {WeeklyReservationsView} from "./WeeklyView/WeeklyReservationsView";
 import {useState} from "react";
 import {MonthlyView} from "./MonthlyView/MonthlyView";
-import {ViewContext} from "../../../Contexts/ViewContext";
 import {useContext,useEffect} from "react";
-import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
-import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 import {TodayView} from "./TodaysView/TodayView";
-import {ActiveReservationTypeContext} from "../Contexts/ActiveReservationTypeContext";
 import {SearchView} from "./SearchView/SearchView";
+import {CancelledView} from "./CancelledView/CancelledView";
 
 export function ReservationsPanel({todayReservations}) {
     const innerWidth = useContext(InnerWidthContext),
@@ -38,6 +39,7 @@ export function ReservationsPanel({todayReservations}) {
             {activeReservationsView === 'Today' && <TodayView todayReservations={todayReservations}></TodayView>}
             {activeReservationsView === 'Weekly' && <WeeklyReservationsView></WeeklyReservationsView>}
             {activeReservationsView === 'Monthly' && <MonthlyView></MonthlyView>}
+            {activeReservationsView === 'Cancelled' && <CancelledView></CancelledView>}
             {activeReservationsView === 'Search' && <SearchView></SearchView>}
         </>
     )
