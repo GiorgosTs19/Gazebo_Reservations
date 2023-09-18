@@ -5,10 +5,9 @@ import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {handleChangeReservationStatus} from "../../../../Inertia_Requests/Admin_Requests";
 import {ViewContext} from "../../../../Contexts/ViewContext";
 
-export function CancelReservation({edit}) {
+export function CancelReservation() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
-        {editing, setEditing} = edit,
         [input, setInput] = useState(''),
         [activeRange, setReservations] = useContext(ActiveRangeContext),
         confNumberConfirmed = input === 'ΑΚΥΡΩΣΗ';
@@ -34,11 +33,12 @@ export function CancelReservation({edit}) {
                 </FloatingLabel>
                 <p className={'info-text'}>Πληκτρολογήστε ΑΚΥΡΩΣΗ για να συνεχίσετε</p>
             </Card.Body>
-            <Card.Footer className={'d-flex bg-transparent border-0'}>
+            <Card.Footer className={'d-flex flex-column bg-transparent border-0'}>
                 <Button variant={'danger'} className={'m-auto'} disabled={!confNumberConfirmed}
-                onClick={()=>handleChangeReservationStatus('Cancelled',{activeReservation,setActiveReservation:setActiveReservation},
+                onClick={()=>handleChangeReservationStatus('Cancelled',activeReservation, setActiveReservation,
                     activeRange, setReservations,activeReservationsView)}
                 >Ακύρωση κράτησης</Button>
+                <p className={'mt-3 mb-2 info-text text-muted fst-italic'}>Η κράτηση θα μεταφερθεί στην καρτέλα με τις ακυρωμένες κρατήσεις</p>
             </Card.Footer>
         </Card>
     )

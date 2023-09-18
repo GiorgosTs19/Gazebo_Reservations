@@ -105,7 +105,7 @@ export function ChangeReservationTableSameDay({edit, availability}) {
             {preserveScroll:true,only: [getParameter(activeRange),
                 'activeReservation', isReservationInConflict ? 'Disabled_Table_Reservations' : '']
             ,onSuccess:(res)=> {
-                setEditing(false);
+                setEditing([false, '']);
                 if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                     setResolvingConflict([false, '']);
                 setActiveReservation(res.props.activeReservation);
