@@ -1,5 +1,5 @@
-import {Col, Image, Row} from "react-bootstrap";
 import {useContext} from "react";
+import {Col, Image, Row} from "react-bootstrap";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import gsap from "gsap";

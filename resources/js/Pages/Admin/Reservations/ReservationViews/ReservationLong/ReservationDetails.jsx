@@ -7,8 +7,9 @@ import {useContext} from "react";
 import {ActiveRangeContext} from "../../../Contexts/ActiveRangeContext";
 import {ViewContext} from "../../../../../Contexts/ViewContext";
 
-export function ReservationDetails({activeReservation, Attendees, handleActiveReservation,isConflicted, conflictMessage, editReservation}) {
-    const Placed_At = activeReservation?.Placed_At,
+export function ReservationDetails({activeReservation, Attendees, handleActiveReservation,isConflicted,
+    conflictMessage, editReservation, setReservation}) {
+    const Placed_At = activeReservation?.created_at,
     Confirmation_Number = activeReservation?.Confirmation_Number,
     Date = changeDateFormat(activeReservation?.Date, '-', '-',true);
     const status = useGetReservationStatusText(activeReservation?.Status);
@@ -17,6 +18,7 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
     reservationIsCancelled = activeReservation?.Status === 'Cancelled',
     {activeReservationsView,setActiveReservationsView} = useContext(ViewContext);
     const {editing, setEditing} = editReservation;
+
     return (
         <Row className={'my-t mb-lg-1 mt-xxl-2 border-bottom'}>
             <h4 className={'border-bottom pb-2 mb-2'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
@@ -28,8 +30,8 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
                 {showActions && <section className={'d-flex flex-column mt-2'}>
                         <Stack direction={'horizontal'} gap={2} className={'m-auto'}>
                             <Button className={'m-auto'} variant={'outline-success'} disabled={isConflicted}
-                                    onClick={()=>handleChangeReservationStatus('Confirmed',activeReservation,handleActiveReservation,
-                                    activeRange, setReservations, activeReservationsView)}>
+                                    onClick={()=>handleChangeReservationStatus('Confirmed', activeReservation, handleActiveReservation,
+                                    activeRange, setReservations, activeReservationsView, setReservation)}>
                                 Επιβεβαίωση
                             </Button>
                             <Button className={'m-auto'} variant={'outline-danger'}

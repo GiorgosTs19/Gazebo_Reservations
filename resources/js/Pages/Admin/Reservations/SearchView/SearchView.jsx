@@ -62,27 +62,13 @@ export function SearchView() {
     const [requestProgress, searchResult, setSearchResult] = useSearch(searchCriteria, noCriteriaActive, [searchCriteria]);
 
     const handleReplaceReservation = (reservation) => {
+        console.log('GotCalled')
         const foundIndex = searchResult.findIndex(item=>item.id === reservation.id);
         if (searchResult[foundIndex]) {
             // Replace the reservation with the same id in the search result, with the newly fetched one,
             // to show the updates that have occurred;
             const newArray = [...searchResult];
-            newArray[foundIndex] = {
-                id: reservation.id,
-                gazebo_id: reservation.Gazebo,
-                Date: reservation.Date,
-                Email: reservation.Contact.Email,
-                Phone_Number: reservation.Contact.Phone,
-                Notes: reservation.Notes,
-                created_at: reservation.Placed_At,
-                updated_at: reservation.Updated_At,
-                Confirmation_Number: reservation.Confirmation_Number,
-                First_Name: reservation.Name.First,
-                Last_Name: reservation.Name.Last,
-                Type: reservation.Type,
-                Status: reservation.Status,
-                rooms: reservation.Rooms,
-            };
+            newArray[foundIndex] = reservation;
             setSearchResult(newArray)
         }
     };

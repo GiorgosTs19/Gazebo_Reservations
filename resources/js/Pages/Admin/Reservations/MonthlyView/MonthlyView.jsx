@@ -158,7 +158,7 @@ export function MonthlyView() {
     const CalendarToShow = <>
         <h6 className={'mb-4 mb-lg-0 user-select-none info-text'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει</h6>
             <Calendar onChange={handleDateChange} value={selectedDate || null}
-                      className={'my-auto mx-3 rounded-5 admin-calendar monthly-view-calendar'} inputRef={CalendarRef} tileClassName={getTileClassName}
+                      className={'m-auto rounded-5 admin-calendar monthly-view-calendar'} inputRef={CalendarRef} tileClassName={getTileClassName}
                       tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
                       tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
                       prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
