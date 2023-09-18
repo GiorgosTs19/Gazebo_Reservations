@@ -4,14 +4,14 @@ import '../../../../../css/GazeboCarousel.css'
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
 import {PinSVG} from "../../../../SVGS/PinSVG";
 
-export function GazeboLocation({index, className, width, gap=3, children}) {
+export function GazeboLocation({index, className, width, gap=3, children, showWave = true}) {
     const Gazebos = useContext(GazebosContext);
     return (
         <div className={'mx-auto ' + className}>
-            <div className="beach rounded-2 mx-auto d-flex">
+            {showWave ? <div className="beach rounded-2 mx-auto d-flex">
                 <div className="wave"></div>
-                {children}
-            </div>
+                {children[1]}
+            </div> : children[0]}
             <Stack direction="horizontal" gap={gap} className={'mx-auto text-center d-flex'}
             style={{width:'fit-content'}}>
                 {Gazebos.map((gazepo,number)=>{
@@ -19,7 +19,7 @@ export function GazeboLocation({index, className, width, gap=3, children}) {
                         : <Image src={'Images/Icons/gazebo_icon.png'} key={number}
                                   height={innerWidth > 992 ? 48 : 37}
                                   width={innerWidth > 992 ? 48 : 37}
-                  className={`mt-4 mx-0 perspective-1000px rounded-3 p-1 p-md-2 opacity-50`}></Image>
+                  className={`${!showWave ? 'mt-0' :'mt-4'} mx-0 perspective-1000px rounded-3 p-1 p-md-2 opacity-50`}></Image>
                 })}
             </Stack>
         </div>

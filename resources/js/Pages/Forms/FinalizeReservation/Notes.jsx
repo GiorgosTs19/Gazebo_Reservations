@@ -1,9 +1,7 @@
 import {Card, Form} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
-import {AddSVG} from "../../../SVGS/AddSVG";
-import {RemoveSVG} from "../../../SVGS/RemoveSVG";
 import {RefContext} from "../../../Contexts/RefContext";
+import {useContext, useEffect, useState} from "react";
 import {ChevronUpSVG} from "../../../SVGS/ChevronUpSVG";
 import {ChevronDownSVG} from "../../../SVGS/ChevronDownSVG";
 
@@ -28,8 +26,8 @@ export function Notes() {
 
     return (
         <>
-            <div className={'d-flex'}>
-                <Card.Subtitle className={'mb-2 mx-auto'} onClick={()=>setShow(!show)}>Additional Notes</Card.Subtitle>
+            <div className={`d-flex user-select-none`} style={{cursor:'pointer'}} onClick={()=>setShow(!show)}>
+                <Card.Subtitle className={'mb-2 mx-auto user-select-none'}>Additional Notes</Card.Subtitle>
                 {show && <ChevronUpSVG className={'justify-content-end mb-2'} height={20} width={20} onClick={()=>setShow(false)}/>}
             </div>
             {show ?

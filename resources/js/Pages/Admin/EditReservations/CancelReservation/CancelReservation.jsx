@@ -3,9 +3,11 @@ import {useContext, useState} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 import {handleChangeReservationStatus} from "../../../../Inertia_Requests/Admin_Requests";
+import {ViewContext} from "../../../../Contexts/ViewContext";
 
 export function CancelReservation({edit}) {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
+        {activeReservationsView,setActiveReservationsView} = useContext(ViewContext),
         {editing, setEditing} = edit,
         [input, setInput] = useState(''),
         [activeRange, setReservations] = useContext(ActiveRangeContext),
@@ -35,7 +37,7 @@ export function CancelReservation({edit}) {
             <Card.Footer className={'d-flex bg-transparent border-0'}>
                 <Button variant={'danger'} className={'m-auto'} disabled={!confNumberConfirmed}
                 onClick={()=>handleChangeReservationStatus('Cancelled',{activeReservation,setActiveReservation:setActiveReservation},
-                    activeRange, setReservations)}
+                    activeRange, setReservations,activeReservationsView)}
                 >Ακύρωση κράτησης</Button>
             </Card.Footer>
         </Card>

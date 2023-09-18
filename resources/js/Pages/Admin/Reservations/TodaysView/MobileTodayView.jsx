@@ -1,14 +1,13 @@
 import {Badge, Stack} from "react-bootstrap";
-import {useCallback} from "react";
-import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {useCallback, useContext} from "react";
+import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 import {MobileUtilityOffCanvas} from "../../OffCanvases/MobileUtilityOffCanvas";
-import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {AdminToNewReservationFormModal} from "../../Modals/AdminToNewReservationFormModal";
 
 export function MobileTodayView({reservations_of_current_date, filter, children, requestProgress, dateDisabled}) {
@@ -41,13 +40,13 @@ export function MobileTodayView({reservations_of_current_date, filter, children,
             return reservationChunks.map((chunk, index) => (
                 <div key={index} className="d-flex justify-content-center">
                     {chunk.map(reservation => (
-                        <ReservationShort Reservation={reservation} key={reservation.id} className={'border mx-3 my-3 hover-scale-0_95'} />
+                        <ReservationShort Reservation={reservation} key={reservation.id} className={`border mx-3 my-3 hover-scale-0_95 ${innerWidth <= 576 ? 'flex-fill mh-300px' : ''}`} />
                     ))}
                 </div>
             ))
         }
         return filteredReservations.map((reservation)=> {
-            return <ReservationShort Reservation={reservation} key={reservation.id} className={'border hover-scale-0_95 my-3'}/>;
+            return <ReservationShort Reservation={reservation} key={reservation.id} className={`border hover-scale-0_95 my-3 ${innerWidth <= 576 ? ' flex-fill mh-300px' : ''}`}/>;
         });
     },[reservations_of_current_date,reservationsFilter, shouldShowStack, innerWidth]);
 

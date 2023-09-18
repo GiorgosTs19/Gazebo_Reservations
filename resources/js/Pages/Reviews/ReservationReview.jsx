@@ -1,8 +1,7 @@
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {useState} from "react";
 import {StarRating} from "./Star Rating/StarRating";
-import CardHeader from "react-bootstrap/CardHeader";
-import {GazeboLocation} from "../Forms/Gazebo/GazeboCarousel/GazeboLocation";
+
 
 export default function ReservationReview(props) {
     const Reservation = props.Reservation,

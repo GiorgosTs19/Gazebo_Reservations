@@ -1,15 +1,14 @@
-import {Button, Card, Col, Form, Row, Stack} from "react-bootstrap";
-import {useContext} from "react";
-import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {useContext, forwardRef} from "react";
 import {changeDateFormat, getTableAA} from "../../../ExternalJs/Util";
+import {MenusOverview} from "./MenusOverview";
+import {Notes} from "./Notes";
+import {Button, Card, Col, Row, Stack} from "react-bootstrap";
+import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {Inertia} from "@inertiajs/inertia";
 import {GazebosContext} from "../../../Contexts/GazebosContext";
-import {forwardRef} from "react";
-import {MenusOverview} from "./MenusOverview";
 import {ErrorsContext} from "../../Admin/Contexts/ErrorsContext";
-import {Notes} from "./Notes";
 
-export const  FinalizeReservation = forwardRef(function FinalizeReservation({...props},ref) {
+export const FinalizeReservation = forwardRef(function FinalizeReservation({...props},ref) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
     {errors, setErrors} = useContext(ErrorsContext),
     Gazebos = useContext(GazebosContext),
@@ -76,7 +75,7 @@ export const  FinalizeReservation = forwardRef(function FinalizeReservation({...
                 </Card.Body>
                 <Card.Footer className={'bg-transparent border-0 d-flex flex-column text-center'}>
                     <Notes containerRef={ref}/>
-                    <Button variant={'outline-light'} className={'mt-5 mx-auto rounded-3 border-0 reservation-button text-dark'}
+                    <Button variant={'outline-light'} className={'mt-3 mx-auto rounded-3 border-0 reservation-button text-dark'}
                             onClick={handleFinalizeReservation}>
                         Reserve
                     </Button>

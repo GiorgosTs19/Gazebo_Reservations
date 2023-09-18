@@ -12,5 +12,5 @@ export default function useCheckConflict(reservationId) {
         if(tableConflictFound)
             return [true, 'Table','Η κράτηση απαιτεί αλλαγή Gazebo'];
 
-        return [false,null,''];
+        return [false,'',''];
 }

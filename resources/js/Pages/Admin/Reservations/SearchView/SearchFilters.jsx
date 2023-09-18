@@ -1,8 +1,11 @@
 import {Button, Form, Offcanvas, Stack} from "react-bootstrap";
 import {ChevronDownSVG} from "../../../../SVGS/ChevronDownSVG";
+import {useContext} from "react";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 
 export function SearchFilters({SearchCriteria, filtersVisibility, children}) {
     const {searchCriteria,dispatchSearchCriteria, noCriteriaActive} = SearchCriteria,
+        {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         {showCriteria, setShowCriteria} = filtersVisibility;
 
     return (
@@ -12,7 +15,7 @@ export function SearchFilters({SearchCriteria, filtersVisibility, children}) {
                 <ChevronDownSVG height={30} width={30} className={'border-0 text-dark align-self-end m-auto pe-1'}
                 onClick={() => setShowCriteria(true)}/>
                 </div>}
-            <Offcanvas show={showCriteria} placement={'top'} responsive={'xl'} scroll={true} backdrop={true}
+            <Offcanvas show={showCriteria && !activeReservation} placement={'top'} responsive={'xl'} scroll={true} backdrop={true}
                        className={'mx-2 h-fit-content my-lg-auto d-flex'} backdropClassName={'search_filters_backdrop'}
                        style={{borderRadius:'0 0 15px 15px', height:innerWidth < 1200 ? 'fit-content' : '100%'}} onHide={()=>setShowCriteria(false)}>
                 <div className={'d-flex'}>

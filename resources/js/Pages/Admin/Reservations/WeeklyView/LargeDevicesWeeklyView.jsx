@@ -1,14 +1,14 @@
-import {getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {Button, Col, ListGroup, Row, Stack} from "react-bootstrap";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
+import {getFormattedDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import useFilteredReservationsCountText from "../../../../CustomHooks/useFilteredReservationsCountText";
 import {LargeWeekDayDisplay} from "./LargeWeekDayDisplay";
-import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {useRenderWeeklyReservations} from "../../../../CustomHooks/useRenderWeeklyReservations";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
-import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
-import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 
 export function LargeDevicesWeeklyView({currentDate, direction, filter, navigateWeeks,
@@ -16,8 +16,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
     const oneWeekLater = new Date(currentDate);
     oneWeekLater.setDate(currentDate.getDate() + 7);
     const {reservationsFilter, setReservationsFilter} = filter,
-    [largeWeekDay,setLargeWeekDay] = useState({date:null, reservations: []
-}),
+    [largeWeekDay,setLargeWeekDay] = useState({date:null, reservations: []}),
     {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
     {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
     Disabled_Days = useContext(DisabledDaysContext),
@@ -97,7 +96,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
                     </LargeWeekDayDisplay>}
                 </ListGroup>
             </Col>
-            <Col sm={12} md={8} lg={5} className={'d-flex flex-column text-center overflow-y-auto reservation-long-view py-lg-4'}>
+            <Col sm={12} lg={5} className={'text-center overflow-y-auto reservation-long-view py-lg-4 my-auto h-fit-content'}>
                 {showReservationLong()}
             </Col>
         </Row>

@@ -74,6 +74,11 @@ Route::middleware('auth')->prefix('/Admin')->group(function () {
         Route::get('/reservations',[\App\Http\Controllers\GazeboController::class,'getReservationsForDate'])->name('Get_Reservations_For_Date');
     });
 
+    Route::prefix('/reservations')->group(function () {
+        Route::get('/cancelled', [\App\Http\Controllers\GazeboController::class, 'getCancelledReservations'])->name('Get_Cancelled_Reservations');
+
+    });
+
     Route::prefix('/reservation')->group(function () {
         Route::prefix('/manage')->group(function () {
             Route::patch('/occurDate', [\App\Http\Controllers\ReservationController::class, 'changeReservationDate'])->

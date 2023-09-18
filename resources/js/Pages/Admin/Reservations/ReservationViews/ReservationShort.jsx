@@ -1,5 +1,5 @@
 import {Badge, Col, Row, Stack} from "react-bootstrap";
-import {useContext} from "react";
+import {forwardRef, useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {changeDateFormat, getDateTime, getTableAA} from "../../../../ExternalJs/Util";
 import {GazebosContext} from "../../../../Contexts/GazebosContext";
@@ -7,11 +7,10 @@ import useGetReservationStatusText from "../../../../CustomHooks/useGetReservati
 import {BellSVG} from "../../../../SVGS/BellSVG";
 import useCheckConflict from "../../../../CustomHooks/useCheckConflict";
 
-export function ReservationShort({Reservation,className}) {
-    const Name = Reservation.Name.First + ' ' + Reservation.Name.Last,
-        ContactDetails = Reservation.Contact,
+export const ReservationShort = forwardRef(function ({Reservation,className} , ref) {
+    const Name = Reservation.First_Name + ' ' + Reservation.Last_Name,
         Confirmation_Number = Reservation.Confirmation_Number,
-        Rooms = Reservation.Rooms,
+        Rooms = Reservation.rooms,
         {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
         Tables = useContext(GazebosContext);
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(Reservation.id);
@@ -31,13 +30,13 @@ export function ReservationShort({Reservation,className}) {
     const status = useGetReservationStatusText(Reservation.Status);
 
     return (
-        <div className={`text-muted p-1 border rounded-2 box_shadow cursor-pointer ${activeReservation?.id === Reservation.id ? '' : 'hover-scale-0_95'}
-        ${innerWidth >= 576 ? 'w-350px' : 'mw-350px'} ${className} ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}`}
+        <div ref={ref ?? null} className={`text-muted p-1 border rounded-2 box_shadow cursor-pointer ${activeReservation?.id === Reservation.id ? '' : 'hover-scale-0_95'}
+        ${innerWidth >= 576 ? 'w-350px ' : 'mw-350px '} ${className} ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}`}
          onClick={()=>setActiveReservation(Reservation)}>
             <p className={'my-1'}>{isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}
                 Αρ. Κράτησης : {Confirmation_Number}
             </p>
-            <p className={'my-1 user-select-none info-text'}><i>Καταχωρήθηκε : {getDateTime(Reservation.Placed_At)}</i></p>
+            <p className={'my-1 user-select-none info-text'}><i>Καταχωρήθηκε : {getDateTime(Reservation.created_at)}</i></p>
             <Stack direction={'horizontal'} className={'d-flex flex-fill'}>
                 <Badge pill bg={'light'} text={'dark'} className={'mx-auto my-2 box_shadow user-select-none'}>
                     {changeDateFormat(Reservation.Date,'-')}
@@ -53,9 +52,9 @@ export function ReservationShort({Reservation,className}) {
                         <p className={'mb-0 info-text'}>Όνομα</p>
                         <p className={'my-1 text-wrap font-size-13px'}>{Name}</p>
                         <p className={'mb-0 info-text '}>Email</p>
-                        <p className={'my-1 text-wrap font-size-13px'}>{ContactDetails.Email}</p>
+                        <p className={'my-1 text-wrap font-size-13px'}>{Reservation.Email}</p>
                         <p className={'mb-0 info-text'}>Τηλέφωνο</p>
-                        <p className={'my-1 font-size-13px'}>{ContactDetails.Phone}</p>
+                        <p className={'my-1 font-size-13px'}>{Reservation.Phone_Number}</p>
                     </section>
                 </Col>
                 <Col className={`d-flex flex-column user-select-none`} xs={5} md={6}>
@@ -67,13 +66,11 @@ export function ReservationShort({Reservation,className}) {
                                 return <span key={index}>{index>0 && ', '} {room.Room_Number}</span>
                             })}
                         </p>
-                        <p className={'my-auto info-text'}>Άτομα</p>
-                        <p className={'my-auto'}>{Reservation.Attendees.length + 1}</p>
                         <p className={'my-auto info-text'}>Gazebo</p>
-                        <p className={'my-auto'}>{getTableAA(Reservation?.Gazebo,Tables)}</p>
+                        <p className={'my-auto'}>{getTableAA(Reservation?.gazebo_id,Tables)}</p>
                     </section>
                 </Col>
             </Row>
         </div>
     )
-}
+});

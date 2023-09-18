@@ -22,7 +22,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             if(reservations_of_current_date.length === 0)
                 return [<h4 className={'text-muted m-auto'}>Δεν υπάρχει κάποια κράτηση.</h4>,0];
 
-            const reservationsToRender = innerWidth >= 768 ? 2 : 1;
+            const reservationsToRender = innerWidth >= 850 ? 2 : 1;
 
             const filteredReservations = reservationsFilter === 'All' ? reservations_of_current_date :
                 reservations_of_current_date.filter((reservation)=>{

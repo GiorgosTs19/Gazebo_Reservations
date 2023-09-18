@@ -1,4 +1,4 @@
-import {extractReservationsForDate, getFormattedDate, getReservationsByDate} from "../ExternalJs/Util";
+import {extractReservationsForDate} from "../ExternalJs/Util";
 import useFilteredReservationsCountText from "./useFilteredReservationsCountText";
 import {ListGroup} from "react-bootstrap";
 import {ReservationShortest} from "../Pages/Admin/Reservations/ReservationViews/ReservationShortest";

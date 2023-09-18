@@ -11,17 +11,16 @@ export function GazeboCarouselItem({Gazebo,isAvailable, children}) {
     };
 
     return (
-        <div className={`my-auto d-flex flex-column ${!isAvailable ? 'opacity-25':''}`}>
+        <div className={`my-auto d-flex flex-column ${!isAvailable ? 'opacity-40' : ''}`}>
             <h3>Gazebo {Gazebo.ascending_number}</h3>
-            {isAvailable ? <>
-                <GazeboLocation index={Gazebo.ascending_number}>
+                <GazeboLocation index={Gazebo.ascending_number} showWave={isAvailable}>
+                    {children}
                     <Button variant="outline-dark"  onClick={handleSelect}
                             disabled={!isAvailable || bookingDetails.table === Gazebo.id}
                             className={'border-0 rounded-3 my-auto py-1 px-2 reservation-button mx-auto w-auto z-2 gazebo-select-button'}>
                         {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
                     </Button>
                 </GazeboLocation>
-            </> : children}
         </div>
     )
 }

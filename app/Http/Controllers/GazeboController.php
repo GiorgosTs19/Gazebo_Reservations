@@ -25,11 +25,16 @@ class GazeboController extends Controller {
     }
 
     public static function checkRangeAvailability(Request $request) {
-        $input = $request->only(['date_start', 'date_end', 'type']);
+        $input = $request->only(['date_start', 'date_end', 'type', 'withDisabledTables']);
+        $withDisabledTables = $request->exists('withDisabledTables') ? $input['withDisabledTables'] : true;
         $Reservations = Reservation::date($input['date_start'],
             $input['date_end'])->type($input['type'])->orderBy('Date', 'asc')->
         status('Cancelled', true)->get(['Date','gazebo_id']);
-        return Redirect::back()->with(['availability_for_date_range'=>$Reservations]);
+        if(filter_var($withDisabledTables, FILTER_VALIDATE_BOOLEAN)) {
+            $Disabled_Tables = DisabledTable::date($input['date_start'],
+                $input['date_end'])->type($input['type'])->get(['Date','gazebo_id']);
+        }
+        return Redirect::back()->with(['availability_for_date_range'=>[...$Reservations, ...$Disabled_Tables ?? []]]);
 
     }
 
@@ -80,7 +85,6 @@ class GazeboController extends Controller {
 
     public function getAvailabilityForDate(Request $request) {
         $input = $request->only(['date','type', 'exceptCancelled']);
-
         $Availability = [];
 
         $Gazebos = Gazebo::all();
@@ -89,7 +93,7 @@ class GazeboController extends Controller {
             return $query->status('Cancelled', $input['exceptCancelled']);
         })->get();
 
-        $Disabled_Tables_Of_Day = DisabledTable::date($input['date'])->type($input['type'])->get()->pluck('gazebo_id');
+        $Disabled_Tables_Of_Day = DisabledTable::date($input['date'])->type($input['type'])->get('gazebo_id');
 
         foreach ($Gazebos as $gazebo) {
             $Availability[] = ['id' => $gazebo->id, 'isAvailable' => self::getBoolean($Reservations,$gazebo,$Disabled_Tables_Of_Day)];
@@ -108,27 +112,31 @@ class GazeboController extends Controller {
 
     public function getReservationsForDates(Request $request) {
         $input = $request->only(['date_start', 'date_end', 'type', 'activeReservation', 'exceptCancelled']);
-
-        $Reservations = ReservationResource::collection(Reservation::date($input['date_start'],$input['date_end'])->type($input['type'])->orderBy('Date', 'asc')
-            ->when($request->exists('exceptCancelled'), function ($query) use ($input) {
-                return $query->status('Cancelled', $input['exceptCancelled']);
-            })->get());
+        $Reservations = Reservation::date($input['date_start'],$input['date_end'])->type($input['type'])->orderBy('Date', 'asc')
+            ->status('Cancelled',true)->with(['Rooms'])->get();
         return Redirect::back()->with(['availability_for_date_range'=>$Reservations, 'activeReservation'=>$request->exists('activeReservation') ? $input['activeReservation'] : '']);
+    }
+
+    public function getCancelledReservations (Request $request) {
+        $type = $request->exists('type') ? $request->only('type')['type'] : 'Dinner';
+        $Reservations = Reservation::type($type)->status('Cancelled')->afterToday()->with(['Rooms'])->get();
+        return Redirect::back()->with(['cancelled_reservations'=>$Reservations]);
     }
 
     public function getReservationsForDate(Request $request) {
         $input = $request->only(['date', 'type', 'activeReservation', 'exceptCancelled']);
-        $Reservations = ReservationResource::collection(Reservation::date($input['date'])->type($input['type'])
+        $Reservations = Reservation::date($input['date'])->type($input['type'])
             ->when($request->exists('exceptCancelled'), function ($query) use ($input) {
             return $query->status('Cancelled', $input['exceptCancelled']);
-        })->get());
+        })->with(['Rooms'])->get();
         return Redirect::back()->with(['availability_for_date' => $Reservations,
             'activeReservation'=>$request->exists('activeReservation') ? $input['activeReservation'] : '']);
     }
 
     protected function getCurrenDayReservations(Request $request) {
+        $request->session()->keep(['errors']);
         $type = $request->only('type')['type'];
-        return Redirect::back()->with(['current_day_reservations'=>ReservationResource::collection(Reservation::date(date('y-m-d'))->type($type)->get())]);
+        return Redirect::back()->with(['current_day_reservations' => Reservation::date(date('y-m-d'))->type($type)->with(['Rooms'])->get()]);
     }
 
     /**

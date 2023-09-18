@@ -3,15 +3,14 @@ import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
-import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
 
 export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
     reservationsFilter,setReservationsFilter, selectedDate}) {
     const [reservations, reservationsCount] = reservationsToShow(),
-        {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
+    {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
 
     return (
-        <Row className={'text-center h-100'}>
+        <Row className={'text-center h-100 d-flex'}>
             <Col xl={4} className={'p-1 border-end d-flex flex-column h-100'}>
                 {Calendar}
             </Col>
@@ -24,7 +23,7 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
                     {reservations}
                 </Stack>
             </Col>
-            {activeReservation !== null && <Col xl={4} className={'d-flex text-center overflow-y-auto reservation-long-view py-lg-4'}>
+            {activeReservation !== null && <Col xl={4} className={'my-auto h-fit-content overflow-y-auto reservation-long-view py-lg-4'}>
                 <ReservationLong></ReservationLong>
             </Col>}
         </Row>

@@ -1,7 +1,7 @@
-import React, {forwardRef, useContext, useRef, useEffect} from "react";
-import {Card, Col, Form, Row} from "react-bootstrap";
+import {Card, Col, Row} from "react-bootstrap";
 import {InnerWidthContext} from "../../../Contexts/InnerWidthContext";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {forwardRef, useContext, useRef, useEffect} from "react";
 import {MultipleRoomsField} from "./MultipleRoomsField";
 import {ContactNameFields} from "./ContactNameFields";
 import {PrimaryContactDetails} from "./PrimaryContactDetails";
@@ -64,30 +64,29 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
 
     return (
         <div ref={ref} className={'d-flex'}>
-            <Card className={'text-center mh-600px pb-3 my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +
+            <Card className={'text-center mh-600px my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +
                 ' ' +  (innerWidth < 992 ? ' h-100 ' : '') + classname}
                   ref={colRef}>
-                <Card.Body className={'py-0'} >
-                    <Form className={'form-container p-2 text-center'}>
-                        <Row>
-                            <Col xs={12} md={bookingDetails.type === 'Dinner' ? (singleGuest ? 12 : 6) : 12} className={'order-0 order-md-0'}>
-                                <ContactNameFields></ContactNameFields>
-                                <PrimaryContactDetails></PrimaryContactDetails>
-                                <AttendeesNamesFields></AttendeesNamesFields>
-                                {(bookingDetails.type === 'Bed' || singleGuest )&& <>
-                                    <RoomNumberFields singleGuest={true}></RoomNumberFields>
-                                    {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
-                                </>}
-                            </Col>
-                            {bookingDetails.type === 'Dinner' && !singleGuest && <Col className={'d-flex flex-column order-1 order-md-1'} xs={12} md={6}>
-                                <div className={'m-auto'}>
-                                    <MultipleRoomsField></MultipleRoomsField>
-                                    <RoomNumberFields ></RoomNumberFields>
-                                </div>
+                <Card.Body className={'p-0 text-center'} >
+                    <Row>
+                        <Col xs={12} md={bookingDetails.type === 'Dinner' ? (singleGuest ? 12 : (checkAttendeesRequirements(bookingDetails.number_of_people-1) ? 6 : 12)) : 12}
+                             className={'order-0 order-md-0 d-flex flex-column'}>
+                            <ContactNameFields singleGuest={singleGuest}></ContactNameFields>
+                            <PrimaryContactDetails singleGuest={singleGuest}></PrimaryContactDetails>
+                            <AttendeesNamesFields></AttendeesNamesFields>
+                            {(bookingDetails.type === 'Bed' || singleGuest )&& <>
+                                <RoomNumberFields singleGuest={true}></RoomNumberFields>
                                 {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
-                            </Col>}
-                        </Row>
-                    </Form>
+                            </>}
+                        </Col>
+                        {bookingDetails.type === 'Dinner' && !singleGuest && <Col className={'d-flex flex-column order-1 order-md-1'} xs={12} md={6}>
+                            <div className={'m-auto'}>
+                                <MultipleRoomsField></MultipleRoomsField>
+                                <RoomNumberFields ></RoomNumberFields>
+                            </div>
+                            {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
+                        </Col>}
+                    </Row>
                 </Card.Body>
             </Card>
         </div>

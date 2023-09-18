@@ -42,14 +42,14 @@ export function TimePicker({onChange, inputValue,className,textPrefix, direction
                         className={'m-2'}
                         placeholder={'Ώρα'}
                     />
-                        <Select
-                            id="minutes"
-                            value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
-                            options={minuteOptions}
-                            onChange={handleMinutesChange}
-                            className={'m-2'}
-                            placeholder={'Λεπτά'}
-                        />
+                    <Select
+                        id="minutes"
+                        value={minuteOptions.find(obj => obj.value === inputValue.split(':')[1])}
+                        options={minuteOptions}
+                        onChange={handleMinutesChange}
+                        className={'m-2'}
+                        placeholder={'Λεπτά'}
+                    />
                 </Stack>
             </Stack>
         </div>

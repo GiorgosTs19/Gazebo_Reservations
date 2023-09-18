@@ -1,6 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {AlertMessage} from "../../Alerts/AlertMessage";
 import 'react-calendar/dist/Calendar.css';
+import '../../../css/Reservations.css'
+import gsap from "gsap";
 import {ReservationInfoForm} from "../Forms/ReservationDetails/ReservationInfoForm";
 import {GazeboSelectionForm} from "../Forms/Gazebo/GazeboSelectionForm";
 import {FormProgressContext} from "../../Contexts/FormProgressContext";
@@ -15,8 +17,6 @@ import {DatabaseSettingsContext} from "../Admin/Contexts/DatabaseSettingsContext
 import {ErrorsContext} from "../Admin/Contexts/ErrorsContext";
 import {IsTouchableContext} from "../../Contexts/IsTouchableContext";
 import {Container} from "react-bootstrap";
-import gsap from "gsap";
-import '../../../css/Reservations.css'
 import {DisabledDaysContext} from "../Admin/Contexts/DisabledDaysContext";
 import {IsDemoContext} from "../../Contexts/IsDemoContext";
 import {RefContext} from "../../Contexts/RefContext";

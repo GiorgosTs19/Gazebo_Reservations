@@ -1,13 +1,14 @@
 import {getMenuName} from "../../../../../ExternalJs/Util";
+import {Col, Row} from "react-bootstrap";
 
 export function SelectedMenus({Menus, MenuCatalog, Type}) {
     const multipleRooms = Menus.length > 1;
     const getContent = (menu) => {
       switch (Type) {
           case 'Dinner' : {
-              return `${multipleRooms ? '{' : ''}
+              return `
               K: ${getMenuName(menu.Main,MenuCatalog,true,'Dinner')},
-              E: ${getMenuName(menu.Dessert,MenuCatalog,true, Type)} ${multipleRooms ? '}' : ''} `
+              E: ${getMenuName(menu.Dessert,MenuCatalog,true, Type)}`
           }
           case 'Bed' : {
               return `Π: ${getMenuName(menu.Main,MenuCatalog,true,'Bed')}`
@@ -16,13 +17,16 @@ export function SelectedMenus({Menus, MenuCatalog, Type}) {
     };
     return (
         <>
-            <div>
+            <Row>
                 {Menus?.map((menu,index)=>{
-                    return <p key={index} className={'user-select-none'}>{multipleRooms && <i>{menu.Room}</i>} {getContent(menu)}</p>
+                    return <Col key={index} className={'user-select-none'}>
+                        {multipleRooms && <p className={'mb-1 info-text-lg'}>{menu.Room}</p>}
+                        <p className={'mb-1'}>{getContent(menu)}</p>
+                    </Col>
                 })}
-            </div>
-            {Type === 'Dinner' ? <p className={'text-muted user-select-none'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p> :
-                <p className={'text-muted user-select-none'}>(Π: Πακέτο)</p>}
+            </Row>
+            {Type === 'Dinner' ? <p className={'info-text-lg user-select-none text-center mt-3'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p> :
+                <p className={'info-text-lg user-select-none text-center mt-3'}>(Π: Πακέτο)</p>}
         </>
     )
 }

@@ -32,6 +32,11 @@ export function NavBarReservations({activeTab}) {
                 disabled={activeReservationsView === 'Monthly'  && activeTabKey === 'Reservations'}>
                 Μηνιαίες
             </NavDropdown.Item>
+            <NavDropdown.Item href="#Ακυρωμένες-Κρατήσεις" onClick={()=>handleSetActiveView('Cancelled')}
+                className={'secondary m-auto user-select-none text-danger ' + (activeReservationsView === 'Monthly' ? '' : 'cursor-pointer hover-scale-1_03')}
+                disabled={activeReservationsView === 'Cancelled'  && activeTabKey === 'Reservations'}>
+                Ακυρωμένες
+            </NavDropdown.Item>
             <NavDropdown.Item href="#Αναζήτηση-Κρατήσεων" onClick={()=>handleSetActiveView('Search')}
                 className={'secondary m-auto user-select-none ' + (activeReservationsView === 'Search' ? '' : 'cursor-pointer hover-scale-1_03')}
                 disabled={activeReservationsView === 'Search'  && activeTabKey === 'Reservations'}>

@@ -2,7 +2,7 @@ import {Inertia} from "@inertiajs/inertia";
 import {useState} from "react";
 import useUpdateEffect from "./useUpdateEffect";
 
-export function useGetReservationsForDate(initialValue, reservationType, dependencies=[]) {
+export function useGetReservationsForToday(initialValue, reservationType, dependencies=[]) {
     const [requestProgress,setRequestProgress] = useState(''),
     [reservations,setReservations] = useState(initialValue);
 

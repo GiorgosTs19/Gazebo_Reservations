@@ -1,8 +1,9 @@
 import {Form, InputGroup} from "react-bootstrap";
-import {useContext} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {useContext} from "react";
+import {checkAttendees} from "./RequirementsChecks";
 
-export function PrimaryContactDetails() {
+export function PrimaryContactDetails({singleGuest}) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
         handleEChange = (e)=>{
             // Handles the Booking's Email field change.
@@ -15,13 +16,14 @@ export function PrimaryContactDetails() {
     const checkShowRequirements = ()=>{
         return bookingDetails.first_name.length>0 && bookingDetails.last_name.length>0;
     };
+    const inputMargin = checkAttendees(bookingDetails) && !singleGuest ? 'mx-1' : 'mx-1 mx-md-auto';
     return (
         <>
-            {checkShowRequirements() && <InputGroup className="mb-3">
-                <Form.Control type="email" placeholder="Email" size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'}
+            {checkShowRequirements() && <InputGroup className="mb-2">
+                <Form.Control type="email" placeholder="Email" size={"sm"} className={`mb-2 text-center box_shadow border-0 ${inputMargin} mw-300px`}
                               value={bookingDetails.email}
                               onChange={handleEChange}/>
-                <Form.Control type="text" placeholder="Phone Number" size={"sm"} className={'mb-2 text-center box_shadow border-0 mx-1'}
+                <Form.Control type="text" placeholder="Phone Number" size={"sm"} className={`mb-2 text-center box_shadow border-0 ${inputMargin} mw-300px`}
                               value={bookingDetails.phone_number}
                               onChange={handlePNChange}/>
             </InputGroup>}

@@ -1,19 +1,25 @@
-import {useCallback, useContext, useRef} from "react";
+import Calendar from "react-calendar";
+import {useCallback, useContext, useEffect, useRef} from "react";
 import {useState} from "react";
-import {extractReservationsForDate, isDateDisabledByAdmin} from "../../../../ExternalJs/Util";
+import {
+    extractReservationsForDate,
+    getFirstAndLastDateOfMonth,
+    isDateDisabledByAdmin
+} from "../../../../ExternalJs/Util";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {MobileMonthlyView} from "./MobileMonthlyView";
 import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
-import {MonthlyCalendarSkeleton} from "../../../../Skeletons/MonthlyCalendarSkeleton";
-import {useGetReservationsForRange} from "../../../../CustomHooks/useGetReservationsForRange";
+import {useGetAvailabilityForRange} from "../../../../CustomHooks/useGetAvailabilityForRange";
+import {useGetReservationsForSpecificDate} from "../../../../CustomHooks/useGetReservationsForSpecificDate";
+import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
+import usePrevious from "../../../../CustomHooks/usePrevious";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
-import Calendar from "react-calendar";
-import {ReservationShortest} from "../ReservationViews/ReservationShortest";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
+import {useScrollToActiveReservation} from "../../../../CustomHooks/useScrollToActiveReservation";
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
@@ -24,24 +30,28 @@ export function MonthlyView() {
         today = new Date(),
         yesterday = new Date(today),
         tomorrow = new Date(today),
-        // Get the first day of the current month to initialize the activeRange. Also setting the Hours to 00:00:00 to match the
-        // date set after the first render by the handleMonthChange function. If not done so, it triggers a second render and thus
-        // a second fetch of the reservations after any action is taken, since the handleDateChange function is called again.
-        first_Day_Of_Month = () => {
-            const date = new Date();
-            date.setDate(1);
-            date.setHours(0, 0, 0, 0);
-            return date;
-        },
         Disabled_Days = useContext(DisabledDaysContext),
-        lastDateOfCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0),
         Last_Day = new Date(Settings.Last_Day),
         [reservationsFilter,setReservationsFilter] = useState('All'),
-        [activeRange,setActiveRange] = useState([first_Day_Of_Month(),lastDateOfCurrentMonth]),
+        [activeRange,setActiveRange] = useState(getFirstAndLastDateOfMonth(today.getMonth()+1, Last_Day)),
         {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
         yesterday.setDate(today.getDate() - 1);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const [requestProgress, reservations, setReservations] = useGetReservationsForRange(activeRange, reservationType, [activeRange, reservationType]);
+        const activeReservationRef = useRef(null);
+        useScrollToActiveReservation(activeReservationRef);
+        // Store the previous activeReservation in a const whenever the activeReservation changes in order to compare the ids later.
+        // This will prevent unnecessary fetches of the reservations of the selected date each time the active reservation changes.
+        // The reservations should only be fetched again if any changes occur in the current active reservation.
+        const previousActiveReservation = usePrevious(activeReservation);
+
+        const [availabilityRequestProgress, availability, setAvailability] = useGetAvailabilityForRange(activeRange, reservationType, [activeRange, reservationType], false);
+        // Lazy load the reservations of the selected Date, only if an availability request is not Pending, there is a selected date and the selected date falls within the activeRange,
+        // and if a reservation is active, then refresh the reservations of that date if anything changes on that reservation to reflect any changes.
+        const [reservationsRequestProgress, reservations, setReservations] = useGetReservationsForSpecificDate(selectedDate, reservationType,
+            [selectedDate, reservationType,availability,activeReservation],
+            availabilityRequestProgress !== 'Pending' && selectedDate !=='' && activeRange[0].getMonth() === selectedDate.getMonth()
+            && (previousActiveReservation && activeReservation ? (previousActiveReservation.id === activeReservation.id) : true) && previousActiveReservation !== null);
+
         // Checks if the date passed in the function has to be disabled on the calendar, either because this day has passed,
         // or is out of the reservation date boundaries set by the administrators.
         const isDateDisabled = (date,view,activeStartDate) => {
@@ -54,13 +64,14 @@ export function MonthlyView() {
                 setActiveReservation(null);
         },
         handleMonthChange = (date) => {
-            const lastDateOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            setActiveRange([date,lastDateOfMonth]);
+            setActiveRange(getFirstAndLastDateOfMonth(date.getMonth()+1, Last_Day));
         },
         // Returns the content to be displayed in each of the calendar's tiles, based on the day's availability.
         getTileContent = (date) => {
+            if(date < yesterday || date > Last_Day)
+                return <h6 className={'m-0 user-select-none'} style={{color: '#090000'}}>0</h6>;
             if(!isDateDisabled(date) && !isDateDisabledByAdmin(date,Disabled_Days)[0] && date > yesterday){
-                const current_date_reservations = extractReservationsForDate(date,reservations);
+                const current_date_reservations = extractReservationsForDate(date,availability);
 
                 switch (current_date_reservations.length) {
                     case 0: {
@@ -109,6 +120,10 @@ export function MonthlyView() {
     const reservationsToShow = useCallback(()=> {
         if(selectedDate === '')
             return [<h4 className={'text-muted my-auto user-select-none info-text-xl'}>Επιλέξτε ημέρα για να δείτε τις κρατήσεις της.</h4>,0];
+
+        if(reservationsRequestProgress === 'Pending')
+            return [<SpinnerSVG className={'m-auto'}/>,0]
+
         const reservations_of_current_date = extractReservationsForDate(selectedDate,reservations);
 
         if(reservations_of_current_date.length === 0)
@@ -126,42 +141,43 @@ export function MonthlyView() {
         for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
             reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
         }
+
         return [reservationChunks.map((chunk, index) => (
             <div key={index} className="d-flex justify-content-center">
-                {chunk.map(reservation => <ReservationShort Reservation={reservation} key={reservation.id} className={`border mx-0 mx-sm-2 my-4 flex-fill`}/>
+                {chunk.map(reservation => <ReservationShort ref={reservation.id === activeReservation?.id ? activeReservationRef : null} Reservation={reservation} key={reservation.id} className={`border mx-0 mx-sm-2 my-4 ${innerWidth < 576 ? ' flex-fill' : ''} `}/>
                 )}
             </div>
         )),reservations_of_current_date.length]
-    },[selectedDate,reservationsFilter,reservationsToRender,reservations, innerWidth]);
+    },[selectedDate, reservationsFilter, reservationsToRender,reservations, innerWidth, reservationsRequestProgress, activeReservation]);
 
     const getTileClassName = ({ activeStartDate, date, view }) => {
         if(date>today && date<Last_Day)
             return isDateDisabledByAdmin(date,Disabled_Days)[0] ? ' disabled-day' : '';
     }
 
-    const CalendarToShow = requestProgress === 'Pending' ? <MonthlyCalendarSkeleton activeStartDate={activeRange[0]}/> : <>
+    const CalendarToShow = <>
         <h6 className={'mb-4 mb-lg-0 user-select-none info-text'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει</h6>
-        <Calendar onChange={handleDateChange} value={selectedDate || today}
-                  className={'m-auto rounded box_shadow'} inputRef={CalendarRef} tileClassName={getTileClassName}
-                  tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
-                  tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
-                  prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
-                  onActiveStartDateChange={({ action, activeStartDate, value, view }) => handleMonthChange(activeStartDate)}
-                  prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()} activeStartDate={activeRange[0]}/>
+            <Calendar onChange={handleDateChange} value={selectedDate || null}
+                      className={'my-auto mx-3 rounded-5 admin-calendar monthly-view-calendar'} inputRef={CalendarRef} tileClassName={getTileClassName}
+                      tileContent={({ activeStartDate , date, view }) => view === 'month' && getTileContent(date)}
+                      tileDisabled={({activeStartDate, date, view }) => isDateDisabled(date,view,activeStartDate)}
+                      prev2Label={null} next2Label={null} showNeighboringMonth={false} minDetail={'month'}
+                      onActiveStartDateChange={({ action, activeStartDate, value, view }) => handleMonthChange(activeStartDate)}
+                      prevLabel={isPrevLabelDisabled()} nextLabel={isNextLabelDisabled()} activeStartDate={activeRange[0]}/>
     </>
 
     return (
-        <ActiveRangeContext.Provider value={[activeRange, setReservations]}>
+        <ActiveRangeContext.Provider value={[activeRange, setAvailability]}>
             {innerWidth > 1400
                 ?
                 <LargeDevicesMonthlyView Calendar={CalendarToShow} selectedDate={selectedDate}
-                                         reservationsToShow={reservationsToShow} reservationsFilter={reservationsFilter}
-                                         setReservationsFilter={setReservationsFilter}>
+                    reservationsToShow={reservationsToShow} reservationsFilter={reservationsFilter}
+                    setReservationsFilter={setReservationsFilter}>
                 </LargeDevicesMonthlyView>
                 :
                 <MobileMonthlyView Calendar={CalendarToShow} reservationsToShow={reservationsToShow}
-                                   selectedDate={selectedDate} reservationsFilter={reservationsFilter}
-                                   setReservationsFilter={setReservationsFilter}>
+                    selectedDate={selectedDate} reservationsFilter={reservationsFilter}
+                    setReservationsFilter={setReservationsFilter}>
                 </MobileMonthlyView>}
         </ActiveRangeContext.Provider>
     )
