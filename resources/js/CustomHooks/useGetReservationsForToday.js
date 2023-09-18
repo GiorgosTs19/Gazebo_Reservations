@@ -6,7 +6,7 @@ export function useGetReservationsForToday(initialValue, reservationType, depend
     const [requestProgress,setRequestProgress] = useState(''),
     [reservations,setReservations] = useState(initialValue);
 
-    useEffect(()=>{
+    useUpdateEffect(()=>{
         Inertia.get(route('Get_Reservations_Current_Day'),{type:reservationType},
             {onStart:()=>setRequestProgress('Pending'),
                 only:['current_day_reservations'],
