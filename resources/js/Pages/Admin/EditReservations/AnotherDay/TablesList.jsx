@@ -43,7 +43,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
 
     // Gets the list item's opacity ( table opacity ) based on the table's availability Current || Available || Reserved .
     const getTableOpacity = (table) => {
-        if(table.id === (activeReservation.Gazebo ?? activeReservation.gazebo_id) && isSelectedDateSameAsReservationsCurrent)
+        if(table.id === activeReservation.gazebo_id && isSelectedDateSameAsReservationsCurrent)
             return 'opacity-50';
         if(!table.isAvailable)
             return 'opacity-25';
@@ -51,7 +51,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
 
     // Gets the reservation's current table, no matter the availability of it on the current date.
     const sameTable = availability.find(table =>{
-        return table.id === (activeReservation.Gazebo ?? activeReservation.gazebo_id);
+        return table.id === activeReservation.gazebo_id;
     });
     console.log(sameTable)
     // Filters out only the available tables out of all in the list.
@@ -134,7 +134,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
 
         return availability.map((table, index)=>{
             return <ListGroup.Item key={table.id} onClick={()=>handleSelectTable(table,index)}
-                                   style={{cursor:(table.isAvailable ? 'pointer ' : (table.id === (activeReservation.Gazebo ?? activeReservation.gazebo_id) ? 'not-allowed' : 'not-allowed'))}}
+                                   style={{cursor:(table.isAvailable ? 'pointer ' : (table.id === activeReservation.gazebo_id ? 'not-allowed' : 'not-allowed'))}}
                                    className={(getTableOpacity(table)) + (selectedTable === table.id ? ' bg-info' : '')}>
                 <Row>
                     <Col>
@@ -160,6 +160,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
                     if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                         setResolvingConflict([false, '']);
                     handleSetReservations(res, activeRange, setReservations,activeReservationsView);
+                    console.log(res.props.activeReservation)
                     setActiveReservation(res.props.activeReservation);
                 },
             onError:errors=>console.log(errors)});

@@ -35,8 +35,8 @@ export function TransferReservationToAnotherDay({edit}) {
             <Row className={'mb-1 h-100'}>
                 <p className={'info-text-lg mb-1'}>Τρέχουσες Πληροφορίες Κράτησης</p>
                 <p className={'border-bottom pb-2 mb-1'}>
-                    <span className={'info-text'}>Ημερομηνία : <i>{changeDateFormat(activeReservation.Date,'-','-')}</i>, </span>
-                    <span className={'info-text'}>Gazebo : <i>{getTableAA(activeReservation.Gazebo,Gazebos)}</i></span>
+                    <span className={'info-text fw-bold'}>Ημερομηνία : <i>{changeDateFormat(activeReservation.Date,'-','-')}</i>, </span>
+                    <span className={'info-text fw-bold'}>Gazebo : <i>{getTableAA(activeReservation.gazebo_id,Gazebos)}</i></span>
                 </p>
             </Row>
             <div className={'my-1 h-100 text-center'}>
@@ -52,7 +52,7 @@ export function TransferReservationToAnotherDay({edit}) {
                             className={'h-100'} setShowCalendar={setShowCalendar}>
                         </ChangeReservationDateCalendar>
                     </> ) : <section className={'my-2 mx-auto cursor-pointer border border-1 p-1 rounded-3 w-fit-content px-4'} onClick={()=>setShowCalendar(true)}>
-                        <span className={'info-text-lg '}>Εμφάνιση Ημερολογίου</span>
+                        <span className={'info-text-lg fw-bold'}>Εμφάνιση Ημερολογίου</span>
                         <ChevronDownSVG/>
                     </section>}
                 {selectedDate && !showCalendar && <TablesList selectedTable={selectedTable} activeDateRange={activeDateRange} date={date} setSelectedTable={setSelectedTable}

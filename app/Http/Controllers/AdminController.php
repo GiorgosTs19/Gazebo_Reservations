@@ -77,10 +77,12 @@ class AdminController extends Controller {
         return [];
     }
 
-    protected function retrieveActiveReservation($request): ?ReservationResource {
+    protected function retrieveActiveReservation($request) {
         // True when a request that requires the activeReservation of that time to be returned is fired.
+        $isResource = $request->session()->exists('shouldBeResource') ? $request->session()->get('shouldBeResource') : false;
         if($request->session()->exists('activeReservation'))
-           return new ReservationResource(Reservation::find($request->session()->get('activeReservation')));
+           return $isResource ? new ReservationResource(Reservation::find($request->session()->get('activeReservation'))) :
+               Reservation::with(['Rooms'])->find($request->session()->get('activeReservation'));
         return null;
     }
 

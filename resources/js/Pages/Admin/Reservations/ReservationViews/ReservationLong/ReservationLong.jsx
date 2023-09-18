@@ -19,6 +19,7 @@ import useCheckChanges from "../../../../../CustomHooks/useCheckChanges";
 
 export function ReservationLong() {
     const {activeReservation,setActiveReservation} = useContext(ActiveReservationContext);
+    // console.log(activeReservation.Status)
     const [requestProgress, reservation, setReservation] = useGetActiveReservation(activeReservation.id, [activeReservation]);
     const{activeTabKey,handleSetActiveKey} = useContext(ActiveTabKeyContext);
     const Tables = useContext(GazebosContext),
@@ -54,14 +55,15 @@ export function ReservationLong() {
 
     const previousActive = usePrevious(activeReservation);
 
-    const reservationAlert = useCheckChanges(previousActive, activeReservation);
+    const reservationAlert = useCheckChanges(previousActive, activeReservation, Tables);
 
     const [isConflicted,conflictType,conflictMessage] = useCheckConflict(reservation?.id);
+
     const reservationTab = <>
         {(innerWidth > 992 && isInResolveConflictTab) &&
             <LeftArrowSVG className={'mb-2 mx-auto'} onClick={handleBack} height={innerWidth > 992 ? 35 : 24} width={innerWidth > 992 ? 35 : 24}/>}
-        {reservation !== null && <ReservationDetails activeReservation={reservation} Attendees={attendees}
-                             handleActiveReservation={setActiveReservation}
+        {reservation !== null && <ReservationDetails activeReservation={activeReservation} Attendees={attendees}
+                             handleActiveReservation={setActiveReservation} setReservation={setReservation}
                              editReservation={{editing, setEditing}} isConflicted={isConflicted}
                              conflictMessage={conflictMessage}>
         </ReservationDetails>}
@@ -119,7 +121,7 @@ export function ReservationLong() {
     return (
         requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : <div className={`d-flex flex-column pt-md-0 mw-550px justify-content-center m-auto`}>
             {reservationAlert}
-            {(reservation?.Status === 'Pending' ? isConflicted : reservation?.Status !== 'Cancelled') &&
+            {(activeReservation?.Status === 'Pending' ? isConflicted : activeReservation?.Status !== 'Cancelled') &&
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-2 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
                 onClick={()=>setEditing([!editing[0],''])}>{!editing[0] ? 'Ενέργειες' : 'Κράτηση'}</Button>}
             <div className={`text-center box_shadow rounded-3 border ${editing[0] ? 'px-1 py-2 ' : 'px-3 py-2 mw-550px'} h-fit-content`}>
