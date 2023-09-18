@@ -14,7 +14,7 @@ export function ConflictsList({reservations, overlayVisibility}) {
     {show, setShow} = overlayVisibility;
 
     const handleFindReservation = (reservation) => {
-        Inertia.get(route('Get_Reservation'),{reservation_id:reservation.id}, {onSuccess:res=>{
+        Inertia.get(route('Get_Reservation'),{reservation_id:reservation.id, shouldBeResource:false}, {onSuccess:res=>{
             const reservationFound = res.props.activeReservation;
             setResolvingConflict([true, activeTabKey]);
             handleSetActiveKey('ResolveConflict');

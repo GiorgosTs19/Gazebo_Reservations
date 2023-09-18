@@ -53,7 +53,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
     const sameTable = availability.find(table =>{
         return table.id === activeReservation.gazebo_id;
     });
-    console.log(sameTable)
+
     // Filters out only the available tables out of all in the list.
     const AvailableTables = selectedDate ? availability.filter((table)=>{
         return table.isAvailable === true;
@@ -89,7 +89,6 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
         if(AvailableTables.length === 1) {
             return handleSelectTable(AvailableTables[0],availability.indexOf(AvailableTables[0]));
         }
-        console.log(sameTableIsAvailable)
         if(sameTableIsAvailable)
             return handleSelectTable(sameTable,availability.indexOf(availability.find((table)=>{return table.id === sameTable.id})));
         if(TablesListRef.current)
@@ -160,7 +159,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
                     if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                         setResolvingConflict([false, '']);
                     handleSetReservations(res, activeRange, setReservations,activeReservationsView);
-                    console.log(res.props.activeReservation)
+                    // console.log(res.props.activeReservation)
                     setActiveReservation(res.props.activeReservation);
                 },
             onError:errors=>console.log(errors)});
