@@ -25,8 +25,8 @@ export function SelectedMenus({Menus, MenuCatalog, Type}) {
                     </Col>
                 })}
             </Row>
-            {Type === 'Dinner' ? <p className={'info-text-lg user-select-none text-center mt-3'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p> :
-                <p className={'info-text-lg user-select-none text-center mt-3'}>(Π: Πακέτο)</p>}
+            {Type === 'Dinner' ? <p className={'info-text-lg user-select-none text-center mt-2 mb-1'}>(Κ: Κυρίως, Ε: Επιδόρπιο)</p> :
+                <p className={'info-text-lg user-select-none text-center mt-2 mb-1'}>(Π: Πακέτο)</p>}
         </>
     )
 }
