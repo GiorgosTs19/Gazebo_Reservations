@@ -8,7 +8,12 @@ import {LeftArrowSVG} from "../../../SVGS/LeftArrowSVG";
 export function ReservationEditModal({conflictType, edit, children = null}) {
     const [content,setContent] = useState('Options');
     const [modalTitle,setModalTitle] = useState('Επεξεργασία Κράτησης');
-    const handleBackToOptions = () => {setContent('Options');setModalTitle('Επεξεργασία Κράτησης')};
+    const {editing, setEditing} = edit;
+    const handleBackToOptions = () => {
+        setContent('Options');
+        setModalTitle('Επεξεργασία Κράτησης');
+        setEditing([editing[0], '']);
+    };
 
     return (
         <Card className={'text-center border-0'}>

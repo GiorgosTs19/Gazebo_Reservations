@@ -35,7 +35,7 @@ export function ReservationLong() {
     updatedAt = reservation?.Updated_At,
     hasChanges = placedAt !== updatedAt,
     reservationIsCancelled = reservation?.Status === 'Cancelled',
-    [editing, setEditing] = useState(false),
+    [editing, setEditing] = useState([false,'']),
     isInResolveConflictTab = activeTabKey === 'ResolveConflict';
 
     const handleBack = () => {
@@ -114,9 +114,9 @@ export function ReservationLong() {
         requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : <div className={`d-flex flex-column pt-md-0 mw-550px justify-content-center m-auto`}>
             {(reservation?.Status === 'Pending' ? isConflicted : reservation?.Status !== 'Cancelled') &&
             <Button className={'mb-0 border-bottom-0 w-fit-content mx-auto mt-2 mt-lg-0'} style={{borderRadius:'5px 5px 0 0'}} variant={'outline-secondary'}
-                onClick={()=>setEditing(!editing)}>{!editing ? 'Ενέργειες' : 'Κράτηση'}</Button>}
-            <div className={`text-center box_shadow rounded-3 border ${editing ? 'px-1 py-2 ' : 'px-3 py-2 mw-550px'} h-fit-content`}>
-                {!editing ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}>
+                onClick={()=>setEditing([!editing[0],''])}>{!editing[0] ? 'Ενέργειες' : 'Κράτηση'}</Button>}
+            <div className={`text-center box_shadow rounded-3 border ${editing[0] ? 'px-1 py-2 ' : 'px-3 py-2 mw-550px'} h-fit-content`}>
+                {!editing[0] ? reservationTab :  <ReservationEditModal conflictType={conflictType} edit={{editing, setEditing}}>
                     <p className={'info-text-lg mb-3'}>
                         E-mail
                     </p>

@@ -156,8 +156,7 @@ export function TablesList({selectedDate, date, activeDateRange, requestProgress
             {preserveScroll:true,preserveState:true,only:[getParameter(activeRange),
                 'activeReservation',conflictType !== '' ? conflictType === 'Date' ? 'Disabled_Dates_Reservations' : 'Disabled_Table_Reservations' : ''],
                 onSuccess:(res)=> {
-                    // console.log('res', res)
-                    setEditing(false);
+                    setEditing([false, '']);
                     if(resolvingConflict[0] && activeTabKey !== 'ResolveConflict')
                         setResolvingConflict([false, '']);
                     handleSetReservations(res, activeRange, setReservations,activeReservationsView);

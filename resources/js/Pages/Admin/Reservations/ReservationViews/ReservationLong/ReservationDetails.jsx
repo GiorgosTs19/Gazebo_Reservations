@@ -7,7 +7,7 @@ import {useContext} from "react";
 import {ActiveRangeContext} from "../../../Contexts/ActiveRangeContext";
 import {ViewContext} from "../../../../../Contexts/ViewContext";
 
-export function ReservationDetails({activeReservation, Attendees, handleActiveReservation,isConflicted, conflictMessage}) {
+export function ReservationDetails({activeReservation, Attendees, handleActiveReservation,isConflicted, conflictMessage, editReservation}) {
     const Placed_At = activeReservation?.Placed_At,
     Confirmation_Number = activeReservation?.Confirmation_Number,
     Date = changeDateFormat(activeReservation?.Date, '-', '-',true);
@@ -16,6 +16,7 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
     [activeRange, setReservations] = useContext(ActiveRangeContext),
     reservationIsCancelled = activeReservation?.Status === 'Cancelled',
     {activeReservationsView,setActiveReservationsView} = useContext(ViewContext);
+    const {editing, setEditing} = editReservation;
     return (
         <Row className={'my-t mb-lg-1 mt-xxl-2 border-bottom'}>
             <h4 className={'border-bottom pb-2 mb-2'}>Αρ. Κράτησης : {Confirmation_Number}</h4>
@@ -32,8 +33,7 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
                                 Επιβεβαίωση
                             </Button>
                             <Button className={'m-auto'} variant={'outline-danger'}
-                                    onClick={()=>handleChangeReservationStatus('Cancelled',activeReservation,handleActiveReservation,
-                                        activeRange, setReservations, activeReservationsView)}>
+                                    onClick={()=>setEditing([true, 'Cancel'])}>
                                 Ακύρωση
                             </Button>
                         </Stack>

@@ -1,12 +1,12 @@
-import {Button, Col, Row, Stack} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import {ActiveReservationContext} from "../Contexts/ActiveReservationContext";
 import {EditReservationModalTitleContext} from "../Contexts/EditReservationModalTitleContext";
-import {TransferReservationToAnotherDay} from "./AnotherDay/TransferReservationToAnotherDay";
-import {useContext} from "react";
-import {ChangeReservationTableSameDay} from "./SameDay/ChangeReservationTableSameDay";
-import {isDateDisabledByAdmin} from "../../../ExternalJs/Util";
 import {DisabledDaysContext} from "../Contexts/DisabledDaysContext";
 import {EditModalContentContext} from "../Contexts/EditModalContentContext";
+import {TransferReservationToAnotherDay} from "./AnotherDay/TransferReservationToAnotherDay";
+import {useContext, useEffect} from "react";
+import {ChangeReservationTableSameDay} from "./SameDay/ChangeReservationTableSameDay";
+import {isDateDisabledByAdmin} from "../../../ExternalJs/Util";
 import {CancelReservation} from "./CancelReservation/CancelReservation";
 import {useGetAvailabilityForDate} from "../../../CustomHooks/useGetAvailabilityForDate";
 import {SpinnerSVG} from "../../../SVGS/SpinnerSVG";
@@ -16,6 +16,7 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
     {modalTitle,setModalTitle} = useContext(EditReservationModalTitleContext),
     Disabled_Days = useContext(DisabledDaysContext),
+    {editing, setEditing} = edit,
     [isDateDisabled, reservationsAllowed]= isDateDisabledByAdmin(activeReservation.Date,Disabled_Days);
     const [requestProgress, availability, setAvailability] = useGetAvailabilityForDate(activeReservation.Date, activeReservation.Type,[]);
     const noAvailableTablesExist = availability.every(table=>{return table.isAvailable === false});
@@ -31,9 +32,16 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
     };
 
     const handleClickCancelReservation = () => {
-        setContent(<CancelReservation edit={edit}/>);
+        setContent(<CancelReservation/>);
         setModalTitle('');
     };
+    useEffect(()=>{
+        if(!editing[0])
+            return;
+        if(editing[1] === 'Cancel')
+            setContent(<CancelReservation/>);
+    },[edit]);
+
     const canChangeGazeboSameDay = (conflictType === 'Table' || conflictType === '') && !isDateDisabled;
     return (
         requestProgress === 'Pending' ? <SpinnerSVG className={'my-2'}/> : <>
