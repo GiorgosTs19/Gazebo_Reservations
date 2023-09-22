@@ -51,7 +51,7 @@ export default function useCheckChanges(previous, next, Gazebos) {
    useTimeout(()=>{
        if(hasChanges)
            setHasChanges(false);
-   }, alert.variant === 'success' ? 3000 : 4500);
+   }, alert.variant === 'success' ? 3500 : 5500);
 
  return <Alert show={hasChanges} onClose={()=>setHasChanges(false)} variant={alert.variant} dismissible className={'px-2 py-3 text-center'}>
      <CheckSVG width={24} height={24} className={'mb-2'}/>

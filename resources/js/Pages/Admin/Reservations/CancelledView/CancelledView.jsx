@@ -12,7 +12,7 @@ export function CancelledView() {
         <ActiveRangeContext.Provider value={[null, ()=>{}]}>
             {innerWidth > 992 ?
                 <LargeDevicesCancelledView reservationType={reservationType} requestProgress={requestProgress} cancelledReservations={reservations}>
-                    <h5>Εμφανίζονται μόνο οι ακυρωμένες κρατήσεις</h5>
+                    <h5>Εμφανίζονται μόνο οι ακυρωμένες {reservationType === 'Dinner' ? 'βραδινές' : 'πρωινές'} κρατήσεις</h5>
                 </LargeDevicesCancelledView>
                 :
                 <MobileCancelledView cancelledReservations={reservations} requestProgress={requestProgress} reservationType={reservationType}>

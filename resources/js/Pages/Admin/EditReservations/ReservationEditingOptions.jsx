@@ -60,12 +60,14 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
                 {canChangeGazeboSameDay &&
                     <Col className={'d-flex flex-column'} xs={6}>
                         <p className={'info-text-lg mb-3'}>Gazebo</p>
-                        {noAvailableTablesExist &&
-                            <p className={'text-danger fw-bold info-text-lg mt-2 mb-1'}>Δεν υπάρχουν διαθέσιμα Gazebo την ίδια μέρα.</p>}
-                        <Button variant={'secondary'} className={'m-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
-                                onClick={handleClickChangeTable} disabled={noAvailableTablesExist || isDateDisabled}>
-                            Αλλαγή Gazebo
-                        </Button>
+                        {noAvailableTablesExist ?
+                            <p className={'info-text-lg mt-2 mb-1 px-3 fst-italic'}>Δεν υπάρχουν διαθέσιμα Gazebo την ίδια μέρα.</p>
+                        :
+                            <Button variant={'secondary'} className={'m-auto ' + (noAvailableTablesExist ? 'opacity-25' : '')}
+                                    onClick={handleClickChangeTable} disabled={noAvailableTablesExist || isDateDisabled}>
+                                Αλλαγή Gazebo
+                            </Button>
+                        }
                     </Col>}
                 <Col xs={canChangeGazeboSameDay ? 6 : 12} className={'d-flex flex-column my-3 my-sm-0'}>
                     <p className={'info-text-lg mb-3 '}>Μενού</p>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\DisabledDay;
 use App\Models\DisabledTable;
@@ -41,7 +42,8 @@ class ReservationController extends Controller {
     /**
      * Create and store a newly Created Reservation.
      */
-    public function create(Request $request) {
+    public function create(NewReservationRequest $request) {
+        $validatedData = $request->validated();
         DB::beginTransaction();
         try {
             $input = $request->only([
@@ -54,19 +56,19 @@ class ReservationController extends Controller {
             ]);
 
             $Reservation = new Reservation;
-            $Reservation->gazebo_id = $input['table'];
-            $Reservation->Date = $input['date'];
-            $Reservation->Email = $input['email'];
-            $Reservation->Phone_Number = $input['phone_number'];
-            $Reservation->First_Name = $input['first_name'];
-            $Reservation->Last_Name = $input['last_name'];
-            $Reservation->Notes = $input['notes'];
+            $Reservation->gazebo_id = $validatedData['table'];
+            $Reservation->Date = $validatedData['date'];
+            $Reservation->Email = $validatedData['email'];
+            $Reservation->Phone_Number = $validatedData['phone_number'];
+            $Reservation->First_Name = $validatedData['first_name'];
+            $Reservation->Last_Name = $validatedData['last_name'];
+            $Reservation->Notes = $validatedData['notes'];
             $Reservation->Confirmation_Number = $this->generateConfirmationNumber();
-            $Reservation->Type = $input['type'];
+            $Reservation->Type = $validatedData['type'];
             $Reservation->save();
 
-            $this->create_attendees($Reservation,$input);
-            $this->createRoomsAndMenus($Reservation,$input);
+            $this->create_attendees($Reservation,$validatedData);
+            $this->createRoomsAndMenus($Reservation,$validatedData);
 
             DB::commit();
             return Redirect::route('ShowAdminPanel');
@@ -139,6 +141,11 @@ class ReservationController extends Controller {
         if(is_null($input['date_start']) && is_null($input['date_end']))
             return Redirect::back()->with(['activeReservation'=>$Reservation->id]);
 
+        if(is_null($input['date_end']) && strtotime($input['date_start']) === strtotime(date('y-m-d'))) {
+            return redirect()->action([GazeboController::class, 'getCurrenDayReservations'],
+                ['type'=>$Reservation->Type, 'activeReservation'=>$Reservation->id]);
+        }
+
         if(is_null($input['date_end']))
             return redirect()->action([GazeboController::class, 'getReservationsForDate'],
                 ['date'=>$input['date_start'], 'type'=>$Reservation->Type, 'activeReservation'=>$Reservation->id]);
@@ -155,14 +162,7 @@ class ReservationController extends Controller {
     public function changeReservationDate(Request $request): \Illuminate\Http\RedirectResponse {
         $input = $request->only(['reservation_id','date','gazebo_id', 'date_start', 'date_end', 'active_view', 'reservation_type']);
         $Reservation = Reservation::find($input['reservation_id']);
-//        try {
-//            $Reservation_Already_Exists = Reservation::date($input['date'])->type($input['reservation_type'])->table($input['gazebo_id'])->
-//            status('Cancelled',true)->exists();
-//            if(!$Reservation_Already_Exists)
-//                throw new \Exception('Το Gazebo που επιλέξατε για τις '.$input['date'].' φαίνεται πώς είναι ήδη πιασμένο');
-//        } catch (\Exception $e) {
-//            return back()->withErrors(['date_error'=>'Το Gazebo που επιλέξατε για τις '.$input['date'].' φαίνεται πώς είναι ήδη πιασμένο']);
-//        }
+
         if($Reservation->Date !== $input['date'])
             $Reservation->Date =$input['date'];
         if($Reservation->gazebo_id !== $input['gazebo_id'])

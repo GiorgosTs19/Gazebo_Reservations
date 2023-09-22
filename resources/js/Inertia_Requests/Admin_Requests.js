@@ -10,7 +10,6 @@ export const getParameter = (activeRange) => {
 
 export const handleSetReservations = (res, activeRange, setReservations, activeView) => {
     if(activeView === 'Search') {
-        console.log('GotIn')
         return setReservations(res.props.activeReservation);
     }
     if(!activeRange)
@@ -44,7 +43,7 @@ export const handleChangeReservationStatus = (status, activeReservation, setActi
     Inertia.patch(route('Change_Reservation_Status'),{date_start:getDate(0, activeRange), date_end:getDate(1, activeRange)
         ,reservation_id:activeReservation.id,status:status},{
         onSuccess:(res)=> {
-            console.log('res', res.props.activeReservation)
+            // console.log('res', res.props.activeReservation)
             setActiveReservation(res.props.activeReservation);
             // handleSetReservation(res.props.activeReservation);
             handleSetReservations(res,activeRange, setReservations, activeView);

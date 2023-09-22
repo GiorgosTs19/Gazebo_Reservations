@@ -1,17 +1,18 @@
-import {Col, Row, Stack} from "react-bootstrap";
-import {useState} from "react";
-import {useEffect} from "react";
-import {useContext} from "react";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {Col, Row, Stack} from "react-bootstrap";
+import {useState, useContext, useEffect} from "react";
 import {LeftArrowSVG} from "../../../../SVGS/LeftArrowSVG";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
+import {formatDateInGreek} from "../../../../ExternalJs/Util";
 
 export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
     reservationsFilter,setReservationsFilter}) {
     const [shouldShowCalendar,setShouldShowCalendar] = useState(true),
     {activeReservation,setActiveReservation} = useContext(ActiveReservationContext),
-    [reservations, reservationsCount] = reservationsToShow();
+    [reservations, reservationsCount] = reservationsToShow(),
+    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
 
     useEffect(()=>{
         if(selectedDate !== '')
@@ -35,6 +36,8 @@ export function MobileMonthlyView({Calendar, reservationsToShow, selectedDate,
                                 reservationsFilter={reservationsFilter}
                                 className={'mx-auto border-secondary-subtle border rounded-4 p-2 my-3'}>
                     </FiltersBar>}
+                {selectedDate && <h5>{formatDateInGreek(selectedDate)}</h5>}
+                <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
                 <Stack className={'p-3 overflow-y-auto d-flex' + (innerWidth > 992 ? ' mh-600px' : ' h-75')}>
                     {reservations}
                 </Stack>

@@ -83,7 +83,7 @@ export function LargeDevicesWeeklyView({currentDate, direction, filter, navigate
             <Col className={'text-center p-2 h-100 position-relative d-flex flex-column'}>
                 <div className="navigation my-1 d-flex flex-row">
                     <Button onClick={handlePrevWeek} variant={"secondary"} size={'sm'} className={'m-2 rounded-3 ' + (!isToday ? 'hover-scale-1_03' : '')} disabled={isToday}>Προηγούμενη Εβδομάδα</Button>
-                    <h6 className={'m-auto user-select-none'}>Κρατήσεις Εβδομάδας : {totalWeekReservations}</h6>
+                    <h6 className={'m-auto user-select-none'}>{reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} Κρατήσεις Εβδομάδας : {totalWeekReservations}</h6>
                     <Button onClick={handleNextWeek} variant={"secondary"} size={'sm'} className={'m-2 rounded-3 ' + (!isLastWeek ? 'hover-scale-1_03' : '')} disabled={isLastWeek}>Επόμενη Εβδομάδα</Button>
                 </div>
                 <h6 className={'mb-4 mb-lg-0 user-select-none info-text'}>* Με <span className={'disabled-day'}>γραμμή</span> εμφανίζονται οι ημερομηνίες που έχετε απενεργοποιήσει</h6>

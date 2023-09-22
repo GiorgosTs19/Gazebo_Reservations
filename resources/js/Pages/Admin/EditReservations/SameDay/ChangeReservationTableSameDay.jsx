@@ -22,7 +22,7 @@ export function ChangeReservationTableSameDay({edit, availability}) {
     {editing, setEditing} = edit;
     const [isReservationInConflict,conflictType,conflictMessage] = useCheckConflict(activeReservation.id),
     [activeRange, setReservations] = useContext(ActiveRangeContext);
-    console.log(activeReservation)
+
     const handleSelectTable = (table,index) => {
         if(table.isAvailable && table.id !== activeReservation.gazebo_id)
             setSelectedTable(table.id);

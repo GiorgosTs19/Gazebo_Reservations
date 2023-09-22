@@ -74,7 +74,7 @@ export default function Gazebo(props) {
     useEffect(()=>{
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
     },[bookingDetails.number_of_people,bookingDetails.date]);
-
+    console.log(bookingDetails)
     useEffect(()=>{
         const tl = gsap.timeline();
         switch (progress) {
@@ -92,7 +92,7 @@ export default function Gazebo(props) {
     const getDisabledDays = () => {
         return Disabled_Days.filter(item=>item.Type === bookingDetails.type);
     }
-
+    console.log(errors)
     return (
         <RefContext.Provider value={ContainerRef}>
             <IsDemoContext.Provider value={isDemo}>
@@ -107,8 +107,7 @@ export default function Gazebo(props) {
                                                 <Container fluid className={`px-3 py-2 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}
                                                            ref={ContainerRef}>
                                                     <DisabledDaysContext.Provider value={getDisabledDays()}>
-                                                        {errors && <AlertMessage variant={'danger'} message={errors} header={'Oh Snap!'} duration={3} shouldShow={true}
-                                                                                 onClose={()=>setErrors(null)} className={'w-fit-content mx-auto px-3 py-1'}/>}
+                                                        {errors && <AlertMessage variant={'danger'} errors={errors} header={'Oh Snap!'} duration={10} shouldShow={true} className={'w-fit-content mx-auto px-3 py-1'}/>}
                                                         <TypeSelectionForm ref={typeRef}>
                                                             {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}></GazeboSelectionForm>}
                                                             {progress === 'Details' && <ReservationInfoForm ref={detailsRef}></ReservationInfoForm>}

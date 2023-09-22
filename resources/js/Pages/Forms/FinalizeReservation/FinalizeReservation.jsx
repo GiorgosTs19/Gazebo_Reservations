@@ -17,7 +17,7 @@ export const FinalizeReservation = forwardRef(function FinalizeReservation({...p
         Inertia.post(route('Create_Reservation'),bookingDetails,{
             preserveState:true,
             preserveScroll:true,
-            onError:(error)=>setErrors(error.Reservation),
+            onError:(error)=> setErrors(error),
         });
     };
 
