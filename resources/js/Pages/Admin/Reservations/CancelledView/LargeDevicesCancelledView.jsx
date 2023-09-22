@@ -18,7 +18,7 @@ export function LargeDevicesCancelledView({requestProgress, cancelledReservation
 
     const reservationsToShow = useCallback(()=> {
         if(!reservationsExist)
-            return <h4 className={'text-muted my-auto user-select-none info-text-xl'}>Δεν υπάρχει κάποια ακυρωμένη κράτηση</h4>;
+            return <h4 className={'text-muted my-auto user-select-none info-text-xl'}>Δεν υπάρχει κάποια ακυρωμένη {reservationType === 'Dinner' ? 'βραδινή' : 'πρωινή'} κράτηση</h4>;
 
         const reservationsToRender = innerWidth < 1500 ? (activeReservation === null ? 2 : 1) : (innerWidth > 1700 ? (activeReservation === null ? 4 : 2)  : (activeReservation === null ? 3 : 2));
         // Will always try to show 2 reservations per line, to save space.

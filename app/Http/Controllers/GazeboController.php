@@ -134,7 +134,6 @@ class GazeboController extends Controller {
     }
 
     protected function getCurrenDayReservations(Request $request) {
-        $request->session()->keep(['errors']);
         $type = $request->only('type')['type'];
         return Redirect::back()->with(['current_day_reservations' => Reservation::date(date('y-m-d'))->type($type)->with(['Rooms'])->status('Cancelled', true)->get()]);
     }

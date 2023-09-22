@@ -19,7 +19,7 @@ export function MobileUtilityOffCanvas({height = 20,children, title = ''}) {
                 <Offcanvas.Header className={'justify-content-center pb-0 pt-1'} onClick={()=>setShow(false)}>
                     <ChevronDownSVG/>
                 </Offcanvas.Header>
-                <Offcanvas.Body className={'d-flex px-2 pt-3 pt-md-1 overflow-y-auto scroll-bar-hidden'}>
+                <Offcanvas.Body className={'d-flex px-2 pt-0 pt-md-1 overflow-y-auto scroll-bar-hidden'}>
                     {children}
                 </Offcanvas.Body>
             </Offcanvas>

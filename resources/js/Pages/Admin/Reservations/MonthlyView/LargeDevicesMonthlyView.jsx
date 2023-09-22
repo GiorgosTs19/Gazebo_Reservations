@@ -1,13 +1,16 @@
 import {Col, Row, Stack} from "react-bootstrap";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
+import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {FiltersBar} from "../FiltersBar/FiltersBar";
 import {useContext} from "react";
-import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {ReservationLong} from "../ReservationViews/ReservationLong/ReservationLong";
+import {formatDateInGreek} from "../../../../ExternalJs/Util";
 
 export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
     reservationsFilter,setReservationsFilter, selectedDate}) {
     const [reservations, reservationsCount] = reservationsToShow(),
-    {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
+    {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
+    {reservationType,setReservationType} = useContext(ActiveReservationTypeContext);
 
     return (
         <Row className={'text-center h-100 d-flex'}>
@@ -19,6 +22,8 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
                              disabled={selectedDate === ''}
                              setReservationsFilter={setReservationsFilter}
                              className={'mx-auto my-3'}/>}
+                {selectedDate && <h5>{formatDateInGreek(selectedDate)}</h5>}
+                <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
                 <Stack className={'px-0 overflow-y-auto my-auto'} >
                     {reservations}
                 </Stack>

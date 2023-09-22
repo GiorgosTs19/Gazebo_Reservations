@@ -29,7 +29,7 @@ export function ReservationLong() {
     rooms = reservation?.Rooms,
     attendees = reservation?.Attendees,
     attendeesExist = attendees?.length > 0,
-    Gazebo = getTableAA(reservation?.Gazebo,Tables),
+    Gazebo = getTableAA(activeReservation?.gazebo_id,Tables),
     menus = reservation?.Menus,
     notes = reservation?.Notes,
     type = reservation?.Type,

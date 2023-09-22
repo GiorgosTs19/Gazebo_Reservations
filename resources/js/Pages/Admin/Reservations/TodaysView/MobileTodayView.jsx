@@ -53,20 +53,25 @@ export function MobileTodayView({reservations_of_current_date, filter, children,
     return ( <div className={'h-100 d-flex flex-column text-center'}>
             {shouldShowStack ? <>
                 <MobileUtilityOffCanvas title={'Φίλτρα και Πληροφορίες'} height={20}>
-                    <Stack direction={(innerWidth > innerHeight ) ? 'horizontal' : 'vertical'} gap={3} className={'flex-fill'}>
+                    <Stack direction={(innerWidth > innerHeight ) ? 'horizontal' : 'vertical'} gap={2} className={'d-flex w-100'}>
+                        <section className={'d-flex flex-column text-center flex-fill'}>
                             {children}
-                        <section className={'d-flex gap-4'}>
+                            <h6 className={'mt-1'}>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
+                        </section>
+                        <section className={'flex-fill d-flex'}>
                             {
-                                isDateDisabled ? <Badge bg="danger" className={'m-auto ms-'}>Απενεργοποιημένη</Badge> :
-                                    <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+                                isDateDisabled ? <Badge bg="danger" className={'m-auto'}>Απενεργοποιημένη</Badge> :
+                                        <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
                             }
                         </section>
-                        {reservations_of_current_date.length > 0 &&
-                            <FiltersBar setReservationsFilter={setReservationsFilter}
-                                        disabled={reservations_of_current_date.length === 0}
-                                        reservationsFilter={reservationsFilter}
-                                        direction={'horizontal'}
-                                        className={'m-auto'}></FiltersBar>}
+                        <section className={'flex-fill'}>
+                            {reservations_of_current_date.length > 0 &&
+                                <FiltersBar setReservationsFilter={setReservationsFilter}
+                                            disabled={reservations_of_current_date.length === 0}
+                                            reservationsFilter={reservationsFilter}
+                                            direction={'horizontal'}
+                                            className={'m-auto'}></FiltersBar>}
+                        </section>
                     </Stack>
                 </MobileUtilityOffCanvas>
                 <Stack className={'mt-1 px-4 mx-auto text-center overflow-y-auto h-85'}>

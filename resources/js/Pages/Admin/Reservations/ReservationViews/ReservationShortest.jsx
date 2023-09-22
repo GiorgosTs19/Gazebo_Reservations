@@ -43,7 +43,7 @@ export const ReservationShortest = forwardRef(function ReservationShortest({Rese
             <section className={'d-flex flex-column text-start p-1'}>
                 <h6 className={'mb-2 user-select-none text-center'}>Στοιχεία Κράτησης</h6>
                 <p className={'my-1 user-select-none info-text'}>Gazebo</p>
-                <p className={'my-0 user-select-none'}>Gazebo {getTableAA(Reservation?.Gazebo,Tables)}</p>
+                <p className={'my-0 user-select-none'}>Gazebo {getTableAA(Reservation?.gazebo_id,Tables)}</p>
                 <section className={'my-2 user-select-none'}>
                     <span className={'info-text'}> {Rooms.length > 1 ? 'Δωμάτια' : 'Δωμάτιο'}</span>
                     <section>

@@ -141,7 +141,7 @@ export default function AdminPanel(props) {
                                                                             <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
                                                                                 {typeAndViewSelectionPanel}
                                                                             </Card.Header>}
-                                                                        <Card.Body className={'px-0 px-lg-2 px-xl-2 rounded-4 border-0 mt-0 mt-lg-3 overflow-x-hidden py-0'}>
+                                                                        <Card.Body className={'px-0 px-lg-2 px-xl-2 rounded-4 border-0 mt-0 mt-lg-3 overflow-x-hidden py-0 d-flex flex-column'}>
                                                                             <PendingUnsavedChangesContext.Provider value={{pendingUnsavedChanges,setPendingUnsavedChanges}}>
                                                                                 <ShouldShowUnsavedChangesModalContext.Provider value={{showUnsavedChangesWarningModal,setShowUnsavedChangesWarningModal,handleSetActiveKey}}>
                                                                                     <FetchReservationsContext.Provider value={{shouldFetchReservations, setShouldFetchReservations}}>

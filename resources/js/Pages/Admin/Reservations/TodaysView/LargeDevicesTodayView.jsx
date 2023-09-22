@@ -51,6 +51,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
         <Row className={'h-100 w-100 d-flex'}>
             <Col className={'pe-0 pb-3 h-100 m-auto pt-4 d-flex flex-column text-center'} lg={reservationsExist && activeReservation !== null ? 7 : 12}>
                 {children}
+                <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
                 {reservationsExist && <FiltersBar setReservationsFilter={setReservationsFilter}
                   reservationsFilter={reservationsFilter} direction={'horizontal'}
                   className={'mx-auto my-2'}>

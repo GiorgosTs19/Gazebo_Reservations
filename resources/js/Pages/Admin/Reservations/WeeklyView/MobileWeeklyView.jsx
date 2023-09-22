@@ -11,11 +11,13 @@ import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext"
 import {MobileActiveReservationOffCanvas} from "../../OffCanvases/MobileActiveReservationOffCanvas";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {ReservationShort} from "../ReservationViews/ReservationShort";
+import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 
 export function MobileWeeklyView({currentDate, filter, children, Reservations}) {
     const {reservationsFilter, setReservationsFilter} = filter,
         [propsReservations, setPropsReservations] = Reservations,
         {activeReservation, setActiveReservation} = useContext(ActiveReservationContext),
+        {reservationType,setReservationType} = useContext(ActiveReservationTypeContext),
         disabled_days = useContext(DisabledDaysContext),
         reservationsToShow = (day)=>{
             const reservations_of_current_date = extractReservationsForDate(day,propsReservations);
@@ -76,6 +78,7 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
                 <div className="navigation my-2 d-flex mx-auto">
                     {children}
                 </div>
+                <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
                 <FiltersBar setReservationsFilter={setReservationsFilter} direction={'horizontal'}
                             reservationsFilter={reservationsFilter} className={'mx-auto my-3'}>
                 </FiltersBar>
