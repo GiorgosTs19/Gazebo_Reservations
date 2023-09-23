@@ -422,6 +422,7 @@ ul .nav-tabs:last-child .nav-link{
 /** {*/
 /*    z-index: 2;*/
 /*}*/
+
 .bold-info-text {
     font-weight: 600;
     font-size: 13px;
@@ -574,4 +575,36 @@ video {
 
 .flash-animation {
     animation: flash 1.6s infinite; /* Adjust duration as needed */
+}
+@media screen and (max-width: 280px) {
+    .menu-item p {
+        font-size: 12px!important;
+        text-wrap: normal;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (min-width: 281px) and (max-width: 350px) {
+    .menu-item p {
+        font-size: 14px!important;
+    }
+}
+
+@media screen and (min-width: 351px) and (max-width: 500px) {
+    .menu-item p {
+        font-size: 14px!important;
+    }
+}
+@media screen and (min-width: 500px) and (max-width: 768px){
+
+}
+@media screen and (min-width: 768px) and (max-width: 992px){
+    .menu-item p {
+        font-size: 15px!important;
+    }
+}
+@media screen and (min-width: 992px){
+    .menu-item p {
+        font-size: 20px!important;
+    }
 }
