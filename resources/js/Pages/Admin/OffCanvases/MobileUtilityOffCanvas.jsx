@@ -6,7 +6,6 @@ import {ChevronUpSVG} from "../../../SVGS/ChevronUpSVG";
 import {ChevronDownSVG} from "../../../SVGS/ChevronDownSVG";
 
 export function MobileUtilityOffCanvas({height = 20,children, title = ''}) {
-    const {activeReservation, setActiveReservation} = useContext(ActiveReservationContext);
     const [show, setShow] = useState(true);
     return (
         <>

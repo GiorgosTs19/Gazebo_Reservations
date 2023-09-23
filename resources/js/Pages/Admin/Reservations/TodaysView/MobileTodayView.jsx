@@ -52,7 +52,7 @@ export function MobileTodayView({reservations_of_current_date, filter, children,
 
     return ( <div className={'h-100 d-flex flex-column text-center'}>
             {shouldShowStack ? <>
-                <MobileUtilityOffCanvas title={'Φίλτρα και Πληροφορίες'} height={20}>
+                <MobileUtilityOffCanvas title={'Φίλτρα και Πληροφορίες'} height={25}>
                     <Stack direction={(innerWidth > innerHeight ) ? 'horizontal' : 'vertical'} gap={2} className={'d-flex w-100'}>
                         <section className={'d-flex flex-column text-center flex-fill'}>
                             {children}

@@ -1,6 +1,6 @@
 import {Form} from "react-bootstrap";
-import {useContext} from "react";
 import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
+import {useContext} from "react";
 import {checkAttendees} from "./RequirementsChecks";
 
 export function MultipleRoomsField() {
@@ -34,10 +34,10 @@ export function MultipleRoomsField() {
             <p className={'mx-auto my-1 bold-info-text'}>
                 Multiple Rooms
             </p>
-            <div className="mb-2">
-                <Form.Check inline label="Yes" name="MoreRooms" type={"radio"} id={'Yes'}
+            <div className="mb-2 text-nowrap">
+                <Form.Check inline label="Yes" name="MoreRooms" type={"radio"} id={'Yes'} className={'text-nowrap'}
                     onChange={handleMRChange} value={"Yes"} checked={bookingDetails.more_rooms === true}/>
-                <Form.Check inline label="No" name="MoreRooms" type={"radio"} id={'No'}
+                <Form.Check inline label="No" name="MoreRooms" type={"radio"} id={'No'} className={'text-nowrap'}
                     onChange={handleMRChange} value={"No"} checked={bookingDetails.more_rooms === false}/>
             </div>
         </div>

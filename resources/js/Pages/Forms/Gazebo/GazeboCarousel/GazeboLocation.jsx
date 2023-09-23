@@ -15,10 +15,8 @@ export function GazeboLocation({index, className, width, gap=3, children, showWa
             <Stack direction="horizontal" gap={gap} className={'mx-auto text-center d-flex'}
             style={{width:'fit-content'}}>
                 {Gazebos.map((gazepo,number)=>{
-                    return gazepo.ascending_number === index ? <PinSVG key={number} className={'mt-auto pb-2'} height={innerWidth > 992 ? 40 : 30} width={innerWidth > 992 ? 40 : 30}/>
+                    return gazepo.ascending_number === index ? <PinSVG key={number} className={'mt-auto pb-2 current-gazebo-pin'}/>
                         : <Image src={'Images/Icons/gazebo_icon.png'} key={number}
-                                  height={innerWidth > 992 ? 48 : 37}
-                                  width={innerWidth > 992 ? 48 : 37}
                   className={`${!showWave ? 'mt-0' :'mt-4'} mx-0 perspective-1000px rounded-3 p-1 p-md-2 opacity-50`}></Image>
                 })}
             </Stack>

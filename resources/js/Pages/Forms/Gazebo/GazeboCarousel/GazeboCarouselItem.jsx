@@ -13,7 +13,7 @@ export function GazeboCarouselItem({Gazebo,isAvailable, children}) {
     return (
         <div className={`my-auto d-flex flex-column ${!isAvailable ? 'opacity-40' : ''}`}>
             <h3>Gazebo {Gazebo.ascending_number}</h3>
-                <GazeboLocation index={Gazebo.ascending_number} showWave={isAvailable}>
+                <GazeboLocation index={Gazebo.ascending_number} showWave={isAvailable} className={'w-fit-content'}>
                     {children}
                     <Button variant="outline-dark"  onClick={handleSelect}
                             disabled={!isAvailable || bookingDetails.table === Gazebo.id}
