@@ -75,7 +75,7 @@ export const FinalizeReservation = forwardRef(function FinalizeReservation({...p
                 </Card.Body>
                 <Card.Footer className={'bg-transparent border-0 d-flex flex-column text-center'}>
                     <Notes containerRef={ref}/>
-                    <Button variant={'outline-light'} className={'mt-3 mx-auto rounded-3 border-0 reservation-button text-dark'}
+                    <Button variant={'outline-light'} className={'mt-3 mx-auto rounded-3 border-0 reservation-button text-dark text-nowrap'}
                             onClick={handleFinalizeReservation}>
                         Reserve
                     </Button>

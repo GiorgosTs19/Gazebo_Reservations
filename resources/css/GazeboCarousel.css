@@ -65,3 +65,66 @@
 .gazebo-selection-carousel .carousel-item.active {
     padding-bottom: 40px;
 }
+
+@media screen and (max-width: 281px){
+    .gazebo-selection-carousel img {
+        width: 20px;
+        height: 20px;
+    }
+    .current-gazebo-pin {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .gazebo-selection-carousel img {
+        width: 27px;
+        height: 27px;
+    }
+    .current-gazebo-pin {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media screen and (min-width: 350px) and (max-width: 500px) {
+    .gazebo-selection-carousel img {
+        width: 30px;
+        height: 30px;
+    }
+    .current-gazebo-pin {
+        width: 26px;
+        height: 26px;
+    }
+}
+@media screen and (min-width: 500px) and (max-width: 768px){
+    .gazebo-selection-carousel img {
+        width: 36px;
+        height: 36px;
+    }
+    .current-gazebo-pin {
+        width: 32px;
+        height: 32px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 992px){
+    .gazebo-selection-carousel img {
+        width: 45px;
+        height: 45px;
+    }
+    .current-gazebo-pin {
+        width: 38px;
+        height: 38px;
+    }
+}
+@media screen and (min-width: 992px){
+    .gazebo-selection-carousel img {
+        width: 50px;
+        height: 50px;
+    }
+    .current-gazebo-pin {
+        width: 43px;
+        height: 43px;
+    }
+}

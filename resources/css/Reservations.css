@@ -198,11 +198,7 @@ ul .nav-tabs:last-child .nav-link{
     font-size: 12px;
     max-width: 300px !important;
 }
-/*@media screen and (max-width: 280px) {*/
-/*    .reservations-calendar {*/
-/*        max-width: 200px;*/
-/*    }*/
-/*}*/
+
 @media screen and (max-width: 360px) {
     .reservations-calendar {
         width: 100%;
@@ -361,6 +357,9 @@ ul .nav-tabs:last-child .nav-link{
 }
 .mw-300px {
     max-width: 300px;
+}
+.mw-330px {
+    max-width: 330px;
 }
 .mw-350px {
     max-width: 350px;

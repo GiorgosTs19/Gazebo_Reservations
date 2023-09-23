@@ -60,7 +60,6 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                              md={bookingDetails.type === '' && bookingDetails.number_of_people === 0 ? 12 : (bookingDetails.number_of_people === 0 ? 7 : 12)}>
                             <TypeOptionsRow/>
                         </Col>
-                        {/*border-start ${innerWidth >= 1400 && bookingDetails.number_of_people !== 0 ? 'border-end' : ''}*/}
                         {bookingDetails.type !== '' && progress === 'Type' &&
                             <Col ref={numberOfPeopleSelectionRef} md={bookingDetails.number_of_people === 0 ? 5 : 12}
                                  className={`my-auto border-blue px-4 text-center m-auto py-2 ${bookingDetails.number_of_people === 0 && innerWidth >= 1400 ? 'border-start' : ''} ` + (innerWidth > 768 ? 'border-bottom-0 border-top-0' : 'border-start-0 ') +
@@ -70,15 +69,11 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                             </Col>}
                         {showCalendar && bookingDetails.number_of_people !== 0 && progress === 'Type' &&
                             <div ref={dateSelectionRef}
-                                 className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative'}
-                                 style={{
-                                     backgroundColor: 'rgba(253,249,249,0.75)',
-                                     userSelect: 'none',
-                                     maxWidth: '330px'
-                                 }}>
+                                 className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative cursor-pointer mw-330px user-select-none'}
+                                 style={{backgroundColor: 'rgba(253,249,249,0.75)'}} onClick={handleShowCalendar}>
                                 {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
                                 <h6 style={{cursor: bookingDetails.number_of_people === 0 ? '' : 'pointer'}}
-                                    onClick={handleShowCalendar} className={'mb-0'}>
+                                    className={'mb-0'}>
                                     {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
                                 </h6>
                             </div>}
@@ -87,9 +82,9 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                 {progress === 'Type' && <Col className={'d-flex flex-column'} md={showCalendar ? 6 : 4}>
                     {!showCalendar && bookingDetails.number_of_people !== 0 && progress === 'Type' &&
                         <div ref={dateSelectionRef}
-                             className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative'}
+                             className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative cursor-pointer mw-330px user-select-none'}
                              onClick={handleShowCalendar}
-                             style={{backgroundColor: 'rgba(253,249,249,0.75)', userSelect: 'none', maxWidth: '330px', cursor:'pointer'}}>
+                             style={{backgroundColor: 'rgba(253,249,249,0.75)'}}>
                             {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
                             <h6 className={'mb-0'}>
                                 {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
@@ -100,10 +95,9 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                         <ReservationCalendar></ReservationCalendar>
                     </div>}
                     {progress === 'Type' && <Button variant={'outline-light'}
-                                                    hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
-                                                    className={'mt-4 my-md-3 mx-auto box_shadow border-0 reservation-button text-dark'}
-                                                    onClick={handleNextClick}
-                                                    style={{width: 'fit-content', height: 'fit-content'}}>
+                        hidden={!bookingDetails?.date || bookingDetails.number_of_people === 0}
+                        className={'mt-4 my-md-3 mx-auto w-fit-content h-fit-content box_shadow border-0 reservation-button text-dark'}
+                        onClick={handleNextClick}>
                         Book on {changeDateFormat(bookingDetails?.date, '-', '/')}
                     </Button>}
                 </Col>}
