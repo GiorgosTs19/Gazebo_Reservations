@@ -1,4 +1,4 @@
-export function CheckSVG({className,width=24,height=24,onClick=()=>{},rotate='45def'}) {
+export function CheckSVG({className,width=24,height=24,onClick=()=>{},rotate='45def', cursor = ''}) {
     return (
         <svg
             width={width}
@@ -6,7 +6,7 @@ export function CheckSVG({className,width=24,height=24,onClick=()=>{},rotate='45
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{cursor:"pointer",rotate:rotate}}
+            style={{cursor:cursor,rotate:rotate}}
             className={className}
             onClick={onClick}
         >
