@@ -17,7 +17,7 @@ export function GazeboCarouselItem({Gazebo,isAvailable, children}) {
                     {children}
                     <Button variant="outline-dark"  onClick={handleSelect}
                             disabled={!isAvailable || bookingDetails.table === Gazebo.id}
-                            className={'border-0 rounded-3 my-auto py-1 px-2 pe-2 reservation-button mx-auto w-auto z-2 gazebo-select-button'}>
+                            className={'border-0 rounded-3 my-auto py-1 px-2  reservation-button mx-auto w-fit-content z-2 gazebo-select-button'}>
                         {isAvailable ? (bookingDetails.table === Gazebo.id ? 'Selected' : 'Select' ): 'Unavailable'}
                     </Button>
                 </GazeboLocation>

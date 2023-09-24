@@ -28,7 +28,7 @@ export function ProceedButton({shouldProceed}) {
 
     return (
        <Button variant={'outline-light'} onClick={handleNextClick}
-          className={'box_shadow border-0 mx-auto mt-2 px-2 py-1 reservation-button text-dark text-nowrap'} style={{width:'fit-content'}}>
+          className={'box_shadow border-0 mx-auto mt-2 px-2 py-1 reservation-button text-dark text-nowrap w-fit-content'}>
             Menu Selection
         </Button>
     )
