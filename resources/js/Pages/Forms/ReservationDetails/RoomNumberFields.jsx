@@ -27,7 +27,7 @@ export function RoomNumberFields({singleGuest = false}) {
                 Room {bookingDetails.more_rooms ? 'numbers' : 'number'}
             </p>
             <p className={'mx-auto info-text mb-3'}>Maximum length of 4 digits</p>
-            <InputGroup className={`mb-2 ${singleGuest ? 'mw-200px mx-auto' : 'd-flex'}`}>
+            <InputGroup className={`mb-2 ${singleGuest ? 'mw-150px mx-auto' : ''}`}>
                     <Form.Control type="number" placeholder={bookingDetails.more_rooms ? 'Room No 1' : 'Room Number'}
                                   size={"sm"} className={`mb-2 text-center box_shadow border-0 ${singleGuest ? ' mx-auto' : 'mw-100px mx-4'}`}
                                   value={bookingDetails.primary_room} onChange={handlePRNChange}/>
