@@ -68,12 +68,12 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
         switch (primary) {
             case true : {
                 if(menu.id === bookingDetails.primary_menu.Main || menu.id === bookingDetails.primary_menu.Dessert)
-                    return <CheckSVG height={17} width={17} className={'my-auto ms-2'}/>;
+                    return <CheckSVG height={17} width={17} className={'my-auto'}/>;
                 return '';
             }
             case false : {
                 if(menu.id === bookingDetails.secondary_menu.Main || menu.id === bookingDetails.secondary_menu.Dessert)
-                    return <CheckSVG height={17} width={17} className={'my-auto ms-2'}/>;
+                    return <CheckSVG height={17} width={17} className={'my-auto'}/>;
                 return '';
             }
         }
@@ -88,8 +88,9 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
 
     return (
         <div key={menu.id} onClick={handleSelectMenu}
-        className={`d-flex justify-content-between py-0 px-2 align-items-start bg-transparent rounded-3 menu-item text-nowrap ${(isSelected() ? ' active' : '')}`}>
-            <p className={"bold-info-text my-auto align-self-start d-flex "}>{menu.Name} {isSelected()}</p>
+        className={`d-flex justify-content-between py-0 px-2 align-items-start bg-transparent rounded-3 menu-item text-nowrap ${(isSelected() ? 'active' : '')}`}>
+            {isSelected()}
+            <p className={"bold-info-text my-auto align-self-start"}>{menu.Name}</p>
             {<MenuInfoModal menu={menu}></MenuInfoModal>}
         </div>
     )

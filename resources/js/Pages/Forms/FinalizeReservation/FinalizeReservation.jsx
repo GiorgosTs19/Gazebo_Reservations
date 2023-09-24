@@ -60,9 +60,9 @@ export const FinalizeReservation = forwardRef(function FinalizeReservation({...p
                                 <Col xl={5}>
                                     <p className={'mb-1 info-text-lg'}>Contact</p>
                                     <Stack direction={'horizontal'} gap={2} className={`mb-1 flex-wrap`}>
-                                        <p className={'my-1 mx-0 fw-350 reservation-finalize-view-text text-break'}>{bookingDetails.phone_number}</p>
+                                        <p className={'my-1 mx-0 fw-350 reservation-finalize-view-text text-nowrap text-break'}>{bookingDetails.phone_number}</p>
                                         |
-                                        <p className={'my-1 mx-0 fw-350 reservation-finalize-view-text text-break'}>{bookingDetails.email}</p>
+                                        <p className={'my-1 mx-0 fw-350 reservation-finalize-view-text text-nowrap text-break'}>{bookingDetails.email}</p>
                                     </Stack>
                                 </Col>
                                 <Col xs={12} xl={7}>

@@ -51,13 +51,13 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menu
                 if(MainFound === undefined && DessertFound === undefined)
                     return 'Menu';
                 if(MainFound !== undefined) {
-                    if(MainFound.Items.length === 1)
-                        return MainFound.Items[0].Name;
+                    // if(MainFound.Items.length === 1)
+                    //     return MainFound.Items[0].Name;
                     return MainFound.Name;
                 }
                 else if(DessertFound !== undefined) {
-                    if(DessertFound.Items.length === 1)
-                        return DessertFound.Items[0].Name;
+                    // if(DessertFound.Items.length === 1)
+                    //     return DessertFound.Items[0].Name;
                     return DessertFound.Name;
                 }
             }
@@ -69,13 +69,13 @@ export function getMenuName(menu_id,Menus_Array,isMenuDestructured = false, menu
                 if(MainFound === undefined && DessertFound === undefined)
                     return 'Menu';
                 if(MainFound !== undefined) {
-                    if(MainFound.Items.length === 1)
-                        return MainFound.Items[0].Name;
+                    // if(MainFound.Items.length === 1)
+                    //     return MainFound.Items[0].Name;
                     return MainFound.Name;
                 }
                 else if(DessertFound !== undefined) {
-                    if(DessertFound.Items.length === 1)
-                        return DessertFound.Items[0].Name;
+                    // if(DessertFound.Items.length === 1)
+                    //     return DessertFound.Items[0].Name;
                     return DessertFound.Name;
                 }
             }
@@ -205,20 +205,19 @@ export function getDateTime(given_date) {
  * 1 if time1 is later than time2,
  * 0 if time1 is equal to time2,
  **/
-export function compareTimes(time1, time2, isNextDay = false) {
+export function compareTimes(time1, time2) {
+    if(time2 === '')
+        return -1;
+    console.log(time1, time2)
     const [hours1, minutes1] = time1.split(':');
     const [hours2, minutes2] = time2.split(':');
-
+    console.log(hours1, hours2)
     const date1 = new Date();
     date1.setHours(hours1, minutes1, 0);
 
     const date2 = new Date();
     date2.setHours(hours2, minutes2, 0);
-
-    if (isNextDay) {
-        date2.setDate(date2.getDate() + 1); // Add 1 day to time2
-    }
-
+    console.log(date1, date2)
     if (date1 < date2) {
         return -1; // time1 is earlier than time2
     } else if (date1 > date2) {

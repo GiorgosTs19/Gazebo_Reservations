@@ -86,7 +86,7 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                              onClick={handleShowCalendar}
                              style={{backgroundColor: 'rgba(253,249,249,0.75)'}}>
                             {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
-                            <h6 className={'mb-0'}>
+                            <h6 className={'mb-0 text-nowrap'}>
                                 {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
                             </h6>
                         </div>

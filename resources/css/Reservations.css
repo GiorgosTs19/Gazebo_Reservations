@@ -163,7 +163,9 @@ ul .nav-tabs:last-child .nav-link{
 .menu-list .menu-item.active {
     background-color: rgba(51, 100, 112, 0.42) !important;
 }
-
+.menu-list .menu-item.active p {
+    margin-right: 15px;
+}
 .menu-list, .content-card, .border-blue, .grey-border {
     border-color: #eaefef !important;
 }
@@ -348,6 +350,12 @@ ul .nav-tabs:last-child .nav-link{
 }
 .w-40 {
     width: 40%;
+}
+.mw-100px {
+    max-width: 100px;
+}
+.mw-120px {
+    max-width: 120px;
 }
 .mw-200px {
     max-width: 200px;
