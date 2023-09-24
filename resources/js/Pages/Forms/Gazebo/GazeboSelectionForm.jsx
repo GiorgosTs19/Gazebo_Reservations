@@ -20,9 +20,9 @@ export const GazeboSelectionForm = forwardRef(function GazeboSelectionForm({...p
     return (
         <div ref={ref} className={'m-auto d-flex flex-column text-light'}>
             <GazeboCarousel/>
-            <Button variant={'outline-light'} className={'my-2 mx-auto border-0 rounded-3 box_shadow reservation-button text-dark'}
-                                             hidden={!bookingDetails.table} onClick={handleNextClick}>
-                Continue with Gazebo {getTableAA(bookingDetails.table, Gazebos)}
+            <Button variant={'outline-light'} className={'my-2 mx-auto border-0 rounded-3 box_shadow reservation-button text-dark px-2 text-nowrap'}
+                hidden={!bookingDetails.table} onClick={handleNextClick}>
+                Proceed with Gazebo {getTableAA(bookingDetails.table, Gazebos)}
             </Button>
         </div>
     )

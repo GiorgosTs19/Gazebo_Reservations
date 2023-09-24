@@ -57,7 +57,9 @@ export function GazeboCarousel() {
         if(onlyOneAvailable) {
             handleSelectGazebo(availableGazebos[0].id);
         }
-        setIndex(!showOnlyAvailable ? getTableAA(firstAvailableGazebo.id,Gazebos)-1 : (0));
+        if(getTableAA(firstAvailableGazebo.id,Gazebos) === 1)
+            return;
+        setIndex(!showOnlyAvailable ? getTableAA(firstAvailableGazebo.id,Gazebos)-1 : 0);
     },[availability, showOnlyAvailable]);
 
     const handleShowOnlyAvailableTablesChange = () => {
