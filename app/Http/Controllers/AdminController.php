@@ -24,7 +24,7 @@ class AdminController extends Controller {
             'Gazebos' => fn () => $this->retrieveGazebos(),
             'Dinner_Settings' => fn () => $this->retrieveDinnerSettings(),
             'Bed_Settings' => fn () => $this->retrieveBedSettings(),
-            'current_day_reservations' => fn () => $this->retrieveCurrentDayReservations($request),
+            'current_day_reservations' => Inertia::lazy(fn () => $this->retrieveCurrentDayReservations($request)),
             'Disabled_Dates_Reservations' => fn () => $this->retrieveDateConflicts(),
             'Disabled_Table_Reservations' => fn () => $this->retrieveTableConflicts(),
             'activeReservation' => Inertia::lazy(fn () =>$this->retrieveActiveReservation($request)),
