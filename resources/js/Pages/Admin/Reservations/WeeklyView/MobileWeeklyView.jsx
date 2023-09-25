@@ -61,8 +61,8 @@ export function MobileWeeklyView({currentDate, filter, children, Reservations}) 
             const [Reservations,reservationsCount] = reservationsToShow(day);
             const isToday = getFormattedDate(day,'/',2) === getFormattedDate(today,'/',2);
             const [isDateDisabled,existingReservationsAllowed] = isDateDisabledByAdmin(day,disabled_days);
-            return <Accordion.Item className={'m-2 '} key={index} eventKey={index.toString()}>
-                <Accordion.Header><span className={' me-1 mx-auto ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
+            return <Accordion.Item className={'m-2'} key={index} eventKey={index.toString()}>
+                <Accordion.Header><span className={'me-1 mx-auto text-nowrap ' + (isDateDisabled ? 'disabled-day' : '')}>{getFormattedDate(day,'/',3) + ' '}</span> ( {reservationsCount} {useFilteredReservationsCountText(reservationsFilter,reservationsCount,true) } )</Accordion.Header>
                 <Accordion.Body className={'px-3'}>
                     <ListGroup horizontal={false} gap={5} className={'py-1'}>
                         {Reservations}
