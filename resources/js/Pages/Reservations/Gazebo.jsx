@@ -74,7 +74,10 @@ export default function Gazebo(props) {
     useEffect(()=>{
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
     },[bookingDetails.number_of_people,bookingDetails.date]);
-    console.log(bookingDetails)
+
+    // console.log(bookingDetails)
+    // console.log(errors)
+    
     useEffect(()=>{
         const tl = gsap.timeline();
         switch (progress) {
@@ -92,7 +95,7 @@ export default function Gazebo(props) {
     const getDisabledDays = () => {
         return Disabled_Days.filter(item=>item.Type === bookingDetails.type);
     }
-    console.log(errors)
+
     return (
         <RefContext.Provider value={ContainerRef}>
             <IsDemoContext.Provider value={isDemo}>
