@@ -31,7 +31,7 @@ export function ReservationDetails({activeReservation, Attendees, handleActiveRe
                         <Stack direction={'horizontal'} gap={2} className={'m-auto'}>
                             <Button className={'m-auto'} variant={'outline-success'} disabled={isConflicted}
                                     onClick={()=>handleChangeReservationStatus('Confirmed', activeReservation, handleActiveReservation,
-                                    activeRange, setReservations, activeReservationsView, setReservation)}>
+                                    activeRange, setReservations, activeReservationsView)}>
                                 Επιβεβαίωση
                             </Button>
                             <Button className={'m-auto'} variant={'outline-danger'}

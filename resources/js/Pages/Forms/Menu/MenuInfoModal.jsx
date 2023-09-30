@@ -13,7 +13,7 @@ export function MenuInfoModal({menu}) {
         if(!show)
             return
             Inertia.get(route('Menu_Items'), {menu_id:menu.id}, {onSuccess:(res)=>setMenuItems(res.props.Menu_Items),
-                preserveState:true, preserveScroll:true, only:['Menu_Items']});
+                preserveState:true, preserveScroll:true, only:['Menu_Items', 'errors']});
     },[show]);
     return (
         <>

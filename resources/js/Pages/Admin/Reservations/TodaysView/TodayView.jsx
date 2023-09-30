@@ -30,7 +30,8 @@ export function TodayView({todayReservations}) {
            {innerWidth > 992 ?
                <LargeDevicesTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
                requestProgress={requestProgress}>
-                   <h5>{formatDateInGreek(today)} {isDateDisabled && <Badge bg="danger" className={'ms-3'}>Απενεργοποιημένη</Badge>}</h5>
+                   <h5>{formatDateInGreek(today)}</h5>
+                   {isDateDisabled && <Badge bg="danger" className={'mx-auto p-2 my-2'}>Απενεργοποιημένη για {reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} κρατήσεις</Badge>}
                </LargeDevicesTodayView>
                : <MobileTodayView reservations_of_current_date={reservations} filter={{reservationsFilter,setReservationsFilter}}
                 requestProgress={requestProgress} dateDisabled={[isDateDisabled,existingReservationsAllowed]}>

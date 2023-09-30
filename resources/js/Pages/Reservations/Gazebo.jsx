@@ -20,6 +20,7 @@ import {Container} from "react-bootstrap";
 import {DisabledDaysContext} from "../Admin/Contexts/DisabledDaysContext";
 import {IsDemoContext} from "../../Contexts/IsDemoContext";
 import {RefContext} from "../../Contexts/RefContext";
+import {InfoSVG} from "../../SVGS/InfoSVG";
 
 export default function Gazebo(props) {
     const [progress, setProgress] = useState('Type'),
@@ -75,9 +76,6 @@ export default function Gazebo(props) {
         ContainerRef.current?.scrollTo({top: ContainerRef.current?.scrollHeight,behavior:'smooth'});
     },[bookingDetails.number_of_people,bookingDetails.date]);
 
-    // console.log(bookingDetails)
-    // console.log(errors)
-    
     useEffect(()=>{
         const tl = gsap.timeline();
         switch (progress) {
@@ -110,7 +108,9 @@ export default function Gazebo(props) {
                                                 <Container fluid className={`px-3 py-2 p-lg-0 text-center mx-auto h-100 mt-0 bg overflow-x-hidden d-flex flex-column ${isDemo ? ' bg' : ' img-container'}`}
                                                            ref={ContainerRef}>
                                                     <DisabledDaysContext.Provider value={getDisabledDays()}>
-                                                        {errors && <AlertMessage variant={'danger'} errors={errors} header={'Oh Snap!'} duration={10} shouldShow={true} className={'w-fit-content mx-auto px-3 py-1'}/>}
+                                                        {errors && <AlertMessage variant={'danger'} errors={errors} header={'Oh Snap!'} duration={10}
+                                                                                 shouldShow={!!errors} className={'w-fit-content mx-auto px-4 rounded-4'} />}
+                                                        {/*{isDemo && isTouchDevice() && <InfoSVG className={'mx-auto'}></InfoSVG>}*/}
                                                         <TypeSelectionForm ref={typeRef}>
                                                             {progress === 'Table' && <GazeboSelectionForm Gazebos={Gazebos} ref={tableRef}></GazeboSelectionForm>}
                                                             {progress === 'Details' && <ReservationInfoForm ref={detailsRef}></ReservationInfoForm>}

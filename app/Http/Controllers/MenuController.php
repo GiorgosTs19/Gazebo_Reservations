@@ -63,7 +63,8 @@ class MenuController extends Controller {
     public function Items(Request $request): \Illuminate\Http\RedirectResponse
     {
         $menu_id = $request->only(['menu_id'])['menu_id'];
-        return redirect()->back()->with(['Menu_Items'=>MenuItemResource::collection(MenuItem::where('menu_id',$menu_id)->get())]);
+        $request->session()->forget('errors');
+        return redirect()->back()->with(['Menu_Items'=>MenuItemResource::collection(MenuItem::where('menu_id',$menu_id)->get()), 'forget_errors'=>true]);
     }
 
     /**

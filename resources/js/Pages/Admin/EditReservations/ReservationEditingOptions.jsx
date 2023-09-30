@@ -75,7 +75,7 @@ export function ReservationEditingOptions({conflictType = '', edit, children = n
                 </Col>
             </Row>
             <section className={'my-5'}>
-                <p className={'info-text-lg my-auto'}>Ακύρωση της κράτησης</p>
+                <p className={'info-text-lg my-auto text-nowrap'}>Ακύρωση της κράτησης</p>
                 <Button variant={'outline-danger'} onClick={handleClickCancelReservation} className={'mt-3 mx-auto'}>Ακύρωση</Button>
             </section>
         </>

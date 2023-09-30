@@ -41,6 +41,7 @@ export function TimePicker({onChange, inputValue,className,textPrefix, direction
                         onChange={handleHoursChange}
                         className={'m-2'}
                         placeholder={'Ώρα'}
+                        isSearchable={false}
                     />
                     <Select
                         id="minutes"
@@ -49,6 +50,7 @@ export function TimePicker({onChange, inputValue,className,textPrefix, direction
                         onChange={handleMinutesChange}
                         className={'m-2'}
                         placeholder={'Λεπτά'}
+                        isSearchable={false}
                     />
                 </Stack>
             </Stack>

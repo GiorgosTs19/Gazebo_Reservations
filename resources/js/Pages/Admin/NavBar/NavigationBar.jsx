@@ -59,7 +59,7 @@ export function NavigationBar({activeTab,activeMenusTab}) {
                             </NavDropdown>
 
                             <Nav.Link href="#Ρυθμίσεις" className={'primary my-auto'} onClick={()=>handleSetActiveKey("Settings")}>Ρυθμίσεις</Nav.Link>
-                            <AdminToNewReservationFormModal/>
+                            <AdminToNewReservationFormModal forCurrentDate={false}/>
                             {/*{activeTabKey === 'Reservations' && <h6*/}
                             {/*    className="mw-350px bg-transparent text-center p-2 rounded-3 border border-1 m-auto">{getReservationViewText()}</h6>}*/}
                         </Nav>

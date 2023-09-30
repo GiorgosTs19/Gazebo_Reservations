@@ -88,7 +88,7 @@ export function MenuSelection({menu, index, primary=false, dessert=false, onlyOn
 
     return (
         <div key={menu.id} onClick={handleSelectMenu}
-        className={`d-flex justify-content-between py-0 px-2 align-items-start bg-transparent rounded-3 menu-item text-nowrap ${(isSelected() ? 'active' : '')}`}>
+        className={`d-flex justify-content-between py-0 my-1 px-2 align-items-start bg-transparent rounded-3 menu-item text-nowrap ${(isSelected() ? 'active' : '')}`}>
             {isSelected()}
             <p className={"bold-info-text my-auto align-self-start"}>{menu.Name}</p>
             {<MenuInfoModal menu={menu}></MenuInfoModal>}

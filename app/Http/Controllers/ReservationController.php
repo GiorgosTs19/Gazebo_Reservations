@@ -46,15 +46,6 @@ class ReservationController extends Controller {
         $validatedData = $request->validated();
         DB::beginTransaction();
         try {
-            $input = $request->only([
-                'date', 'table',
-                'number_of_people', 'more_rooms',
-                'first_name', 'last_name', 'email',
-                'phone_number', 'primary_room', 'secondary_room',
-                'attendees', 'primary_menu', 'secondary_menu',
-                'notes', 'type',
-            ]);
-
             $Reservation = new Reservation;
             $Reservation->gazebo_id = $validatedData['table'];
             $Reservation->Date = $validatedData['date'];

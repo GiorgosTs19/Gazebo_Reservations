@@ -89,32 +89,32 @@ class NewReservationRequest extends FormRequest {
             'email.required' => 'The email field is required.',
             'email.email' => 'Please enter a valid email address.',
             'phone_number.required' => 'The phone number field is required.',
-            'phone_number.numeric' => 'The phone number field must be a number.',
+            'phone_number.numeric' => 'The phone number field must only consist of numbers.',
             'primary_room.required' => 'The primary room field is required.',
             'secondary_room.numeric' => 'The secondary room field must be a number.',
             'notes.max' => 'The notes field cannot exceed :max characters.',
             'more_rooms.required' => 'The more rooms field is required.',
-            'primary_menu.Main.required_if' => 'The primary menu main dish selection is required.',
-            'primary_menu.Dessert.required_if' => 'The primary menu dessert dish selection is required.',
-            'secondary_menu.Main.required_if' => 'Main Dish for :secondary_room cannot be empty',
-            'secondary_menu.Dessert.required_if' => 'Dessert for :secondary_room cannot be empty',
-            'attendees.array_length' => 'The number of attendees must be equal to the number of guests minus 1.',
+            'primary_menu.Main.required_if' => 'Main Dish for room :primary_room is required.',
+            'primary_menu.Dessert.required_if' => 'Dessert for room :primary_room is required.',
+            'secondary_menu.Main.required_if' => 'Main Dish for room :secondary_room cannot be empty',
+            'secondary_menu.Dessert.required_if' => 'Dessert for room :secondary_room cannot be empty',
+            'attendees.array_length' => 'The number of attendees must be equal to the number of guests accompanying you.',
         ];
     }
 
     public function withValidator($validator) {
         $validator->after(function ($validator) {
             $validatedData = $this->validated();
-            $Reservation_Exists = Reservation::date($validatedData['date'])->table($validatedData['table'])->type($validatedData['type'])->exists();
-            $Date_Disabled_Reservations_Not_Allowed = DisabledDay::date($validatedData['date'])->allowReservations(false)->type($validatedData['type'])->exists();
-            $Gazebo_Is_Disabled = DisabledTable::date($validatedData['date'])->type($validatedData['type'])->exists();
-            if($Date_Disabled_Reservations_Not_Allowed) {
-                $validator->errors()->add('day_disabled',
-                    'It seems that the selected date is not available for booking anymore. Please select another date.');
+            $Reservation_Exists = Reservation::date($validatedData['date'])->table($validatedData['table'])->type($validatedData['type'])->status('Cancelled', true)->exists();
+            $Date_Disabled = DisabledDay::date($validatedData['date'])->type($validatedData['type'])->exists();
+            $Gazebo_Is_Disabled = DisabledTable::date($validatedData['date'])->type($validatedData['type'])->table($validatedData['table'])->exists();
+            if($Date_Disabled) {
+                $validator->errors()->add('date',
+                    'It appears that '. $validatedData['date'].', is not available for booking anymore. Kindly select another date.');
             }
             if($Reservation_Exists || $Gazebo_Is_Disabled) {
-                $validator->errors()->add('gazebo_occupied',
-                    'It seems that the gazebo you are trying to book is not available on the selected date. Please select another gazebo or another date.');
+                $validator->errors()->add('gazebo',
+                    'It appears that the gazebo you are trying to book, is not available on the selected date anymore. Kindly select another gazebo or another date.');
             }
         });
     }

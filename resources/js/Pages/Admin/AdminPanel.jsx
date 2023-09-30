@@ -136,7 +136,7 @@ export default function AdminPanel(props) {
                                                                 <NavigationBar activeTab={{activeTabKey,handleSetActiveKey}} activeMenusTab={{activeMenusTabKey,setActiveMenusTabKey}}>
                                                                 </NavigationBar>
                                                                 <div className={'h-90 px-xs-5 vw-100 position-absolute overflow-hidden'}>
-                                                                    <Card className={"px-2 px-lg-2 px-xxl-4 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2"} >
+                                                                    <Card className={`px-2 px-lg-2 mx-sm-0 mx-lg-0 border-0 pb-2 overflow-y-auto h-100 px-sm-2`} >
                                                                         {innerWidth > 992 &&
                                                                             <Card.Header className={'text-center border-0 bg-transparent mt-xs-2 mt-lg-1 '}>
                                                                                 {typeAndViewSelectionPanel}

@@ -23,7 +23,7 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
     // Generates the reservations to show for the selected date.
     const reservationsToShow = useCallback(()=> {
         if(!reservationsExist)
-            return <h4 className={'text-muted my-auto user-select-none info-text-xl'}>Δεν υπάρχει κάποια κράτηση για σήμερα</h4>;
+            return <h4 className={'text-muted my-auto user-select-none info-text-xl'}>Δεν υπάρχει κάποια {reservationType === 'Dinner' ? 'βραδινή' : 'πρωινή'} κράτηση για σήμερα</h4>;
 
         const filteredReservations = reservationsFilter === 'All' ?  reservations_of_current_date :
             reservations_of_current_date.filter((reservation)=>{
@@ -51,12 +51,12 @@ export function LargeDevicesTodayView({reservations_of_current_date,filter,child
         <Row className={'h-100 w-100 d-flex'}>
             <Col className={'pe-0 pb-3 h-100 m-auto pt-4 d-flex flex-column text-center'} lg={reservationsExist && activeReservation !== null ? 7 : 12}>
                 {children}
-                <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
+                {/*<h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>*/}
                 {reservationsExist && <FiltersBar setReservationsFilter={setReservationsFilter}
                   reservationsFilter={reservationsFilter} direction={'horizontal'}
                   className={'mx-auto my-2'}>
                 </FiltersBar>}
-                <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+                <AdminToNewReservationFormModal returnButton reservationType={reservationType} forCurrentDate/>
                 <Stack className={'px-3 text-center d-flex overflow-y-auto h-75'} >
                     {requestProgress === 'Pending' ? <SpinnerSVG className={'m-auto'}/> : reservationsToShow()}
                 </Stack>

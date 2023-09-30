@@ -9,16 +9,19 @@ import {NumberOfPeople} from "../ReservationDetails/NumberOfPeople";
 import useUpdateEffect from "../../../CustomHooks/useUpdateEffect";
 import {GazeboBookingProgressBar} from "../../../ProgressBars/GazeboBookingProgressBar";
 import {TypeOptionsRow} from "./TypeOptionsRow";
+import {ErrorsContext} from "../../Admin/Contexts/ErrorsContext";
 
 export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children},ref) {
     const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext),
+    {errors, setErrors} = useContext(ErrorsContext),
     {progress, setProgress} = useContext(FormProgressContext),
     innerWidth = useContext(InnerWidthContext),
     typeSelectionRef = useRef(null),
     dateSelectionRef = useRef(null),
     numberOfPeopleSelectionRef = useRef(null),
     calendarRef = useRef(null),
-    [showCalendar,setShowCalendar] = useState(false);
+    dateErrorExists = errors && Object.keys(errors).includes('date') && errors.date !== '',
+    [showCalendar,setShowCalendar] = useState(dateErrorExists);
     const handleShowCalendar = () => {
         if(progress !== 'Type')
             setProgress('Type');
@@ -47,6 +50,11 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
             setBookingDetails(prev=>{return {...prev,more_rooms:false,primary_room:'',secondary_room:''}});
         }
     },[bookingDetails.number_of_people]);
+
+    useEffect(()=>{
+        if(errors)
+            setShowCalendar(dateErrorExists);
+    },[errors]);
 
     return (
         <div className={`${progress === 'Table' ? 'p-0' : (progress === 'Details' ? 'p-2 p-md-3' : 'p-3')}) border border-1 rounded-5 mx-auto content-card h-fit-content mw-850px w-100
@@ -82,9 +90,9 @@ export const TypeSelectionForm = forwardRef(function TypeSelectionForm({children
                 {progress === 'Type' && <Col className={'d-flex flex-column'} md={showCalendar ? 6 : 4}>
                     {!showCalendar && bookingDetails.number_of_people !== 0 && progress === 'Type' &&
                         <div ref={dateSelectionRef}
-                             className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative cursor-pointer mw-330px user-select-none'}
+                             className={'box_shadow border-0 m-auto py-2 px-4 rounded-4 position-relative mw-330px user-select-none'}
                              onClick={handleShowCalendar}
-                             style={{backgroundColor: 'rgba(253,249,249,0.75)'}}>
+                             style={{backgroundColor: 'rgba(253,249,249,0.75)', cursor:"pointer"}}>
                             {(!showCalendar || innerWidth >= 992) && <span className={'info-text-lg'}>Date</span>}
                             <h6 className={'mb-0 text-nowrap'}>
                                 {bookingDetails.date ? changeDateFormat(bookingDetails.date, '-', '-') : 'Choose Date'}
