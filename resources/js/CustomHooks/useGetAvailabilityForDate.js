@@ -17,7 +17,9 @@ export function useGetAvailabilityForDate(date, reservationType, dependencies=[]
                 onSuccess:res=> {
                     // console.log('res', res.props);
                     setAvailability(res.props.availability_for_date);
-                }, preserveScroll:true, preserveState:true, only:['availability_for_date']});
+                },
+                // onError:error=>console.log('Date',error),
+                preserveScroll:true, preserveState:true, only:['availability_for_date', 'errors']});
     },[...dependencies]);
 
     return [requestProgress, availability , setAvailability];

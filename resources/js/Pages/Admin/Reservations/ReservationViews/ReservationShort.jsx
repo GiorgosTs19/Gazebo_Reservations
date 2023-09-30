@@ -31,7 +31,7 @@ export const ReservationShort = forwardRef(function ({Reservation,className} , r
 
     return (
         <div ref={ref ?? null} className={`text-muted p-1 border rounded-2 box_shadow cursor-pointer ${activeReservation?.id === Reservation.id ? '' : 'hover-scale-0_95'}
-        ${innerWidth >= 576 ? 'w-350px ' : 'mw-350px '} ${className} ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}`}
+        ${innerWidth >= 576 ? 'mw-300px ' : 'mw-350px '} ${className} ${(activeReservation?.id !== Reservation.id ? ' reservation-view' : ' active-reservation')}`}
          onClick={()=>setActiveReservation(Reservation)}>
             <p className={'my-1'}>{isReservationInConflict && <Badge pill bg={'transparent'}><BellSVG className={'text-dark mx-auto'}/></Badge>}
                 Αρ. Κράτησης : {Confirmation_Number}
@@ -46,7 +46,7 @@ export const ReservationShort = forwardRef(function ({Reservation,className} , r
                 </Badge>
             </Stack>
             <Row className={'p-2'} >
-                <Col xs={7} md={6}>
+                <Col xs={7} md={7}>
                     <section className={`text-start`}>
                         <h6 className={'mb-1 user-select-none info-text-lg'}>Στοιχεία Πελάτη</h6>
                         <p className={'mb-0 info-text'}>Όνομα</p>
@@ -57,7 +57,7 @@ export const ReservationShort = forwardRef(function ({Reservation,className} , r
                         <p className={'my-1 font-size-13px'}>{Reservation.Phone_Number}</p>
                     </section>
                 </Col>
-                <Col className={`d-flex flex-column user-select-none`} xs={5} md={6}>
+                <Col className={`d-flex flex-column user-select-none`} xs={5} md={5}>
                     <section className={'text-end'}>
                         <h6 className={'mb-1 info-text-lg'}>Στοιχεία Κράτησης</h6>
                         <p className={'info-text mb-1'}>{Rooms.length > 1 ? 'Δωμάτια ' : 'Δωμάτιο '}</p>

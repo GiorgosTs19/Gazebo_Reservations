@@ -44,6 +44,7 @@ export function ReservationCalendar() {
            return null;
        return "›";
     };
+
     // Checks if the given date should show as disabled in the calendar.
     // If the date is before today, after the last date set by the admins, or if it is contained in the Disabled_Days array,
     // then it should be disabled. Different restrictions apply for each reservation Type.
@@ -82,13 +83,13 @@ export function ReservationCalendar() {
                 return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#D2042D',width:'76%', height:'4px'}}></div>;
         }
         return <div className={'my-1 mx-auto'}  style={{backgroundColor:'#555557',width:'76%', height:'4px'}}></div>;
-    },[availability]);
+    },[availability,Disabled_Days]);
 
     const getTileClassName = useCallback((date) => {
         if(isDateDisabled(date))
             return 'disabled';
         return extractReservationsForDate(date,availability).length === 6 ? 'disabled-day-availability' : '';
-    },[activeRange, availability]);
+    },[activeRange, availability, Disabled_Days]);
 
     return (
         <Calendar onChange={handleDateChange} value={bookingDetails.date ?? null} tileDisabled={({ date }) => isDateDisabled(date)}

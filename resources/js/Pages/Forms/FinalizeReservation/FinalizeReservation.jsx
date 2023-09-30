@@ -7,17 +7,30 @@ import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 import {Inertia} from "@inertiajs/inertia";
 import {GazebosContext} from "../../../Contexts/GazebosContext";
 import {ErrorsContext} from "../../Admin/Contexts/ErrorsContext";
+import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 
 export const FinalizeReservation = forwardRef(function FinalizeReservation({...props},ref) {
     const {bookingDetails,setBookingDetails} = useContext(BookingDetailsContext),
     {errors, setErrors} = useContext(ErrorsContext),
     Gazebos = useContext(GazebosContext),
+    {progress,setProgress} = useContext(FormProgressContext),
     // Handles the inertia request to submit the reservation and store it in the database.
     handleFinalizeReservation = () => {
         Inertia.post(route('Create_Reservation'),bookingDetails,{
             preserveState:true,
             preserveScroll:true,
-            onError:(error)=> setErrors(error),
+            onError:(error)=> {
+                setErrors(error);
+                const emailErrorExists = Object.keys(error).includes('email') && error.email !== '';
+                if(emailErrorExists)
+                    return setProgress('Details');
+                const dateErrorExists = Object.keys(error).includes('date') && error.date !== '';
+                if(dateErrorExists)
+                    return setProgress('Type')
+                const gazeboErrorExists = Object.keys(error).includes('gazebo') && error.gazebo !== '';
+                if(gazeboErrorExists)
+                    return setProgress('Table')
+            },
         });
     };
 

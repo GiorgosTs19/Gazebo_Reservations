@@ -80,19 +80,17 @@ export function SearchView() {
         if(searchResult.length === 0)
             return <h5 className={'m-auto text-wrap info-text-xl'}>Δεν βρέθηκαν κρατήσεις με αυτά τα κριτήρια αναζήτησης</h5>
 
-        // Will always try to show as many reservations per line, to save space.
-        const reservationsToRender = InnerWidth > 992 ? (innerWidth >= 1600 ? (activeReservation === null ? 3 : 2) : (activeReservation === null ? 2 : 1)) : 1;
-        const reservationChunks = [];
-        for (let i = 0; i < searchResult.length; i += reservationsToRender) {
-            reservationChunks.push(searchResult.slice(i, i + reservationsToRender));
-        }
-        return reservationChunks.map((chunk, index) => (
-            <div key={index} className="d-flex justify-content-center">
-                {chunk.map(reservation => (
-                    <ReservationShort ref={reservation.id === activeReservation?.id ? activeReservationRef : null} Reservation={reservation} key={reservation.id} className={'border mx-0 mx-md-4 mb-3 mb-lg-5'} />
-                ))}
-            </div>
-        ))
+        return <Row className={'overflow-x-hidden'}>
+            {searchResult.map((reservation) => (
+                <Col className={'px-0 px-xl-2 overflow-x-hidden'} key={reservation.id} xs={12} md={activeReservation ? 12 : 6}
+                     xxl={activeReservation ? 6 : 3}>
+                    <ReservationShort
+                        ref={reservation.id === activeReservation?.id ? activeReservationRef : null}
+                        Reservation={reservation} className={`border mx-auto my-4 ${innerWidth < 576 ? ' flex-fill' : ''}`}
+                    />
+                </Col>
+            ))}
+        </Row>
     };
 
     const getCriteriaLabels = useCallback(()=>{

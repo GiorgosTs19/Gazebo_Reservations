@@ -16,7 +16,7 @@ export function AttendeesNamesFields() {
     return (
         checkShowRequirements() &&
         <>
-            <p className={'bold-info-text'}>Guests accompanying you</p>
+            <p className={'bold-info-text mb-2'}>Guests accompanying you</p>
             <InputGroup className={`mx-auto`} style={{maxWidth:`${(bookingDetails.number_of_people-1)*250}px`}}>
                 {/*Return inputs for attendee's first names based on the number of people variables */}
                 {Array.from({ length:bookingDetails.number_of_people-1}).map((_, index)=>{

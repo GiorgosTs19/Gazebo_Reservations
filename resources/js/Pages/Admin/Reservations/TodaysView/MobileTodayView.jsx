@@ -60,8 +60,8 @@ export function MobileTodayView({reservations_of_current_date, filter, children,
                         </section>
                         <section className={'flex-fill d-flex'}>
                             {
-                                isDateDisabled ? <Badge bg="danger" className={'m-auto'}>Απενεργοποιημένη</Badge> :
-                                        <AdminToNewReservationFormModal returnButton reservationType={reservationType}/>
+                                isDateDisabled ? <Badge bg="danger" className={'m-auto p-2'}>Απενεργοποιημένη για {reservationType === 'Dinner' ? 'Βραδινές' : 'Πρωινές'} κρατήσεις</Badge> :
+                                        <AdminToNewReservationFormModal returnButton reservationType={reservationType} forCurrentDate/>
                             }
                         </section>
                         <section className={'flex-fill'}>

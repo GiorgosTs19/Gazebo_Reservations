@@ -31,6 +31,19 @@ export const MenuSelectionForm = forwardRef(function MenuSelectionForm({...props
             ref.current.scrollTo({top: ref.current?.scrollHeight,behavior:'smooth'})
         }
     },[bookingDetails.primary_menu,bookingDetails.secondary_menu]);
+
+    useEffect(()=>{
+        const handleProceed = (ev) => {
+            if(ev.key === 'Enter' && checkRequirement()) {
+                handleFinalize();
+            }
+        }
+        window.addEventListener('keypress',handleProceed);
+        return () => {
+            window.removeEventListener('keypress', handleProceed);
+        };
+    },[]);
+
     return (
         <div className={'px-1 overflow-y-auto overflow-x-hidden mh-660px '} ref={ref}>
             {innerWidth > 1300 ? <LargeDevicesMenus bookingDetails={bookingDetails}></LargeDevicesMenus> :

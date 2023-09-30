@@ -1,25 +1,27 @@
 import Calendar from "react-calendar";
-import {useCallback, useContext, useEffect, useRef} from "react";
+import {useCallback, useContext, useRef} from "react";
 import {useState} from "react";
 import {
     extractReservationsForDate,
     getFirstAndLastDateOfMonth,
     isDateDisabledByAdmin
 } from "../../../../ExternalJs/Util";
-import {ReservationShort} from "../ReservationViews/ReservationShort";
 import {MobileMonthlyView} from "./MobileMonthlyView";
 import {LargeDevicesMonthlyView} from "./LargeDevicesMonthlyView";
 import {useGetAvailabilityForRange} from "../../../../CustomHooks/useGetAvailabilityForRange";
 import {useGetReservationsForSpecificDate} from "../../../../CustomHooks/useGetReservationsForSpecificDate";
 import {SpinnerSVG} from "../../../../SVGS/SpinnerSVG";
 import usePrevious from "../../../../CustomHooks/usePrevious";
+import {useScrollToActiveReservation} from "../../../../CustomHooks/useScrollToActiveReservation";
 import {InnerWidthContext} from "../../../../Contexts/InnerWidthContext";
 import {ActiveReservationContext} from "../../Contexts/ActiveReservationContext";
 import {DatabaseSettingsContext} from "../../Contexts/DatabaseSettingsContext";
 import {ActiveReservationTypeContext} from "../../Contexts/ActiveReservationTypeContext";
 import {DisabledDaysContext} from "../../Contexts/DisabledDaysContext";
 import {ActiveRangeContext} from "../../Contexts/ActiveRangeContext";
-import {useScrollToActiveReservation} from "../../../../CustomHooks/useScrollToActiveReservation";
+import {Col, Row} from "react-bootstrap";
+import {ReservationShort} from "../ReservationViews/ReservationShort";
+
 
 export function MonthlyView() {
     const [selectedDate,setSelectedDate] = useState(''),
@@ -137,18 +139,27 @@ export function MonthlyView() {
         if(filteredReservations.length === 0)
             return [<h4 className={'my-auto user-select-none info-text-xl'}>Δεν υπάρχουν κρατήσεις που ταιριάζουν με τα επιλεγμένα κριτήρια</h4>, reservations_of_current_date.length]
 
-        const reservationChunks = [];
-        for (let i = 0; i < filteredReservations.length; i += reservationsToRender) {
-            reservationChunks.push(filteredReservations.slice(i, i + reservationsToRender));
-        }
-
-        return [reservationChunks.map((chunk, index) => (
-            <div key={index} className="d-flex justify-content-center">
-                {chunk.map(reservation => <ReservationShort ref={reservation.id === activeReservation?.id ? activeReservationRef : null} Reservation={reservation} key={reservation.id} className={`border mx-0 mx-sm-2 my-4 ${innerWidth < 576 ? ' flex-fill' : ''} `}/>
-                )}
-            </div>
-        )),reservations_of_current_date.length]
-    },[selectedDate, reservationsFilter, reservationsToRender,reservations, innerWidth, reservationsRequestProgress, activeReservation]);
+        return [ <Row className={'overflow-x-hidden'}>
+            {filteredReservations.map((reservation) => (
+                <Col className={'px-0 overflow-x-hidden'}
+                    key={reservation.id}
+                    xs={12} // Extra small screens (phones) - 1 reservation per row
+                    sm={6} // Small screens (tablets) - 2 reservations per row
+                    md={activeReservation ? 12 : 6} // Medium screens (desktops) - 3 reservations per row
+                    lg={activeReservation ? 12 : 6} // Large screens (large desktops) - 4 reservations per row
+                    xl={activeReservation ? 12 : 4}>
+                    <ReservationShort
+                        ref={reservation.id === activeReservation?.id ? activeReservationRef : null}
+                        Reservation={reservation}
+                        className={`border mx-auto my-4 ${
+                            innerWidth < 576 ? ' flex-fill' : ''
+                        }`}
+                    />
+                </Col>
+            ))}
+        </Row>
+    ,reservations_of_current_date.length]
+    },[selectedDate, reservationsFilter, reservationsToRender,reservations, reservationsRequestProgress, activeReservation]);
 
     const getTileClassName = ({ activeStartDate, date, view }) => {
         if(date>today && date<Last_Day)

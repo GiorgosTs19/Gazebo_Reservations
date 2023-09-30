@@ -14,7 +14,9 @@ export function useGetAvailabilityForRange(activeRange, reservationType, depende
                 onSuccess:res=> {
                     // console.log('res', res.props);
                     setAvailability(res.props.availability_for_date_range);
-                }, preserveScroll:true, preserveState:true, only:['availability_for_date_range']});
+                },
+                // onError:error=>console.log('Range',error),
+                preserveScroll:true, preserveState:true, only:['availability_for_date_range', 'Disabled_Days', 'errors']});
     },[...dependencies]);
 
     return [requestProgress, availability, setAvailability];

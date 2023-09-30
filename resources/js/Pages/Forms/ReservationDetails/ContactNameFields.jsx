@@ -19,7 +19,7 @@ export function ContactNameFields({singleGuest}) {
     const inputMargin = checkAttendees(bookingDetails) && !singleGuest ? 'mx-1' : 'mx-1 mx-md-auto';
     return (
         <>
-            <p className={'bold-info-text'}>Reservation's Contact</p>
+            <p className={'bold-info-text mb-2'}>Reservation's Contact</p>
             <InputGroup className="mb-3" size={"sm"}>
                 <Form.Control type="text" placeholder="Last Name" size={"sm"} className={`mb-2 text-center box_shadow border-0 ${inputMargin} mw-300px`}
                               value={bookingDetails.last_name}

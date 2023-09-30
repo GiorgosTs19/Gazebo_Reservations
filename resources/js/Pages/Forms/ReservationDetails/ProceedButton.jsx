@@ -2,8 +2,10 @@ import {Button} from "react-bootstrap";
 import {useContext} from "react";
 import {FormProgressContext} from "../../../Contexts/FormProgressContext";
 import {useEffect} from "react";
+import {BookingDetailsContext} from "../../../Contexts/BookingDetailsContext";
 
 export function ProceedButton({shouldProceed}) {
+    const {bookingDetails, setBookingDetails} = useContext(BookingDetailsContext);
     const {progress, setProgress} = useContext(FormProgressContext),
     handleNextClick = ()=>{
         // Handles the click on the To Menu Selection Button
@@ -13,6 +15,8 @@ export function ProceedButton({shouldProceed}) {
         setProgress('Menu');
     };
 
+    const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
+    const emailChecks = emailRegex.test(bookingDetails.email);
 
     useEffect(()=>{
         const handleProceed = (ev) => {
@@ -27,8 +31,8 @@ export function ProceedButton({shouldProceed}) {
     },[]);
 
     return (
-       <Button variant={'outline-light'} onClick={handleNextClick}
-          className={'box_shadow border-0 mx-auto mt-2 px-2 py-1 reservation-button text-dark text-nowrap w-fit-content'}>
+       <Button variant={'outline-light'} onClick={handleNextClick} disabled={!emailChecks}
+          className={'border-0 mx-auto my-3 px-2 py-1 reservation-button text-dark text-nowrap w-fit-content'}>
             Menu Selection
         </Button>
     )

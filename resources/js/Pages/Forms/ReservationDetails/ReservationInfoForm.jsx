@@ -61,7 +61,7 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
             default:return false;
         }
     };
-
+    const sameRoomTwice = bookingDetails.primary_room !== '' && bookingDetails.secondary_room !== ''  && bookingDetails.primary_room === bookingDetails.secondary_room;
     return (
         <div ref={ref} className={'d-flex'}>
             <Card className={'text-center mh-600px my-2 bg-transparent border-0 mx-auto w-100 overflow-y-auto overflow-x-hidden ' +
@@ -84,7 +84,7 @@ export const ReservationInfoForm = forwardRef(function ReservationInfoForm({clas
                                 <MultipleRoomsField></MultipleRoomsField>
                                 <RoomNumberFields ></RoomNumberFields>
                             </div>
-                            {checkProceedRequirements() && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
+                            {checkProceedRequirements() && !sameRoomTwice && <ProceedButton shouldProceed={checkProceedRequirements()}/>}
                         </Col>}
                     </Row>
                 </Card.Body>

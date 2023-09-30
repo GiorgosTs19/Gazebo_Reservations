@@ -17,14 +17,14 @@ export function LargeDevicesMonthlyView({Calendar,reservationsToShow,
             <Col xl={4} className={'p-1 border-end d-flex flex-column h-100'}>
                 {Calendar}
             </Col>
-            <Col xl={activeReservation == null ? 8 : 4} className={'d-flex flex-column h-100 pb-0'}>
+            <Col xl={activeReservation == null ? 8 : 4} className={`d-flex flex-column h-100 pb-0 ${activeReservation ? 'border-end' : ''}`}>
                 {reservationsCount > 0 && <FiltersBar direction={'horizontal'} reservationsFilter={reservationsFilter}
                              disabled={selectedDate === ''}
                              setReservationsFilter={setReservationsFilter}
                              className={'mx-auto my-3'}/>}
                 {selectedDate && <h5>{formatDateInGreek(selectedDate)}</h5>}
                 <h6>{reservationType === 'Dinner' ? 'Βραδινές Κρατήσεις' : 'Πρωινές Κρατήσεις'}</h6>
-                <Stack className={'px-0 overflow-y-auto my-auto'} >
+                <Stack className={'px-0 overflow-y-auto my-auto overflow-x-hidden'} >
                     {reservations}
                 </Stack>
             </Col>

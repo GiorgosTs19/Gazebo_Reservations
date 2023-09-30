@@ -25,6 +25,7 @@ class GazeboController extends Controller {
     }
 
     public static function checkRangeAvailability(Request $request) {
+        $request->session()->forget('errors');
         $input = $request->only(['date_start', 'date_end', 'type', 'withDisabledTables', 'activeReservation']);
         $withDisabledTables = $request->exists('withDisabledTables') ? $input['withDisabledTables'] : true;
         $Reservations = Reservation::date($input['date_start'],
@@ -34,7 +35,9 @@ class GazeboController extends Controller {
             $Disabled_Tables = DisabledTable::date($input['date_start'],
                 $input['date_end'])->type($input['type'])->get(['Date','gazebo_id']);
         }
-        return Redirect::back()->with(['availability_for_date_range'=>[...$Reservations, ...$Disabled_Tables ?? []], 'activeReservation' => $input['activeReservation'] ?? '']);
+
+        return Redirect::back()->with(['availability_for_date_range'=>[...$Reservations, ...$Disabled_Tables ?? []], 'activeReservation' => $input['activeReservation'] ?? '',
+            'forget_errors'=>true]);
 
     }
 
@@ -48,6 +51,8 @@ class GazeboController extends Controller {
             $selectedType = $request->only(['selectedType'])['selectedType'];
         if($request->exists('selectedPeople'))
             $selectedPeople = $request->only(['selectedPeople'])['selectedPeople'];
+        if($request->session()->exists('forget_errors'))
+            $request->session()->forget('errors');
         $Dinner_Settings = DinnerSetting::first();
         $Bed_Settings = BedSetting::first();
         // Retrieve all the days that were disabled by the admins, regardless of type
@@ -84,6 +89,7 @@ class GazeboController extends Controller {
     }
 
     public function getAvailabilityForDate(Request $request) {
+        $request->session()->forget('errors');
         $input = $request->only(['date','type', 'exceptCancelled']);
         $Availability = [];
 
@@ -99,7 +105,7 @@ class GazeboController extends Controller {
             $Availability[] = ['id' => $gazebo->id, 'isAvailable' => self::getBoolean($Reservations,$gazebo,$Disabled_Tables_Of_Day)];
         }
 
-        return Redirect::back()->with(['availability_for_date'=>$Availability]);
+        return Redirect::back()->with(['availability_for_date'=>$Availability,'forget_errors'=>true]);
     }
 
     protected  function getBoolean($Reservations,$gazebo,$Disabled_Tables_Of_Day) {
@@ -135,7 +141,9 @@ class GazeboController extends Controller {
 
     protected function getCurrenDayReservations(Request $request) {
         $type = $request->only('type')['type'];
-        return Redirect::back()->with(['current_day_reservations' => Reservation::date(date('y-m-d'))->type($type)->with(['Rooms'])->status('Cancelled', true)->get()]);
+        $activeReservation = $request->exists('activeReservation') ? $request->only(['activeReservation'])['activeReservation'] : null;
+        return Redirect::back()->with(['current_day_reservations' => Reservation::date(date('y-m-d'))->type($type)->with(['Rooms'])->status('Cancelled', true)->get(),
+            'activeReservation'=>$activeReservation]);
     }
 
     /**
